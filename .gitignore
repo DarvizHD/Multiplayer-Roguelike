@@ -102,3 +102,7 @@ InitTestScene*.unity*
 *.DotSettings
 
 /UIElementsSchema
+
+# Ignore temporaries from GameCI
+/[Aa]rtifacts/
+/[Cc]odeCoverage/
