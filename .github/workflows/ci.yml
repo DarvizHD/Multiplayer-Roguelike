@@ -10,9 +10,37 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    name: Code Style
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Verify solution exists
+        shell: bash
+        run: |
+          if ! ls *.sln 1> /dev/null 2>&1; then
+            echo "No .sln file found. Commit your solution file."
+            exit 1
+          fi
+
+      - name: Run dotnet format
+        shell: bash
+        run: |
+          SOLUTION=$(ls *.sln | head -n 1)
+          dotnet format "$SOLUTION" --verify-no-changes --severity warn
+
   build:
     name: ${{ matrix.target-platform }}
     runs-on: ${{ matrix.os }}
+    needs: lint
 
     strategy:
       matrix:
@@ -27,18 +55,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-
-      - name: Install dotnet format
-        run: dotnet tool install -g dotnet-format
-
-      - name: Verify code style
-        run: |
-          dotnet format --verify-no-changes --severity warn
 
       - name: Cache Library
         uses: actions/cache@v5
