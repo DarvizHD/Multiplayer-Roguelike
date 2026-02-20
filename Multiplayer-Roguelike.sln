@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pivo.MultiplayerRoguelike.Editor", "Pivo.MultiplayerRoguelike.Editor.csproj", "{ee10f7db-e2dd-5611-3ff5-93ed4a20f6a4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pivo.MultiplayerRoguelike.Runtime", "Pivo.MultiplayerRoguelike.Runtime.csproj", "{3bc3c130-3c44-867d-3c1a-73121c028320}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ee10f7db-e2dd-5611-3ff5-93ed4a20f6a4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ee10f7db-e2dd-5611-3ff5-93ed4a20f6a4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3bc3c130-3c44-867d-3c1a-73121c028320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3bc3c130-3c44-867d-3c1a-73121c028320}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
