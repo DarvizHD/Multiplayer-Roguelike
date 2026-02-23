@@ -1,3 +1,17 @@
 {
-	"name": "Pivo.MultiplayerRoguelike.Runtime"
+    "name": "Pivo.MultiplayerRoguelike.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:507f71136c48c694da1836ca6c54c24e",
+        "GUID:3452bce71b61acf4c9ca06ec2ba4298c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
