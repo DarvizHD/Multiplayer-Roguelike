@@ -12,7 +12,7 @@
     "com.unity.ugui": "2.0.0",
     "com.unity.visualscripting": "1.9.9",
     "enet.shared": "file:../../LocalPackages/ENet",
-    "pivo.multiplayerroguelike.shared": "file:C:/My Projects/Multiplayer-Roguelike/Multiplayer-Roguelike.Shared",
+    "pivo.multiplayerroguelike.shared": "file:../../Multiplayer-Roguelike.Shared",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
