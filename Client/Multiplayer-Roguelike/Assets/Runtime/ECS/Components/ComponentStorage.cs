@@ -31,5 +31,10 @@ namespace Runtime.ECS.Components
             
             return success;
         }
+
+        public void Remove(int entityId)
+        {
+            _components.Remove(entityId);
+        }
     }
 }

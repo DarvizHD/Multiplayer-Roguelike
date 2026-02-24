@@ -9,19 +9,21 @@ namespace Runtime.ECS.Core
     {
         private readonly Dictionary<Type, IComponentStorage<IComponent>> _storage = new();
 
+        private readonly Dictionary<Type, int> _pendingRemove = new();
+        
+        public void RegisterComponent<T>() where T : class, IComponent
+        {
+            _storage[typeof(T)] = new ComponentStorage<T>();
+        }
+        
         public void AddComponent<T>(int entityId, T component) where T : class, IComponent
         {
             GetStorage<T>().Add(entityId, component);
         }
 
-        public IEnumerable<int> GetAllEntities()
+        public void RemoveComponent<T>(int entityId) where T : class, IComponent
         {
-            return _storage.Values.SelectMany(s => s.EntityIds).Distinct();
-        }
-
-        public IEnumerable<Type> GetComponentTypes(int entityId)
-        {
-            return from pair in _storage where pair.Value.Has(entityId) select pair.Key;
+            _pendingRemove.Add(typeof(T), entityId);
         }
 
         public object GetComponent(int entityId, Type componentType)
@@ -32,7 +34,36 @@ namespace Runtime.ECS.Core
             }
 
             storage.TryGet(entityId, out var component);
-            return component;
+            return _storage;
+        }
+
+        public T GetComponent<T>(int entityId) where T : class, IComponent
+        {
+            return (T) _storage[typeof(T)].Get(entityId);
+        }
+
+        public bool TryGetComponent<T>(int entityId, out T component) where T : class, IComponent
+        {
+            var success =  _storage[typeof(T)].TryGet(entityId, out var founded);
+
+            component = (T) founded;
+            
+            return success;
+        }
+
+        public bool HasComponent<T>(int entityId) where T : class, IComponent
+        {
+            return _storage.ContainsKey(typeof(T));
+        }
+
+        public IEnumerable<int> GetAllEntities()
+        {
+            return _storage.Values.SelectMany(s => s.EntityIds).Distinct();
+        }
+
+        public IEnumerable<Type> GetComponentTypes(int entityId)
+        {
+            return from pair in _storage where pair.Value.Has(entityId) select pair.Key;
         }
 
         public IEnumerable<(int entityId, object[] components)> Query(params Type[] componentTypes)
@@ -52,16 +83,23 @@ namespace Runtime.ECS.Core
 
                 yield return (id, components);
             }
+            
+            RemoveComponents();
         }
 
         private ComponentStorage<T> GetStorage<T>() where T : class, IComponent
         {
-            if (!_storage.TryGetValue(typeof(T), out var storage))
-            {
-                _storage[typeof(T)] = new ComponentStorage<T>();
-            }
-
             return (ComponentStorage<T>)_storage[typeof(T)];
+        }
+
+        private void RemoveComponents()
+        {
+            foreach (var pair in _pendingRemove)
+            {
+                _storage[pair.Key].Remove(pair.Value);
+            }
+            
+            _pendingRemove.Clear();
         }
     }
 }
