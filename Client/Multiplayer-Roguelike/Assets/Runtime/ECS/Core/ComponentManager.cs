@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Runtime.Components;
+using Runtime.ECS.Components;
 
-namespace Runtime.Core
+namespace Runtime.ECS.Core
 {
     public class ComponentManager
     {
@@ -12,6 +12,27 @@ namespace Runtime.Core
         public void AddComponent<T>(int entityId, T component) where T : class, IComponent
         {
             GetStorage<T>().Add(entityId, component);
+        }
+        
+        public IEnumerable<int> GetAllEntities()
+        {
+            return _storage.Values.SelectMany(s => s.EntityIds).Distinct();
+        }
+        
+        public IEnumerable<Type> GetComponentTypes(int entityId)
+        {
+            return from kvp in _storage where kvp.Value.Has(entityId) select kvp.Key;
+        }
+        
+        public object GetComponent(int entityId, Type componentType)
+        {
+            if (!_storage.TryGetValue(componentType, out var storage))
+            {
+                return null;
+            }
+            
+            storage.TryGet(entityId, out var component);
+            return component;
         }
 
         public IEnumerable<(int entityId, object[] components)> Query(params Type[] componentTypes) 
