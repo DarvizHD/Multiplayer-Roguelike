@@ -1,0 +1,51 @@
+# Build results
+bin/
+obj/
+out/
+publish/
+.bin/
+.obj/
+.out/
+.publish/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / Visual Studio / VS Code
+.vs/
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# Test results
+TestResults/
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# Windows
+*.dll
+
+# Linux
+*.so
+
+# macOS
+*.dylib
+
+.ai/
