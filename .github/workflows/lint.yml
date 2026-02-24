@@ -1,7 +1,7 @@
 name: Lint
 
 on:
-  push:
+    push:
     paths:
       - 'Multiplayer-Roguelike.Backend/**'
       - 'Multiplayer-Roguelike.Shared/**'
@@ -11,6 +11,7 @@ on:
       - 'Multiplayer-Roguelike.Backend/**'
       - 'Multiplayer-Roguelike.Shared/**'
       - 'Multiplayer-Roguelike.Unity/**'
+  workflow_dispatch: 
 
 jobs:
   backend-lint:
