@@ -2,7 +2,7 @@ using System;
 using ENet;
 using Shared.Commands;
 
-namespace Multiplayer
+namespace Backend.CommandExecutors
 {
     public class LoginCommandExecutor : BaseCommandExecutor<LoginCommand>
     {

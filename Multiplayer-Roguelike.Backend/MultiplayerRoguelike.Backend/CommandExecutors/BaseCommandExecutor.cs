@@ -1,7 +1,7 @@
 using ENet;
 using Shared.Commands;
 
-namespace Multiplayer
+namespace Backend.CommandExecutors
 {
     public abstract class BaseCommandExecutor<T> : ICommandExecutor where T : BaseCommand
     {

@@ -2,7 +2,7 @@ using ENet;
 using Shared;
 using Shared.Commands;
 
-namespace Multiplayer
+namespace Backend.CommandExecutors
 {
     public class CommandExecutorFactory
     {
