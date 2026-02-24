@@ -7,5 +7,8 @@ namespace Runtime.ECS.Components
         public IEnumerable<int> EntityIds { get; }
         bool Has(int entityId);
         bool TryGet(int id, out IComponent component);
+        
+        T Get(int entityId);
+        void Remove(int entityId);
     }
 }

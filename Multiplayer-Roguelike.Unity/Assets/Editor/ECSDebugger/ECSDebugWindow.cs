@@ -34,7 +34,7 @@ namespace Editor.ECSDebugger
                 return;
             }
 
-            var componentManager = _entryPoint.Ecs.ComponentManager;
+            var componentManager = _entryPoint.EcsWorld.ComponentManager;
 
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
 
