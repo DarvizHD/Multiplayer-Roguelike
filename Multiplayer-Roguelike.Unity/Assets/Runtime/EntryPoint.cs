@@ -39,6 +39,9 @@ namespace Runtime
 
             var loginCommand = new LoginCommand("Varfolomey");
             loginCommand.Write(serverConnectionModel.PlayerPeer);
+            
+            var createLobbyCommand = new CreateLobbyCommand("Varfolomey");
+            createLobbyCommand.Write(serverConnectionModel.PlayerPeer);
         }
 
         private void Update()
