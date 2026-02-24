@@ -1,4 +1,4 @@
-namespace Server.CommandExecutors
+namespace Multiplayer
 {
     public interface ICommandExecutor
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace Server
+namespace Multiplayer
 {
     public class Program
     {

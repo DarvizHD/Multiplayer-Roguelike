@@ -1,9 +1,8 @@
 using System;
 using System.Threading;
 using ENet;
-using Server.CommandExecutors;
 
-namespace Server
+namespace Multiplayer
 {
     public class Server
     {
@@ -16,7 +15,7 @@ namespace Server
             var playerThread = new Thread(() => Update());
             playerThread.Start();
             
-            Console.WriteLine("Server started!");
+            Console.WriteLine("Multiplayer-Roguelike.Backend started!");
         }
 
         private void Update()

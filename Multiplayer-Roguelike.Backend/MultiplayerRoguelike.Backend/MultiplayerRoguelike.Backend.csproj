@@ -10,6 +10,7 @@
         <PackageReference Include="ENet-CSharp" Version="2.4.8" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\..\MultiplayerRoguelike.Shared\MultiplayerRoguelike.Shared.csproj" />
       <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 </Project>
