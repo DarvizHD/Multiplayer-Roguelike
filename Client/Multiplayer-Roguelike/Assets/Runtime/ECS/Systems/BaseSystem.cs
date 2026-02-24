@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Runtime.Core;
+using Runtime.ECS.Core;
 
-namespace Runtime.Systems
+namespace Runtime.ECS.Systems
 {
     public abstract class BaseSystem
     {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Runtime.Systems;
+using Runtime.ECS.Systems;
 
-namespace Runtime.Core
+namespace Runtime.ECS.Core
 {
     public class SystemManager
     {

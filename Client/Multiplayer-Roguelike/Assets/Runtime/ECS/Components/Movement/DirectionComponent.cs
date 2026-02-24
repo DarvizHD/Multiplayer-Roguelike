@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Runtime.Components
+namespace Runtime.ECS.Components.Movement
 {
     public class DirectionComponent : IComponent
     {

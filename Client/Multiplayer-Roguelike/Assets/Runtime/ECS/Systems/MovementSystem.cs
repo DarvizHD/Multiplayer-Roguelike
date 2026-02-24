@@ -1,8 +1,6 @@
-using Runtime.Components;
-using Runtime.Components.Movement;
-using UnityEngine;
+using Runtime.ECS.Components.Movement;
 
-namespace Runtime.Systems
+namespace Runtime.ECS.Systems
 {
     public class MovementSystem : BaseSystem
     {
@@ -20,8 +18,6 @@ namespace Runtime.Systems
             var speedComponent = components[2] as SpeedComponent;
             
             positionComponent.Position += directionComponent.Direction.normalized * speedComponent.Speed * deltaTime;
-            
-            //Debug.Log($"{this.GetType()} {id}: {positionComponent.Position}");
         }
     }
 }

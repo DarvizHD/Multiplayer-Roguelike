@@ -1,36 +1,31 @@
-using System.ComponentModel;
-using Runtime.Components;
-using Runtime.Components.Movement;
-using Runtime.Core;
-using Runtime.Systems;
+using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Systems;
 using UnityEngine;
 
 namespace Runtime
 {
     public class EntryPoint : MonoBehaviour
     {
-        private ECS _ecs;
-        
+        public ECS.Core.ECS Ecs { get; } = new ();
+
         private void Start()
         {
-            _ecs = new ECS();
-
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                _ecs.AddEntityComponent(i, new PositionComponent(Random.insideUnitSphere));
-                _ecs.AddEntityComponent(i, new DirectionComponent(Random.insideUnitSphere.normalized));
-                _ecs.AddEntityComponent(i, new SpeedComponent(Random.value * 5f));
-                _ecs.AddEntityComponent(i, new TransformComponent(GameObject.CreatePrimitive(PrimitiveType.Sphere).transform));
+                Ecs.AddEntityComponent(i, new PositionComponent(Random.insideUnitSphere));
+                Ecs.AddEntityComponent(i, new DirectionComponent(Random.insideUnitSphere.normalized));
+                Ecs.AddEntityComponent(i, new SpeedComponent(Random.value * 5f));
+                Ecs.AddEntityComponent(i, new TransformComponent(GameObject.CreatePrimitive(PrimitiveType.Sphere).transform));
             }
-            
-            _ecs.AddSystem<MovementSystem>();
-            _ecs.AddSystem<PatrolSystem>();
-            _ecs.AddSystem<DrawTransformSystem>();
+
+            Ecs.AddSystem<MovementSystem>();
+            Ecs.AddSystem<PatrolSystem>();
+            Ecs.AddSystem<DrawTransformSystem>();
         }
 
         private void Update()
         {
-            _ecs.Update(Time.deltaTime);
+            Ecs.Update(Time.deltaTime);
         }
     }
 }

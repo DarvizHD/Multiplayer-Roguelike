@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Runtime.Components.Movement
+namespace Runtime.ECS.Components.Movement
 {
     public class VelocityComponent : IComponent
     {

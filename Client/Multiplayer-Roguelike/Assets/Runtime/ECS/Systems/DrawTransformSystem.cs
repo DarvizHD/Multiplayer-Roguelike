@@ -1,7 +1,6 @@
-using Runtime.Components.Movement;
-using Runtime.Systems;
+using Runtime.ECS.Components.Movement;
 
-namespace Runtime.Components
+namespace Runtime.ECS.Systems
 {
     public class DrawTransformSystem : BaseSystem
     {

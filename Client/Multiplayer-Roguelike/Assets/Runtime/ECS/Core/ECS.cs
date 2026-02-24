@@ -1,34 +1,32 @@
-using Runtime.Components;
-using Runtime.Systems;
+using Runtime.ECS.Components;
+using Runtime.ECS.Systems;
 
-namespace Runtime.Core
+namespace Runtime.ECS.Core
 {
     public class ECS
     {
-        private readonly ComponentManager _componentManager;
-        
-        private readonly SystemManager _systemManager;
+        public ComponentManager ComponentManager { get; }
+        public  SystemManager SystemManager { get; }
 
         public ECS()
         {
-            _componentManager = new ComponentManager();
-            
-            _systemManager = new SystemManager(_componentManager);
+            ComponentManager = new ComponentManager();
+            SystemManager = new SystemManager(ComponentManager);
         }
         
         public void Update(float deltaTime)
         {
-            _systemManager.UpdateAll(deltaTime);
+            SystemManager.UpdateAll(deltaTime);
         }
 
         public void AddEntityComponent<T>(int entityId, T component) where T : class, IComponent
         {
-            _componentManager.AddComponent<T>(entityId, component);
+            ComponentManager.AddComponent<T>(entityId, component);
         }
 
         public void AddSystem<T>() where T : BaseSystem, new()
         {
-            _systemManager.RegisterSystem<T>();
+            SystemManager.RegisterSystem<T>();
         }
     }
 }
