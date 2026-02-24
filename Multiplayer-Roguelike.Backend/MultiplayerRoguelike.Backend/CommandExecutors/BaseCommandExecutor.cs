@@ -6,11 +6,13 @@ namespace Backend.CommandExecutors
     public abstract class BaseCommandExecutor<T> : ICommandExecutor where T : BaseCommand
     {
         protected readonly T Command;
+        protected WorldModel World;
         protected readonly Peer Peer;
 
-        public BaseCommandExecutor(T command, ref Peer peer)
+        public BaseCommandExecutor(T command, WorldModel world, ref Peer peer)
         {
             Command = command;
+            World = world;
             Peer = peer;
         }
 

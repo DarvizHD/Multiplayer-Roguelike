@@ -6,7 +6,7 @@ namespace Backend.CommandExecutors
 {
     public class LoginCommandExecutor : BaseCommandExecutor<LoginCommand>
     {
-        public LoginCommandExecutor(LoginCommand command, Peer peer) : base(command, ref peer)
+        public LoginCommandExecutor(LoginCommand command, WorldModel world, Peer peer) : base(command, world, ref peer)
         {
             
         }
