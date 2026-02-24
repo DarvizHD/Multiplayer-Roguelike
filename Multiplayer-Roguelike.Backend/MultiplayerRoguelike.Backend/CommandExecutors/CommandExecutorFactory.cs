@@ -23,7 +23,8 @@ namespace Backend.CommandExecutors
             eNetProtocol.Get(out string commandName);
             return commandName switch
             {
-                CommandConst.Login => new LoginCommandExecutor(new LoginCommand(eNetProtocol), netEvent.Peer),
+                CommandConst.Login => new LoginCommandExecutor(new LoginCommand(eNetProtocol), _world, netEvent.Peer),
+                CommandConst.CreateLobby => new CreateLobbyExecutor(new CreateLobbyCommand(eNetProtocol), _world, netEvent.Peer),
                 _ => null
             };
         }
