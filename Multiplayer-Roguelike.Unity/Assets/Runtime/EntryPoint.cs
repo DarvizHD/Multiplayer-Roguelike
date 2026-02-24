@@ -1,57 +1,59 @@
+using Runtime.ECS.Components.Battle;
 using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Core;
 using Runtime.ECS.Systems;
-using ENet;
-using Runtime.GameSystems;
-using Runtime.ServerInteraction;
-using Shared.Commands;
+using Runtime.ECS.Systems.Battle;
+using Runtime.ECS.Systems.Movement;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Runtime
 {
     public class EntryPoint : MonoBehaviour
     {
-        public ECS.Core.ECS Ecs { get; } = new ();
-        private readonly GameSystemCollection _gameFixedSystemCollection = new();
+        public ECSWorld EcsWorld { get; } = new ();
 
-
-        private async void Start()
+        private void Start()
         {
-            for (var i = 0; i < 10; i++)
-            {
-                Ecs.AddEntityComponent(i, new PositionComponent(Random.insideUnitSphere));
-                Ecs.AddEntityComponent(i, new DirectionComponent(Random.insideUnitSphere.normalized));
-                Ecs.AddEntityComponent(i, new SpeedComponent(Random.value * 5f));
-                Ecs.AddEntityComponent(i, new TransformComponent(GameObject.CreatePrimitive(PrimitiveType.Sphere).transform));
-            }
+            EcsWorld.RegisterComponent<PositionComponent>();
+            EcsWorld.RegisterComponent<VelocityComponent>();
+            EcsWorld.RegisterComponent<SpeedComponent>();
+            EcsWorld.RegisterComponent<DirectionComponent>();
+            EcsWorld.RegisterComponent<AttackCooldownComponent>();
+            EcsWorld.RegisterComponent<MeleeAttackComponent>();
+            EcsWorld.RegisterComponent<TransformComponent>();
+            EcsWorld.RegisterComponent<TransformComponent>();
+            EcsWorld.RegisterComponent<EnemyTagComponent>();
+            EcsWorld.RegisterComponent<PendingDamageEventComponent>();
+            
+            var playerEntityId = 0;
+            
+            EcsWorld.AddEntityComponent(playerEntityId, new PositionComponent(Vector3.zero));
+            EcsWorld.AddEntityComponent(playerEntityId, new DirectionComponent(Random.insideUnitSphere.normalized));
+            EcsWorld.AddEntityComponent(playerEntityId, new TransformComponent(GameObject.CreatePrimitive(PrimitiveType.Sphere).transform));
+            EcsWorld.AddEntityComponent(playerEntityId, new AttackCooldownComponent(3f));
+            EcsWorld.AddEntityComponent(playerEntityId, new MeleeAttackComponent(2f, 10f));
+            
+            var enemyId = 1;
 
-            Ecs.AddSystem<MovementSystem>();
-            Ecs.AddSystem<PatrolSystem>();
-            Ecs.AddSystem<DrawTransformSystem>();
-            
-            Library.Initialize();
-            
-            var serverConnectionModel = new ServerConnectionModel();
-            var serverConnectionPresenter = new ServerConnectionPresenter(serverConnectionModel, _gameFixedSystemCollection);
-            serverConnectionPresenter.Enable();
-            
-            serverConnectionModel.ConnectPlayer();
-            await serverConnectionModel.CompletePlayerConnectAwaiter;
+            EcsWorld.AddEntityComponent(enemyId, new PositionComponent(Vector3.forward));
+            EcsWorld.AddEntityComponent(enemyId, new DirectionComponent(Vector3.forward));
+            EcsWorld.AddEntityComponent(enemyId, new SpeedComponent(0.1f));
+            EcsWorld.AddEntityComponent(enemyId, new TransformComponent(GameObject.CreatePrimitive(PrimitiveType.Sphere).transform));
+            EcsWorld.AddEntityComponent(enemyId, new EnemyTagComponent());
 
-            var loginCommand = new LoginCommand("Varfolomey");
-            loginCommand.Write(serverConnectionModel.PlayerPeer);
             
-            var createLobbyCommand = new CreateLobbyCommand("Varfolomey");
-            createLobbyCommand.Write(serverConnectionModel.PlayerPeer);
-        }
-
-        private void Update()
-        {
-            Ecs.Update(Time.deltaTime);
+            EcsWorld.AddSystem<MovementSystem>();
+            EcsWorld.AddSystem<PatrolSystem>();
+            EcsWorld.AddSystem<DrawTransformSystem>();
+            EcsWorld.AddSystem<DamageSystem>();
+            EcsWorld.AddSystem<MeleeAttackSystem>();
+            EcsWorld.AddSystem<AttackCooldownSystem>();
         }
         
-        private void FixedUpdate()
+        private void Update()
         {
-            _gameFixedSystemCollection.Update(Time.fixedDeltaTime);
+            EcsWorld.Update(Time.deltaTime);
         }
     }
 }
