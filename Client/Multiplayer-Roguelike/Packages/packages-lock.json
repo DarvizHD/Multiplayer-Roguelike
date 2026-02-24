@@ -194,13 +194,13 @@
       "url": "https://packages.unity.com"
     },
     "game.enet": {
-      "version": "file:../LocalPackages/ENet",
+      "version": "file:../../../LocalPackages/ENet",
       "depth": 0,
       "source": "local",
       "dependencies": {}
     },
     "game.share": {
-      "version": "file:../Server/Share",
+      "version": "file:../../../Server/Share",
       "depth": 0,
       "source": "local",
       "dependencies": {}
