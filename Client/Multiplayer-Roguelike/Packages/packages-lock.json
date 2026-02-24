@@ -193,7 +193,7 @@
       },
       "url": "https://packages.unity.com"
     },
-    "game.enet": {
+    "enet.shared": {
       "version": "file:../../../LocalPackages/ENet",
       "depth": 0,
       "source": "local",
