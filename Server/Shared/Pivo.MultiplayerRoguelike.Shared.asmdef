@@ -1,5 +1,5 @@
 {
-    "name": "Game.Share",
+    "name": "Pivo.MultiplayerRoguelike.Shared",
     "rootNamespace": "",
     "references": [
         "GUID:507f71136c48c694da1836ca6c54c24e"

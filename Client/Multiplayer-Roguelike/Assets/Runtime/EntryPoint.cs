@@ -3,7 +3,7 @@ using Runtime.ECS.Systems;
 using ENet;
 using Runtime.GameSystems;
 using Runtime.ServerInteraction;
-using Server.Commands;
+using Shared.Commands;
 using UnityEngine;
 
 namespace Runtime
@@ -14,7 +14,7 @@ namespace Runtime
         private readonly GameSystemCollection _gameFixedSystemCollection = new();
 
 
-        private void Start()
+        private async void Start()
         {
             for (var i = 0; i < 10; i++)
             {

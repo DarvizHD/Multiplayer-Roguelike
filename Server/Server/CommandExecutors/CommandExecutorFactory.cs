@@ -1,5 +1,6 @@
 using ENet;
-using Server.Commands;
+using Shared;
+using Shared.Commands;
 
 namespace Server.CommandExecutors
 {

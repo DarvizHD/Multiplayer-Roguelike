@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{F739B406-444D-409C-8251-CA1659D8F046}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share", "Share\Share.csproj", "{D9524E1B-0251-4392-AB29-2A766333559B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{D9524E1B-0251-4392-AB29-2A766333559B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

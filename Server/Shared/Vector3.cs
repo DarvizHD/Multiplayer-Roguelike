@@ -1,4 +1,4 @@
-namespace Server
+namespace Shared
 {
     public class Vector3
     {

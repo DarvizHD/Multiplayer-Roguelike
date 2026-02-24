@@ -1,7 +1,6 @@
 using ENet;
-using Server.CommandExecutors;
 
-namespace Server.Commands
+namespace Shared.Commands
 {
     public class LoginCommand : BaseCommand
     {

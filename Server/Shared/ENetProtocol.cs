@@ -1,9 +1,8 @@
 using System;
 using System.IO;
-using System.Numerics;
 using System.Text;
 
-namespace Server.CommandExecutors
+namespace Shared
 {
     public class ENetProtocol
     {

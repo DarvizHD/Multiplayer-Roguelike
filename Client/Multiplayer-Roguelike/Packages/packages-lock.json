@@ -199,8 +199,8 @@
       "source": "local",
       "dependencies": {}
     },
-    "game.share": {
-      "version": "file:../../../Server/Share",
+    "pivo.multiplayerroguelike.shared": {
+      "version": "file:../../../Server/Shared",
       "depth": 0,
       "source": "local",
       "dependencies": {}

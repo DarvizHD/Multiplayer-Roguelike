@@ -1,4 +1,4 @@
-namespace Server.CommandExecutors
+namespace Shared.Commands
 {
     public class CommandConst
     {

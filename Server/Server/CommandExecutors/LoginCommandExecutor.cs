@@ -1,6 +1,6 @@
 using System;
 using ENet;
-using Server.Commands;
+using Shared.Commands;
 
 namespace Server.CommandExecutors
 {
