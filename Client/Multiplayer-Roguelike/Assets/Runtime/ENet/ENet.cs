@@ -28,7 +28,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 
-namespace ServerCore.Main
+namespace Runtime.ENet
 {
     [Flags]
     public enum PacketFlags

@@ -1,8 +1,7 @@
-using Runtime.Components.Movement;
-using Runtime.Systems;
+using Runtime.ECS.Components.Movement;
 using UnityEngine;
 
-namespace Runtime.Components
+namespace Runtime.ECS.Systems
 {
     public class PatrolSystem : BaseSystem
     {
@@ -20,8 +19,6 @@ namespace Runtime.Components
             var speedComponent = components[2] as SpeedComponent;
             
             var endPoint = directionComponent.Direction.normalized * speedComponent.Speed;
-            
-            Debug.Log($"{this.GetType()}: {id}: {endPoint} : {directionComponent.Direction} : {speedComponent.Speed} : {positionComponent.Position}");
             
             if (Vector3.Distance(positionComponent.Position, endPoint) < 0.5f)
             {

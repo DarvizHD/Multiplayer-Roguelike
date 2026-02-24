@@ -1,4 +1,4 @@
-namespace Runtime.Components
+namespace Runtime.ECS.Components
 {
     public interface IComponent
     {
