@@ -1,5 +1,9 @@
 using Runtime.ECS.Components.Movement;
 using Runtime.ECS.Systems;
+using ENet;
+using Runtime.GameSystems;
+using Runtime.ServerInteraction;
+using Server.Commands;
 using UnityEngine;
 
 namespace Runtime
@@ -7,6 +11,8 @@ namespace Runtime
     public class EntryPoint : MonoBehaviour
     {
         public ECS.Core.ECS Ecs { get; } = new ();
+        private readonly GameSystemCollection _gameFixedSystemCollection = new();
+
 
         private void Start()
         {
@@ -21,11 +27,28 @@ namespace Runtime
             Ecs.AddSystem<MovementSystem>();
             Ecs.AddSystem<PatrolSystem>();
             Ecs.AddSystem<DrawTransformSystem>();
+            
+            Library.Initialize();
+            
+            var serverConnectionModel = new ServerConnectionModel();
+            var serverConnectionPresenter = new ServerConnectionPresenter(serverConnectionModel, _gameFixedSystemCollection);
+            serverConnectionPresenter.Enable();
+            
+            serverConnectionModel.ConnectPlayer();
+            await serverConnectionModel.CompletePlayerConnectAwaiter;
+
+            var loginCommand = new LoginCommand("Varfolomey");
+            loginCommand.Write(serverConnectionModel.PlayerPeer);
         }
 
         private void Update()
         {
             Ecs.Update(Time.deltaTime);
+        }
+        
+        private void FixedUpdate()
+        {
+            _gameFixedSystemCollection.Update(Time.fixedDeltaTime);
         }
     }
 }
