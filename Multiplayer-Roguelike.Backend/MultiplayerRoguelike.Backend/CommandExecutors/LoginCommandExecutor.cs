@@ -1,4 +1,5 @@
 using System;
+using Backend.Player;
 using ENet;
 using Shared.Commands;
 
@@ -14,6 +15,9 @@ namespace Backend.CommandExecutors
         public override void Execute()
         {
             Console.WriteLine($"Player {Command.PlayerNickname} wants to login");
+
+            var player = new PlayerModel(Command.PlayerNickname, Peer);
+            World.Players.Add(player.PlayerNickname, player);
         }
     }
 }
