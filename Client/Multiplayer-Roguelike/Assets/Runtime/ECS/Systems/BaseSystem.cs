@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Runtime.ECS.Components;
 using Runtime.ECS.Core;
 
 namespace Runtime.ECS.Systems
@@ -11,16 +12,16 @@ namespace Runtime.ECS.Systems
         
         private readonly List<Type> _requiredComponents = new List<Type>();
         
-        private ComponentManager _componentManager;
+        protected ComponentManager ComponentManager { get; private set; }
         
         public void Initialize(ComponentManager componentManager)
         {
-            _componentManager = componentManager;
+            ComponentManager = componentManager;
         }
 
         public void Update(float deltaTime)
         {
-            foreach (var (id, components) in _componentManager.Query(Components.ToArray()))
+            foreach (var (id, components) in ComponentManager.Query(Components.ToArray()))
             {
                 Update(id, components, deltaTime);
             }
