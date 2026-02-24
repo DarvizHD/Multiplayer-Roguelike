@@ -12,6 +12,5 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\MultiplayerRoguelike.Shared\MultiplayerRoguelike.Shared.csproj" />
-      <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 </Project>
