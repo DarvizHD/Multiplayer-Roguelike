@@ -1,15 +1,25 @@
 using System;
 using System.Threading;
 using Backend.CommandExecutors;
+using Backend.Lobby.Collection;
+using Backend.Player.Collection;
 using ENet;
 
 namespace Backend
 {
     public class Server
     {
+        private WorldModel _world;
+        
         public async void Start()
         {
-            //Объявление серверных моделей
+            _world = new WorldModel();
+            
+            var playerCollectionPresenter = new PlayerModelCollectionPresenter(_world.Players);
+            playerCollectionPresenter.Enable();
+            
+            var lobbyCollectionPresenter = new LobbyModelCollectionPresenter(_world.Lobbies, _world);
+            lobbyCollectionPresenter.Enable();
 
             Library.Initialize();
             
@@ -29,7 +39,7 @@ namespace Backend
             var playerHost = new Host();
             playerHost.Create(playerAddress, 5, 100);
 
-            var commandExecutorFactory = new CommandExecutorFactory();
+            var commandExecutorFactory = new CommandExecutorFactory(_world);
             
             while (true)
             {
