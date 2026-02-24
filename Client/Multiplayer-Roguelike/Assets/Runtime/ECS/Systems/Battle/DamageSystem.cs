@@ -1,7 +1,7 @@
-using Runtime.ECS.Systems;
+using Runtime.ECS.Components.Battle;
 using UnityEngine;
 
-namespace Runtime.ECS.Components.Battle
+namespace Runtime.ECS.Systems.Battle
 {
     public class DamageSystem : BaseSystem
     {

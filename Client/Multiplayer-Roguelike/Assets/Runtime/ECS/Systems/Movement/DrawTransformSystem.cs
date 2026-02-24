@@ -1,6 +1,6 @@
 using Runtime.ECS.Components.Movement;
 
-namespace Runtime.ECS.Systems
+namespace Runtime.ECS.Systems.Movement
 {
     public class DrawTransformSystem : BaseSystem
     {

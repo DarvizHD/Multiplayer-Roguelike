@@ -1,8 +1,8 @@
+using Runtime.ECS.Components.Battle;
 using Runtime.ECS.Components.Movement;
-using Runtime.ECS.Systems;
 using UnityEngine;
 
-namespace Runtime.ECS.Components.Battle
+namespace Runtime.ECS.Systems.Battle
 {
     public class MeleeAttackSystem : BaseSystem
     {

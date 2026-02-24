@@ -2,6 +2,8 @@ using Runtime.ECS.Components.Battle;
 using Runtime.ECS.Components.Movement;
 using Runtime.ECS.Core;
 using Runtime.ECS.Systems;
+using Runtime.ECS.Systems.Battle;
+using Runtime.ECS.Systems.Movement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
