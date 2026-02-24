@@ -12,10 +12,10 @@ namespace Editor.ECSDebugger
         private EntryPoint _entryPoint;
         private readonly Dictionary<int, bool> _foldouts = new ();
 
-        [MenuItem("Tools/ECS Debugger")]
+        [MenuItem("Tools/ECSWorld Debugger")]
         public static void ShowWindow()
         {
-            GetWindow<EcsDebugWindow>("ECS Debugger");
+            GetWindow<EcsDebugWindow>("ECSWorld Debugger");
         }
 
         private void OnGUI()
@@ -34,7 +34,7 @@ namespace Editor.ECSDebugger
                 return;
             }
 
-            var componentManager = _entryPoint.Ecs.ComponentManager;
+            var componentManager = _entryPoint.EcsWorld.ComponentManager;
 
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
 
@@ -85,8 +85,12 @@ namespace Editor.ECSDebugger
         {
             var fields = component.GetType().GetFields();
 
+            Debug.Log($"{component.GetType().Name}: {fields.Length}");
+            
             foreach (var field in fields)
             {
+                Debug.Log(field.Name);
+                
                 var value = field.GetValue(component);
                 EditorGUILayout.LabelField($"{field.Name}: {value}");
             }
