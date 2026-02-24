@@ -200,7 +200,7 @@
       "dependencies": {}
     },
     "pivo.multiplayerroguelike.shared": {
-      "version": "file:C:/My Projects/Multiplayer-Roguelike/Multiplayer-Roguelike.Shared",
+      "version": "file:../../Multiplayer-Roguelike.Shared",
       "depth": 0,
       "source": "local",
       "dependencies": {}
