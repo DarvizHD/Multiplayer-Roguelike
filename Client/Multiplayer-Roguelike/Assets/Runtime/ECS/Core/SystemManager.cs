@@ -15,7 +15,7 @@ namespace Runtime.Core
             _componentManager = componentManager;
         }
 
-        public void RegisterSystem<T>() where T : Systems.BaseSystem, new()
+        public void RegisterSystem<T>() where T : BaseSystem, new()
         {
             var system = new T();
             

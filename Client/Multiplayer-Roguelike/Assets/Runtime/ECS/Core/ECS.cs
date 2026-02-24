@@ -1,4 +1,5 @@
 using Runtime.Components;
+using Runtime.Systems;
 
 namespace Runtime.Core
 {
@@ -25,7 +26,7 @@ namespace Runtime.Core
             _componentManager.AddComponent<T>(entityId, component);
         }
 
-        public void AddSystem<T>() where T : Systems.BaseSystem, new()
+        public void AddSystem<T>() where T : BaseSystem, new()
         {
             _systemManager.RegisterSystem<T>();
         }
