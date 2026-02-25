@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b31a41b391874d1693c467a0467fa992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.MonoBehaviorProvider
-  <Animator>k__BackingField: {fileID: 0}
+  <Animator>k__BackingField: {fileID: 2004594603268225297}
   <Transform>k__BackingField: {fileID: 8930996077387157583}
 --- !u!1001 &2428474008981581904
 PrefabInstance:
@@ -150,7 +150,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3274897511479807233}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: eb091ab270ca58a429174d77b229c42b, type: 3}
   m_Controller: {fileID: 9100000, guid: 44ed933473df91f4f81a30b0287a1a2f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0

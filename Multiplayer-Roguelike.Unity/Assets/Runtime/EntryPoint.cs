@@ -15,7 +15,7 @@ namespace Runtime
     {
         public ECSWorld EcsWorld { get; } = new ();
         public MonoBehaviorProvider PlayerPrefab;
-        public GameObject EnemyPrefab;
+        public MonoBehaviorProvider EnemyPrefab;
         private PlayerControls _playerControls;
         
         private void Start()
@@ -57,14 +57,17 @@ namespace Runtime
             
             var enemyId = 1;
 
+            var enemyProvider = Instantiate(EnemyPrefab);
+            
             EcsWorld.AddEntityComponent(enemyId, new PositionComponent(Vector3.forward));
             EcsWorld.AddEntityComponent(enemyId, new DirectionComponent(Vector3.forward));
-            EcsWorld.AddEntityComponent(enemyId, new SpeedComponent(5f));
-            EcsWorld.AddEntityComponent(enemyId, new TransformComponent(Instantiate(EnemyPrefab).transform));
+            EcsWorld.AddEntityComponent(enemyId, new SpeedComponent(1f));
+            EcsWorld.AddEntityComponent(enemyId, new TransformComponent(enemyProvider.Transform));
             EcsWorld.AddEntityComponent(enemyId, new EnemyTagComponent());
             EcsWorld.AddEntityComponent(enemyId, new RotationComponent(Quaternion.identity));
             EcsWorld.AddEntityComponent(enemyId, new FollowComponent(playerProvider.Transform));
             EcsWorld.AddEntityComponent(enemyId, new SeparationComponent());
+            EcsWorld.AddEntityComponent(enemyId, new AnimatorComponent(enemyProvider.Animator));
             
             EcsWorld.AddSystem<PlayerInputSystem>();
             EcsWorld.AddSystem<FollowSystem>();
@@ -77,6 +80,7 @@ namespace Runtime
             EcsWorld.AddSystem<MeleeAttackSystem>();
             EcsWorld.AddSystem<AttackCooldownSystem>();
             EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
+            EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
         }
         
         private void Update()
