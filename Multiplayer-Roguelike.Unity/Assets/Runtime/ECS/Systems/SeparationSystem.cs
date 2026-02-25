@@ -36,8 +36,8 @@ namespace Runtime.ECS.Systems
 
                 var correction = delta.normalized * (MinDistance - distance);
 
-                var currentIsPlayer = ComponentManager.HasComponent<PlayerComponent>(id);
-                var otherIsPlayer = ComponentManager.HasComponent<PlayerComponent>(otherId);
+                var currentIsPlayer = ComponentManager.HasComponent<PlayerInputComponent>(id);
+                var otherIsPlayer = ComponentManager.HasComponent<PlayerInputComponent>(otherId);
 
                 if (!currentIsPlayer)
                 {
