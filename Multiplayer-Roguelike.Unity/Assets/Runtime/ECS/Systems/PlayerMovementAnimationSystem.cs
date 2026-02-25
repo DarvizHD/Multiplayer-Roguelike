@@ -20,7 +20,7 @@ namespace Runtime.ECS.Systems
             var playerAnimatorComponent = components[1] as AnimatorComponent;
             var rotationComponent = components[2] as RotationComponent;
             
-            var input = inputComponent.PlayerControls.Gameplay.Move.ReadValue<Vector2>();
+            var input = inputComponent.PlayerControls.Gameplay.Move.ReadValue<Vector2>().normalized;
             
             var worldMove = new Vector3(input.x, 0f, input.y); 
             var rotation = Quaternion.Euler(0f, rotationComponent.Angle, 0f);
@@ -29,7 +29,6 @@ namespace Runtime.ECS.Systems
 
             playerAnimatorComponent.Animator.SetFloat(playerAnimatorComponent.X, localMove.x, 0.1f, deltaTime);
             playerAnimatorComponent.Animator.SetFloat(playerAnimatorComponent.Z, localMove.z, 0.1f, deltaTime);
-            playerAnimatorComponent.Animator.SetBool(playerAnimatorComponent.IsRun, input != Vector2.zero);
         }
     }
 }

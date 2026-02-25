@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Runtime.ECS.Components.Player
 {
     public class PlayerInputComponent : IComponent
