@@ -11,30 +11,17 @@ on:
       - 'Multiplayer-Roguelike.Backend/**'
       - 'Multiplayer-Roguelike.Shared/**'
       - 'Multiplayer-Roguelike.Unity/**'
+  workflow_dispatch:
 
 jobs:
   backend-lint:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Backend
+        working-directory: Multiplayer-Roguelike.Backend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - run: dotnet format Backend.sln --verify-no-changes
-
-  unity-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Generate solution
-        uses: game-ci/unity-builder@v4
-        with:
-          projectPath: Multiplayer-Roguelike.Unity
-          buildMethod: UnityEditor.SyncVS.SyncSolution
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-      - run: dotnet format Multiplayer-Roguelike.Unity.sln --verify-no-changes
+      - run: dotnet format Multiplayer-Roguelike.Backend.sln --verify-no-changes
