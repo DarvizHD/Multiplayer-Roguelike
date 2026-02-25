@@ -1,9 +1,9 @@
+using Runtime.ECS.Components;
 using Runtime.ECS.Components.Movement;
 using Runtime.ECS.Components.Player;
-using Runtime.ECS.Systems;
 using UnityEngine;
 
-namespace Runtime.ECS.Components
+namespace Runtime.ECS.Systems
 {
     public class PlayerMovementAnimationSystem : BaseSystem
     {

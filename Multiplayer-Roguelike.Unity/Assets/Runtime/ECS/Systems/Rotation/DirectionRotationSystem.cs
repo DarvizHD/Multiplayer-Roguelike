@@ -1,7 +1,7 @@
 using Runtime.ECS.Components.Movement;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems
+namespace Runtime.ECS.Systems.Rotation
 {
     namespace Runtime.ECS.Systems
     {
