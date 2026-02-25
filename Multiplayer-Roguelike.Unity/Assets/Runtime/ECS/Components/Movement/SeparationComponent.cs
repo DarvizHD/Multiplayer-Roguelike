@@ -1,4 +1,4 @@
-namespace Runtime.ECS.Components
+namespace Runtime.ECS.Components.Movement
 {
     public class SeparationComponent : IComponent
     {
