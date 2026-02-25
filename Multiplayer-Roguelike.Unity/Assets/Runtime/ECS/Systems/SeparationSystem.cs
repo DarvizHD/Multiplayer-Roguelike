@@ -1,12 +1,11 @@
 using Runtime.ECS.Components;
 using Runtime.ECS.Components.Movement;
-using Runtime.ECS.Components.Player;
 
 namespace Runtime.ECS.Systems
 {
     public class SeparationSystem : BaseSystem
     {
-        private const float MinDistance = 2f;
+        private const float MinDistance = 1.5f;
 
         public SeparationSystem()
         {
@@ -39,18 +38,8 @@ namespace Runtime.ECS.Systems
 
                 var correction = delta.normalized * (MinDistance - distance);
 
-                var currentIsPlayer = ComponentManager.HasComponent<PlayerInputComponent>(id);
-                var otherIsPlayer = ComponentManager.HasComponent<PlayerInputComponent>(otherId);
-
-                if (!currentIsPlayer)
-                {
-                    positionComponent.Position += correction * 0.5f;
-                }
-
-                if (!otherIsPlayer)
-                {
-                    otherPosition.Position -= correction * 0.5f;
-                }
+                positionComponent.Position += correction;
+                otherPosition.Position -= correction;
             }
         }
     }
