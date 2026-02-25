@@ -1,4 +1,5 @@
 using Runtime.ECS.Components.Movement;
+using UnityEngine;
 
 namespace Runtime.ECS.Systems.Movement
 {
@@ -17,8 +18,8 @@ namespace Runtime.ECS.Systems.Movement
             var rotationComponent = components[1] as RotationComponent;
             var transformComponent = components[2] as TransformComponent;
             
-            transformComponent!.Transform.position = positionComponent!.Position;
-            transformComponent.Transform.rotation = rotationComponent!.Rotation;
+            transformComponent.Transform.position = positionComponent.Position;
+            transformComponent.Transform.rotation = Quaternion.Euler(0f, rotationComponent.Angle, 0f);
         }
     }
 }
