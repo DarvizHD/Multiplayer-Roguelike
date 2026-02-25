@@ -127,22 +127,20 @@ namespace Runtime
 
             var results = EcsWorld.ComponentManager.Query(
                 typeof(PositionComponent),
-                typeof(DirectionComponent),
+                typeof(RotationComponent),
                 typeof(MeleeAttackComponent)
             );
 
             foreach (var (id, components) in results)
             {
                 var position = (PositionComponent)components[0];
-                var direction = (DirectionComponent)components[1];
+                var rotation = (RotationComponent)components[1];
                 var melee = (MeleeAttackComponent)components[2];
-                
+
                 Gizmos.color = new Color(1f, 0f, 0f, 0.2f);
                 Gizmos.DrawWireSphere(position.Position, melee.Range);
-                
-                var attackDir = direction.Direction.sqrMagnitude > 0.0001f
-                    ? direction.Direction
-                    : Vector3.forward;
+
+                var attackDir = Quaternion.Euler(0, rotation.Angle, 0) * Vector3.forward;
                 attackDir.y = 0;
                 attackDir.Normalize();
 
@@ -153,7 +151,7 @@ namespace Runtime
                 Gizmos.color = Color.red;
                 Gizmos.DrawRay(position.Position, leftDir * melee.Range);
                 Gizmos.DrawRay(position.Position, rightDir * melee.Range);
-                
+
                 var steps = 20;
                 var prev = position.Position + leftDir * melee.Range;
                 for (var i = 1; i <= steps; i++)
