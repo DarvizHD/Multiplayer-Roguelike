@@ -606,6 +606,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9649d15b13fe4e8182bd35f7b677d970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.EntryPoint
+  PlayerPrefab: {fileID: 3652991558215106615, guid: 84ab6511e3e0f0643869c47787fb2b58, type: 3}
+  EnemyPrefab: {fileID: 4409722934381763222, guid: 550d87c7b3283ee4182daea2791f86b7, type: 3}
 --- !u!4 &941861036
 Transform:
   m_ObjectHideFlags: 0

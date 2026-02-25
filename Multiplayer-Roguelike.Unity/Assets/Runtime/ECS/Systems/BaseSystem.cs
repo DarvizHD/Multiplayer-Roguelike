@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Runtime.ECS.Components;
 using Runtime.ECS.Core;
 
 namespace Runtime.ECS.Systems
@@ -10,7 +9,7 @@ namespace Runtime.ECS.Systems
     {
         private IEnumerable<Type> Components => _requiredComponents;
         
-        private readonly List<Type> _requiredComponents = new List<Type>();
+        private readonly List<Type> _requiredComponents = new();
         
         protected ComponentManager ComponentManager { get; private set; }
         
