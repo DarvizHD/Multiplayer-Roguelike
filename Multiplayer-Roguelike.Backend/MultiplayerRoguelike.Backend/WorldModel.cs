@@ -6,7 +6,7 @@ namespace Backend
     public class WorldModel
     {
         public PlayerModelCollection Players { get; set; } = new();
-        
+
         public LobbyModelCollection Lobbies { get; set; } = new();
     }
 }

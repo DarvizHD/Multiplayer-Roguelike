@@ -19,7 +19,7 @@ namespace Backend.CommandExecutors
         {
             netEvent.Packet.CopyTo(_buffer);
             var eNetProtocol = new ENetProtocol(_buffer);
-            
+
             eNetProtocol.Get(out string commandName);
             return commandName switch
             {

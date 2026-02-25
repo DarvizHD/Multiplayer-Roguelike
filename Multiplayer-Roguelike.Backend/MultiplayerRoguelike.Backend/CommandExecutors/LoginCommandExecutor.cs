@@ -9,7 +9,6 @@ namespace Backend.CommandExecutors
     {
         public LoginCommandExecutor(LoginCommand command, WorldModel world, Peer peer) : base(command, world, ref peer)
         {
-            
         }
 
         public override void Execute()

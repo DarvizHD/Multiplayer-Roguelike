@@ -24,15 +24,15 @@ namespace Backend.Lobby
             _model.OnMemberAdded -= OnMemberAdded;
             _model.OnMemberRemoved -= OnMemberRemoved;
         }
-        
+
         private void OnMemberAdded(string playerNickname)
         {
             var player = _world.Players.Get(playerNickname);
             player.PartyId = _model.Guid;
-            
+
             Console.WriteLine($"Player {playerNickname} added to lobby {_model.Guid}");
         }
-        
+
         private void OnMemberRemoved(string playerNickname)
         {
             var player = _world.Players.Get(playerNickname);

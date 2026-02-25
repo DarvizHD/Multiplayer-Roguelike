@@ -10,7 +10,7 @@ namespace Backend
     public class Server
     {
         private readonly ushort _port;
-        
+
         private Host _host;
         private Thread _thread;
         private WorldModel _world;
@@ -25,30 +25,30 @@ namespace Backend
         public void Start()
         {
             _world = new WorldModel();
-            
+
             var playerCollectionPresenter = new PlayerModelCollectionPresenter(_world.Players);
             playerCollectionPresenter.Enable();
-            
+
             var lobbyCollectionPresenter = new LobbyModelCollectionPresenter(_world.Lobbies, _world);
             lobbyCollectionPresenter.Enable();
 
             Library.Initialize();
-            
+
             var address = new Address { Port = _port };
-            
-            _host = new Host();    
+
+            _host = new Host();
             _host.Create(address, 5, 2);
-            
+
             _isRunning = true;
-            
+
             _commandExecutorFactory = new CommandExecutorFactory(_world);
-            
+
             _thread = new Thread(NetworkLoop);
             _thread.Start();
-            
+
             Console.WriteLine($"Server started on port {_port}");
         }
-        
+
         public void Stop()
         {
             _isRunning = false;
@@ -60,7 +60,7 @@ namespace Backend
 
             Console.WriteLine("Server stopped");
         }
-        
+
         private void NetworkLoop()
         {
             while (_isRunning)
@@ -76,7 +76,7 @@ namespace Backend
                 }
             }
         }
-        
+
         private void HandleEvent(Event netEvent)
         {
             switch (netEvent.Type)
@@ -93,7 +93,7 @@ namespace Backend
                 case EventType.Disconnect:
                     Console.WriteLine($"{netEvent.Peer.ID} disconnected");
                     break;
-                
+
                 case EventType.Timeout:
                     Console.WriteLine($"{netEvent.Peer.ID} timed out");
                     break;

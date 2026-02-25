@@ -9,13 +9,12 @@ namespace Backend.CommandExecutors
     {
         public CreateLobbyExecutor(CreateLobbyCommand command, WorldModel world, Peer peer) : base(command, world, ref peer)
         {
-            
         }
 
         public override void Execute()
         {
             Console.WriteLine("Create lobby");
-            
+
             var player = World.Players.Get(Command.PlayerNickname);
             if (player.PartyId != string.Empty)
             {
@@ -24,7 +23,7 @@ namespace Backend.CommandExecutors
 
             var lobby = new LobbyModel(Guid.NewGuid().ToString(), player.PlayerNickname);
             World.Lobbies.Add(lobby.Guid, lobby);
-            
+
             lobby.AddMember(player.PlayerNickname);
         }
     }

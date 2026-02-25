@@ -6,7 +6,7 @@ namespace Backend.Lobby.Collection
     public class LobbyModelCollectionPresenter : IPresenter
     {
         private readonly LobbyModelCollection _lobbyModelCollection;
-        
+
         private readonly Dictionary<string, LobbyPresenter> _presenters = new();
         private readonly WorldModel _world;
 
@@ -31,16 +31,17 @@ namespace Backend.Lobby.Collection
             {
                 presenter.Value.Disable();
             }
+
             _presenters.Clear();
         }
-        
+
         private void OnLobbyAdded(LobbyModel lobbyModel)
         {
             Console.WriteLine($"Lobby {lobbyModel.Guid} created");
-            
+
             var presenter = new LobbyPresenter(lobbyModel, _world);
             presenter.Enable();
-            
+
             _presenters.Add(lobbyModel.Guid, presenter);
         }
 
@@ -48,7 +49,7 @@ namespace Backend.Lobby.Collection
         {
             var presenter = _presenters[lobbyModel.Guid];
             presenter.Disable();
-            
+
             _presenters.Remove(lobbyModel.Guid);
         }
     }
