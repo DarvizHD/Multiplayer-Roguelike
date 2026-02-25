@@ -44,6 +44,7 @@ namespace Runtime
             EcsWorld.RegisterComponent<EnemyTagComponent>();
             
             EcsWorld.RegisterComponent<PendingDamageEventComponent>();
+            EcsWorld.RegisterComponent<AttackEventComponent>();
             EcsWorld.RegisterComponent<FollowComponent>();
 
             EcsWorld.RegisterComponent<SeparationComponent>();
@@ -93,9 +94,11 @@ namespace Runtime
             EcsWorld.AddSystem<SeparationSystem>();
             EcsWorld.AddSystem<DirectionRotationSystem>();
             EcsWorld.AddSystem<DrawTransformSystem>();
-            EcsWorld.AddSystem<DamageSystem>();
             EcsWorld.AddSystem<MeleeAttackSystem>();
             EcsWorld.AddSystem<AttackCooldownSystem>();
+            EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
+            EcsWorld.AddSystem<AttackSystem>();
+            EcsWorld.AddSystem<DamageSystem>();
             EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
             EcsWorld.AddSystem<PlayerLookRotationSystem>();
@@ -114,6 +117,55 @@ namespace Runtime
             
             var createLobbyCommand = new CreateLobbyCommand("Varfolomey");
             createLobbyCommand.Write(serverConnectionModel.PlayerPeer);
+            
+            OnDrawGizmos();
+        }
+        
+        private void OnDrawGizmos()
+        {
+            if (!Application.isPlaying) return;
+
+            var results = EcsWorld.ComponentManager.Query(
+                typeof(PositionComponent),
+                typeof(DirectionComponent),
+                typeof(MeleeAttackComponent)
+            );
+
+            foreach (var (id, components) in results)
+            {
+                var position = (PositionComponent)components[0];
+                var direction = (DirectionComponent)components[1];
+                var melee = (MeleeAttackComponent)components[2];
+                
+                Gizmos.color = new Color(1f, 0f, 0f, 0.2f);
+                Gizmos.DrawWireSphere(position.Position, melee.Range);
+                
+                var attackDir = direction.Direction.sqrMagnitude > 0.0001f
+                    ? direction.Direction
+                    : Vector3.forward;
+                attackDir.y = 0;
+                attackDir.Normalize();
+
+                var halfAngle = melee.Angle * 0.5f;
+                var leftDir = Quaternion.Euler(0, -halfAngle, 0) * attackDir;
+                var rightDir = Quaternion.Euler(0, halfAngle, 0) * attackDir;
+
+                Gizmos.color = Color.red;
+                Gizmos.DrawRay(position.Position, leftDir * melee.Range);
+                Gizmos.DrawRay(position.Position, rightDir * melee.Range);
+                
+                var steps = 20;
+                var prev = position.Position + leftDir * melee.Range;
+                for (var i = 1; i <= steps; i++)
+                {
+                    var t = (float)i / steps;
+                    var angle = Mathf.Lerp(-halfAngle, halfAngle, t);
+                    var dir = Quaternion.Euler(0, angle, 0) * attackDir;
+                    var next = position.Position + dir * melee.Range;
+                    Gizmos.DrawLine(prev, next);
+                    prev = next;
+                }
+            }
         }
         
         private void Update()
