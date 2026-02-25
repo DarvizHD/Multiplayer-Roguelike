@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Runtime;
 using Runtime.ECS.Core;
 using UnityEditor;
@@ -102,8 +102,8 @@ namespace Editor.ECSDebugger
 
         private void ShowComponentFields(object component)
         {
-            var fields = component.GetType().GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-            var properties = component.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            var fields = component.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            var properties = component.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             foreach (var field in fields)
             {

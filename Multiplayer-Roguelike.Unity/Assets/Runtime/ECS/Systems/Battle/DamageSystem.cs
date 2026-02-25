@@ -14,7 +14,7 @@ namespace Runtime.ECS.Systems.Battle
         {
             var pendingDamageEventComponent = components[0] as PendingDamageEventComponent;
             
-            Debug.Log($"{this.GetType().Name} {id}: {pendingDamageEventComponent.TotalDamage}");
+            Debug.Log($"{GetType().Name} {id}: {pendingDamageEventComponent.TotalDamage}");
             
             ComponentManager.RemoveComponent<PendingDamageEventComponent>(id);
         }

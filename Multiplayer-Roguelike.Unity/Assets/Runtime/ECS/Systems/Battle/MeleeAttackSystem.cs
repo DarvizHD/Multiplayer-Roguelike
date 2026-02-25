@@ -8,9 +8,9 @@ namespace Runtime.ECS.Systems.Battle
     {
         public MeleeAttackSystem()
         {
-            RegisterRequiredComponent((typeof(PositionComponent)));
-            RegisterRequiredComponent((typeof(MeleeAttackComponent)));
-            RegisterRequiredComponent((typeof(AttackCooldownComponent)));
+            RegisterRequiredComponent(typeof(PositionComponent));
+            RegisterRequiredComponent(typeof(MeleeAttackComponent));
+            RegisterRequiredComponent(typeof(AttackCooldownComponent));
         }
         
         protected override void Update(int id, object[] components, float deltaTime)

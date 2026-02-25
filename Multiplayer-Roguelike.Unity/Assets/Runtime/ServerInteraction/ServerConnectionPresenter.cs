@@ -5,8 +5,8 @@ namespace Runtime.ServerInteraction
 {
     public class ServerConnectionPresenter : IPresenter
     {
-        private ServerConnectionModel _model;
-        private GameSystemCollection _systemCollection;
+        private readonly ServerConnectionModel _model;
+        private readonly GameSystemCollection _systemCollection;
         private ServerPlayerConnectionSystem _serverConnectionSystem;
 
         public ServerConnectionPresenter(ServerConnectionModel serverConnectionModel, GameSystemCollection gameSystemCollection)
@@ -36,7 +36,7 @@ namespace Runtime.ServerInteraction
             _model.PlayerHost = new Host();
             _model.PlayerHost.Create();
             
-            _model.PlayerPeer = _model.PlayerHost.Connect(address, 100);
+            _model.PlayerPeer = _model.PlayerHost.Connect(address, 2);
 
             _serverConnectionSystem = new ServerPlayerConnectionSystem(_model);
             _systemCollection.Add(_serverConnectionSystem);
@@ -45,6 +45,7 @@ namespace Runtime.ServerInteraction
         private void OnPlayerDisconnect()
         {
             _model.PlayerHost.Dispose();
+            _model.PlayerHost = null;
             _systemCollection.Remove(_serverConnectionSystem);
         }
     }
