@@ -1,6 +1,7 @@
 using ENet;
 using Runtime.ECS.Components;
 using Runtime.ECS.Components.Battle;
+using Runtime.ECS.Components.Health;
 using Runtime.ECS.Components.Movement;
 using Runtime.ECS.Components.Player;
 using Runtime.ECS.Core;
@@ -22,43 +23,47 @@ namespace Runtime
         public MonoBehaviorProvider PlayerPrefab;
         public MonoBehaviorProvider EnemyPrefab;
         private PlayerControls _playerControls;
-        
+
         private readonly GameSystemCollection _gameFixedSystemCollection = new();
 
         private async void Start()
         {
             _playerControls = new PlayerControls();
-            
+
             _playerControls.Enable();
-            
+
             EcsWorld.RegisterComponent<PositionComponent>();
             EcsWorld.RegisterComponent<RotationComponent>();
             EcsWorld.RegisterComponent<VelocityComponent>();
             EcsWorld.RegisterComponent<SpeedComponent>();
             EcsWorld.RegisterComponent<DirectionComponent>();
-            
+
             EcsWorld.RegisterComponent<AttackCooldownComponent>();
             EcsWorld.RegisterComponent<MeleeAttackComponent>();
-            
+
             EcsWorld.RegisterComponent<TransformComponent>();
             EcsWorld.RegisterComponent<EnemyTagComponent>();
-            
+
             EcsWorld.RegisterComponent<PendingDamageEventComponent>();
             EcsWorld.RegisterComponent<AttackEventComponent>();
             EcsWorld.RegisterComponent<FollowComponent>();
 
             EcsWorld.RegisterComponent<SeparationComponent>();
             EcsWorld.RegisterComponent<PlayerInputComponent>();
-            
+
             EcsWorld.RegisterComponent<DirectionRotationComponent>();
             EcsWorld.RegisterComponent<PlayerLookRotationComponent>();
-            
+
             EcsWorld.RegisterComponent<AnimatorComponent>();
-            
+            EcsWorld.RegisterComponent<HealthComponent>();
+            EcsWorld.RegisterComponent<RegenerationComponent>();
+            EcsWorld.RegisterComponent<DeathComponent>();
+            EcsWorld.RegisterComponent<InvulnerabilityComponent>();
+
             var playerEntityId = 0;
-            
+
             var playerProvider = Instantiate(PlayerPrefab);
-            
+
             EcsWorld.AddEntityComponent(playerEntityId, new PositionComponent(Vector3.zero));
             EcsWorld.AddEntityComponent(playerEntityId, new RotationComponent());
             EcsWorld.AddEntityComponent(playerEntityId, new DirectionComponent(Vector3.zero));
@@ -69,6 +74,8 @@ namespace Runtime
             EcsWorld.AddEntityComponent(playerEntityId, new PlayerLookRotationComponent(10f));
             EcsWorld.AddEntityComponent(playerEntityId, new PlayerInputComponent(_playerControls));
             EcsWorld.AddEntityComponent(playerEntityId, new AnimatorComponent(playerProvider.Animator));
+            EcsWorld.AddEntityComponent(playerEntityId, new HealthComponent(100f));
+            EcsWorld.AddEntityComponent(playerEntityId, new RegenerationComponent(5f, 3f));
 
             for (var i = 1; i < 2; i++)
             {
@@ -86,8 +93,10 @@ namespace Runtime
               EcsWorld.AddEntityComponent(enemyId, new FollowComponent(playerProvider.Transform));
               EcsWorld.AddEntityComponent(enemyId, new SeparationComponent());
               EcsWorld.AddEntityComponent(enemyId, new AnimatorComponent(enemyProvider.Animator));
+              EcsWorld.AddEntityComponent(enemyId, new HealthComponent(50f));
+              EcsWorld.AddEntityComponent(enemyId, new RegenerationComponent(2f, 5f));
             }
-            
+
             EcsWorld.AddSystem<PlayerInputMovementSystem>();
             EcsWorld.AddSystem<FollowSystem>();
             EcsWorld.AddSystem<MovementSystem>();
@@ -95,6 +104,10 @@ namespace Runtime
             EcsWorld.AddSystem<DirectionRotationSystem>();
             EcsWorld.AddSystem<DrawTransformSystem>();
             EcsWorld.AddSystem<MeleeAttackSystem>();
+            EcsWorld.AddSystem<DamageSystem>();
+            EcsWorld.AddSystem<DeathSystem>();
+            EcsWorld.AddSystem<RegenerationSystem>();
+            EcsWorld.AddSystem<InvulnerabilitySystem>();
             EcsWorld.AddSystem<AttackCooldownSystem>();
             EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
             EcsWorld.AddSystem<AttackSystem>();
@@ -102,25 +115,25 @@ namespace Runtime
             EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
             EcsWorld.AddSystem<PlayerLookRotationSystem>();
-            
+
             Library.Initialize();
-            
+
             var serverConnectionModel = new ServerConnectionModel();
             var serverConnectionPresenter = new ServerConnectionPresenter(serverConnectionModel, _gameFixedSystemCollection);
             serverConnectionPresenter.Enable();
-            
+
             serverConnectionModel.ConnectPlayer();
             await serverConnectionModel.CompletePlayerConnectAwaiter;
 
             var loginCommand = new LoginCommand("Varfolomey");
             loginCommand.Write(serverConnectionModel.PlayerPeer);
-            
+
             var createLobbyCommand = new CreateLobbyCommand("Varfolomey");
             createLobbyCommand.Write(serverConnectionModel.PlayerPeer);
-            
+
             OnDrawGizmos();
         }
-        
+
         private void OnDrawGizmos()
         {
             if (!Application.isPlaying) return;
@@ -165,12 +178,12 @@ namespace Runtime
                 }
             }
         }
-        
+
         private void Update()
         {
             EcsWorld.Update(Time.deltaTime);
         }
-        
+
         private void FixedUpdate()
         {
             _gameFixedSystemCollection.Update(Time.fixedDeltaTime);
