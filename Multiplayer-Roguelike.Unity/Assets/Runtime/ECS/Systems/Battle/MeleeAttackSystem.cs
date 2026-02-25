@@ -27,8 +27,6 @@ namespace Runtime.ECS.Systems.Battle
                 return;
             }
 
-            attackCooldownComponent.CurrentCooldown = attackCooldownComponent.Cooldown;
-
             var attackDirection = Quaternion.Euler(0f, rotationComponent.Angle, 0f) * Vector3.forward;
             attackDirection.y = 0;
 
@@ -50,8 +48,10 @@ namespace Runtime.ECS.Systems.Battle
 
                 if (angle > meleeAttackComponent.Angle * 0.5f) continue;
 
-                if (!ComponentManager.TryGetComponent<AttackEventComponent>(id, out var attackEventComponent))
+                if (!ComponentManager.HasComponent<AttackEventComponent>(id))
                 {
+                    attackCooldownComponent.CurrentCooldown = attackCooldownComponent.Cooldown;
+                    
                     ComponentManager.AddComponent(id, new AttackEventComponent(targetId, meleeAttackComponent.Damage));
                 }
             }
