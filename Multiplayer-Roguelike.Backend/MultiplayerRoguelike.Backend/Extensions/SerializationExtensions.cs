@@ -54,7 +54,9 @@ namespace Backend.Extensions
             {
                 var attribute = field.GetCustomAttribute<EnumMemberAttribute>();
                 if (attribute?.Value == value)
+                {
                     return (T)field.GetValue(null);
+                }
             }
 
             return (T)Enum.Parse(type, ToPascalCase(value), true);
