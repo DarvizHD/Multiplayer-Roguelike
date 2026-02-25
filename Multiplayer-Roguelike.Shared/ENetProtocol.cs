@@ -6,9 +6,9 @@ namespace Shared
 {
     public class ENetProtocol
     {
-        public BinaryWriter Writer;
-        public BinaryReader Reader;
-        public MemoryStream Stream;
+        public readonly BinaryWriter Writer;
+        public readonly BinaryReader Reader;
+        public readonly MemoryStream Stream;
 
         public ENetProtocol(byte[] buffer = null)
         {

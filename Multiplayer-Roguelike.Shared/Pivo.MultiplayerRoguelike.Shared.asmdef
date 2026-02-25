@@ -1,16 +1,16 @@
 {
-    "name": "Pivo.MultiplayerRoguelike.Shared",
-    "rootNamespace": "",
-    "references": [
-        "GUID:c64c3c4e9c771ca4d96eebafd519df0f"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "Pivo.MultiplayerRoguelike.Shared",
+  "rootNamespace": "",
+  "references": [
+    "GUID:c64c3c4e9c771ca4d96eebafd519df0f"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

@@ -31,7 +31,7 @@ namespace Backend
 
         private void Update()
         {
-            var playerAddress = new Address()
+            var playerAddress = new Address
             {
                 Port = 8080
             };

@@ -8,9 +8,9 @@
         <RootNamespace>Backend</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="ENet-CSharp" Version="2.4.8" />
+        <PackageReference Include="ENet-CSharp" Version="2.4.8"/>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\Multiplayer-Roguelike.Shared\Multiplayer-Roguelike.Shared.csproj" />
+        <ProjectReference Include="..\..\Multiplayer-Roguelike.Shared\Multiplayer-Roguelike.Shared.csproj"/>
     </ItemGroup>
 </Project>
