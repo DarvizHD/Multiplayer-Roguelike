@@ -10,12 +10,12 @@ namespace Runtime.ECS.Core
         private readonly Dictionary<Type, IComponentStorage<IComponent>> _storage = new();
 
         private readonly Dictionary<Type, int> _pendingRemove = new();
-        
+
         public void RegisterComponent<T>() where T : class, IComponent
         {
             _storage[typeof(T)] = new ComponentStorage<T>();
         }
-        
+
         public void AddComponent<T>(int entityId, T component) where T : class, IComponent
         {
             GetStorage<T>().Add(entityId, component);
@@ -39,15 +39,15 @@ namespace Runtime.ECS.Core
 
         public T GetComponent<T>(int entityId) where T : class, IComponent
         {
-            return (T) _storage[typeof(T)].Get(entityId);
+            return (T)_storage[typeof(T)].Get(entityId);
         }
 
         public bool TryGetComponent<T>(int entityId, out T component) where T : class, IComponent
         {
-            var success =  _storage[typeof(T)].TryGet(entityId, out var founded);
+            var success = _storage[typeof(T)].TryGet(entityId, out var founded);
 
-            component = (T) founded;
-            
+            component = (T)founded;
+
             return success;
         }
 
@@ -83,7 +83,7 @@ namespace Runtime.ECS.Core
 
                 yield return (id, components);
             }
-            
+
             RemoveComponents();
         }
 
@@ -98,7 +98,7 @@ namespace Runtime.ECS.Core
             {
                 _storage[pair.Key].Remove(pair.Value);
             }
-            
+
             _pendingRemove.Clear();
         }
     }

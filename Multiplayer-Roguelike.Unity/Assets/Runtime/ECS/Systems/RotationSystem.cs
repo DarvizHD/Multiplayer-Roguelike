@@ -24,22 +24,22 @@ namespace Runtime.ECS.Systems
                 var directionComponent = components[2] as DirectionComponent;
 
                 var dir = directionComponent!.Direction;
-                
+
                 if (dir == Vector3.zero)
                 {
                     return;
                 }
 
                 var angle = Vector3.Angle(transformComponent!.Transform.forward, dir);
-                
+
                 if (angle < MinAngle)
                 {
                     return;
                 }
-                
+
                 var targetRotation = Quaternion.LookRotation(dir);
                 var maxDelta = RotationSpeed * deltaTime;
-                rotationComponent!.Rotation =  Quaternion.RotateTowards(transformComponent.Transform.rotation, targetRotation, maxDelta);
+                rotationComponent!.Rotation = Quaternion.RotateTowards(transformComponent.Transform.rotation, targetRotation, maxDelta);
             }
         }
     }

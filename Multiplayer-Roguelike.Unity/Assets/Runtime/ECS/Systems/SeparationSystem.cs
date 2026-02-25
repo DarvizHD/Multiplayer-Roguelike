@@ -20,7 +20,10 @@ namespace Runtime.ECS.Systems
 
             foreach (var (otherId, otherComponents) in ComponentManager.Query(typeof(PositionComponent)))
             {
-                if (otherId <= id) continue;
+                if (otherId <= id)
+                {
+                    continue;
+                }
 
                 var otherPosition = (PositionComponent)otherComponents[0];
 

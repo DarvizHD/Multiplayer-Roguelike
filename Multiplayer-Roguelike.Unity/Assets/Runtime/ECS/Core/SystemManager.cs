@@ -7,7 +7,7 @@ namespace Runtime.ECS.Core
     public class SystemManager
     {
         private readonly Dictionary<Type, BaseSystem> _systems = new();
-        
+
         private readonly ComponentManager _componentManager;
 
         public SystemManager(ComponentManager componentManager)
@@ -18,9 +18,9 @@ namespace Runtime.ECS.Core
         public void RegisterSystem<T>() where T : BaseSystem, new()
         {
             var system = new T();
-            
+
             system.Initialize(_componentManager);
-            
+
             _systems[typeof(T)] = system;
         }
 
@@ -28,7 +28,7 @@ namespace Runtime.ECS.Core
         {
             _systems.Remove(typeof(T));
         }
-        
+
         public void UpdateAll(float deltaTime)
         {
             foreach (var system in _systems.Values)

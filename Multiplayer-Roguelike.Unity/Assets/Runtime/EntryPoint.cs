@@ -17,11 +17,11 @@ namespace Runtime
 {
     public class EntryPoint : MonoBehaviour
     {
-        public ECSWorld EcsWorld { get; } = new ();
+        public ECSWorld EcsWorld { get; } = new();
         public GameObject PlayerPrefab;
         public GameObject EnemyPrefab;
         private Transform _playerTransform;
-        
+
         private readonly GameSystemCollection _gameFixedSystemCollection = new();
 
         private async void Start()
@@ -40,11 +40,11 @@ namespace Runtime
             EcsWorld.RegisterComponent<SeparationComponent>();
             EcsWorld.RegisterComponent<PlayerComponent>();
             EcsWorld.RegisterComponent<RotationComponent>();
-            
+
             var playerEntityId = 0;
-            
+
             _playerTransform = Instantiate(PlayerPrefab).transform;
-            
+
             EcsWorld.AddEntityComponent(playerEntityId, new PositionComponent(Vector3.up));
             EcsWorld.AddEntityComponent(playerEntityId, new DirectionComponent(Vector3.zero));
             EcsWorld.AddEntityComponent(playerEntityId, new TransformComponent(_playerTransform));
@@ -66,7 +66,7 @@ namespace Runtime
                 EcsWorld.AddEntityComponent(i, new FollowComponent(_playerTransform));
                 EcsWorld.AddEntityComponent(i, new SeparationComponent());
             }
-            
+
             EcsWorld.AddSystem<PlayerInputSystem>();
             EcsWorld.AddSystem<FollowSystem>();
             EcsWorld.AddSystem<MovementSystem>();
@@ -76,28 +76,28 @@ namespace Runtime
             EcsWorld.AddSystem<DamageSystem>();
             EcsWorld.AddSystem<MeleeAttackSystem>();
             EcsWorld.AddSystem<AttackCooldownSystem>();
-            
+
             Library.Initialize();
-            
+
             var serverConnectionModel = new ServerConnectionModel();
             var serverConnectionPresenter = new ServerConnectionPresenter(serverConnectionModel, _gameFixedSystemCollection);
             serverConnectionPresenter.Enable();
-            
+
             serverConnectionModel.ConnectPlayer();
             await serverConnectionModel.CompletePlayerConnectAwaiter;
 
             var loginCommand = new LoginCommand("Varfolomey");
             loginCommand.Write(serverConnectionModel.PlayerPeer);
-            
+
             var createLobbyCommand = new CreateLobbyCommand("Varfolomey");
             createLobbyCommand.Write(serverConnectionModel.PlayerPeer);
         }
-        
+
         private void Update()
         {
             EcsWorld.Update(Time.deltaTime);
         }
-        
+
         private void FixedUpdate()
         {
             _gameFixedSystemCollection.Update(Time.fixedDeltaTime);

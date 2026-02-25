@@ -9,7 +9,7 @@ namespace Runtime.ECS.Components.Battle
         public AttackCooldownComponent(float cooldown)
         {
             Cooldown = cooldown;
-            
+
             CurrentCooldown = cooldown;
         }
     }

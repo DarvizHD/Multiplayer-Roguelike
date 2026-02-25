@@ -6,14 +6,14 @@ namespace Runtime.ECS.Systems
     public class FollowSystem : BaseSystem
     {
         private const float StopDistance = 1f;
-        
+
         public FollowSystem()
         {
             RegisterRequiredComponent(typeof(FollowComponent));
-            RegisterRequiredComponent(typeof(DirectionComponent));            
-            RegisterRequiredComponent(typeof(PositionComponent));            
+            RegisterRequiredComponent(typeof(DirectionComponent));
+            RegisterRequiredComponent(typeof(PositionComponent));
         }
-    
+
         protected override void Update(int id, object[] components, float deltaTime)
         {
             var followComponent = (FollowComponent)components[0];
