@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Runtime;
+using Runtime.ECS.Core;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Editor.ECSDebugger
 {
@@ -23,7 +26,9 @@ namespace Editor.ECSDebugger
             if (!Application.isPlaying)
             {
                 EditorGUILayout.HelpBox("Available only in Play Mode", MessageType.Info);
-                return;
+                {
+                    return;
+                }
             }
 
             _entryPoint = FindFirstObjectByType<EntryPoint>();
@@ -31,7 +36,9 @@ namespace Editor.ECSDebugger
             if (!_entryPoint)
             {
                 EditorGUILayout.HelpBox("EntryPoint not found in the scene", MessageType.Warning);
-                return;
+                {
+                    return;
+                }
             }
 
             var componentManager = _entryPoint.EcsWorld.ComponentManager;
@@ -43,6 +50,15 @@ namespace Editor.ECSDebugger
             EditorGUILayout.LabelField($"Total Entities: {entities.Count}", EditorStyles.boldLabel);
             EditorGUILayout.Space();
 
+            ShowEntityHeader(entities, componentManager);
+            
+            EditorGUILayout.EndScrollView();
+
+            Repaint();
+        }
+
+        private void ShowEntityHeader(List<int> entities, ComponentManager componentManager)
+        {
             foreach (var entityId in entities)
             {
                 _foldouts.TryAdd(entityId, false);
@@ -56,45 +72,38 @@ namespace Editor.ECSDebugger
                 
                 EditorGUI.indentLevel++;
 
-                var componentTypes = componentManager.GetComponentTypes(entityId);
-
-                foreach (var componentType in componentTypes)
-                {
-                    var rect = EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-    
-                    EditorGUILayout.LabelField(componentType.Name, EditorStyles.boldLabel);
-
-                    var component = componentManager.GetComponent(entityId, componentType);
-                    if (component != null)
-                    {
-                        EditorGUI.indentLevel++;
-                        ShowComponentFields(component);
-                        EditorGUI.indentLevel--;
-                    }
-
-                    EditorGUILayout.EndVertical();
-                    EditorGUILayout.Space(2);
-                }
+                ShowComponentHeader(componentManager, entityId);
 
                 EditorGUI.indentLevel--;
             }
+        }
 
-            EditorGUILayout.EndScrollView();
+        private void ShowComponentHeader(ComponentManager componentManager, int entityId)
+        {
+            var componentTypes = componentManager.GetComponentTypes(entityId);
+            
+            foreach (var componentType in componentTypes)
+            {
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                EditorGUILayout.LabelField(componentType.Name, EditorStyles.boldLabel);
 
-            Repaint();
+                var component = componentManager.GetComponent(entityId, componentType);
+                if (component != null)
+                {
+                    EditorGUI.indentLevel++;
+                    ShowComponentFields(component);
+                    EditorGUI.indentLevel--;
+                }
+
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.Space(2);
+            }
         }
 
         private void ShowComponentFields(object component)
         {
-            var fields = component.GetType().GetFields(
-                System.Reflection.BindingFlags.Public | 
-                System.Reflection.BindingFlags.Instance
-            );
-    
-            var properties = component.GetType().GetProperties(
-                System.Reflection.BindingFlags.Public | 
-                System.Reflection.BindingFlags.Instance
-            );
+            var fields = component.GetType().GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            var properties = component.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 
             foreach (var field in fields)
             {
