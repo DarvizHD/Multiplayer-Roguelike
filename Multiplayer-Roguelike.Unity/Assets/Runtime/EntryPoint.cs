@@ -48,8 +48,8 @@ namespace Runtime
             EcsWorld.RegisterComponent<SeparationComponent>();
             EcsWorld.RegisterComponent<PlayerInputComponent>();
             
-            EcsWorld.RegisterComponent<DirectionRotationTagComponent>();
-            EcsWorld.RegisterComponent<PlayerLookRotationTagComponent>();
+            EcsWorld.RegisterComponent<DirectionRotationComponent>();
+            EcsWorld.RegisterComponent<PlayerLookRotationComponent>();
             
             EcsWorld.RegisterComponent<AnimatorComponent>();
             
@@ -64,7 +64,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(playerEntityId, new SpeedComponent(8f));
             EcsWorld.AddEntityComponent(playerEntityId, new AttackCooldownComponent(3f));
             EcsWorld.AddEntityComponent(playerEntityId, new MeleeAttackComponent(2f, 10f));
-            EcsWorld.AddEntityComponent(playerEntityId, new PlayerLookRotationTagComponent());
+            EcsWorld.AddEntityComponent(playerEntityId, new PlayerLookRotationComponent(10f));
             EcsWorld.AddEntityComponent(playerEntityId, new PlayerInputComponent(_playerControls));
             EcsWorld.AddEntityComponent(playerEntityId, new AnimatorComponent(playerProvider.Animator));
 
@@ -80,7 +80,7 @@ namespace Runtime
               EcsWorld.AddEntityComponent(enemyId, new SpeedComponent(1f));
               EcsWorld.AddEntityComponent(enemyId, new TransformComponent(enemyProvider.Transform));
               EcsWorld.AddEntityComponent(enemyId, new EnemyTagComponent());
-              EcsWorld.AddEntityComponent(enemyId, new DirectionRotationTagComponent());
+              EcsWorld.AddEntityComponent(enemyId, new DirectionRotationComponent(10f));
               EcsWorld.AddEntityComponent(enemyId, new FollowComponent(playerProvider.Transform));
               EcsWorld.AddEntityComponent(enemyId, new SeparationComponent());
               EcsWorld.AddEntityComponent(enemyId, new AnimatorComponent(enemyProvider.Animator));
