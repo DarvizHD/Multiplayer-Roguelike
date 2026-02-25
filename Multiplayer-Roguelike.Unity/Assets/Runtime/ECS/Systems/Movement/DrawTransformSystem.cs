@@ -7,15 +7,18 @@ namespace Runtime.ECS.Systems.Movement
         public DrawTransformSystem()
         {
             RegisterRequiredComponent(typeof(PositionComponent));
+            RegisterRequiredComponent(typeof(RotationComponent));
             RegisterRequiredComponent(typeof(TransformComponent));
         }
         
         protected override void Update(int id, object[] components, float deltaTime)
         {
             var positionComponent =  components[0] as PositionComponent;
-            var transformComponent = components[1] as TransformComponent;
+            var rotationComponent = components[1] as RotationComponent;
+            var transformComponent = components[2] as TransformComponent;
             
-            transformComponent.Transform.position = positionComponent.Position;
+            transformComponent!.Transform.position = positionComponent!.Position;
+            transformComponent.Transform.rotation = rotationComponent!.Rotation;
         }
     }
 }
