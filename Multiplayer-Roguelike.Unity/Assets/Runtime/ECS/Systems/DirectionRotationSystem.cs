@@ -12,7 +12,7 @@ namespace Runtime.ECS.Systems
 
             public DirectionRotationSystem()
             {
-                RegisterRequiredComponent(typeof(DirectionRotationTagComponent));
+                RegisterRequiredComponent(typeof(DirectionRotationComponent));
                 RegisterRequiredComponent(typeof(TransformComponent));
                 RegisterRequiredComponent(typeof(DirectionComponent));
                 RegisterRequiredComponent(typeof(RotationComponent));
@@ -20,7 +20,7 @@ namespace Runtime.ECS.Systems
 
             protected override void Update(int id, object[] components, float deltaTime)
             {
-                var directionRotationTagComponent = components[0] as DirectionRotationTagComponent;
+                var directionRotationComponent = components[0] as DirectionRotationComponent;
                 var transformComponent = components[1] as TransformComponent;
                 var directionComponent = components[2] as DirectionComponent;
                 var rotationComponent =  components[3] as RotationComponent;
@@ -43,8 +43,10 @@ namespace Runtime.ECS.Systems
                 var maxDelta = RotationSpeed * deltaTime;
                 
                 var currentRotation = Quaternion.Euler(0, rotationComponent.Angle, 0f);
+
+                var targetAngle = Quaternion.RotateTowards(currentRotation, targetRotation, maxDelta).eulerAngles.y;
                 
-                rotationComponent.Angle =  Quaternion.RotateTowards(currentRotation, targetRotation, maxDelta).eulerAngles.y;
+                rotationComponent.Angle = Mathf.LerpAngle(rotationComponent.Angle, targetAngle, directionRotationComponent.RotationSpeed * deltaTime);
             }
         }
     }
