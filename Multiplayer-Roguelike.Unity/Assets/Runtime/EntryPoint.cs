@@ -58,7 +58,6 @@ namespace Runtime
             EcsWorld.AddEntityComponent(playerEntityId, new MeleeAttackComponent(2f, 10f));
             EcsWorld.AddEntityComponent(playerEntityId, new RotationComponent(Quaternion.identity));
             EcsWorld.AddEntityComponent(playerEntityId, new PlayerInputComponent(_playerControls));
-            EcsWorld.AddEntityComponent(playerEntityId, new SeparationComponent());
             EcsWorld.AddEntityComponent(playerEntityId, new AnimatorComponent(playerProvider.Animator));
 
             for (var i = 1; i < 21; i++)
@@ -67,7 +66,7 @@ namespace Runtime
 
               var enemyProvider = Instantiate(EnemyPrefab);
 
-              EcsWorld.AddEntityComponent(enemyId, new PositionComponent(Vector3.forward));
+              EcsWorld.AddEntityComponent(enemyId, new PositionComponent(new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f))));
               EcsWorld.AddEntityComponent(enemyId, new DirectionComponent(Vector3.forward));
               EcsWorld.AddEntityComponent(enemyId, new SpeedComponent(1f));
               EcsWorld.AddEntityComponent(enemyId, new TransformComponent(enemyProvider.Transform));
