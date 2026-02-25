@@ -1,27 +1,29 @@
 using Runtime.ECS.Components.Movement;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems
+namespace Runtime.ECS.Systems.Rotation
 {
     namespace Runtime.ECS.Systems
     {
-        public class RotationSystem : BaseSystem
+        public class DirectionRotationSystem : BaseSystem
         {
             private const float RotationSpeed = 900f;
             private const float MinAngle = 0.01f;
 
-            public RotationSystem()
+            public DirectionRotationSystem()
             {
-                RegisterRequiredComponent(typeof(RotationComponent));
+                RegisterRequiredComponent(typeof(DirectionRotationComponent));
                 RegisterRequiredComponent(typeof(TransformComponent));
                 RegisterRequiredComponent(typeof(DirectionComponent));
+                RegisterRequiredComponent(typeof(RotationComponent));
             }
 
             protected override void Update(int id, object[] components, float deltaTime)
             {
-                var rotationComponent = components[0] as RotationComponent;
+                var directionRotationComponent = components[0] as DirectionRotationComponent;
                 var transformComponent = components[1] as TransformComponent;
                 var directionComponent = components[2] as DirectionComponent;
+                var rotationComponent =  components[3] as RotationComponent;
 
                 var dir = directionComponent!.Direction;
                 
@@ -39,7 +41,12 @@ namespace Runtime.ECS.Systems
                 
                 var targetRotation = Quaternion.LookRotation(dir);
                 var maxDelta = RotationSpeed * deltaTime;
-                rotationComponent!.Rotation =  Quaternion.RotateTowards(transformComponent.Transform.rotation, targetRotation, maxDelta);
+                
+                var currentRotation = Quaternion.Euler(0, rotationComponent.Angle, 0f);
+
+                var targetAngle = Quaternion.RotateTowards(currentRotation, targetRotation, maxDelta).eulerAngles.y;
+                
+                rotationComponent.Angle = Mathf.LerpAngle(rotationComponent.Angle, targetAngle, directionRotationComponent.RotationSpeed * deltaTime);
             }
         }
     }
