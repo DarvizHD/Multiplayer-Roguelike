@@ -1,15 +1,10 @@
-﻿namespace Backend
-{
-    public static class Program
-    {
-        public static void Main(string[] args)
-        {
-            new Server().Start();
+﻿using System;
+using Backend;
 
-            while (true)
-            {
-                
-            }
-        }
-    }
-}
+var server = new Server(7777);
+server.Start();
+
+Console.WriteLine("Press ENTER to shutdown...");
+Console.ReadLine();
+
+server.Stop();

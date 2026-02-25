@@ -26,7 +26,7 @@ namespace Runtime.ECS.Core
         
         public void AddEntityComponent<T>(int entityId, T component) where T : class, IComponent
         {
-            ComponentManager.AddComponent<T>(entityId, component);
+            ComponentManager.AddComponent(entityId, component);
         }
 
         public void AddSystem<T>() where T : BaseSystem, new()

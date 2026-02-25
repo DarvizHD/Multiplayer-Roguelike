@@ -9,7 +9,7 @@ namespace Runtime.ServerInteraction
     {
         public string Id => "ServerPlayerConnectionSystem";
         
-        private ServerConnectionModel _serverConnectionModel;
+        private readonly ServerConnectionModel _serverConnectionModel;
         
         public ServerPlayerConnectionSystem(ServerConnectionModel serverConnectionModel)
         {
@@ -19,9 +19,8 @@ namespace Runtime.ServerInteraction
         public void Update(float deltaTime)
         {
             var host = _serverConnectionModel.PlayerHost;
-            var peer = _serverConnectionModel.PlayerPeer;
 
-            if (host.CheckEvents(out var netEvent) <= 0 && host.Service(0, out netEvent) <= 0)
+            if (host.CheckEvents(out var netEvent) <= 0 || host.Service(0, out netEvent) <= 0)
             {
                 return;
             }
