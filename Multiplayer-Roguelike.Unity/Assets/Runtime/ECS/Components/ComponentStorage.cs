@@ -6,7 +6,7 @@ namespace Runtime.ECS.Components
     {
         public IEnumerable<int> EntityIds => _components.Keys;
 
-        private readonly Dictionary<int, T> _components = new Dictionary<int, T>();
+        private readonly Dictionary<int, T> _components = new();
 
         public void Add(int entityId, T component)
         {
