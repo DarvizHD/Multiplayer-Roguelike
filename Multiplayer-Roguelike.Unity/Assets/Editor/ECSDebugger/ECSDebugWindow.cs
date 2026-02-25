@@ -60,6 +60,8 @@ namespace Editor.ECSDebugger
 
                 foreach (var componentType in componentTypes)
                 {
+                    var rect = EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+    
                     EditorGUILayout.LabelField(componentType.Name, EditorStyles.boldLabel);
 
                     var component = componentManager.GetComponent(entityId, componentType);
@@ -70,7 +72,8 @@ namespace Editor.ECSDebugger
                         EditorGUI.indentLevel--;
                     }
 
-                    EditorGUILayout.Space();
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.Space(2);
                 }
 
                 EditorGUI.indentLevel--;
@@ -83,12 +86,26 @@ namespace Editor.ECSDebugger
 
         private void ShowComponentFields(object component)
         {
-            var fields = component.GetType().GetFields();
+            var fields = component.GetType().GetFields(
+                System.Reflection.BindingFlags.Public | 
+                System.Reflection.BindingFlags.Instance
+            );
+    
+            var properties = component.GetType().GetProperties(
+                System.Reflection.BindingFlags.Public | 
+                System.Reflection.BindingFlags.Instance
+            );
 
             foreach (var field in fields)
             {
                 var value = field.GetValue(component);
-                EditorGUILayout.LabelField($"{field.Name}: {value}");
+                EditorGUILayout.LabelField($"{field.Name}: {(value is Object obj ? obj.name : value)}");
+            }
+    
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(component);
+                EditorGUILayout.LabelField($"{property.Name}: {(value is Object obj ? obj.name : value)}");
             }
         }
     }

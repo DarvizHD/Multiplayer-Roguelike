@@ -23,7 +23,7 @@ namespace Runtime.ECS.Core
 
         public void RemoveComponent<T>(int entityId) where T : class, IComponent
         {
-            _pendingRemove.Add(typeof(T), entityId);
+            _pendingRemove.TryAdd(typeof(T), entityId);
         }
 
         public object GetComponent(int entityId, Type componentType)
@@ -34,7 +34,7 @@ namespace Runtime.ECS.Core
             }
 
             storage.TryGet(entityId, out var component);
-            return _storage;
+            return component;
         }
 
         public T GetComponent<T>(int entityId) where T : class, IComponent
@@ -53,7 +53,7 @@ namespace Runtime.ECS.Core
 
         public bool HasComponent<T>(int entityId) where T : class, IComponent
         {
-            return _storage.ContainsKey(typeof(T));
+            return _storage[typeof(T)].Has(entityId);
         }
 
         public IEnumerable<int> GetAllEntities()
