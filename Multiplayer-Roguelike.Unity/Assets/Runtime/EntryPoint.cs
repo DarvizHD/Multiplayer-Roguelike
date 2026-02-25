@@ -1,6 +1,7 @@
 using ENet;
 using Runtime.ECS.Components;
 using Runtime.ECS.Components.Battle;
+using Runtime.ECS.Components.Health;
 using Runtime.ECS.Components.Movement;
 using Runtime.ECS.Components.Player;
 using Runtime.ECS.Core;
@@ -54,6 +55,10 @@ namespace Runtime
             EcsWorld.RegisterComponent<PlayerLookRotationComponent>();
             
             EcsWorld.RegisterComponent<AnimatorComponent>();
+            EcsWorld.RegisterComponent<HealthComponent>();
+            EcsWorld.RegisterComponent<RegenerationComponent>();
+            EcsWorld.RegisterComponent<DeathComponent>();
+            EcsWorld.RegisterComponent<InvulnerabilityComponent>();
             
             var playerEntityId = 0;
             
@@ -69,6 +74,8 @@ namespace Runtime
             EcsWorld.AddEntityComponent(playerEntityId, new PlayerLookRotationComponent(10f));
             EcsWorld.AddEntityComponent(playerEntityId, new PlayerInputComponent(_playerControls));
             EcsWorld.AddEntityComponent(playerEntityId, new AnimatorComponent(playerProvider.Animator));
+            EcsWorld.AddEntityComponent(playerEntityId, new HealthComponent(100f));
+            EcsWorld.AddEntityComponent(playerEntityId, new RegenerationComponent(5f, 3f));
 
             for (var i = 1; i < 2; i++)
             {
@@ -86,6 +93,8 @@ namespace Runtime
               EcsWorld.AddEntityComponent(enemyId, new FollowComponent(playerProvider.Transform));
               EcsWorld.AddEntityComponent(enemyId, new SeparationComponent());
               EcsWorld.AddEntityComponent(enemyId, new AnimatorComponent(enemyProvider.Animator));
+              EcsWorld.AddEntityComponent(enemyId, new HealthComponent(50f));
+              EcsWorld.AddEntityComponent(enemyId, new RegenerationComponent(2f, 5f));
             }
             
             EcsWorld.AddSystem<PlayerInputMovementSystem>();
@@ -95,6 +104,10 @@ namespace Runtime
             EcsWorld.AddSystem<DirectionRotationSystem>();
             EcsWorld.AddSystem<DrawTransformSystem>();
             EcsWorld.AddSystem<MeleeAttackSystem>();
+            EcsWorld.AddSystem<DamageSystem>();
+            EcsWorld.AddSystem<DeathSystem>();
+            EcsWorld.AddSystem<RegenerationSystem>();
+            EcsWorld.AddSystem<InvulnerabilitySystem>();
             EcsWorld.AddSystem<AttackCooldownSystem>();
             EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
             EcsWorld.AddSystem<AttackSystem>();
@@ -102,6 +115,7 @@ namespace Runtime
             EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
             EcsWorld.AddSystem<PlayerLookRotationSystem>();
+            
             
             Library.Initialize();
             

@@ -13,6 +13,9 @@ namespace Runtime.ECS.Systems
 
         protected override void Update(int id, object[] components, float deltaTime)
         {
+            if (ComponentManager.HasComponent<DeathComponent>(id))
+                return;
+        
             var health = components[0] as HealthComponent;
             var regeneration = components[1] as RegenerationComponent;
 
