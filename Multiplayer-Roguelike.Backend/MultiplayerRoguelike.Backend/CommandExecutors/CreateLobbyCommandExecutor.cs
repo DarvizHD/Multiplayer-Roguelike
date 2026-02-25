@@ -5,9 +5,9 @@ using Shared.Commands;
 
 namespace Backend.CommandExecutors
 {
-    public class CreateLobbyExecutor : BaseCommandExecutor<CreateLobbyCommand>
+    public class CreateLobbyCommandExecutor : BaseCommandExecutor<CreateLobbyCommand>
     {
-        public CreateLobbyExecutor(CreateLobbyCommand command, WorldModel world, Peer peer) : base(command, world, ref peer)
+        public CreateLobbyCommandExecutor(CreateLobbyCommand command, WorldModel world, Peer peer) : base(command, world, ref peer)
         {
             
         }
