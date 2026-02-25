@@ -87,7 +87,7 @@ namespace Runtime
               EcsWorld.AddEntityComponent(enemyId, new AnimatorComponent(enemyProvider.Animator));
             }
             
-            EcsWorld.AddSystem<PlayerInputSystem>();
+            EcsWorld.AddSystem<PlayerInputMovementSystem>();
             EcsWorld.AddSystem<FollowSystem>();
             EcsWorld.AddSystem<MovementSystem>();
             EcsWorld.AddSystem<SeparationSystem>();
