@@ -9,9 +9,20 @@ namespace Backend
 {
     public class Server
     {
-        private WorldModel _world;
+        private readonly ushort _port;
         
-        public async void Start()
+        private Host _host;
+        private Thread _thread;
+        private WorldModel _world;
+        private CommandExecutorFactory _commandExecutorFactory;
+        private bool _isRunning;
+
+        public Server(ushort port)
+        {
+            _port = port;
+        }
+
+        public void Start()
         {
             _world = new WorldModel();
             
@@ -23,61 +34,69 @@ namespace Backend
 
             Library.Initialize();
             
-            var playerThread = new Thread(() => Update());
-            playerThread.Start();
+            var address = new Address { Port = _port };
             
-            Console.WriteLine("Multiplayer-Roguelike.Backend started!");
+            _host = new Host();    
+            _host.Create(address, 5, 2);
+            
+            _isRunning = true;
+            
+            _commandExecutorFactory = new CommandExecutorFactory(_world);
+            
+            _thread = new Thread(NetworkLoop);
+            _thread.Start();
+            
+            Console.WriteLine($"Server started on port {_port}");
         }
-
-        private void Update()
+        
+        public void Stop()
         {
-            var playerAddress = new Address
-            {
-                Port = 8080
-            };
+            _isRunning = false;
 
-            var playerHost = new Host();
-            playerHost.Create(playerAddress, 5, 100);
+            _thread.Join();
 
-            var commandExecutorFactory = new CommandExecutorFactory(_world);
-            
-            while (true)
+            _host.Dispose();
+            Library.Deinitialize();
+
+            Console.WriteLine("Server stopped");
+        }
+        
+        private void NetworkLoop()
+        {
+            while (_isRunning)
             {
-                var polled = false;
-                while (!polled)
+                while (_host.CheckEvents(out var netEvent) > 0)
                 {
-                    if (playerHost.CheckEvents(out var netEvent) <= 0)
-                    {
-                        if (playerHost.Service(15, out netEvent) <= 0)
-                        {
-                            break;
-                        }
-                        
-                        polled = true;
-                    }
-
-                    switch (netEvent.Type)
-                    {
-                        case EventType.None:
-                        default:
-                            break;
-                        case EventType.Connect:
-                            Console.WriteLine($"{netEvent.Peer.ID} connected");
-                            break;
-                        case EventType.Disconnect:
-                            Console.WriteLine($"{netEvent.Peer.ID} disconnected");
-                            break;
-                        case EventType.Receive:
-                            commandExecutorFactory.CreateCommandExecutor(ref netEvent).Execute();
-                            netEvent.Packet.Dispose();
-                            break;
-                        case EventType.Timeout:
-                            Console.WriteLine($"{netEvent.Peer.ID} timed out");
-                            break;
-                    }
-
-                    playerHost.Flush();
+                    HandleEvent(netEvent);
                 }
+
+                while (_host.Service(15, out var netEvent) > 0)
+                {
+                    HandleEvent(netEvent);
+                }
+            }
+        }
+        
+        private void HandleEvent(Event netEvent)
+        {
+            switch (netEvent.Type)
+            {
+                case EventType.Connect:
+                    Console.WriteLine($"{netEvent.Peer.ID} connected");
+                    break;
+
+                case EventType.Receive:
+                    _commandExecutorFactory.CreateCommandExecutor(ref netEvent).Execute();
+                    netEvent.Packet.Dispose();
+                    break;
+
+                case EventType.Disconnect:
+                    Console.WriteLine($"{netEvent.Peer.ID} disconnected");
+                    break;
+                
+                case EventType.Timeout:
+                    Console.WriteLine($"{netEvent.Peer.ID} timed out");
+                    break;
             }
         }
 

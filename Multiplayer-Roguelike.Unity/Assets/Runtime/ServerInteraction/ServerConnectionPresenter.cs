@@ -31,7 +31,7 @@ namespace Runtime.ServerInteraction
         {
             var address = new Address();
             address.SetHost("127.0.0.1");
-            address.Port = 8080;
+            address.Port = 7777;
 
             _model.PlayerHost = new Host();
             _model.PlayerHost.Create();

@@ -1,3 +1,4 @@
+using ENet;
 using Runtime.ECS.Components;
 using Runtime.ECS.Components.Battle;
 using Runtime.ECS.Components.Movement;
@@ -7,6 +8,9 @@ using Runtime.ECS.Systems;
 using Runtime.ECS.Systems.Battle;
 using Runtime.ECS.Systems.Movement;
 using Runtime.ECS.Systems.Runtime.ECS.Systems;
+using Runtime.GameSystems;
+using Runtime.ServerInteraction;
+using Shared.Commands;
 using UnityEngine;
 
 namespace Runtime
@@ -17,8 +21,10 @@ namespace Runtime
         public GameObject PlayerPrefab;
         public GameObject EnemyPrefab;
         private Transform _playerTransform;
+        
+        private readonly GameSystemCollection _gameFixedSystemCollection = new();
 
-        private void Start()
+        private async void Start()
         {
             EcsWorld.RegisterComponent<PositionComponent>();
             EcsWorld.RegisterComponent<VelocityComponent>();
@@ -70,11 +76,31 @@ namespace Runtime
             EcsWorld.AddSystem<DamageSystem>();
             EcsWorld.AddSystem<MeleeAttackSystem>();
             EcsWorld.AddSystem<AttackCooldownSystem>();
+            
+            Library.Initialize();
+            
+            var serverConnectionModel = new ServerConnectionModel();
+            var serverConnectionPresenter = new ServerConnectionPresenter(serverConnectionModel, _gameFixedSystemCollection);
+            serverConnectionPresenter.Enable();
+            
+            serverConnectionModel.ConnectPlayer();
+            await serverConnectionModel.CompletePlayerConnectAwaiter;
+
+            var loginCommand = new LoginCommand("Varfolomey");
+            loginCommand.Write(serverConnectionModel.PlayerPeer);
+            
+            var createLobbyCommand = new CreateLobbyCommand("Varfolomey");
+            createLobbyCommand.Write(serverConnectionModel.PlayerPeer);
         }
         
         private void Update()
         {
             EcsWorld.Update(Time.deltaTime);
+        }
+        
+        private void FixedUpdate()
+        {
+            _gameFixedSystemCollection.Update(Time.fixedDeltaTime);
         }
     }
 }
