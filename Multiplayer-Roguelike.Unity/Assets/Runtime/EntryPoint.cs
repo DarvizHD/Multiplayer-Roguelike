@@ -43,7 +43,6 @@ namespace Runtime
             EcsWorld.RegisterComponent<SeparationComponent>();
             EcsWorld.RegisterComponent<PlayerInputComponent>();
             EcsWorld.RegisterComponent<FollowComponent>();
-            EcsWorld.RegisterComponent<PlayerComponent>();
             EcsWorld.RegisterComponent<RotationComponent>();
             EcsWorld.RegisterComponent<AnimatorComponent>();
             
@@ -51,15 +50,16 @@ namespace Runtime
             
             var playerProvider = Instantiate(PlayerPrefab);
             
-            EcsWorld.AddEntityComponent(playerEntityId, new PositionComponent(Vector3.up));
+            EcsWorld.AddEntityComponent(playerEntityId, new PositionComponent(Vector3.zero));
             EcsWorld.AddEntityComponent(playerEntityId, new DirectionComponent(Vector3.zero));
-            EcsWorld.AddEntityComponent(playerEntityId, new TransformComponent((playerProvider.Transform));
+            EcsWorld.AddEntityComponent(playerEntityId, new TransformComponent((playerProvider.Transform)));
             EcsWorld.AddEntityComponent(playerEntityId, new SpeedComponent(8f));
             EcsWorld.AddEntityComponent(playerEntityId, new AttackCooldownComponent(3f));
             EcsWorld.AddEntityComponent(playerEntityId, new MeleeAttackComponent(2f, 10f));
             EcsWorld.AddEntityComponent(playerEntityId, new RotationComponent(Quaternion.identity));
             EcsWorld.AddEntityComponent(playerEntityId, new PlayerInputComponent(_playerControls));
             EcsWorld.AddEntityComponent(playerEntityId, new SeparationComponent());
+            EcsWorld.AddEntityComponent(playerEntityId, new AnimatorComponent(playerProvider.Animator));
 
             for (var i = 1; i < 21; i++)
             {
