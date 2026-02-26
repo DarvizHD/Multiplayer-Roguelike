@@ -5,6 +5,7 @@ using Runtime.ECS.Components.Camera;
 using Runtime.ECS.Components.Health;
 using Runtime.ECS.Components.Movement;
 using Runtime.ECS.Components.Player;
+using Runtime.ECS.Components.Spawn;
 using Runtime.ECS.Components.Tags;
 using Runtime.ECS.Core;
 using Runtime.ECS.Systems;
@@ -15,6 +16,7 @@ using Runtime.ECS.Systems.Follow;
 using Runtime.ECS.Systems.Movement;
 using Runtime.ECS.Systems.Rotation;
 using Runtime.ECS.Systems.Rotation.Runtime.ECS.Systems;
+using Runtime.ECS.Systems.Spawn;
 using Runtime.GameSystems;
 using Runtime.ServerInteraction;
 using Shared.Commands;
@@ -60,6 +62,14 @@ namespace Runtime
             {
                 CreateEnemy(i, playerProvider);
             }
+
+            var spawnerEntityId = 100;
+            EcsWorld.AddEntityComponent(spawnerEntityId, new SpawnerComponent(
+                targetCount: 2,
+                prefab: EnemyPrefab.gameObject,
+                centerPosition: new Vector3(20f, 0f, 20f),
+                spawnRadius: 8f
+            ));
 
             AddSystems();
 
@@ -110,6 +120,10 @@ namespace Runtime
             EcsWorld.RegisterComponent<RegenerationComponent>();
             EcsWorld.RegisterComponent<DeathComponent>();
             EcsWorld.RegisterComponent<InvulnerabilityComponent>();
+            EcsWorld.RegisterComponent<SpawnerComponent>();
+            EcsWorld.RegisterComponent<SpawnedUnitTagComponent>();
+            EcsWorld.RegisterComponent<DeathAnimationComponent>();
+            EcsWorld.RegisterComponent<GameObjectComponent>();
 
             EcsWorld.RegisterComponent<CameraTargetComponent>();
         }
@@ -130,12 +144,13 @@ namespace Runtime
             EcsWorld.AddSystem<AttackCooldownSystem>();
             EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
             EcsWorld.AddSystem<AttackSystem>();
-            EcsWorld.AddSystem<DamageSystem>();
             EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
             EcsWorld.AddSystem<PlayerLookRotationSystem>();
             EcsWorld.AddSystem<CameraFocusSystem>();
             EcsWorld.AddSystem<DrawCameraTransformSystem>();
+            EcsWorld.AddSystem<DeathAnimationSystem>();
+            EcsWorld.AddSystem<SpawnerSystem>();
         }
 
         private void CreatePlayer(int entityId, MonoBehaviorProvider provider, Vector3 position)
@@ -158,7 +173,8 @@ namespace Runtime
         {
             var enemyProvider = Instantiate(EnemyPrefab);
 
-            EcsWorld.AddEntityComponent(entityId, new PositionComponent(new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f))));
+            EcsWorld.AddEntityComponent(entityId,
+                new PositionComponent(new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f))));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
             EcsWorld.AddEntityComponent(entityId, new SpeedComponent(1f));
@@ -170,6 +186,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(enemyProvider.Animator));
             EcsWorld.AddEntityComponent(entityId, new HealthComponent(50f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(2f, 5f));
+            EcsWorld.AddEntityComponent(entityId, new GameObjectComponent(enemyProvider.gameObject));
         }
 
         private void Update()
