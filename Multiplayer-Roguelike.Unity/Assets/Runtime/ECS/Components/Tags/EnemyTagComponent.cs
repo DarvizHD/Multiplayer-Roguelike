@@ -1,4 +1,4 @@
-namespace Runtime.ECS.Components.Battle
+namespace Runtime.ECS.Components.Tags
 {
     public class EnemyTagComponent : IComponent
     {

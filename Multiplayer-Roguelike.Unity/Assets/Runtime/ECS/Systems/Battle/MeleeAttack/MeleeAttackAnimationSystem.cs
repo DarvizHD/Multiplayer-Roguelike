@@ -1,7 +1,7 @@
 using Runtime.ECS.Components;
 using Runtime.ECS.Components.Battle;
 
-namespace Runtime.ECS.Systems
+namespace Runtime.ECS.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackAnimationSystem : BaseSystem
     {
