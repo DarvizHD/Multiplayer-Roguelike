@@ -17,8 +17,6 @@ namespace Runtime.ECS.Systems.Battle
             var animatorComponent =  components[0] as AnimatorComponent;
             var pendingDamageEventComponent = components[1] as PendingDamageEventComponent;
 
-            Debug.Log($"Trying to animate {id}");
-
             animatorComponent.Animator.SetTrigger(animatorComponent.Damage);
         }
     }
