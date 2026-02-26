@@ -58,7 +58,7 @@ namespace Runtime
 
             for (var i = 3; i < 5; i++)
             {
-                CreateEnemy(i, Instantiate(EnemyPrefab));
+                CreateEnemy(i, playerProvider);
             }
 
             AddSystems();
@@ -154,7 +154,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(5f, 3f));
         }
 
-        private void CreateEnemy(int entityId, MonoBehaviorProvider provider)
+        private void CreateEnemy(int entityId, MonoBehaviorProvider playerProvider)
         {
             var enemyProvider = Instantiate(EnemyPrefab);
 
@@ -165,7 +165,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(enemyProvider.Transform));
             EcsWorld.AddEntityComponent(entityId, new EnemyTagComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionRotationComponent(10f));
-            EcsWorld.AddEntityComponent(entityId, new FollowComponent(provider.Transform));
+            EcsWorld.AddEntityComponent(entityId, new FollowComponent(playerProvider.Transform));
             EcsWorld.AddEntityComponent(entityId, new SeparationComponent());
             EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(enemyProvider.Animator));
             EcsWorld.AddEntityComponent(entityId, new HealthComponent(50f));
