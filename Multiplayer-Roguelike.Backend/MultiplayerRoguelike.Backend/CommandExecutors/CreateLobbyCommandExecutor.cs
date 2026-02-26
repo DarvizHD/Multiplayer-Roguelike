@@ -16,9 +16,15 @@ namespace Backend.CommandExecutors
         {
             Console.WriteLine("Create lobby");
             
-            var player = World.Players.Get(Command.PlayerNickname);
+            if (!World.Players.TryGet(Command.PlayerNickname,  out var player))
+            {
+                Console.WriteLine($"Undefined player {player.PlayerNickname}");
+                return;
+            }
+            
             if (player.PartyId != string.Empty)
             {
+                Console.WriteLine($"Lobby {player.PartyId} already exists");
                 return;
             }
 

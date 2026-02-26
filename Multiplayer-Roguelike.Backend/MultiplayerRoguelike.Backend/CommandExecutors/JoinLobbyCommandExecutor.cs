@@ -13,9 +13,24 @@ namespace Backend.CommandExecutors
         public override void Execute()
         {
             Console.WriteLine("Join lobby");
+
+            if (!World.Lobbies.TryGet(Command.LobbyId, out var lobby))
+            {
+                Console.WriteLine($"Undefined lobby {Command.LobbyId}");
+                return;
+            }
+
+            if (!World.Players.TryGet(Command.PlayerNickname,  out var player))
+            {
+                Console.WriteLine($"Undefined player {player.PlayerNickname}");
+                return;
+            }
             
-            var player = World.Players.Get(Command.PlayerNickname);
-            var lobby = World.Lobbies.Get(Command.LobbyId);
+            if (player.PartyId != string.Empty)
+            {
+                var previousLobby = World.Lobbies.Get(player.PartyId);
+                previousLobby.RemoveMember(player.PlayerNickname);
+            }
             
             lobby.AddMember(player.PlayerNickname);
         }
