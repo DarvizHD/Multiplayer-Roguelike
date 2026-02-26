@@ -1,5 +1,6 @@
 using Runtime.ECS.Components;
 using Runtime.ECS.Components.Battle;
+using UnityEngine;
 
 namespace Runtime.ECS.Systems.Battle
 {
@@ -16,7 +17,9 @@ namespace Runtime.ECS.Systems.Battle
             var animatorComponent =  components[0] as AnimatorComponent;
             var pendingDamageEventComponent = components[1] as PendingDamageEventComponent;
 
-            animatorComponent.Animator.SetTrigger(animatorComponent.DamageTrigger);
+            Debug.Log($"Trying to animate {id}");
+
+            animatorComponent.Animator.SetTrigger(animatorComponent.Damage);
         }
     }
 }

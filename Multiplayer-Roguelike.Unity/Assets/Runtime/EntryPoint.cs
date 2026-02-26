@@ -123,16 +123,23 @@ namespace Runtime
             EcsWorld.AddSystem<DirectionRotationSystem>();
             EcsWorld.AddSystem<DrawTransformSystem>();
             EcsWorld.AddSystem<MeleeAttackSystem>();
-            EcsWorld.AddSystem<DamageSystem>();
-            EcsWorld.AddSystem<DeathSystem>();
+
             EcsWorld.AddSystem<RegenerationSystem>();
             EcsWorld.AddSystem<InvulnerabilitySystem>();
-            EcsWorld.AddSystem<AttackCooldownSystem>();
-            EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
-            EcsWorld.AddSystem<AttackSystem>();
-            EcsWorld.AddSystem<DamageSystem>();
+
             EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
+            EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
+
+            EcsWorld.AddSystem<AttackCooldownSystem>();
+            EcsWorld.AddSystem<AttackSystem>();
+
+            EcsWorld.AddSystem<DamageAnimationSystem>();
+
+            EcsWorld.AddSystem<DamageSystem>();
+            EcsWorld.AddSystem<DeathSystem>();
+
+
             EcsWorld.AddSystem<PlayerLookRotationSystem>();
             EcsWorld.AddSystem<CameraFocusSystem>();
             EcsWorld.AddSystem<DrawCameraTransformSystem>();

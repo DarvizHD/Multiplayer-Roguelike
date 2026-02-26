@@ -24,11 +24,6 @@ namespace Runtime.ECS.Systems.Battle
 
             healthComponent.CurrentHealth -= pendingDamage.TotalDamage;
 
-            if (healthComponent.CurrentHealth <= 0)
-            {
-                ComponentManager.AddComponent(id, new DeathTagComponent());
-            }
-
             if (ComponentManager.TryGetComponent<RegenerationComponent>(id, out var regenerationComponent))
             {
                 regenerationComponent.LastDamageTime = 0f;
