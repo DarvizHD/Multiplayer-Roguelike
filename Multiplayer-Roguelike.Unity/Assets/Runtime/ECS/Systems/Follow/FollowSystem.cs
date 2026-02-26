@@ -1,7 +1,7 @@
 using Runtime.ECS.Components.Movement;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Movement
+namespace Runtime.ECS.Systems.Follow
 {
     public class FollowSystem : BaseSystem
     {

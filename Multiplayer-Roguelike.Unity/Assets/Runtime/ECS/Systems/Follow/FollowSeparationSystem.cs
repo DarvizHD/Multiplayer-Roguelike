@@ -1,13 +1,12 @@
-using Runtime.ECS.Components;
 using Runtime.ECS.Components.Movement;
 
-namespace Runtime.ECS.Systems
+namespace Runtime.ECS.Systems.Follow
 {
-    public class SeparationSystem : BaseSystem
+    public class FollowSeparationSystem : BaseSystem
     {
         private const float MinDistance = 1.5f;
 
-        public SeparationSystem()
+        public FollowSeparationSystem()
         {
             RegisterRequiredComponent(typeof(PositionComponent));
             RegisterRequiredComponent(typeof(SeparationComponent));
