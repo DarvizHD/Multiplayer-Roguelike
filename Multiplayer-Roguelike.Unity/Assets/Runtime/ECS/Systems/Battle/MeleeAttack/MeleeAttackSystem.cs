@@ -19,9 +19,9 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
 
         protected override void Update(int id, object[] components, float deltaTime)
         {
-            if (ComponentManager.HasComponent<DeathComponent>(id))
+            if (ComponentManager.HasComponent<DeathTagComponent>(id))
                 return;
-        
+
             var positionComponent = components[0] as PositionComponent;
             var rotationComponent = components[1] as RotationComponent;
             var meleeAttackComponent = components[2] as MeleeAttackComponent;
@@ -39,9 +39,9 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
 
             foreach (var (targetId, targetComponents) in targets)
             {
-                if (ComponentManager.HasComponent<DeathComponent>(targetId))
+                if (ComponentManager.HasComponent<DeathTagComponent>(targetId))
                     continue;
-            
+
                 var targetPositionComponent = targetComponents[0] as PositionComponent;
 
                 var distance = Vector3.Distance(targetPositionComponent.Position, positionComponent.Position);
@@ -59,7 +59,7 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
                 if (!ComponentManager.HasComponent<AttackEventComponent>(id))
                 {
                     attackCooldownComponent.CurrentCooldown = attackCooldownComponent.Cooldown;
-                    
+
                     ComponentManager.AddComponent(id, new AttackEventComponent(targetId, meleeAttackComponent.Damage));
                 }
             }

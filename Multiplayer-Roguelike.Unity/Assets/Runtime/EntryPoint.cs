@@ -108,7 +108,7 @@ namespace Runtime
             EcsWorld.RegisterComponent<AnimatorComponent>();
             EcsWorld.RegisterComponent<HealthComponent>();
             EcsWorld.RegisterComponent<RegenerationComponent>();
-            EcsWorld.RegisterComponent<DeathComponent>();
+            EcsWorld.RegisterComponent<DeathTagComponent>();
             EcsWorld.RegisterComponent<InvulnerabilityComponent>();
 
             EcsWorld.RegisterComponent<CameraTargetComponent>();
