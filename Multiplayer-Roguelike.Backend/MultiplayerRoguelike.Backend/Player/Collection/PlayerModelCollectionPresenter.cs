@@ -23,7 +23,7 @@ namespace Backend.Player.Collection
 
         private void OnAdded(PlayerModel newPlayer)
         {
-            Console.WriteLine($"Player {newPlayer.PlayerNickname} has been added");
+            Console.WriteLine($"Player {newPlayer.PlayerSharedModel.Nickname.Value} has been added");
         }
     }
 }

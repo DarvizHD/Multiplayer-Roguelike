@@ -18,7 +18,7 @@ namespace Backend.CommandExecutors
 
             if (World.Players.TryGet(Command.PlayerNickname, out PlayerModel existedPlayer))
             {
-                Console.WriteLine($"Player with name {existedPlayer.PlayerNickname} has already been logged in");
+                Console.WriteLine($"Player with name {existedPlayer.PlayerSharedModel.Nickname.Value} has already been logged in");
                 return;
             }
 
@@ -29,7 +29,7 @@ namespace Backend.CommandExecutors
             }
 
             var player = new PlayerModel(Command.PlayerNickname, Peer);
-            World.Players.Add(player.PlayerNickname, player);
+            World.Players.Add(player.PlayerSharedModel.Nickname.Value, player);
         }
     }
 }

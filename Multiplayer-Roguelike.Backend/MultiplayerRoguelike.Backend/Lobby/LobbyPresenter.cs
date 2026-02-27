@@ -26,20 +26,35 @@ namespace Backend.Lobby
             _model.OnMemberRemoved -= OnMemberRemoved;
         }
 
-        private void OnMemberAdded(string playerNickname)
+        private void OnMemberAdded(string newPlayerNickname)
         {
-            PlayerModel player = _world.Players.Get(playerNickname);
-            player.PartyId = _model.Guid;
+            PlayerModel newPlayer = _world.Players.Get(newPlayerNickname);
+            newPlayer.PlayerSharedModel.Lobby.LobbyId.Value = _model.Guid;
+            newPlayer.PlayerSharedModel.Lobby.OwnerId.Value = _model.OwnerNickname;
+            foreach (var memberNickname in _model.Members)
+            {
+                newPlayer.PlayerSharedModel.Lobby.Members.Add(memberNickname);
 
-            Console.WriteLine($"Player {playerNickname} added to lobby {_model.Guid}");
+                if (memberNickname != newPlayerNickname)
+                {
+                    PlayerModel member = _world.Players.Get(memberNickname);
+                    member.PlayerSharedModel.Lobby.Members.Add(newPlayerNickname);
+                }
+            }
         }
 
-        private void OnMemberRemoved(string playerNickname)
+        private void OnMemberRemoved(string removedPlayerNickname)
         {
-            PlayerModel player = _world.Players.Get(playerNickname);
-            player.PartyId = string.Empty;
-            
-            Console.WriteLine($"Player {playerNickname} removed from lobby {_model.Guid}");
+            PlayerModel removedPlayer = _world.Players.Get(removedPlayerNickname);
+            removedPlayer.PlayerSharedModel.Lobby.LobbyId.Value = string.Empty;
+            removedPlayer.PlayerSharedModel.Lobby.OwnerId.Value = string.Empty;
+            removedPlayer.PlayerSharedModel.Lobby.Members.Clear();
+
+            foreach (var memberNickname in _model.Members)
+            {
+                PlayerModel member = _world.Players.Get(memberNickname);
+                member.PlayerSharedModel.Lobby.Members.Remove(removedPlayerNickname);
+            }
         }
     }
 }

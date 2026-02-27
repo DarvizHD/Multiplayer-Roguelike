@@ -14,23 +14,23 @@ namespace Backend.CommandExecutors
         public override void Execute()
         {
             Console.WriteLine("Create lobby");
-            
+
             if (!World.Players.TryGet(Command.PlayerNickname,  out var player))
             {
-                Console.WriteLine($"Undefined player {player.PlayerNickname}");
-                return;
-            }
-            
-            if (player.PartyId != string.Empty)
-            {
-                Console.WriteLine($"Lobby {player.PartyId} already exists");
+                Console.WriteLine($"Undefined player {player.PlayerSharedModel.Nickname.Value}");
                 return;
             }
 
-            var lobby = new LobbyModel(Guid.NewGuid().ToString(), player.PlayerNickname);
+            if (player.PlayerSharedModel.Lobby.LobbyId.Value != string.Empty)
+            {
+                Console.WriteLine($"Lobby {player.PlayerSharedModel.Lobby.LobbyId.Value} already exists");
+                return;
+            }
+
+            var lobby = new LobbyModel(Guid.NewGuid().ToString(), player.PlayerSharedModel.Nickname.Value);
             World.Lobbies.Add(lobby.Guid, lobby);
-            
-            lobby.AddMember(player.PlayerNickname);
+
+            lobby.AddMember(player.PlayerSharedModel.Nickname.Value);
         }
     }
 }
