@@ -70,29 +70,6 @@ namespace Runtime.ECS.Core
             return from pair in _storage where pair.Value.Has(entityId) select pair.Key;
         }
 
-        /*
-        public IEnumerable<(int entityId, IComponent[] components)> Query(params Type[] componentTypes)
-        {
-            var storages = componentTypes.Select(t => _storage[t]).ToArray();
-
-            var entityIds = storages[0].EntityIds;
-
-            foreach (var storage in storages.Skip(1))
-            {
-                entityIds = entityIds.Intersect(storage.EntityIds);
-            }
-
-            foreach (var id in entityIds)
-            {
-                var components = storages.Select(s => s.TryGet(id, out var component) ? component : null).ToArray();
-
-                yield return (id, components);
-            }
-
-            RemoveComponents();
-        }
-        */
-
         public IEnumerable<(int entityId, T1)> Query<T1>() where T1 : class, IComponent
         {
             foreach (var entityId in GetStorage<T1>().EntityIds)
