@@ -15,13 +15,19 @@ namespace Runtime.ECS.Systems.Follow
 
         public override void Update(float deltaTime)
         {
-            var positionQuery = ComponentManager.Query<PositionComponent>();
+            var positionQuery = ComponentManager.TupleQuery<PositionComponent>();
+            var entityIds = positionQuery.entityId;
+            var components = positionQuery.components;
+            var count = positionQuery.count;
 
             foreach (var (entityId, positionComponent, separationComponent)
                      in ComponentManager.Query<PositionComponent, SeparationComponent>())
             {
-                foreach (var (otherId, otherComponent) in positionQuery)
+                for (int i = 0; i < count; i++)
                 {
+                    var otherId = entityIds[i];
+                    var otherComponent = components[i];
+
                     if (otherId <= entityId)
                     {
                         continue;

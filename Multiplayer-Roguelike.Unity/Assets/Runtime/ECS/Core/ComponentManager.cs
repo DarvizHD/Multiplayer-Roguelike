@@ -65,6 +65,15 @@ namespace Runtime.ECS.Core
             }
         }
 
+        public (int[] entityId, T1[] components, int count) TupleQuery<T1>() where T1 : class, IComponent
+        {
+            var entityId =  GetStorage<T1>().EntityIds;
+            var components = GetStorage<T1>().Components;
+            var count = entityId.Length;
+
+            return  (entityId, components, count);
+        }
+
         public IEnumerable<(int entityId, T1, T2)> Query<T1, T2>()
             where T1 : class, IComponent
             where T2 : class, IComponent
