@@ -1,4 +1,5 @@
 using ENet;
+using Shared.Protocol;
 
 namespace Shared.Commands
 {
@@ -6,7 +7,7 @@ namespace Shared.Commands
     {
         public abstract string Id { get; }
 
-        protected BaseCommand(ENetProtocol protocol)
+        protected BaseCommand(NetworkProtocol protocol)
         {
             Read(protocol);
         }
@@ -15,7 +16,7 @@ namespace Shared.Commands
         {
         }
 
-        public abstract void Read(ENetProtocol protocol);
+        public abstract void Read(NetworkProtocol protocol);
 
         public abstract void Write(Peer peer);
     }

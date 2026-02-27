@@ -1,4 +1,4 @@
-namespace Shared
+namespace Shared.Primitives
 {
     public class Vector3
     {

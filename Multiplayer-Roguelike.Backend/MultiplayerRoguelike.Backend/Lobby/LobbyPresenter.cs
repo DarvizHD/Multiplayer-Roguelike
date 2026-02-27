@@ -1,4 +1,5 @@
 using System;
+using Backend.Player;
 
 namespace Backend.Lobby
 {
@@ -27,7 +28,7 @@ namespace Backend.Lobby
 
         private void OnMemberAdded(string playerNickname)
         {
-            var player = _world.Players.Get(playerNickname);
+            PlayerModel player = _world.Players.Get(playerNickname);
             player.PartyId = _model.Guid;
 
             Console.WriteLine($"Player {playerNickname} added to lobby {_model.Guid}");
@@ -35,7 +36,7 @@ namespace Backend.Lobby
 
         private void OnMemberRemoved(string playerNickname)
         {
-            var player = _world.Players.Get(playerNickname);
+            PlayerModel player = _world.Players.Get(playerNickname);
             player.PartyId = string.Empty;
         }
     }

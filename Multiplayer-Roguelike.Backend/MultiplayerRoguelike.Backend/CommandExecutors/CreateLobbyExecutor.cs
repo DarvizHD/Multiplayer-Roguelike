@@ -1,5 +1,6 @@
 using System;
 using Backend.Lobby;
+using Backend.Player;
 using ENet;
 using Shared.Commands;
 
@@ -15,7 +16,7 @@ namespace Backend.CommandExecutors
         {
             Console.WriteLine("Create lobby");
 
-            var player = World.Players.Get(Command.PlayerNickname);
+            PlayerModel player = World.Players.Get(Command.PlayerNickname);
             if (player.PartyId != string.Empty)
             {
                 return;
