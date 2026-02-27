@@ -58,7 +58,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(cameraTargetEntityId, new CameraTargetComponent());
             EcsWorld.AddEntityComponent(cameraTargetEntityId, new TransformComponent(CameraTarget.transform));
 
-            for (var i = 3; i < 5; i++)
+            for (var i = 3; i < 100; i++)
             {
                 CreateEnemy(i, playerProvider);
             }
