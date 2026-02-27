@@ -38,6 +38,8 @@ namespace Backend.Lobby
         {
             PlayerModel player = _world.Players.Get(playerNickname);
             player.PartyId = string.Empty;
+            
+            Console.WriteLine($"Player {playerNickname} removed from lobby {_model.Guid}");
         }
     }
 }
