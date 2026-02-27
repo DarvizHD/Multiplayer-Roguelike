@@ -149,13 +149,6 @@ namespace Runtime.ECS.Core
 
         private ComponentStorage<T> GetStorage<T>() where T : class, IComponent
         {
-            /*
-            Debug.Log(typeof(T).Name);
-            Debug.Log($"{ComponentId<T>.Id.ToString()} {_storages[ComponentId<T>.Id] == null}" );
-            Debug.Log($"{_storages[ComponentId<T>.Id] as ComponentStorage<T> == null} ");
-            Debug.Log($"{_storages[ComponentId<T>.Id].GetType().Name} {ComponentId<T>.Id}");
-            */
-
             return (ComponentStorage<T>) _storages[ComponentId<T>.Id];
         }
 
