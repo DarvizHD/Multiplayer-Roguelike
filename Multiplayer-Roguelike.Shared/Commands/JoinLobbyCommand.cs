@@ -3,22 +3,26 @@ using Shared.Protocol;
 
 namespace Shared.Commands
 {
-    public class CreateLobbyCommand : BaseCommand
+    public class JoinLobbyCommand : BaseCommand
     {
-        public override string Id => CommandConst.CreateLobby;
+        public override string Id => CommandConst.JoinLobby;
+        public string LobbyId;
         public string PlayerNickname;
 
-        public CreateLobbyCommand(string playerNickname)
+        public JoinLobbyCommand(string lobbyId, string playerNickname)
         {
+            LobbyId = lobbyId;
             PlayerNickname = playerNickname;
         }
 
-        public CreateLobbyCommand(NetworkProtocol protocol) : base(protocol)
+        public JoinLobbyCommand(NetworkProtocol protocol) : base(protocol)
         {
+
         }
 
         public override void Read(NetworkProtocol protocol)
         {
+            protocol.Get(out LobbyId);
             protocol.Get(out PlayerNickname);
         }
 
@@ -28,6 +32,7 @@ namespace Shared.Commands
             var packet = default(Packet);
 
             protocol.Add(Id);
+            protocol.Add(LobbyId);
             protocol.Add(PlayerNickname);
 
             packet.Create(protocol.Stream.GetBuffer());

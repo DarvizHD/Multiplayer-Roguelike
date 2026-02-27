@@ -40,6 +40,10 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
             foreach (var (targetId, targetComponents) in targets)
             {
                 if (ComponentManager.HasComponent<DeathTagComponent>(targetId))
+                if (targetId == id)
+                    continue;
+
+                if (ComponentManager.HasComponent<DeathAnimationComponent>(targetId))
                     continue;
 
                 var targetPositionComponent = targetComponents[0] as PositionComponent;

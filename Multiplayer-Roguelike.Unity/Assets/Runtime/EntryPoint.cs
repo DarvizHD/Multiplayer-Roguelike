@@ -61,6 +61,14 @@ namespace Runtime
                 CreateEnemy(i, playerProvider);
             }
 
+            var spawnerEntityId = 100;
+            EcsWorld.AddEntityComponent(spawnerEntityId, new SpawnerComponent(
+                targetCount: 2,
+                prefab: EnemyPrefab.gameObject,
+                centerPosition: new Vector3(20f, 0f, 20f),
+                spawnRadius: 8f
+            ));
+
             AddSystems();
 
             Library.Initialize();
@@ -92,6 +100,7 @@ namespace Runtime
 
             EcsWorld.RegisterComponent<AttackCooldownComponent>();
             EcsWorld.RegisterComponent<MeleeAttackComponent>();
+
             EcsWorld.RegisterComponent<TransformComponent>();
             EcsWorld.RegisterComponent<EnemyTagComponent>();
 
@@ -111,6 +120,10 @@ namespace Runtime
             EcsWorld.RegisterComponent<RegenerationComponent>();
             EcsWorld.RegisterComponent<DeathTagComponent>();
             EcsWorld.RegisterComponent<InvulnerabilityComponent>();
+            EcsWorld.RegisterComponent<SpawnerComponent>();
+            EcsWorld.RegisterComponent<SpawnedUnitTagComponent>();
+            EcsWorld.RegisterComponent<DeathAnimationComponent>();
+            EcsWorld.RegisterComponent<GameObjectComponent>();
 
             EcsWorld.RegisterComponent<CameraTargetComponent>();
             EcsWorld.RegisterComponent<FreezeMovementComponent>();
@@ -148,6 +161,8 @@ namespace Runtime
             EcsWorld.AddSystem<CameraFocusSystem>();
             EcsWorld.AddSystem<DrawCameraTransformSystem>();
             EcsWorld.AddSystem<FreezeMovementSystem>();
+            EcsWorld.AddSystem<DeathAnimationSystem>();
+            EcsWorld.AddSystem<SpawnerSystem>();
         }
 
         private void CreatePlayer(int entityId, MonoBehaviorProvider provider, Vector3 position)
@@ -171,7 +186,8 @@ namespace Runtime
         {
             var enemyProvider = Instantiate(EnemyPrefab);
 
-            EcsWorld.AddEntityComponent(entityId, new PositionComponent(new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f))));
+            EcsWorld.AddEntityComponent(entityId,
+                new PositionComponent(new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f))));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
             EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(1f));

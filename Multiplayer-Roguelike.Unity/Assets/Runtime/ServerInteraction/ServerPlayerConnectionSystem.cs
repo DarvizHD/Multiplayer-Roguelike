@@ -20,7 +20,7 @@ namespace Runtime.ServerInteraction
         {
             var host = _serverConnectionModel.PlayerHost;
 
-            if (host.CheckEvents(out var netEvent) <= 0 || host.Service(0, out netEvent) <= 0)
+            if (host.CheckEvents(out var netEvent) <= 0 && host.Service(0, out netEvent) <= 0)
             {
                 return;
             }

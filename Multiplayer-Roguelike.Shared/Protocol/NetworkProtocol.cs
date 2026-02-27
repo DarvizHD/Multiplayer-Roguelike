@@ -1,16 +1,17 @@
 using System;
 using System.IO;
 using System.Text;
+using Shared.Primitives;
 
-namespace Shared
+namespace Shared.Protocol
 {
-    public class ENetProtocol
+    public class NetworkProtocol
     {
         public readonly BinaryWriter Writer;
         public readonly BinaryReader Reader;
         public readonly MemoryStream Stream;
 
-        public ENetProtocol(byte[] buffer = null)
+        public NetworkProtocol(byte[] buffer = null)
         {
             if (buffer != null)
             {

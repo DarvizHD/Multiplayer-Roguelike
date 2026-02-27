@@ -27,7 +27,7 @@ namespace Backend.Lobby.Collection
             _lobbyModelCollection.OnAdded -= OnLobbyAdded;
             _lobbyModelCollection.OnRemoved -= OnLobbyRemoved;
 
-            foreach (var presenter in _presenters)
+            foreach (KeyValuePair<string, LobbyPresenter> presenter in _presenters)
             {
                 presenter.Value.Disable();
             }
@@ -47,7 +47,7 @@ namespace Backend.Lobby.Collection
 
         private void OnLobbyRemoved(LobbyModel lobbyModel)
         {
-            var presenter = _presenters[lobbyModel.Guid];
+            LobbyPresenter presenter = _presenters[lobbyModel.Guid];
             presenter.Disable();
 
             _presenters.Remove(lobbyModel.Guid);

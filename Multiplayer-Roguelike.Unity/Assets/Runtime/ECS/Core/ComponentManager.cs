@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Runtime.ECS.Components;
+using UnityEngine;
 
 namespace Runtime.ECS.Core
 {
     public class ComponentManager
     {
         private readonly Dictionary<Type, IComponentStorage<IComponent>> _storage = new();
-
-        private readonly Dictionary<Type, int> _pendingRemove = new();
+        private readonly Dictionary<int, Dictionary<Type, int>> _pendingRemove = new();
 
         public void RegisterComponent<T>() where T : class, IComponent
         {
@@ -23,7 +23,11 @@ namespace Runtime.ECS.Core
 
         public void RemoveComponent<T>(int entityId) where T : class, IComponent
         {
-            _pendingRemove.TryAdd(typeof(T), entityId);
+            if (!_pendingRemove.ContainsKey(entityId))
+            {
+                _pendingRemove[entityId] = new Dictionary<Type, int>();
+            }
+            _pendingRemove[entityId][typeof(T)] = entityId;
         }
 
         public object GetComponent(int entityId, Type componentType)
@@ -94,12 +98,35 @@ namespace Runtime.ECS.Core
 
         private void RemoveComponents()
         {
-            foreach (var pair in _pendingRemove)
+            foreach (var entityKv in _pendingRemove)
             {
-                _storage[pair.Key].Remove(pair.Value);
+                int entityId = entityKv.Key;
+                foreach (var componentType in entityKv.Value.Keys)
+                {
+                    if (_storage.TryGetValue(componentType, out var storage))
+                    {
+                        storage.Remove(entityId);
+                    }
+                }
             }
 
             _pendingRemove.Clear();
+        }
+
+        public void RemoveEntity(int entityId)
+        {
+            foreach (var kv in _storage)
+            {
+                if (kv.Value.Has(entityId))
+                {
+                    if (!_pendingRemove.ContainsKey(entityId))
+                    {
+                        _pendingRemove[entityId] = new Dictionary<Type, int>();
+                    }
+                    _pendingRemove[entityId][kv.Key] = entityId;
+                }
+            }
+            Debug.Log($"Entity {entityId} marked for removal");
         }
     }
 }
