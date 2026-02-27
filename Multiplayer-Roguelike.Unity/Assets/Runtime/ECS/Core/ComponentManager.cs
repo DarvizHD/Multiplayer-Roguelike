@@ -168,12 +168,7 @@ namespace Runtime.ECS.Core
             }
         }
 
-        private ComponentStorage<T> GetStorage<T>() where T : class, IComponent
-        {
-            return (ComponentStorage<T>)_storage[typeof(T)];
-        }
-
-        private void RemoveComponents()
+        public void RemoveComponents()
         {
             foreach (var entityKv in _pendingRemove)
             {
@@ -188,6 +183,11 @@ namespace Runtime.ECS.Core
             }
 
             _pendingRemove.Clear();
+        }
+
+        private ComponentStorage<T> GetStorage<T>() where T : class, IComponent
+        {
+            return (ComponentStorage<T>)_storage[typeof(T)];
         }
 
         public void RemoveEntity(int entityId)

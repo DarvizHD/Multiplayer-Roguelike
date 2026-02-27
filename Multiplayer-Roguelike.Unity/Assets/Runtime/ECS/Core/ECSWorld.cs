@@ -17,6 +17,7 @@ namespace Runtime.ECS.Core
         public void Update(float deltaTime)
         {
             SystemManager.UpdateAll(deltaTime);
+            ComponentManager.RemoveComponents();
         }
 
         public void RegisterComponent<T>() where T : class, IComponent
