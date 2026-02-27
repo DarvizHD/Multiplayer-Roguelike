@@ -95,8 +95,10 @@ namespace Runtime
             EcsWorld.RegisterComponent<PositionComponent>();
             EcsWorld.RegisterComponent<RotationComponent>();
             EcsWorld.RegisterComponent<VelocityComponent>();
-            EcsWorld.RegisterComponent<SpeedComponent>();
             EcsWorld.RegisterComponent<DirectionComponent>();
+
+            EcsWorld.RegisterComponent<MoveSpeedComponent>();
+            EcsWorld.RegisterComponent<RotationSpeedComponent>();
 
             EcsWorld.RegisterComponent<AttackCooldownComponent>();
             EcsWorld.RegisterComponent<MeleeAttackComponent>();
@@ -112,13 +114,13 @@ namespace Runtime
             EcsWorld.RegisterComponent<PlayerInputComponent>();
             EcsWorld.RegisterComponent<PlayerTagComponent>();
 
-            EcsWorld.RegisterComponent<DirectionRotationComponent>();
-            EcsWorld.RegisterComponent<PlayerLookRotationComponent>();
+            EcsWorld.RegisterComponent<DirectionRotationTagComponent>();
+            EcsWorld.RegisterComponent<PlayerLookRotationTagComponent>();
 
             EcsWorld.RegisterComponent<AnimatorComponent>();
             EcsWorld.RegisterComponent<HealthComponent>();
             EcsWorld.RegisterComponent<RegenerationComponent>();
-            EcsWorld.RegisterComponent<DeathComponent>();
+            EcsWorld.RegisterComponent<DeathTagComponent>();
             EcsWorld.RegisterComponent<InvulnerabilityComponent>();
             EcsWorld.RegisterComponent<SpawnerComponent>();
             EcsWorld.RegisterComponent<SpawnedUnitTagComponent>();
@@ -126,6 +128,8 @@ namespace Runtime
             EcsWorld.RegisterComponent<GameObjectComponent>();
 
             EcsWorld.RegisterComponent<CameraTargetComponent>();
+            EcsWorld.RegisterComponent<FreezeMovementComponent>();
+            EcsWorld.RegisterComponent<FreezeMovementByDamageComponent>();
         }
 
         private void AddSystems()
@@ -137,18 +141,28 @@ namespace Runtime
             EcsWorld.AddSystem<DirectionRotationSystem>();
             EcsWorld.AddSystem<DrawTransformSystem>();
             EcsWorld.AddSystem<MeleeAttackSystem>();
-            EcsWorld.AddSystem<DamageSystem>();
-            EcsWorld.AddSystem<DeathSystem>();
+
             EcsWorld.AddSystem<RegenerationSystem>();
             EcsWorld.AddSystem<InvulnerabilitySystem>();
-            EcsWorld.AddSystem<AttackCooldownSystem>();
-            EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
-            EcsWorld.AddSystem<AttackSystem>();
+
             EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
+            EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
+
+            EcsWorld.AddSystem<AttackCooldownSystem>();
+            EcsWorld.AddSystem<AttackSystem>();
+
+            EcsWorld.AddSystem<DamageAnimationSystem>();
+
+            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
+
+            EcsWorld.AddSystem<DamageSystem>();
+            EcsWorld.AddSystem<DeathSystem>();
+
             EcsWorld.AddSystem<PlayerLookRotationSystem>();
             EcsWorld.AddSystem<CameraFocusSystem>();
             EcsWorld.AddSystem<DrawCameraTransformSystem>();
+            EcsWorld.AddSystem<FreezeMovementSystem>();
             EcsWorld.AddSystem<DeathAnimationSystem>();
             EcsWorld.AddSystem<SpawnerSystem>();
         }
@@ -157,13 +171,14 @@ namespace Runtime
         {
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(position));
             EcsWorld.AddEntityComponent(entityId, new PlayerTagComponent());
+            EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(8f));
+            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(10f));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.zero));
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(provider.Transform));
-            EcsWorld.AddEntityComponent(entityId, new SpeedComponent(8f));
             EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(3f));
             EcsWorld.AddEntityComponent(entityId, new MeleeAttackComponent(2f, 10f));
-            EcsWorld.AddEntityComponent(entityId, new PlayerLookRotationComponent(10f));
+            EcsWorld.AddEntityComponent(entityId, new PlayerLookRotationTagComponent());
             EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(provider.Animator));
             EcsWorld.AddEntityComponent(entityId, new HealthComponent(100f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(5f, 3f));
@@ -177,16 +192,17 @@ namespace Runtime
                 new PositionComponent(new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f))));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
-            EcsWorld.AddEntityComponent(entityId, new SpeedComponent(1f));
+            EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(1f));
+            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(10f));
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(enemyProvider.Transform));
             EcsWorld.AddEntityComponent(entityId, new EnemyTagComponent());
-            EcsWorld.AddEntityComponent(entityId, new DirectionRotationComponent(10f));
+            EcsWorld.AddEntityComponent(entityId, new DirectionRotationTagComponent());
             EcsWorld.AddEntityComponent(entityId, new FollowComponent(playerProvider.Transform));
             EcsWorld.AddEntityComponent(entityId, new SeparationComponent());
             EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(enemyProvider.Animator));
             EcsWorld.AddEntityComponent(entityId, new HealthComponent(50f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(2f, 5f));
-            EcsWorld.AddEntityComponent(entityId, new GameObjectComponent(enemyProvider.gameObject));
+            EcsWorld.AddEntityComponent(entityId, new FreezeMovementByDamageComponent(1.5f));
         }
 
         private void Update()

@@ -13,7 +13,7 @@ namespace Runtime.ECS.Systems
 
         protected override void Update(int id, object[] components, float deltaTime)
         {
-            if (ComponentManager.HasComponent<DeathComponent>(id))
+            if (ComponentManager.HasComponent<DeathTagComponent>(id))
                 return;
 
             var health = components[0] as HealthComponent;

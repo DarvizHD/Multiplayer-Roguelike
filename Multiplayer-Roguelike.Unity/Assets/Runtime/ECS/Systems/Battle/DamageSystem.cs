@@ -9,39 +9,27 @@ namespace Runtime.ECS.Systems.Battle
         public DamageSystem()
         {
             RegisterRequiredComponent(typeof(PendingDamageEventComponent));
+            RegisterRequiredComponent(typeof(HealthComponent));
         }
 
         protected override void Update(int id, object[] components, float deltaTime)
         {
             var pendingDamage = components[0] as PendingDamageEventComponent;
-            if (ComponentManager.HasComponent<DeathComponent>(id))
+            var healthComponent = components[1] as HealthComponent;
+
+            if (healthComponent.CurrentHealth <= 0 || ComponentManager.HasComponent<InvulnerabilityComponent>(id))
             {
-                Debug.Log($"Entity {id} is dead, damage ignored");
-                ComponentManager.RemoveComponent<PendingDamageEventComponent>(id);
                 return;
             }
 
-            if (ComponentManager.HasComponent<InvulnerabilityComponent>(id))
+            healthComponent.CurrentHealth -= pendingDamage.TotalDamage;
+
+            if (ComponentManager.TryGetComponent<RegenerationComponent>(id, out var regenerationComponent))
             {
-                Debug.Log($"Entity {id} is invulnerable, damage blocked");
-                ComponentManager.RemoveComponent<PendingDamageEventComponent>(id);
-                return;
+                regenerationComponent.LastDamageTime = 0f;
             }
 
-            if (ComponentManager.TryGetComponent<HealthComponent>(id, out var health))
-            {
-                health.CurrentHealth -= pendingDamage.TotalDamage;
-
-                if (health.CurrentHealth < 0) health.CurrentHealth = 0;
-
-                if (ComponentManager.TryGetComponent<RegenerationComponent>(id, out var regen))
-                {
-                    regen.LastDamageTime = 0f;
-                }
-
-                Debug.Log(
-                    $"{GetType().Name} {id}: dealt {pendingDamage.TotalDamage} damage, health left: {health.CurrentHealth}");
-            }
+            Debug.Log($"{GetType().Name} {id}: dealt {pendingDamage.TotalDamage} damage, health left: {healthComponent.CurrentHealth}");
 
             ComponentManager.RemoveComponent<PendingDamageEventComponent>(id);
         }

@@ -19,7 +19,7 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
 
         protected override void Update(int id, object[] components, float deltaTime)
         {
-            if (ComponentManager.HasComponent<DeathComponent>(id))
+            if (ComponentManager.HasComponent<DeathTagComponent>(id))
                 return;
 
             var positionComponent = components[0] as PositionComponent;
@@ -39,11 +39,11 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
 
             foreach (var (targetId, targetComponents) in targets)
             {
+                if (ComponentManager.HasComponent<DeathTagComponent>(targetId))
                 if (targetId == id)
                     continue;
 
-                if (ComponentManager.HasComponent<DeathComponent>(targetId) ||
-                    ComponentManager.HasComponent<DeathAnimationComponent>(targetId))
+                if (ComponentManager.HasComponent<DeathAnimationComponent>(targetId))
                     continue;
 
                 var targetPositionComponent = targetComponents[0] as PositionComponent;

@@ -1,10 +1,10 @@
 namespace Runtime.ECS.Components.Movement
 {
-    public class SpeedComponent : IComponent
+    public class RotationSpeedComponent : IComponent
     {
         public float Speed;
 
-        public SpeedComponent(float speed)
+        public RotationSpeedComponent(float speed)
         {
             Speed = speed;
         }

@@ -54,7 +54,7 @@ namespace Runtime.ECS.Systems.Spawn
             {
                 if (ComponentManager.HasComponent<SpawnedUnitTagComponent>(entityId))
                 {
-                    if (!ComponentManager.HasComponent<DeathComponent>(entityId))
+                    if (!ComponentManager.HasComponent<DeathTagComponent>(entityId))
                     {
                         count++;
                     }
@@ -81,12 +81,15 @@ namespace Runtime.ECS.Systems.Spawn
             ComponentManager.AddComponent(entityId, new RotationComponent());
             ComponentManager.AddComponent(entityId, new DirectionComponent(Vector3.zero));
             ComponentManager.AddComponent(entityId, new TransformComponent(instance.transform));
-            ComponentManager.AddComponent(entityId, new SpeedComponent(2f));
+            ComponentManager.AddComponent(entityId, new MoveSpeedComponent(2f));
+            ComponentManager.AddComponent(entityId, new RotationSpeedComponent(100f));
             ComponentManager.AddComponent(entityId, new HealthComponent(50f));
             ComponentManager.AddComponent(entityId, new FollowComponent(_playerTransform));
-            ComponentManager.AddComponent(entityId, new DirectionRotationComponent(10f));
+            ComponentManager.AddComponent(entityId, new DirectionRotationTagComponent());
             ComponentManager.AddComponent(entityId, new SeparationComponent());
             ComponentManager.AddComponent(entityId, new RegenerationComponent(2f, 5f));
+            ComponentManager.AddComponent(entityId, new FreezeMovementByDamageComponent(1f));
+
 
             var animator = instance.GetComponentInChildren<Animator>();
             ComponentManager.AddComponent(entityId, new AnimatorComponent(animator));
