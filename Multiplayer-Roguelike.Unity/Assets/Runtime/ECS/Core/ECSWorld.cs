@@ -10,13 +10,14 @@ namespace Runtime.ECS.Core
 
         public ECSWorld()
         {
-            ComponentManager = new ComponentManager();
+            ComponentManager = new ComponentManager(32);
             SystemManager = new SystemManager(ComponentManager);
         }
 
         public void Update(float deltaTime)
         {
             SystemManager.UpdateAll(deltaTime);
+            ComponentManager.RemoveComponents();
         }
 
         public void RegisterComponent<T>() where T : class, IComponent

@@ -80,7 +80,10 @@ namespace Editor.ECSDebugger
 
         private void ShowComponentHeader(ComponentManager componentManager, int entityId)
         {
-            var componentTypes = componentManager.GetComponentTypes(entityId);
+            /*
+             TODO: Rework this.
+
+             var componentTypes = componentManager.GetComponentTypes(entityId);
 
             foreach (var componentType in componentTypes)
             {
@@ -97,7 +100,7 @@ namespace Editor.ECSDebugger
 
                 EditorGUILayout.EndVertical();
                 EditorGUILayout.Space(2);
-            }
+            }*/
         }
 
         private void ShowComponentFields(object component)

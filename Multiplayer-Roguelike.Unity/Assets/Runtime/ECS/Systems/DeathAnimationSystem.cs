@@ -11,20 +11,22 @@ namespace Runtime.ECS.Systems
             RegisterRequiredComponent(typeof(DeathAnimationComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            var deathAnimation = components[0] as DeathAnimationComponent;
-
-            deathAnimation.Timer -= deltaTime;
-
-            if (deathAnimation.Timer <= 0)
+            foreach (var (entityId, deathAnimationComponent)
+                     in ComponentManager.Query<DeathAnimationComponent>())
             {
-                if (ComponentManager.TryGetComponent<GameObjectComponent>(id, out var gameObjectComponent))
-                {
-                    Object.Destroy(gameObjectComponent.GameObject);
-                }
+                deathAnimationComponent.Timer -= deltaTime;
 
-                ComponentManager.RemoveEntity(id);
+                if (deathAnimationComponent.Timer <= 0)
+                {
+                    if (ComponentManager.TryGetComponent<GameObjectComponent>(entityId, out var gameObjectComponent))
+                    {
+                        Object.Destroy(gameObjectComponent.GameObject);
+                    }
+
+                    ComponentManager.RemoveEntity(entityId);
+                }
             }
         }
     }

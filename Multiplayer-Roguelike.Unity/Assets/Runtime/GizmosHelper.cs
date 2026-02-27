@@ -26,41 +26,33 @@ namespace Runtime
 
         private void DrawAttackRangeGizmos()
         {
-            var results = _ecsWorld.ComponentManager.Query(
-                typeof(PositionComponent),
-                typeof(RotationComponent),
-                typeof(MeleeAttackComponent)
-            );
+            var results = _ecsWorld.ComponentManager.Query<PositionComponent, RotationComponent, MeleeAttackComponent>();
 
-            foreach (var (id, components) in results)
+            foreach (var (id, positionComponent, rotationComponent, meleeAttackComponent) in results)
             {
-                var position = (PositionComponent)components[0];
-                var rotation = (RotationComponent)components[1];
-                var melee = (MeleeAttackComponent)components[2];
-
                 Gizmos.color = new Color(1f, 0f, 0f, 0.2f);
-                Gizmos.DrawWireSphere(position.Position, melee.Range);
+                Gizmos.DrawWireSphere(positionComponent.Position, meleeAttackComponent.Range);
 
-                var attackDir = Quaternion.Euler(0, rotation.Angle, 0) * Vector3.forward;
+                var attackDir = Quaternion.Euler(0, rotationComponent.Angle, 0) * Vector3.forward;
                 attackDir.y = 0;
                 attackDir.Normalize();
 
-                var halfAngle = melee.Angle * 0.5f;
+                var halfAngle = meleeAttackComponent.Angle * 0.5f;
                 var leftDir = Quaternion.Euler(0, -halfAngle, 0) * attackDir;
                 var rightDir = Quaternion.Euler(0, halfAngle, 0) * attackDir;
 
                 Gizmos.color = Color.red;
-                Gizmos.DrawRay(position.Position, leftDir * melee.Range);
-                Gizmos.DrawRay(position.Position, rightDir * melee.Range);
+                Gizmos.DrawRay(positionComponent.Position, leftDir * meleeAttackComponent.Range);
+                Gizmos.DrawRay(positionComponent.Position, rightDir * meleeAttackComponent.Range);
 
                 var steps = 20;
-                var prev = position.Position + leftDir * melee.Range;
+                var prev = positionComponent.Position + leftDir * meleeAttackComponent.Range;
                 for (var i = 1; i <= steps; i++)
                 {
                     var t = (float)i / steps;
                     var angle = Mathf.Lerp(-halfAngle, halfAngle, t);
                     var dir = Quaternion.Euler(0, angle, 0) * attackDir;
-                    var next = position.Position + dir * melee.Range;
+                    var next = positionComponent.Position + dir * meleeAttackComponent.Range;
                     Gizmos.DrawLine(prev, next);
                     prev = next;
                 }

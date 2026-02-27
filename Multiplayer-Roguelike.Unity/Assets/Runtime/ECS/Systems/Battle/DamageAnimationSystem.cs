@@ -12,12 +12,13 @@ namespace Runtime.ECS.Systems.Battle
             RegisterRequiredComponent(typeof(PendingDamageEventComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            var animatorComponent =  components[0] as AnimatorComponent;
-            var pendingDamageEventComponent = components[1] as PendingDamageEventComponent;
-
-            animatorComponent.Animator.SetTrigger(animatorComponent.Damage);
+            foreach (var (entityId, animatorComponent, pendingDamageEventComponent)
+                     in ComponentManager.Query<AnimatorComponent, PendingDamageEventComponent>())
+            {
+                animatorComponent.Animator.SetTrigger(animatorComponent.Damage);
+            }
         }
     }
 }

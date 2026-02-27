@@ -4,7 +4,8 @@ namespace Runtime.ECS.Components
 {
     public interface IComponentStorage<out T> where T : IComponent
     {
-        IEnumerable<int> EntityIds { get; }
+        public int Count { get; }
+        int[] EntityIds { get; }
         bool Has(int entityId);
         bool TryGet(int id, out IComponent component);
 

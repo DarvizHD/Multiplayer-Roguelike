@@ -13,23 +13,23 @@ namespace Runtime.ECS.Components
             RegisterRequiredComponent(typeof(FreezeMovementComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            var speedComponent = components[0] as MoveSpeedComponent;
-            var rotationSpeedComponent = components[1] as RotationSpeedComponent;
-            var freezeMovementComponent = components[2] as FreezeMovementComponent;
-
-            speedComponent.Speed = 0f;
-            rotationSpeedComponent.Speed = 0f;
-
-            if (freezeMovementComponent.CurrentDuration <= 0)
+            foreach (var (entityId, moveSpeedComponent, rotationSpeedComponent, freezeMovementComponent)
+                     in ComponentManager.Query<MoveSpeedComponent, RotationSpeedComponent, FreezeMovementComponent>())
             {
-                speedComponent.Speed = freezeMovementComponent.CachedMoveSpeedSpeed;
-                rotationSpeedComponent.Speed = freezeMovementComponent.CachedRotationSpeed;
-                ComponentManager.RemoveComponent<FreezeMovementComponent>(id);
-            }
+                moveSpeedComponent.Speed = 0f;
+                rotationSpeedComponent.Speed = 0f;
 
-            freezeMovementComponent.CurrentDuration -= deltaTime;
+                if (freezeMovementComponent.CurrentDuration <= 0)
+                {
+                    moveSpeedComponent.Speed = freezeMovementComponent.CachedMoveSpeedSpeed;
+                    rotationSpeedComponent.Speed = freezeMovementComponent.CachedRotationSpeed;
+                    ComponentManager.RemoveComponent<FreezeMovementComponent>(entityId);
+                }
+
+                freezeMovementComponent.CurrentDuration -= deltaTime;
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Runtime.ECS.Systems.Spawn
 {
     public class SpawnerSystem : BaseSystem
     {
-        private int _nextEntityId = 1000; //TODO: нужен уникальный id
+        private int _nextEntityId = 64; //TODO: нужен уникальный id
         private Transform _playerTransform;
 
         public SpawnerSystem()
@@ -17,20 +17,22 @@ namespace Runtime.ECS.Systems.Spawn
             RegisterRequiredComponent(typeof(SpawnerComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            var spawner = components[0] as SpawnerComponent;
-
-            if (_playerTransform == null)
+            foreach (var (entityId, spawner)
+                     in ComponentManager.Query<SpawnerComponent>())
             {
-                FindPlayerTransform();
-            }
+                if (_playerTransform == null)
+                {
+                    FindPlayerTransform();
+                }
 
-            spawner.CurrentCount = CountAliveSpawnedUnits();
+                spawner.CurrentCount = CountAliveSpawnedUnits();
 
-            if (spawner.CurrentCount < spawner.TargetCount)
-            {
-                SpawnUnit(spawner);
+                if (spawner.CurrentCount < spawner.TargetCount)
+                {
+                    SpawnUnit(spawner);
+                }
             }
         }
 

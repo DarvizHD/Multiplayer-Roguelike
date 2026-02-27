@@ -13,27 +13,30 @@ namespace Runtime.ECS.Systems.CameraFocus
             RegisterRequiredComponent(typeof(CameraTargetComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            var cameraTarget = components[0] as CameraTargetComponent;
-
-            var players = ComponentManager.Query(typeof(PositionComponent), typeof(PlayerTagComponent));
-
-            var sum = Vector3.zero;
-            var count = 0;
-
-            foreach (var (_, playerComponents) in players)
+            foreach (var (entityId, cameraTargetComponent)
+                     in ComponentManager.Query<CameraTargetComponent>())
             {
-                sum += ((PositionComponent)playerComponents[0]).Position;
-                count++;
-            }
 
-            if (count == 0)
-            {
-                return;
-            }
+                var players = ComponentManager.Query<PositionComponent, PlayerTagComponent>();
 
-            cameraTarget.TargetPosition = sum / count;
+                var sum = Vector3.zero;
+                var count = 0;
+
+                foreach (var (_, positionComponent, playerTagComponent) in players)
+                {
+                    sum += positionComponent.Position;
+                    count++;
+                }
+
+                if (count == 0)
+                {
+                    return;
+                }
+
+                cameraTargetComponent.TargetPosition = sum / count;
+            }
         }
     }
 }

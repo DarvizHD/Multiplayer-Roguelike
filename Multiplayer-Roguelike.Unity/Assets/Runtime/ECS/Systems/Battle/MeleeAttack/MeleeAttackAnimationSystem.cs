@@ -11,12 +11,14 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
             RegisterRequiredComponent(typeof(MeleeAttackComponent));
             RegisterRequiredComponent(typeof(AttackEventComponent));
         }
-        
-        protected override void Update(int id, object[] components, float deltaTime)
-        {
-            var animatorComponent = components[0] as AnimatorComponent;
 
-            animatorComponent.Animator.SetTrigger(animatorComponent.MeleeAttack);
+        public override void Update(float deltaTime)
+        {
+            foreach (var (entityId, animatorComponent, meleeAttackComponent, attackEventComponent)
+                     in ComponentManager.Query<AnimatorComponent, MeleeAttackComponent, AttackEventComponent>())
+            {
+                animatorComponent.Animator.SetTrigger(animatorComponent.MeleeAttack);
+            }
         }
     }
 }

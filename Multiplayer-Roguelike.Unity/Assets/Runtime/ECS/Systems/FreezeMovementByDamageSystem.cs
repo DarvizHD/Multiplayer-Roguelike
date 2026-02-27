@@ -15,18 +15,21 @@ namespace Runtime.ECS.Components
             RegisterRequiredComponent(typeof(PendingDamageEventComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            var speedComponent = components[0] as MoveSpeedComponent;
-            var freezeMovementDamageComponent = components[1] as FreezeMovementByDamageComponent;
-            var rotationSpeedComponent = components[2] as RotationSpeedComponent;
-
-            if (ComponentManager.HasComponent<FreezeMovementComponent>(id))
+            foreach (var (entityId, moveSpeedComponent, freezeMovementByDamageComponent, rotationSpeedComponent, pendingDamageEventComponent)
+                     in ComponentManager.Query<MoveSpeedComponent, FreezeMovementByDamageComponent, RotationSpeedComponent, PendingDamageEventComponent>())
             {
-                return;
-            }
+                if (ComponentManager.HasComponent<FreezeMovementComponent>(entityId))
+                {
+                    return;
+                }
 
-            ComponentManager.AddComponent(id, new FreezeMovementComponent(speedComponent.Speed, rotationSpeedComponent.Speed,freezeMovementDamageComponent.Duration));
+                ComponentManager.AddComponent(entityId,
+                    new FreezeMovementComponent(moveSpeedComponent.Speed,
+                        rotationSpeedComponent.Speed,
+                        freezeMovementByDamageComponent.Duration));
+            }
         }
     }
 }

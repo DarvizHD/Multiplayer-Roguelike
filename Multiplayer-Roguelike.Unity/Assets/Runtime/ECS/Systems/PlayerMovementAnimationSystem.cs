@@ -13,22 +13,22 @@ namespace Runtime.ECS.Systems
             RegisterRequiredComponent(typeof(AnimatorComponent));
             RegisterRequiredComponent(typeof(RotationComponent));
         }
-        
-        protected override void Update(int id, object[] components, float deltaTime)
-        {
-            var inputComponent = components[0] as PlayerInputComponent;
-            var playerAnimatorComponent = components[1] as AnimatorComponent;
-            var rotationComponent = components[2] as RotationComponent;
-            
-            var input = inputComponent.PlayerControls.Gameplay.Move.ReadValue<Vector2>().normalized;
-            
-            var worldMove = new Vector3(input.x, 0f, input.y); 
-            var rotation = Quaternion.Euler(0f, rotationComponent.Angle, 0f);
-            
-            var localMove = Quaternion.Inverse(rotation) * worldMove;
 
-            playerAnimatorComponent.Animator.SetFloat(playerAnimatorComponent.X, localMove.x, 0.1f, deltaTime);
-            playerAnimatorComponent.Animator.SetFloat(playerAnimatorComponent.Z, localMove.z, 0.1f, deltaTime);
+        public override void Update(float deltaTime)
+        {
+            foreach (var (entityId, playerInputComponent, animatorComponent, rotationComponent)
+                     in ComponentManager.Query<PlayerInputComponent, AnimatorComponent, RotationComponent>())
+            {
+                var input = playerInputComponent.PlayerControls.Gameplay.Move.ReadValue<Vector2>().normalized;
+
+                var worldMove = new Vector3(input.x, 0f, input.y);
+                var rotation = Quaternion.Euler(0f, rotationComponent.Angle, 0f);
+
+                var localMove = Quaternion.Inverse(rotation) * worldMove;
+
+                animatorComponent.Animator.SetFloat(animatorComponent.X, localMove.x, 0.1f, deltaTime);
+                animatorComponent.Animator.SetFloat(animatorComponent.Z, localMove.z, 0.1f, deltaTime);
+            }
         }
     }
 }

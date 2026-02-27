@@ -12,17 +12,17 @@ namespace Runtime.ECS.Systems.Movement
             RegisterRequiredComponent(typeof(MoveSpeedComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            if (ComponentManager.HasComponent<DeathTagComponent>(id) ||
-                ComponentManager.HasComponent<DeathAnimationComponent>(id))
-                return;
+            foreach (var (entityId, positionComponent, directionComponent, moveSpeedComponent)
+                     in ComponentManager.Query<PositionComponent, DirectionComponent, MoveSpeedComponent>())
+            {
+                if (ComponentManager.HasComponent<DeathTagComponent>(entityId) ||
+                    ComponentManager.HasComponent<DeathAnimationComponent>(entityId))
+                    return;
 
-            var positionComponent = components[0] as PositionComponent;
-            var directionComponent = components[1] as DirectionComponent;
-            var speedComponent = components[2] as MoveSpeedComponent;
-
-            positionComponent.Position += directionComponent.Direction.normalized * speedComponent.Speed * deltaTime;
+                positionComponent.Position += directionComponent.Direction.normalized * moveSpeedComponent.Speed * deltaTime;
+            }
         }
     }
 }

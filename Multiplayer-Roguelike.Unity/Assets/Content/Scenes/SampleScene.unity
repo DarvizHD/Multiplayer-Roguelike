@@ -435,7 +435,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -761,6 +761,7 @@ GameObject:
   m_Component:
   - component: {fileID: 941861036}
   - component: {fileID: 941861035}
+  - component: {fileID: 941861037}
   m_Layer: 0
   m_Name: EntryPoint
   m_TagString: Untagged
@@ -799,6 +800,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &941861037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941861034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec13d70135b04d9eb2d984bdf9fbd834, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.PerformanceMonitor
 --- !u!1 &1972683686
 GameObject:
   m_ObjectHideFlags: 0

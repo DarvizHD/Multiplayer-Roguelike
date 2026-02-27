@@ -8,19 +8,19 @@ namespace Runtime.ECS.Systems
     {
         public PlayerInputMovementSystem()
         {
-            RegisterRequiredComponent(typeof(PlayerInputComponent)); 
+            RegisterRequiredComponent(typeof(PlayerInputComponent));
             RegisterRequiredComponent(typeof(DirectionComponent));
         }
-        
-        protected override void Update(int id, object[] components, float deltaTime)
+
+        public override void Update(float deltaTime)
         {
-            var playerInputComponent = components[0] as PlayerInputComponent;
-            var directionComponent = components[1] as DirectionComponent;
-            
-            var moveInput = playerInputComponent.PlayerControls.Gameplay.Move.ReadValue<Vector2>();
-            
-            
-            directionComponent!.Direction = new Vector3(moveInput.x, 0, moveInput.y).normalized;
+            foreach (var (entityId, playerInputComponent, directionComponent)
+                     in ComponentManager.Query<PlayerInputComponent, DirectionComponent>())
+            {
+                var moveInput = playerInputComponent.PlayerControls.Gameplay.Move.ReadValue<Vector2>();
+
+                directionComponent!.Direction = new Vector3(moveInput.x, 0, moveInput.y).normalized;
+            }
         }
     }
 }

@@ -1,19 +1,23 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Runtime.ECS.Components;
-using UnityEngine;
 
 namespace Runtime.ECS.Core
 {
     public class ComponentManager
     {
-        private readonly Dictionary<Type, IComponentStorage<IComponent>> _storage = new();
-        private readonly Dictionary<int, Dictionary<Type, int>> _pendingRemove = new();
+        private readonly IComponentStorage<IComponent>[] _storages;
+
+        private readonly Dictionary<int, int> _toRemoveEntityComponents = new();
+
+        public ComponentManager(int maxComponentsTypes)
+        {
+            _storages = new IComponentStorage<IComponent>[maxComponentsTypes];
+        }
 
         public void RegisterComponent<T>() where T : class, IComponent
         {
-            _storage[typeof(T)] = new ComponentStorage<T>();
+            var id = ComponentId<T>.Id;
+            _storages[id] = new ComponentStorage<T>();
         }
 
         public void AddComponent<T>(int entityId, T component) where T : class, IComponent
@@ -23,32 +27,17 @@ namespace Runtime.ECS.Core
 
         public void RemoveComponent<T>(int entityId) where T : class, IComponent
         {
-            if (!_pendingRemove.ContainsKey(entityId))
-            {
-                _pendingRemove[entityId] = new Dictionary<Type, int>();
-            }
-            _pendingRemove[entityId][typeof(T)] = entityId;
-        }
-
-        public object GetComponent(int entityId, Type componentType)
-        {
-            if (!_storage.TryGetValue(componentType, out var storage))
-            {
-                return null;
-            }
-
-            storage.TryGet(entityId, out var component);
-            return component;
+            _toRemoveEntityComponents[ComponentId<T>.Id] = entityId;
         }
 
         public T GetComponent<T>(int entityId) where T : class, IComponent
         {
-            return (T)_storage[typeof(T)].Get(entityId);
+            return (T)_storages[ComponentId<T>.Id].Get(entityId);
         }
 
         public bool TryGetComponent<T>(int entityId, out T component) where T : class, IComponent
         {
-            var success = _storage[typeof(T)].TryGet(entityId, out var founded);
+            var success = _storages[ComponentId<T>.Id].TryGet(entityId, out var founded);
 
             component = (T)founded;
 
@@ -57,76 +46,125 @@ namespace Runtime.ECS.Core
 
         public bool HasComponent<T>(int entityId) where T : class, IComponent
         {
-            return _storage[typeof(T)].Has(entityId);
+            return _storages[ComponentId<T>.Id].Has(entityId);
         }
 
         public IEnumerable<int> GetAllEntities()
         {
-            return _storage.Values.SelectMany(s => s.EntityIds).Distinct();
+            // TODO: Rework this
+            yield break;
+
+           // return _storages.SelectMany(s => s.EntityIds).Distinct();
         }
 
-        public IEnumerable<Type> GetComponentTypes(int entityId)
+        public IEnumerable<(int entityId, T1)> Query<T1>() where T1 : class, IComponent
         {
-            return from pair in _storage where pair.Value.Has(entityId) select pair.Key;
+            foreach (var entityId in GetStorage<T1>().EntityIds)
+            {
+                yield return (entityId, GetStorage<T1>().Get(entityId));
+            }
         }
 
-        public IEnumerable<(int entityId, object[] components)> Query(params Type[] componentTypes)
+        public (int[] entityId, T1[] components, int count) TupleQuery<T1>() where T1 : class, IComponent
         {
-            var storages = componentTypes.Select(t => _storage[t]).ToArray();
+            var entityId =  GetStorage<T1>().EntityIds;
+            var components = GetStorage<T1>().Components;
+            var count = entityId.Length;
 
-            var entityIds = storages[0].EntityIds;
+            return  (entityId, components, count);
+        }
 
-            foreach (var storage in storages.Skip(1))
+        public IEnumerable<(int entityId, T1, T2)> Query<T1, T2>()
+            where T1 : class, IComponent
+            where T2 : class, IComponent
+        {
+            foreach (var entityId in GetStorage<T1>().EntityIds)
             {
-                entityIds = entityIds.Intersect(storage.EntityIds);
+                if (GetStorage<T2>().Has(entityId))
+                {
+                    yield return (entityId, GetStorage<T1>().Get(entityId), GetStorage<T2>().Get(entityId));
+                }
+            }
+        }
+
+        public IEnumerable<(int entityId, T1, T2, T3)> Query<T1, T2, T3>()
+            where T1 : class, IComponent
+            where T2 : class, IComponent
+            where T3 : class, IComponent
+        {
+            foreach (var entityId in GetStorage<T1>().EntityIds)
+            {
+                if (GetStorage<T2>().Has(entityId) && GetStorage<T3>().Has(entityId))
+                {
+                    yield return (entityId, GetStorage<T1>().Get(entityId), GetStorage<T2>().Get(entityId), GetStorage<T3>().Get(entityId));
+                }
+            }
+        }
+
+        public IEnumerable<(int entityId, T1, T2, T3, T4)> Query<T1, T2, T3, T4>()
+            where T1 : class, IComponent
+            where T2 : class, IComponent
+            where T3 : class, IComponent
+            where T4 : class, IComponent
+        {
+            foreach (var entityId in GetStorage<T1>().EntityIds)
+            {
+                if (GetStorage<T2>().Has(entityId) && GetStorage<T3>().Has(entityId) && GetStorage<T4>().Has(entityId))
+                {
+                    yield return (entityId,
+                        GetStorage<T1>().Get(entityId),
+                        GetStorage<T2>().Get(entityId),
+                        GetStorage<T3>().Get(entityId),
+                        GetStorage<T4>().Get(entityId));
+                }
+            }
+        }
+
+        public IEnumerable<(int entityId, T1, T2, T3, T4, T5)> Query<T1, T2, T3, T4, T5>()
+            where T1 : class, IComponent
+            where T2 : class, IComponent
+            where T3 : class, IComponent
+            where T4 : class, IComponent
+            where T5 : class, IComponent
+        {
+            foreach (var entityId in GetStorage<T1>().EntityIds)
+            {
+                if (GetStorage<T2>().Has(entityId) && GetStorage<T3>().Has(entityId) && GetStorage<T4>().Has(entityId) &&  GetStorage<T5>().Has(entityId))
+                {
+                    yield return (entityId,
+                        GetStorage<T1>().Get(entityId),
+                        GetStorage<T2>().Get(entityId),
+                        GetStorage<T3>().Get(entityId),
+                        GetStorage<T4>().Get(entityId),
+                        GetStorage<T5>().Get(entityId));
+                }
+            }
+        }
+
+        public void RemoveComponents()
+        {
+            if (_toRemoveEntityComponents.Count == 0)
+            {
+                return;
             }
 
-            foreach (var id in entityIds)
+            foreach (var toRemoveComponentPair in _toRemoveEntityComponents)
             {
-                var components = storages.Select(s => s.TryGet(id, out var component) ? component : null).ToArray();
-
-                yield return (id, components);
+                _storages[toRemoveComponentPair.Key].Remove(toRemoveComponentPair.Value);
             }
 
-            RemoveComponents();
+            _toRemoveEntityComponents.Clear();
         }
 
         private ComponentStorage<T> GetStorage<T>() where T : class, IComponent
         {
-            return (ComponentStorage<T>)_storage[typeof(T)];
-        }
-
-        private void RemoveComponents()
-        {
-            foreach (var entityKv in _pendingRemove)
-            {
-                int entityId = entityKv.Key;
-                foreach (var componentType in entityKv.Value.Keys)
-                {
-                    if (_storage.TryGetValue(componentType, out var storage))
-                    {
-                        storage.Remove(entityId);
-                    }
-                }
-            }
-
-            _pendingRemove.Clear();
+            return (ComponentStorage<T>) _storages[ComponentId<T>.Id];
         }
 
         public void RemoveEntity(int entityId)
         {
-            foreach (var kv in _storage)
-            {
-                if (kv.Value.Has(entityId))
-                {
-                    if (!_pendingRemove.ContainsKey(entityId))
-                    {
-                        _pendingRemove[entityId] = new Dictionary<Type, int>();
-                    }
-                    _pendingRemove[entityId][kv.Key] = entityId;
-                }
-            }
-            Debug.Log($"Entity {entityId} marked for removal");
+            // TODO: Rework this
+
         }
     }
 }
