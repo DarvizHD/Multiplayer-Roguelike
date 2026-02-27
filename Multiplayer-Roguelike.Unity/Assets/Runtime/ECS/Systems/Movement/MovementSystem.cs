@@ -14,7 +14,7 @@ namespace Runtime.ECS.Systems.Movement
 
         protected override void Update(int id, object[] components, float deltaTime)
         {
-            if (ComponentManager.HasComponent<DeathComponent>(id) ||
+            if (ComponentManager.HasComponent<DeathTagComponent>(id) ||
                 ComponentManager.HasComponent<DeathAnimationComponent>(id))
                 return;
 
