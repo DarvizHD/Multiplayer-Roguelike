@@ -11,23 +11,24 @@ namespace Runtime.ECS.Systems
             RegisterRequiredComponent(typeof(RegenerationComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            if (ComponentManager.HasComponent<DeathTagComponent>(id))
-                return;
-
-            var health = components[0] as HealthComponent;
-            var regeneration = components[1] as RegenerationComponent;
-
-            regeneration.LastDamageTime += deltaTime;
-
-            if (regeneration.LastDamageTime >= regeneration.Cooldown &&
-                health.CurrentHealth < health.MaxHealth)
+            foreach (var (entityId, healthComponent, regenerationComponent)
+                     in ComponentManager.Query<HealthComponent, RegenerationComponent>())
             {
-                health.CurrentHealth = Mathf.Min(
-                    health.CurrentHealth + regeneration.RegenerationRate * deltaTime,
-                    health.MaxHealth
-                );
+                if (ComponentManager.HasComponent<DeathTagComponent>(entityId))
+                    return;
+
+                regenerationComponent.LastDamageTime += deltaTime;
+
+                if (regenerationComponent.LastDamageTime >= regenerationComponent.Cooldown &&
+                    healthComponent.CurrentHealth < healthComponent.MaxHealth)
+                {
+                    healthComponent.CurrentHealth = Mathf.Min(
+                        healthComponent.CurrentHealth + regenerationComponent.RegenerationRate * deltaTime,
+                        healthComponent.MaxHealth
+                    );
+                }
             }
         }
     }

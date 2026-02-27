@@ -17,54 +17,51 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
             RegisterRequiredComponent(typeof(AttackCooldownComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            if (ComponentManager.HasComponent<DeathTagComponent>(id))
-                return;
-
-            var positionComponent = components[0] as PositionComponent;
-            var rotationComponent = components[1] as RotationComponent;
-            var meleeAttackComponent = components[2] as MeleeAttackComponent;
-            var attackCooldownComponent = components[3] as AttackCooldownComponent;
-
-            if (attackCooldownComponent.CurrentCooldown > 0)
+            foreach (var (entityId, positionComponent, rotationComponent, meleeAttackComponent, attackCooldownComponent)
+                     in ComponentManager.Query<PositionComponent, RotationComponent, MeleeAttackComponent, AttackCooldownComponent>())
             {
-                return;
-            }
+                if (ComponentManager.HasComponent<DeathTagComponent>(entityId))
+                    return;
 
-            var attackDirection = Quaternion.Euler(0f, rotationComponent.Angle, 0f) * Vector3.forward;
-            attackDirection.y = 0;
-
-            var targets = ComponentManager.Query(typeof(PositionComponent), typeof(EnemyTagComponent));
-
-            foreach (var (targetId, targetComponents) in targets)
-            {
-                if (ComponentManager.HasComponent<DeathTagComponent>(targetId))
-                if (targetId == id)
-                    continue;
-
-                if (ComponentManager.HasComponent<DeathAnimationComponent>(targetId))
-                    continue;
-
-                var targetPositionComponent = targetComponents[0] as PositionComponent;
-
-                var distance = Vector3.Distance(targetPositionComponent.Position, positionComponent.Position);
-
-                if (distance >= meleeAttackComponent.Range) continue;
-
-                var toTarget = targetPositionComponent.Position - positionComponent.Position;
-                toTarget.y = 0;
-                toTarget.Normalize();
-
-                var angle = Vector3.Angle(attackDirection, toTarget);
-
-                if (angle > meleeAttackComponent.Angle * 0.5f) continue;
-
-                if (!ComponentManager.HasComponent<AttackEventComponent>(id))
+                if (attackCooldownComponent.CurrentCooldown > 0)
                 {
-                    attackCooldownComponent.CurrentCooldown = attackCooldownComponent.Cooldown;
+                    return;
+                }
 
-                    ComponentManager.AddComponent(id, new AttackEventComponent(targetId, meleeAttackComponent.Damage));
+                var attackDirection = Quaternion.Euler(0f, rotationComponent.Angle, 0f) * Vector3.forward;
+                attackDirection.y = 0;
+
+                var targets = ComponentManager.Query<PositionComponent, EnemyTagComponent>();
+
+                foreach (var (targetId, targetPositionComponent, enemyTagComponent) in targets)
+                {
+                    if (ComponentManager.HasComponent<DeathTagComponent>(targetId))
+                        if (targetId == entityId)
+                            continue;
+
+                    if (ComponentManager.HasComponent<DeathAnimationComponent>(targetId))
+                        continue;
+
+                    var distance = Vector3.Distance(targetPositionComponent.Position, positionComponent.Position);
+
+                    if (distance >= meleeAttackComponent.Range) continue;
+
+                    var toTarget = targetPositionComponent.Position - positionComponent.Position;
+                    toTarget.y = 0;
+                    toTarget.Normalize();
+
+                    var angle = Vector3.Angle(attackDirection, toTarget);
+
+                    if (angle > meleeAttackComponent.Angle * 0.5f) continue;
+
+                    if (!ComponentManager.HasComponent<AttackEventComponent>(entityId))
+                    {
+                        attackCooldownComponent.CurrentCooldown = attackCooldownComponent.Cooldown;
+
+                        ComponentManager.AddComponent(entityId, new AttackEventComponent(targetId, meleeAttackComponent.Damage));
+                    }
                 }
             }
         }

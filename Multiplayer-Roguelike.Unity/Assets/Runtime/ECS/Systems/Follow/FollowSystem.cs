@@ -14,24 +14,24 @@ namespace Runtime.ECS.Systems.Follow
             RegisterRequiredComponent(typeof(PositionComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            var followComponent = (FollowComponent)components[0];
-            var directionComponent = (DirectionComponent)components[1];
-            var positionComponent = (PositionComponent)components[2];
-
-            var toTarget = followComponent.Target.position - positionComponent.Position;
-            toTarget.y = 0f;
-
-            var distance = toTarget.magnitude;
-
-            if (distance <= StopDistance)
+            foreach (var (entityId, followComponent, directionComponent, positionComponent)
+                     in ComponentManager.Query<FollowComponent, DirectionComponent, PositionComponent>())
             {
-                directionComponent.Direction = Vector3.zero;
-                return;
-            }
+                var toTarget = followComponent.Target.position - positionComponent.Position;
+                toTarget.y = 0f;
 
-            directionComponent.Direction = toTarget.normalized;
+                var distance = toTarget.magnitude;
+
+                if (distance <= StopDistance)
+                {
+                    directionComponent.Direction = Vector3.zero;
+                    return;
+                }
+
+                directionComponent.Direction = toTarget.normalized;
+            }
         }
     }
 }

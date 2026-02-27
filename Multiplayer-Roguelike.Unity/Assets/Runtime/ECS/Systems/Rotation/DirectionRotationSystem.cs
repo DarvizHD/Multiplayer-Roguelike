@@ -19,36 +19,35 @@ namespace Runtime.ECS.Systems.Rotation
                 RegisterRequiredComponent(typeof(RotationSpeedComponent));
             }
 
-            protected override void Update(int id, object[] components, float deltaTime)
+            public override void Update(float deltaTime)
             {
-                var directionRotationComponent = components[0] as DirectionRotationTagComponent;
-                var transformComponent = components[1] as TransformComponent;
-                var directionComponent = components[2] as DirectionComponent;
-                var rotationComponent =  components[3] as RotationComponent;
-                var rotationSpeedComponent = components[4] as RotationSpeedComponent;
-
-                var dir = directionComponent!.Direction;
-
-                if (dir == Vector3.zero)
+                foreach (var (entityId, directionRotationTagComponent, transformComponent, directionComponent, rotationComponent, rotationSpeedComponent)
+                         in ComponentManager.Query<DirectionRotationTagComponent, TransformComponent, DirectionComponent, RotationComponent, RotationSpeedComponent>())
                 {
-                    return;
+
+                    var dir = directionComponent!.Direction;
+
+                    if (dir == Vector3.zero)
+                    {
+                        return;
+                    }
+
+                    var angle = Vector3.Angle(transformComponent!.Transform.forward, dir);
+
+                    if (angle < MinAngle)
+                    {
+                        return;
+                    }
+
+                    var targetRotation = Quaternion.LookRotation(dir);
+                    var maxDelta = RotationSpeed * deltaTime;
+
+                    var currentRotation = Quaternion.Euler(0, rotationComponent.Angle, 0f);
+
+                    var targetAngle = Quaternion.RotateTowards(currentRotation, targetRotation, maxDelta).eulerAngles.y;
+
+                    rotationComponent.Angle = Mathf.LerpAngle(rotationComponent.Angle, targetAngle, rotationSpeedComponent.Speed * deltaTime);
                 }
-
-                var angle = Vector3.Angle(transformComponent!.Transform.forward, dir);
-
-                if (angle < MinAngle)
-                {
-                    return;
-                }
-
-                var targetRotation = Quaternion.LookRotation(dir);
-                var maxDelta = RotationSpeed * deltaTime;
-
-                var currentRotation = Quaternion.Euler(0, rotationComponent.Angle, 0f);
-
-                var targetAngle = Quaternion.RotateTowards(currentRotation, targetRotation, maxDelta).eulerAngles.y;
-
-                rotationComponent.Angle = Mathf.LerpAngle(rotationComponent.Angle, targetAngle, rotationSpeedComponent.Speed * deltaTime);
             }
         }
     }

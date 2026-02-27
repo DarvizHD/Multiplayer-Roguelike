@@ -10,15 +10,18 @@ namespace Runtime.ECS.Systems
             RegisterRequiredComponent(typeof(HealthComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            var health = components[0] as HealthComponent;
-
-            if (health.CurrentHealth <= 0 && !ComponentManager.HasComponent<DeathTagComponent>(id))
+            foreach (var (entityId, healthComponent)
+                     in ComponentManager.Query<HealthComponent>())
             {
-                ComponentManager.AddComponent(id, new DeathTagComponent());
 
-                Debug.Log($"Entity {id} died");
+                if (healthComponent.CurrentHealth <= 0 && !ComponentManager.HasComponent<DeathTagComponent>(entityId))
+                {
+                    ComponentManager.AddComponent(entityId, new DeathTagComponent());
+
+                    Debug.Log($"Entity {entityId} died");
+                }
             }
         }
     }

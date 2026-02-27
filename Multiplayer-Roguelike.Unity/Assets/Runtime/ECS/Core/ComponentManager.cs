@@ -70,7 +70,8 @@ namespace Runtime.ECS.Core
             return from pair in _storage where pair.Value.Has(entityId) select pair.Key;
         }
 
-        public IEnumerable<(int entityId, object[] components)> Query(params Type[] componentTypes)
+        /*
+        public IEnumerable<(int entityId, IComponent[] components)> Query(params Type[] componentTypes)
         {
             var storages = componentTypes.Select(t => _storage[t]).ToArray();
 
@@ -89,6 +90,82 @@ namespace Runtime.ECS.Core
             }
 
             RemoveComponents();
+        }
+        */
+
+        public IEnumerable<(int entityId, T1)> Query<T1>() where T1 : class, IComponent
+        {
+            foreach (var entityId in GetStorage<T1>().EntityIds)
+            {
+                yield return (entityId, GetStorage<T1>().Get(entityId));
+            }
+        }
+
+        public IEnumerable<(int entityId, T1, T2)> Query<T1, T2>()
+            where T1 : class, IComponent
+            where T2 : class, IComponent
+        {
+            foreach (var entityId in GetStorage<T1>().EntityIds)
+            {
+                if (GetStorage<T2>().Has(entityId))
+                {
+                    yield return (entityId, GetStorage<T1>().Get(entityId), GetStorage<T2>().Get(entityId));
+                }
+            }
+        }
+
+        public IEnumerable<(int entityId, T1, T2, T3)> Query<T1, T2, T3>()
+            where T1 : class, IComponent
+            where T2 : class, IComponent
+            where T3 : class, IComponent
+        {
+            foreach (var entityId in GetStorage<T1>().EntityIds)
+            {
+                if (GetStorage<T2>().Has(entityId) && GetStorage<T3>().Has(entityId))
+                {
+                    yield return (entityId, GetStorage<T1>().Get(entityId), GetStorage<T2>().Get(entityId), GetStorage<T3>().Get(entityId));
+                }
+            }
+        }
+
+        public IEnumerable<(int entityId, T1, T2, T3, T4)> Query<T1, T2, T3, T4>()
+            where T1 : class, IComponent
+            where T2 : class, IComponent
+            where T3 : class, IComponent
+            where T4 : class, IComponent
+        {
+            foreach (var entityId in GetStorage<T1>().EntityIds)
+            {
+                if (GetStorage<T2>().Has(entityId) && GetStorage<T3>().Has(entityId) && GetStorage<T4>().Has(entityId))
+                {
+                    yield return (entityId,
+                        GetStorage<T1>().Get(entityId),
+                        GetStorage<T2>().Get(entityId),
+                        GetStorage<T3>().Get(entityId),
+                        GetStorage<T4>().Get(entityId));
+                }
+            }
+        }
+
+        public IEnumerable<(int entityId, T1, T2, T3, T4, T5)> Query<T1, T2, T3, T4, T5>()
+            where T1 : class, IComponent
+            where T2 : class, IComponent
+            where T3 : class, IComponent
+            where T4 : class, IComponent
+            where T5 : class, IComponent
+        {
+            foreach (var entityId in GetStorage<T1>().EntityIds)
+            {
+                if (GetStorage<T2>().Has(entityId) && GetStorage<T3>().Has(entityId) && GetStorage<T4>().Has(entityId) &&  GetStorage<T5>().Has(entityId))
+                {
+                    yield return (entityId,
+                        GetStorage<T1>().Get(entityId),
+                        GetStorage<T2>().Get(entityId),
+                        GetStorage<T3>().Get(entityId),
+                        GetStorage<T4>().Get(entityId),
+                        GetStorage<T5>().Get(entityId));
+                }
+            }
         }
 
         private ComponentStorage<T> GetStorage<T>() where T : class, IComponent

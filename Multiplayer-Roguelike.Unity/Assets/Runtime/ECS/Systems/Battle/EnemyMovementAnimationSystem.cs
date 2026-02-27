@@ -14,13 +14,14 @@ namespace Runtime.ECS.Systems
             RegisterRequiredComponent(typeof(DirectionComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            var enemyTagComponent = components[0] as EnemyTagComponent;
-            var animatorComponent = components[1] as AnimatorComponent;
-            var directionComponent = components[2] as DirectionComponent;
+            foreach (var (entityId, enemyTagComponent, animatorComponent, directionComponent)
+                     in ComponentManager.Query<EnemyTagComponent, AnimatorComponent, DirectionComponent>())
+            {
 
-            animatorComponent.Animator.SetBool(animatorComponent.IsRun, directionComponent.Direction != Vector3.zero);
+                animatorComponent.Animator.SetBool(animatorComponent.IsRun, directionComponent.Direction != Vector3.zero);
+            }
         }
     }
 }

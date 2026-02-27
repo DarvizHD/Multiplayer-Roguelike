@@ -12,33 +12,36 @@ namespace Runtime.ECS.Systems.Follow
             RegisterRequiredComponent(typeof(SeparationComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+
+        public override void Update(float deltaTime)
         {
-            var positionComponent = (PositionComponent)components[0];
-
-            foreach (var (otherId, otherComponents) in ComponentManager.Query(typeof(PositionComponent)))
+            foreach (var (entityId, positionComponent, separationComponent)
+                     in ComponentManager.Query<PositionComponent, SeparationComponent>())
             {
-                if (otherId <= id)
+                foreach (var (otherId, otherComponent) in ComponentManager.Query<PositionComponent>())
                 {
-                    continue;
+                    if (otherId <= entityId)
+                    {
+                        continue;
+                    }
+
+                    var otherPosition = otherComponent;
+
+                    var delta = positionComponent.Position - otherPosition.Position;
+                    delta.y = 0;
+
+                    var distance = delta.magnitude;
+
+                    if (distance is >= MinDistance or < 0.001f)
+                    {
+                        continue;
+                    }
+
+                    var correction = delta.normalized * (MinDistance - distance);
+
+                    positionComponent.Position += correction;
+                    otherPosition.Position -= correction;
                 }
-
-                var otherPosition = (PositionComponent)otherComponents[0];
-
-                var delta = positionComponent.Position - otherPosition.Position;
-                delta.y = 0;
-
-                var distance = delta.magnitude;
-
-                if (distance is >= MinDistance or < 0.001f)
-                {
-                    continue;
-                }
-
-                var correction = delta.normalized * (MinDistance - distance);
-
-                positionComponent.Position += correction;
-                otherPosition.Position -= correction;
             }
         }
     }

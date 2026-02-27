@@ -4,6 +4,7 @@ namespace Runtime.ECS.Components
 {
     public class ComponentStorage<T> : IComponentStorage<T> where T : IComponent
     {
+        public int Count => _components.Count;
         public IEnumerable<int> EntityIds => _components.Keys;
 
         private readonly Dictionary<int, T> _components = new();

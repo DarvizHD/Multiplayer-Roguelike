@@ -18,15 +18,7 @@ namespace Runtime.ECS.Systems
             ComponentManager = componentManager;
         }
 
-        public void Update(float deltaTime)
-        {
-            foreach (var (id, components) in ComponentManager.Query(Components.ToArray()))
-            {
-                Update(id, components, deltaTime);
-            }
-        }
-
-        protected abstract void Update(int id, object[] components, float deltaTime);
+        public abstract void Update(float deltaTime);
 
         protected void RegisterRequiredComponent(Type componentType)
         {

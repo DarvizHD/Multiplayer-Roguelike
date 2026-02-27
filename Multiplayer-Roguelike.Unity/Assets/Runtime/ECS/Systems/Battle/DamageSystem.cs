@@ -12,26 +12,28 @@ namespace Runtime.ECS.Systems.Battle
             RegisterRequiredComponent(typeof(HealthComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            var pendingDamage = components[0] as PendingDamageEventComponent;
-            var healthComponent = components[1] as HealthComponent;
-
-            if (healthComponent.CurrentHealth <= 0 || ComponentManager.HasComponent<InvulnerabilityComponent>(id))
+            foreach (var (entityId, pendingDamageEventComponent, healthComponent)
+                     in ComponentManager.Query<PendingDamageEventComponent, HealthComponent>())
             {
-                return;
+
+                if (healthComponent.CurrentHealth <= 0 || ComponentManager.HasComponent<InvulnerabilityComponent>(entityId))
+                {
+                    return;
+                }
+
+                healthComponent.CurrentHealth -= pendingDamageEventComponent.TotalDamage;
+
+                if (ComponentManager.TryGetComponent<RegenerationComponent>(entityId, out var regenerationComponent))
+                {
+                    regenerationComponent.LastDamageTime = 0f;
+                }
+
+                Debug.Log($"{GetType().Name} {entityId}: dealt {pendingDamageEventComponent.TotalDamage} damage, health left: {healthComponent.CurrentHealth}");
+
+                ComponentManager.RemoveComponent<PendingDamageEventComponent>(entityId);
             }
-
-            healthComponent.CurrentHealth -= pendingDamage.TotalDamage;
-
-            if (ComponentManager.TryGetComponent<RegenerationComponent>(id, out var regenerationComponent))
-            {
-                regenerationComponent.LastDamageTime = 0f;
-            }
-
-            Debug.Log($"{GetType().Name} {id}: dealt {pendingDamage.TotalDamage} damage, health left: {healthComponent.CurrentHealth}");
-
-            ComponentManager.RemoveComponent<PendingDamageEventComponent>(id);
         }
     }
 }

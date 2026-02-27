@@ -13,12 +13,15 @@ namespace Runtime.ECS.Systems.CameraFocus
             RegisterRequiredComponent(typeof(TransformComponent));
         }
 
-        protected override void Update(int id, object[] components, float deltaTime)
+        public override void Update(float deltaTime)
         {
-            var cameraTarget = (CameraTargetComponent)components[0];
-            var transformComponent = (TransformComponent)components[1];
+            foreach (var (entityId, cameraTargetComponent, transformComponent)
+                     in ComponentManager.Query<CameraTargetComponent, TransformComponent>())
+            {
 
-            transformComponent.Transform.position = Vector3.Lerp(transformComponent.Transform.position, cameraTarget.TargetPosition, deltaTime * 5f);
+                transformComponent.Transform.position = Vector3.Lerp(transformComponent.Transform.position, cameraTargetComponent.TargetPosition, deltaTime * 5f);
+
+            }
         }
     }
 }
