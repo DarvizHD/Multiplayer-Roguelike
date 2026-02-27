@@ -8,14 +8,14 @@ namespace Runtime.ServerInteraction
     public class ServerPlayerConnectionSystem : IGameSystem
     {
         public string Id => "ServerPlayerConnectionSystem";
-        
+
         private readonly ServerConnectionModel _serverConnectionModel;
-        
+
         public ServerPlayerConnectionSystem(ServerConnectionModel serverConnectionModel)
         {
             _serverConnectionModel = serverConnectionModel;
         }
-        
+
         public void Update(float deltaTime)
         {
             var host = _serverConnectionModel.PlayerHost;

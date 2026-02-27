@@ -13,7 +13,7 @@ namespace Editor.ECSDebugger
     {
         private Vector2 _scrollPos;
         private EntryPoint _entryPoint;
-        private readonly Dictionary<int, bool> _foldouts = new ();
+        private readonly Dictionary<int, bool> _foldouts = new();
 
         [MenuItem("Tools/ECS Debugger")]
         public static void ShowWindow()
@@ -32,7 +32,7 @@ namespace Editor.ECSDebugger
             }
 
             _entryPoint = FindFirstObjectByType<EntryPoint>();
-            
+
             if (!_entryPoint)
             {
                 EditorGUILayout.HelpBox("EntryPoint not found in the scene", MessageType.Warning);
@@ -51,7 +51,7 @@ namespace Editor.ECSDebugger
             EditorGUILayout.Space();
 
             ShowEntityHeader(entities, componentManager);
-            
+
             EditorGUILayout.EndScrollView();
 
             Repaint();
@@ -69,7 +69,7 @@ namespace Editor.ECSDebugger
                 {
                     continue;
                 }
-                
+
                 EditorGUI.indentLevel++;
 
                 ShowComponentHeader(componentManager, entityId);
@@ -81,7 +81,7 @@ namespace Editor.ECSDebugger
         private void ShowComponentHeader(ComponentManager componentManager, int entityId)
         {
             var componentTypes = componentManager.GetComponentTypes(entityId);
-            
+
             foreach (var componentType in componentTypes)
             {
                 EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -110,7 +110,7 @@ namespace Editor.ECSDebugger
                 var value = field.GetValue(component);
                 EditorGUILayout.LabelField($"{field.Name}: {(value is Object obj ? obj.name : value)}");
             }
-    
+
             foreach (var property in properties)
             {
                 var value = property.GetValue(component);

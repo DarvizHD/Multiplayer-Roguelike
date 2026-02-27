@@ -26,7 +26,7 @@ namespace Runtime.ServerInteraction
             _model.PlayerConnect -= OnPlayerConnect;
             _model.PlayerDisconnect -= OnPlayerDisconnect;
         }
-        
+
         private void OnPlayerConnect()
         {
             var address = new Address();
@@ -35,13 +35,13 @@ namespace Runtime.ServerInteraction
 
             _model.PlayerHost = new Host();
             _model.PlayerHost.Create();
-            
+
             _model.PlayerPeer = _model.PlayerHost.Connect(address, 2);
 
             _serverConnectionSystem = new ServerPlayerConnectionSystem(_model);
             _systemCollection.Add(_serverConnectionSystem);
         }
-        
+
         private void OnPlayerDisconnect()
         {
             _model.PlayerHost.Dispose();

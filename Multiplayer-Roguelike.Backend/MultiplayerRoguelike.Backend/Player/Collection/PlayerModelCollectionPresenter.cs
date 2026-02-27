@@ -20,7 +20,7 @@ namespace Backend.Player.Collection
         {
             _playerModelCollection.OnAdded -= OnAdded;
         }
-        
+
         private void OnAdded(PlayerModel newPlayer)
         {
             Console.WriteLine($"Player {newPlayer.PlayerNickname} has been added");

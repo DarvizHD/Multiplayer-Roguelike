@@ -5,7 +5,7 @@ namespace Runtime.ECS.Components.Health
         public float RegenerationRate;
         public float Cooldown;
         public float LastDamageTime;
-        
+
         public RegenerationComponent(float rate, float cooldown)
         {
             RegenerationRate = rate;

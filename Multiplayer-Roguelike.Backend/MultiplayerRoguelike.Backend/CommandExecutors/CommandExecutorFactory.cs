@@ -1,6 +1,6 @@
 using ENet;
-using Shared;
 using Shared.Commands;
+using Shared.Protocol;
 
 namespace Backend.CommandExecutors
 {
@@ -18,8 +18,8 @@ namespace Backend.CommandExecutors
         public ICommandExecutor CreateCommandExecutor(ref Event netEvent)
         {
             netEvent.Packet.CopyTo(_buffer);
-            var eNetProtocol = new ENetProtocol(_buffer);
-            
+            var eNetProtocol = new NetworkProtocol(_buffer);
+
             eNetProtocol.Get(out string commandName);
             return commandName switch
             {

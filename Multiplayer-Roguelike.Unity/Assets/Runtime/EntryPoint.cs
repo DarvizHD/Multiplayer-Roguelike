@@ -1,13 +1,22 @@
 using ENet;
 using Runtime.ECS.Components;
 using Runtime.ECS.Components.Battle;
+using Runtime.ECS.Components.Camera;
+using Runtime.ECS.Components.Health;
 using Runtime.ECS.Components.Movement;
 using Runtime.ECS.Components.Player;
+using Runtime.ECS.Components.Spawn;
+using Runtime.ECS.Components.Tags;
 using Runtime.ECS.Core;
 using Runtime.ECS.Systems;
 using Runtime.ECS.Systems.Battle;
+using Runtime.ECS.Systems.Battle.MeleeAttack;
+using Runtime.ECS.Systems.CameraFocus;
+using Runtime.ECS.Systems.Follow;
 using Runtime.ECS.Systems.Movement;
-using Runtime.ECS.Systems.Runtime.ECS.Systems;
+using Runtime.ECS.Systems.Rotation;
+using Runtime.ECS.Systems.Rotation.Runtime.ECS.Systems;
+using Runtime.ECS.Systems.Spawn;
 using Runtime.GameSystems;
 using Runtime.ServerInteraction;
 using Shared.Commands;
@@ -17,87 +26,174 @@ namespace Runtime
 {
     public class EntryPoint : MonoBehaviour
     {
-        public ECSWorld EcsWorld { get; } = new ();
-        public GameObject PlayerPrefab;
-        public GameObject EnemyPrefab;
-        private Transform _playerTransform;
-        
+        public ECSWorld EcsWorld { get; } = new();
+        public MonoBehaviorProvider PlayerPrefab;
+        public MonoBehaviorProvider EnemyPrefab;
+        public MonoBehaviorProvider CameraTarget;
+        public GizmosHelper GizmosHelper;
+        private PlayerControls _playerControls;
+
         private readonly GameSystemCollection _gameFixedSystemCollection = new();
 
         private async void Start()
         {
-            EcsWorld.RegisterComponent<PositionComponent>();
-            EcsWorld.RegisterComponent<VelocityComponent>();
-            EcsWorld.RegisterComponent<SpeedComponent>();
-            EcsWorld.RegisterComponent<DirectionComponent>();
-            EcsWorld.RegisterComponent<AttackCooldownComponent>();
-            EcsWorld.RegisterComponent<MeleeAttackComponent>();
-            EcsWorld.RegisterComponent<TransformComponent>();
-            EcsWorld.RegisterComponent<TransformComponent>();
-            EcsWorld.RegisterComponent<EnemyTagComponent>();
-            EcsWorld.RegisterComponent<PendingDamageEventComponent>();
-            EcsWorld.RegisterComponent<FollowComponent>();
-            EcsWorld.RegisterComponent<SeparationComponent>();
-            EcsWorld.RegisterComponent<PlayerComponent>();
-            EcsWorld.RegisterComponent<RotationComponent>();
-            
-            var playerEntityId = 0;
-            
-            _playerTransform = Instantiate(PlayerPrefab).transform;
-            
-            EcsWorld.AddEntityComponent(playerEntityId, new PositionComponent(Vector3.up));
-            EcsWorld.AddEntityComponent(playerEntityId, new DirectionComponent(Vector3.zero));
-            EcsWorld.AddEntityComponent(playerEntityId, new TransformComponent(_playerTransform));
-            EcsWorld.AddEntityComponent(playerEntityId, new SpeedComponent(8f));
-            EcsWorld.AddEntityComponent(playerEntityId, new AttackCooldownComponent(3f));
-            EcsWorld.AddEntityComponent(playerEntityId, new MeleeAttackComponent(2f, 10f));
-            EcsWorld.AddEntityComponent(playerEntityId, new RotationComponent(Quaternion.identity));
-            EcsWorld.AddEntityComponent(playerEntityId, new PlayerComponent());
-            EcsWorld.AddEntityComponent(playerEntityId, new SeparationComponent());
+            _playerControls = new PlayerControls();
+            _playerControls.Enable();
 
-            for (var i = 1; i < 21; i++)
+            GizmosHelper.Initialize(EcsWorld);
+
+            RegisterComponents();
+
+            var playerEntityId = 0;
+            var playerProvider = Instantiate(PlayerPrefab);
+            CreatePlayer(playerEntityId, playerProvider, Vector3.zero);
+            EcsWorld.AddEntityComponent(playerEntityId, new PlayerInputComponent(_playerControls));
+
+            //TODO: Test second player
+            var testPlayerEntityId = 1;
+            var testplayerProvider = Instantiate(PlayerPrefab);
+            CreatePlayer(testPlayerEntityId, testplayerProvider, new Vector3(15f, 0f, 5f));
+
+            var cameraTargetEntityId = 2;
+            EcsWorld.AddEntityComponent(cameraTargetEntityId, new CameraTargetComponent());
+            EcsWorld.AddEntityComponent(cameraTargetEntityId, new TransformComponent(CameraTarget.transform));
+
+            for (var i = 3; i < 5; i++)
             {
-                EcsWorld.AddEntityComponent(i, new PositionComponent(new Vector3(Random.Range(-15f, 15f), 1f, Random.Range(-15f, 15f))));
-                EcsWorld.AddEntityComponent(i, new DirectionComponent(Vector3.zero));
-                EcsWorld.AddEntityComponent(i, new SpeedComponent(5f));
-                EcsWorld.AddEntityComponent(i, new TransformComponent(Instantiate(EnemyPrefab).transform));
-                EcsWorld.AddEntityComponent(i, new EnemyTagComponent());
-                EcsWorld.AddEntityComponent(i, new RotationComponent(Quaternion.identity));
-                EcsWorld.AddEntityComponent(i, new FollowComponent(_playerTransform));
-                EcsWorld.AddEntityComponent(i, new SeparationComponent());
+                CreateEnemy(i, playerProvider);
             }
-            
-            EcsWorld.AddSystem<PlayerInputSystem>();
-            EcsWorld.AddSystem<FollowSystem>();
-            EcsWorld.AddSystem<MovementSystem>();
-            EcsWorld.AddSystem<SeparationSystem>();
-            EcsWorld.AddSystem<RotationSystem>();
-            EcsWorld.AddSystem<DrawTransformSystem>();
-            EcsWorld.AddSystem<DamageSystem>();
-            EcsWorld.AddSystem<MeleeAttackSystem>();
-            EcsWorld.AddSystem<AttackCooldownSystem>();
-            
+
+            var spawnerEntityId = 100;
+            EcsWorld.AddEntityComponent(spawnerEntityId, new SpawnerComponent(
+                targetCount: 2,
+                prefab: EnemyPrefab.gameObject,
+                centerPosition: new Vector3(20f, 0f, 20f),
+                spawnRadius: 8f
+            ));
+
+            AddSystems();
+
             Library.Initialize();
-            
+
             var serverConnectionModel = new ServerConnectionModel();
-            var serverConnectionPresenter = new ServerConnectionPresenter(serverConnectionModel, _gameFixedSystemCollection);
+            var serverConnectionPresenter =
+                new ServerConnectionPresenter(serverConnectionModel, _gameFixedSystemCollection);
             serverConnectionPresenter.Enable();
-            
+
             serverConnectionModel.ConnectPlayer();
             await serverConnectionModel.CompletePlayerConnectAwaiter;
 
             var loginCommand = new LoginCommand("Varfolomey");
             loginCommand.Write(serverConnectionModel.PlayerPeer);
-            
+
             var createLobbyCommand = new CreateLobbyCommand("Varfolomey");
             createLobbyCommand.Write(serverConnectionModel.PlayerPeer);
         }
-        
+
+        private void RegisterComponents()
+        {
+            EcsWorld.RegisterComponent<PositionComponent>();
+            EcsWorld.RegisterComponent<RotationComponent>();
+            EcsWorld.RegisterComponent<VelocityComponent>();
+            EcsWorld.RegisterComponent<SpeedComponent>();
+            EcsWorld.RegisterComponent<DirectionComponent>();
+
+            EcsWorld.RegisterComponent<AttackCooldownComponent>();
+            EcsWorld.RegisterComponent<MeleeAttackComponent>();
+
+            EcsWorld.RegisterComponent<TransformComponent>();
+            EcsWorld.RegisterComponent<EnemyTagComponent>();
+
+            EcsWorld.RegisterComponent<PendingDamageEventComponent>();
+            EcsWorld.RegisterComponent<AttackEventComponent>();
+            EcsWorld.RegisterComponent<FollowComponent>();
+
+            EcsWorld.RegisterComponent<SeparationComponent>();
+            EcsWorld.RegisterComponent<PlayerInputComponent>();
+            EcsWorld.RegisterComponent<PlayerTagComponent>();
+
+            EcsWorld.RegisterComponent<DirectionRotationComponent>();
+            EcsWorld.RegisterComponent<PlayerLookRotationComponent>();
+
+            EcsWorld.RegisterComponent<AnimatorComponent>();
+            EcsWorld.RegisterComponent<HealthComponent>();
+            EcsWorld.RegisterComponent<RegenerationComponent>();
+            EcsWorld.RegisterComponent<DeathComponent>();
+            EcsWorld.RegisterComponent<InvulnerabilityComponent>();
+            EcsWorld.RegisterComponent<SpawnerComponent>();
+            EcsWorld.RegisterComponent<SpawnedUnitTagComponent>();
+            EcsWorld.RegisterComponent<DeathAnimationComponent>();
+            EcsWorld.RegisterComponent<GameObjectComponent>();
+
+            EcsWorld.RegisterComponent<CameraTargetComponent>();
+        }
+
+        private void AddSystems()
+        {
+            EcsWorld.AddSystem<PlayerInputMovementSystem>();
+            EcsWorld.AddSystem<FollowSystem>();
+            EcsWorld.AddSystem<MovementSystem>();
+            EcsWorld.AddSystem<FollowSeparationSystem>();
+            EcsWorld.AddSystem<DirectionRotationSystem>();
+            EcsWorld.AddSystem<DrawTransformSystem>();
+            EcsWorld.AddSystem<MeleeAttackSystem>();
+            EcsWorld.AddSystem<DamageSystem>();
+            EcsWorld.AddSystem<DeathSystem>();
+            EcsWorld.AddSystem<RegenerationSystem>();
+            EcsWorld.AddSystem<InvulnerabilitySystem>();
+            EcsWorld.AddSystem<AttackCooldownSystem>();
+            EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
+            EcsWorld.AddSystem<AttackSystem>();
+            EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
+            EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
+            EcsWorld.AddSystem<PlayerLookRotationSystem>();
+            EcsWorld.AddSystem<CameraFocusSystem>();
+            EcsWorld.AddSystem<DrawCameraTransformSystem>();
+            EcsWorld.AddSystem<DeathAnimationSystem>();
+            EcsWorld.AddSystem<SpawnerSystem>();
+        }
+
+        private void CreatePlayer(int entityId, MonoBehaviorProvider provider, Vector3 position)
+        {
+            EcsWorld.AddEntityComponent(entityId, new PositionComponent(position));
+            EcsWorld.AddEntityComponent(entityId, new PlayerTagComponent());
+            EcsWorld.AddEntityComponent(entityId, new RotationComponent());
+            EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.zero));
+            EcsWorld.AddEntityComponent(entityId, new TransformComponent(provider.Transform));
+            EcsWorld.AddEntityComponent(entityId, new SpeedComponent(8f));
+            EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(3f));
+            EcsWorld.AddEntityComponent(entityId, new MeleeAttackComponent(2f, 10f));
+            EcsWorld.AddEntityComponent(entityId, new PlayerLookRotationComponent(10f));
+            EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(provider.Animator));
+            EcsWorld.AddEntityComponent(entityId, new HealthComponent(100f));
+            EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(5f, 3f));
+        }
+
+        private void CreateEnemy(int entityId, MonoBehaviorProvider playerProvider)
+        {
+            var enemyProvider = Instantiate(EnemyPrefab);
+
+            EcsWorld.AddEntityComponent(entityId,
+                new PositionComponent(new Vector3(Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f))));
+            EcsWorld.AddEntityComponent(entityId, new RotationComponent());
+            EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
+            EcsWorld.AddEntityComponent(entityId, new SpeedComponent(1f));
+            EcsWorld.AddEntityComponent(entityId, new TransformComponent(enemyProvider.Transform));
+            EcsWorld.AddEntityComponent(entityId, new EnemyTagComponent());
+            EcsWorld.AddEntityComponent(entityId, new DirectionRotationComponent(10f));
+            EcsWorld.AddEntityComponent(entityId, new FollowComponent(playerProvider.Transform));
+            EcsWorld.AddEntityComponent(entityId, new SeparationComponent());
+            EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(enemyProvider.Animator));
+            EcsWorld.AddEntityComponent(entityId, new HealthComponent(50f));
+            EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(2f, 5f));
+            EcsWorld.AddEntityComponent(entityId, new GameObjectComponent(enemyProvider.gameObject));
+        }
+
         private void Update()
         {
             EcsWorld.Update(Time.deltaTime);
         }
-        
+
         private void FixedUpdate()
         {
             _gameFixedSystemCollection.Update(Time.fixedDeltaTime);

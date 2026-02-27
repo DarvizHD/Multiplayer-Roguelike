@@ -8,12 +8,12 @@ namespace Runtime.ServerInteraction
     {
         public event Action PlayerConnect;
         public event Action PlayerDisconnect;
-        
+
         public CustomAwaiter CompletePlayerConnectAwaiter { get; private set; } = new();
-        
+
         public Peer PlayerPeer { get; set; }
         public Host PlayerHost { get; set; }
-        
+
         public void ConnectPlayer()
         {
             PlayerConnect?.Invoke();

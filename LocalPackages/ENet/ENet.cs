@@ -108,7 +108,9 @@ namespace ENet
         public static byte[] GetByteBuffer()
         {
             if (byteBuffer == null)
+            {
                 byteBuffer = new byte[64];
+            }
 
             return byteBuffer;
         }
@@ -116,7 +118,9 @@ namespace ENet
         public static IntPtr[] GetPointerBuffer()
         {
             if (pointerBuffer == null)
+            {
                 pointerBuffer = new IntPtr[Library.maxPeers];
+            }
 
             return pointerBuffer;
         }
@@ -150,7 +154,9 @@ namespace ENet
             StringBuilder hostName = new StringBuilder(1024);
 
             if (Native.enet_address_get_host(nativeAddress, hostName, (IntPtr)hostName.Capacity) != 0)
+            {
                 return String.Empty;
+            }
 
             return hostName.ToString();
         }
@@ -158,7 +164,9 @@ namespace ENet
         public bool SetHost(string hostName)
         {
             if (hostName == null)
+            {
                 throw new ArgumentNullException("hostName");
+            }
 
             return Native.enet_address_set_host(ref nativeAddress, hostName) == 0;
         }
@@ -250,11 +258,14 @@ namespace ENet
             }
         }
 
-        internal void ThrowIfNotCreated() {
+        internal void ThrowIfNotCreated()
+        {
             if (nativePacket == IntPtr.Zero)
+            {
                 throw new InvalidOperationException("Packet not created");
+            }
         }
-        
+
         public bool IsSet
         {
             get { return nativePacket != IntPtr.Zero; }
@@ -293,7 +304,9 @@ namespace ENet
         internal void CheckCreated()
         {
             if (nativePacket == IntPtr.Zero)
+            {
                 throw new InvalidOperationException("Packet not created");
+            }
         }
 
         public void SetFreeCallback(IntPtr callback)
@@ -313,7 +326,9 @@ namespace ENet
         public void Create(byte[] data)
         {
             if (data == null)
+            {
                 throw new ArgumentNullException("data");
+            }
 
             Create(data, data.Length);
         }
@@ -331,10 +346,14 @@ namespace ENet
         public void Create(byte[] data, int length, PacketFlags flags)
         {
             if (data == null)
+            {
                 throw new ArgumentNullException("data");
+            }
 
             if (length < 0 || length > data.Length)
+            {
                 throw new ArgumentOutOfRangeException();
+            }
 
             nativePacket = Native.enet_packet_create(data, (IntPtr)length, flags);
         }
@@ -342,10 +361,14 @@ namespace ENet
         public void Create(IntPtr data, int length, PacketFlags flags)
         {
             if (data == IntPtr.Zero)
+            {
                 throw new ArgumentNullException("data");
+            }
 
             if (length < 0)
+            {
                 throw new ArgumentOutOfRangeException();
+            }
 
             nativePacket = Native.enet_packet_create(data, (IntPtr)length, flags);
         }
@@ -353,10 +376,14 @@ namespace ENet
         public void Create(byte[] data, int offset, int length, PacketFlags flags)
         {
             if (data == null)
+            {
                 throw new ArgumentNullException("data");
+            }
 
             if (offset < 0 || length < 0 || length > data.Length)
+            {
                 throw new ArgumentOutOfRangeException();
+            }
 
             nativePacket = Native.enet_packet_create_offset(data, (IntPtr)length, (IntPtr)offset, flags);
         }
@@ -364,10 +391,14 @@ namespace ENet
         public void Create(IntPtr data, int offset, int length, PacketFlags flags)
         {
             if (data == IntPtr.Zero)
+            {
                 throw new ArgumentNullException("data");
+            }
 
             if (offset < 0 || length < 0)
+            {
                 throw new ArgumentOutOfRangeException();
+            }
 
             nativePacket = Native.enet_packet_create_offset(data, (IntPtr)length, (IntPtr)offset, flags);
         }
@@ -375,7 +406,9 @@ namespace ENet
         public void CopyTo(byte[] destination)
         {
             if (destination == null)
+            {
                 throw new ArgumentNullException("destination");
+            }
 
             Marshal.Copy(Data, destination, 0, Length);
         }
@@ -470,13 +503,17 @@ namespace ENet
         internal void CheckCreated()
         {
             if (nativeHost == IntPtr.Zero)
+            {
                 throw new InvalidOperationException("Host not created");
+            }
         }
 
         private void CheckChannelLimit(int channelLimit)
         {
             if (channelLimit < 0 || channelLimit > Library.maxChannelCount)
+            {
                 throw new ArgumentOutOfRangeException("channelLimit");
+            }
         }
 
         public void Create()
@@ -507,10 +544,14 @@ namespace ENet
         public void Create(Address? address, int peerLimit, int channelLimit, uint incomingBandwidth, uint outgoingBandwidth)
         {
             if (nativeHost != IntPtr.Zero)
+            {
                 throw new InvalidOperationException("Host already created");
+            }
 
             if (peerLimit < 0 || peerLimit > Library.maxPeers)
+            {
                 throw new ArgumentOutOfRangeException("peerLimit");
+            }
 
             CheckChannelLimit(channelLimit);
 
@@ -526,7 +567,9 @@ namespace ENet
             }
 
             if (nativeHost == IntPtr.Zero)
+            {
                 throw new InvalidOperationException("Host creation call failed");
+            }
         }
 
         public void EnableCompression()
@@ -617,7 +660,9 @@ namespace ENet
             var peer = new Peer(Native.enet_host_connect(nativeHost, ref nativeAddress, (IntPtr)channelLimit, data));
 
             if (peer.NativeData == IntPtr.Zero)
+            {
                 throw new InvalidOperationException("Host connect call failed");
+            }
 
             return peer;
         }
@@ -625,7 +670,9 @@ namespace ENet
         public int Service(int timeout, out Event @event)
         {
             if (timeout < 0)
+            {
                 throw new ArgumentOutOfRangeException("timeout");
+            }
 
             CheckCreated();
 
@@ -707,9 +754,13 @@ namespace ENet
                 if (Native.enet_peer_get_ip(nativePeer, ip, (IntPtr)ip.Length) == 0)
                 {
                     if (Encoding.ASCII.GetString(ip).Remove(7) != "::ffff:")
+                    {
                         return Encoding.ASCII.GetString(ip, 0, ip.StringLength());
+                    }
                     else
+                    {
                         return Encoding.ASCII.GetString(ip, 0, ip.StringLength()).Substring(7);
+                    }
                 }
                 else
                 {
@@ -833,7 +884,9 @@ namespace ENet
         internal void CheckCreated()
         {
             if (nativePeer == IntPtr.Zero)
+            {
                 throw new InvalidOperationException("Peer not created");
+            }
         }
 
         public void ConfigureThrottle(uint interval, uint acceleration, uint deceleration)
@@ -852,17 +905,22 @@ namespace ENet
             return Native.enet_peer_send(nativePeer, channelID, packet.NativeData) == 0;
         }
 
-        internal void ThrowIfNotCreated() {
+        internal void ThrowIfNotCreated()
+        {
             if (nativePeer == IntPtr.Zero)
+            {
                 throw new InvalidOperationException("Peer not created");
+            }
         }
-        
-        public bool Receive(out byte channelID, out Packet packet) {
+
+        public bool Receive(out byte channelID, out Packet packet)
+        {
             ThrowIfNotCreated();
 
             IntPtr nativePacket = Native.enet_peer_receive(nativePeer, out channelID);
 
-            if (nativePacket != IntPtr.Zero) {
+            if (nativePacket != IntPtr.Zero)
+            {
                 packet = new Packet(nativePacket);
 
                 return true;
@@ -872,7 +930,7 @@ namespace ENet
 
             return false;
         }
-        
+
         public void Ping()
         {
             CheckCreated();
@@ -928,11 +986,16 @@ namespace ENet
         public static int StringLength(this byte[] data)
         {
             if (data == null)
+            {
                 throw new ArgumentNullException("data");
+            }
 
             int i;
 
-            for (i = 0; i < data.Length && data[i] != 0; i++) ;
+            for (i = 0; i < data.Length && data[i] != 0; i++)
+            {
+                ;
+            }
 
             return i;
         }
@@ -984,7 +1047,7 @@ namespace ENet
 
         [DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr enet_peer_receive(IntPtr peer, out byte channelID);
-        
+
         [DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
         internal static extern int enet_initialize();
 

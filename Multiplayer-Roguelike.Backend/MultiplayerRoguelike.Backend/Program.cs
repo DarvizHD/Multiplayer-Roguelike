@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Backend;
 
 var server = new Server(7777);

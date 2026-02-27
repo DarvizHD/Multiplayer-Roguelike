@@ -25,10 +25,10 @@ namespace Runtime.ECS.Components
 
         public bool TryGet(int id, out IComponent component)
         {
-            var success = _components.TryGetValue(id, out var componentId);  
-            
+            var success = _components.TryGetValue(id, out var componentId);
+
             component = success ? componentId : default;
-            
+
             return success;
         }
 

@@ -1,4 +1,5 @@
 using ENet;
+using Shared.Protocol;
 
 namespace Shared.Commands
 {
@@ -14,12 +15,12 @@ namespace Shared.Commands
             PlayerNickname = playerNickname;
         }
 
-        public JoinLobbyCommand(ENetProtocol protocol) : base(protocol)
+        public JoinLobbyCommand(NetworkProtocol protocol) : base(protocol)
         {
-            
+
         }
-        
-        public override void Read(ENetProtocol protocol)
+
+        public override void Read(NetworkProtocol protocol)
         {
             protocol.Get(out LobbyId);
             protocol.Get(out PlayerNickname);
@@ -27,13 +28,13 @@ namespace Shared.Commands
 
         public override void Write(Peer peer)
         {
-            var protocol = new ENetProtocol();
+            var protocol = new NetworkProtocol();
             var packet = default(Packet);
-            
+
             protocol.Add(Id);
             protocol.Add(LobbyId);
             protocol.Add(PlayerNickname);
-            
+
             packet.Create(protocol.Stream.GetBuffer());
             peer.Send(0, ref packet);
         }
