@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace Runtime.ECS.Components
 {
+
     public class ComponentStorage<T> : IComponentStorage<T> where T : IComponent
     {
         public int Count => _components.Count;

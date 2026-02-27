@@ -9,7 +9,7 @@ namespace Runtime.ECS.Systems.Spawn
 {
     public class SpawnerSystem : BaseSystem
     {
-        private int _nextEntityId = 1000; //TODO: нужен уникальный id
+        private int _nextEntityId = 64; //TODO: нужен уникальный id
         private Transform _playerTransform;
 
         public SpawnerSystem()

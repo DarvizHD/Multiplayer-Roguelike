@@ -164,7 +164,7 @@ namespace Runtime
             EcsWorld.AddSystem<DrawCameraTransformSystem>();
             EcsWorld.AddSystem<FreezeMovementSystem>();
             EcsWorld.AddSystem<DeathAnimationSystem>();
-            EcsWorld.AddSystem<SpawnerSystem>();
+           // TODO: Fix this EcsWorld.AddSystem<SpawnerSystem>();
         }
 
         private void CreatePlayer(int entityId, MonoBehaviorProvider provider, Vector3 position)

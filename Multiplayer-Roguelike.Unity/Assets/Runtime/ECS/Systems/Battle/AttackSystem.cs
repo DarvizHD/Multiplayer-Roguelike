@@ -16,8 +16,6 @@ namespace Runtime.ECS.Systems.Battle
             foreach (var (entityId, attackEventComponent)
                      in ComponentManager.Query<AttackEventComponent>())
             {
-                Debug.Log($"System Attack {entityId} -> {attackEventComponent.TargetId} {attackEventComponent.Damage}");
-
                 if (!ComponentManager.TryGetComponent<PendingDamageEventComponent>(attackEventComponent.TargetId, out var pendingDamageEventComponent))
                 {
                     ComponentManager.AddComponent(attackEventComponent.TargetId, pendingDamageEventComponent = new PendingDamageEventComponent());

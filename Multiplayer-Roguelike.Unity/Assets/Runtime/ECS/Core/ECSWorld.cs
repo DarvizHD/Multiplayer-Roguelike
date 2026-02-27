@@ -10,7 +10,7 @@ namespace Runtime.ECS.Core
 
         public ECSWorld()
         {
-            ComponentManager = new ComponentManager();
+            ComponentManager = new ComponentManager(32);
             SystemManager = new SystemManager(ComponentManager);
         }
 
