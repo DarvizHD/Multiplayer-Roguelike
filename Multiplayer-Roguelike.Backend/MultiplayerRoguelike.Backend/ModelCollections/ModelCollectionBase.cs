@@ -12,7 +12,7 @@ namespace Backend.ModelCollections
 
         public void Remove(TKey id)
         {
-            TValue model = Models[id];
+            var model = Models[id];
             Models.Remove(id);
             OnRemoved?.Invoke(model);
         }
@@ -40,7 +40,7 @@ namespace Backend.ModelCollections
 
             Models.Clear();
 
-            foreach (TValue model in models.Values)
+            foreach (var model in models.Values)
             {
                 OnRemoved?.Invoke(model);
             }

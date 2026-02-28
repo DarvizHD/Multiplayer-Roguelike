@@ -16,7 +16,7 @@ namespace Backend.CommandExecutors
         {
             Console.WriteLine($"Player {Command.PlayerNickname} wants to login");
 
-            if (World.Players.TryGet(Command.PlayerNickname, out PlayerModel existedPlayer))
+            if (World.Players.TryGet(Command.PlayerNickname, out var existedPlayer))
             {
                 Console.WriteLine($"Player with name {existedPlayer.PlayerSharedModel.Nickname.Value} has already been logged in");
                 return;

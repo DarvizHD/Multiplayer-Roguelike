@@ -21,17 +21,17 @@ namespace Shared.Models
         public void GetChanges(out Dictionary<string, object> changes)
         {
             changes = new Dictionary<string, object>();
-            foreach (IProperty property in Properties.Values.Where(p => p.IsDirty))
+            foreach (var property in Properties.Values.Where(p => p.IsDirty))
             {
                 changes.Add(property.Id, property);
                 property.UnsetDirty();
             }
 
-            foreach(SharedModel model in Models.Values.Where(m => m.IsDirty))
+            foreach (var model in Models.Values.Where(m => m.IsDirty))
             {
                 changes.Add(model.Id, model);
-                model.GetChanges(out Dictionary<string, object> innerChanges);
-                foreach (KeyValuePair<string, object> change in innerChanges)
+                model.GetChanges(out var innerChanges);
+                foreach (var change in innerChanges)
                 {
                     changes.Add(change.Key, change.Value);
                 }

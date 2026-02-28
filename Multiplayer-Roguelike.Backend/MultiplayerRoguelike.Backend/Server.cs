@@ -65,12 +65,12 @@ namespace Backend
         {
             while (_isRunning)
             {
-                while (_host.CheckEvents(out Event netEvent) > 0)
+                while (_host.CheckEvents(out var netEvent) > 0)
                 {
                     HandleEvent(netEvent);
                 }
 
-                while (_host.Service(15, out Event netEvent) > 0)
+                while (_host.Service(15, out var netEvent) > 0)
                 {
                     HandleEvent(netEvent);
                 }

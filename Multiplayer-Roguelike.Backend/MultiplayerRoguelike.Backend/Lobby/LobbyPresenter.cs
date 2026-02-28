@@ -1,6 +1,3 @@
-using System;
-using Backend.Player;
-
 namespace Backend.Lobby
 {
     public class LobbyPresenter : IPresenter
@@ -28,7 +25,7 @@ namespace Backend.Lobby
 
         private void OnMemberAdded(string newPlayerNickname)
         {
-            PlayerModel newPlayer = _world.Players.Get(newPlayerNickname);
+            var newPlayer = _world.Players.Get(newPlayerNickname);
             newPlayer.PlayerSharedModel.Lobby.LobbyId.Value = _model.Guid;
             newPlayer.PlayerSharedModel.Lobby.OwnerId.Value = _model.OwnerNickname;
             foreach (var memberNickname in _model.Members)
@@ -37,7 +34,7 @@ namespace Backend.Lobby
 
                 if (memberNickname != newPlayerNickname)
                 {
-                    PlayerModel member = _world.Players.Get(memberNickname);
+                    var member = _world.Players.Get(memberNickname);
                     member.PlayerSharedModel.Lobby.Members.Add(newPlayerNickname);
                 }
             }
@@ -45,14 +42,14 @@ namespace Backend.Lobby
 
         private void OnMemberRemoved(string removedPlayerNickname)
         {
-            PlayerModel removedPlayer = _world.Players.Get(removedPlayerNickname);
+            var removedPlayer = _world.Players.Get(removedPlayerNickname);
             removedPlayer.PlayerSharedModel.Lobby.LobbyId.Value = string.Empty;
             removedPlayer.PlayerSharedModel.Lobby.OwnerId.Value = string.Empty;
             removedPlayer.PlayerSharedModel.Lobby.Members.Clear();
 
             foreach (var memberNickname in _model.Members)
             {
-                PlayerModel member = _world.Players.Get(memberNickname);
+                var member = _world.Players.Get(memberNickname);
                 member.PlayerSharedModel.Lobby.Members.Remove(removedPlayerNickname);
             }
         }

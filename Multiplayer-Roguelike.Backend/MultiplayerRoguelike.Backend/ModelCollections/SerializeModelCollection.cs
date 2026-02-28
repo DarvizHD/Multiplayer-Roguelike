@@ -15,7 +15,7 @@ namespace Backend.ModelCollections
 
             var models = new Dictionary<string, object>();
 
-            foreach (KeyValuePair<string, T> model in Models)
+            foreach (var model in Models)
             {
                 models.Add(model.Key, model.Value.Serialize());
             }
@@ -26,11 +26,11 @@ namespace Backend.ModelCollections
 
         public void Deserialize(Dictionary<string, object> data)
         {
-            Dictionary<string, object> models = data.GetNode("models");
-            foreach (KeyValuePair<string, object> pair in models)
+            var models = data.GetNode("models");
+            foreach (var pair in models)
             {
                 var modelData = (Dictionary<string, object>)pair.Value;
-                T model = CreateModelFromData(pair.Key, modelData);
+                var model = CreateModelFromData(pair.Key, modelData);
                 Add(pair.Key, model);
             }
         }

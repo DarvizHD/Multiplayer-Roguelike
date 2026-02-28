@@ -20,7 +20,7 @@ namespace Backend.CommandExecutors
                 return;
             }
 
-            if (!World.Players.TryGet(Command.PlayerNickname,  out var player))
+            if (!World.Players.TryGet(Command.PlayerNickname, out var player))
             {
                 Console.WriteLine($"Undefined player {player.PlayerSharedModel.Nickname.Value}");
                 return;

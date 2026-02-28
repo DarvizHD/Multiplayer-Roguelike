@@ -10,8 +10,7 @@ namespace Shared.Properties
 
         private readonly List<T> _values = new List<T>();
 
-        private bool _isDirty;
-        public bool IsDirty => _isDirty;
+        public bool IsDirty { get; private set; }
 
         public PropertyCollection(string id)
         {
@@ -21,13 +20,13 @@ namespace Shared.Properties
         public void Add(T value)
         {
             _values.Add(value);
-            _isDirty = true;
+            IsDirty = true;
         }
 
         public void Remove(T value)
         {
             _values.Remove(value);
-            _isDirty = true;
+            IsDirty = true;
         }
 
         public void Read(NetworkProtocol protocol)
@@ -44,7 +43,7 @@ namespace Shared.Properties
         {
             protocol.Add(Id);
             protocol.Add(_values.Count);
-            foreach (T value in _values)
+            foreach (var value in _values)
             {
                 protocol.Add(value);
             }
@@ -53,19 +52,19 @@ namespace Shared.Properties
         public void Clear()
         {
             _values.Clear();
-            _isDirty = true;
+            IsDirty = true;
         }
 
         public void UnsetDirty()
         {
-            _isDirty = false;
+            IsDirty = false;
         }
 
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append('[');
-            foreach (T value in _values)
+            foreach (var value in _values)
             {
                 stringBuilder.Append(value);
                 stringBuilder.Append(',');

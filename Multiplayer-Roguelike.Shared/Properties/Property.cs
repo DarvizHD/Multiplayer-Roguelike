@@ -14,12 +14,11 @@ namespace Shared.Properties
             set
             {
                 _value = value;
-                _isDirty = true;
+                IsDirty = true;
             }
         }
 
-        private bool _isDirty;
-        public bool IsDirty => _isDirty;
+        public bool IsDirty { get; private set; }
 
         public Property(string id, T value)
         {
@@ -40,7 +39,7 @@ namespace Shared.Properties
 
         public void UnsetDirty()
         {
-            _isDirty = false;
+            IsDirty = false;
         }
 
         public override string ToString()
