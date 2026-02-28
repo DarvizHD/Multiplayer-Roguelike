@@ -9,6 +9,8 @@ namespace Runtime.ServerInteraction
         public event Action PlayerConnect;
         public event Action PlayerDisconnect;
 
+        public event Action<Packet> PacketReceived;
+
         public CustomAwaiter CompletePlayerConnectAwaiter { get; private set; } = new();
 
         public Peer PlayerPeer { get; set; }
@@ -28,6 +30,11 @@ namespace Runtime.ServerInteraction
         {
             CompletePlayerConnectAwaiter.Complete();
             CompletePlayerConnectAwaiter = new CustomAwaiter();
+        }
+
+        public void SetPacket(Packet packet)
+        {
+            PacketReceived?.Invoke(packet);
         }
     }
 }
