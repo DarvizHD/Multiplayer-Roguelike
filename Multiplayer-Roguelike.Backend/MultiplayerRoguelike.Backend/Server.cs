@@ -4,6 +4,7 @@ using Backend.CommandExecutors;
 using Backend.Lobby.Collection;
 using Backend.Player.Collection;
 using ENet;
+using Shared.Protocol;
 
 namespace Backend
 {
@@ -114,6 +115,15 @@ namespace Backend
                     {
                         Console.WriteLine($"{change.Key}: {change.Value}");
                     }
+
+                    var protocol = new NetworkProtocol();
+                    var packet = default(Packet);
+
+                    player.PlayerSharedModel.Write(protocol);
+
+                    packet.Create(protocol.Stream.GetBuffer());
+
+                    SendPacket(player.Peer, 0, ref packet);
                 }
             }
         }
