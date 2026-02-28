@@ -17,7 +17,6 @@ namespace Shared.Commands
 
         public JoinLobbyCommand(NetworkProtocol protocol) : base(protocol)
         {
-
         }
 
         public override void Read(NetworkProtocol protocol)

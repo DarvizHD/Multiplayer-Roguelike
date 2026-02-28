@@ -65,15 +65,17 @@ namespace Backend
         {
             while (_isRunning)
             {
-                while (_host.CheckEvents(out Event netEvent) > 0)
+                while (_host.CheckEvents(out var netEvent) > 0)
                 {
                     HandleEvent(netEvent);
                 }
 
-                while (_host.Service(15, out Event netEvent) > 0)
+                while (_host.Service(15, out var netEvent) > 0)
                 {
                     HandleEvent(netEvent);
                 }
+
+                HandleTick();
             }
         }
 
@@ -97,6 +99,22 @@ namespace Backend
                 case EventType.Timeout:
                     Console.WriteLine($"{netEvent.Peer.ID} timed out");
                     break;
+            }
+        }
+
+        public void HandleTick()
+        {
+            foreach (var player in _world.Players.Models.Values)
+            {
+                if (player.PlayerSharedModel.IsDirty)
+                {
+                    Console.WriteLine($"\nPlayer {player.PlayerSharedModel.Nickname} has changes");
+                    player.PlayerSharedModel.GetChanges(out var changes);
+                    foreach (var change in changes)
+                    {
+                        Console.WriteLine($"{change.Key}: {change.Value}");
+                    }
+                }
             }
         }
 

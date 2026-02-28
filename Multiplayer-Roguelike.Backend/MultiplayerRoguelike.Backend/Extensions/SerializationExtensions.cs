@@ -41,18 +41,18 @@ namespace Backend.Extensions
 
         public static Queue<T> GetQueue<T>(this Dictionary<string, object> dictionary, string key)
         {
-            List<object> list = dictionary.GetList(key);
+            var list = dictionary.GetList(key);
             return new Queue<T>(list.Select(obj => (T)Convert.ChangeType(obj, typeof(T))));
         }
 
         public static T GetEnum<T>(this Dictionary<string, object> dictionary, string key) where T : Enum
         {
             var value = (string)dictionary[key];
-            Type type = typeof(T);
+            var type = typeof(T);
 
-            foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
+            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
             {
-                EnumMemberAttribute attribute = field.GetCustomAttribute<EnumMemberAttribute>();
+                var attribute = field.GetCustomAttribute<EnumMemberAttribute>();
                 if (attribute?.Value == value)
                 {
                     return (T)field.GetValue(null);
@@ -64,16 +64,16 @@ namespace Backend.Extensions
 
         public static T GetFlags<T>(this Dictionary<string, object> dictionary, string key) where T : Enum
         {
-            Type type = typeof(T);
+            var type = typeof(T);
             long combinedValue = 0;
 
             foreach (var item in (IEnumerable<object>)dictionary[key])
             {
                 var str = item.ToString();
 
-                foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
+                foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
                 {
-                    EnumMemberAttribute attribute = field.GetCustomAttribute<EnumMemberAttribute>();
+                    var attribute = field.GetCustomAttribute<EnumMemberAttribute>();
                     if (attribute?.Value == str)
                     {
                         combinedValue |= Convert.ToInt64(field.GetValue(null));
@@ -90,7 +90,7 @@ namespace Backend.Extensions
         {
             var result = new Dictionary<TKey, TValue>();
 
-            foreach (KeyValuePair<string, object> pair in dictionary.GetNode(key))
+            foreach (var pair in dictionary.GetNode(key))
             {
                 var typedKey = (TKey)Convert.ChangeType(pair.Key, typeof(TKey));
                 var value = (TValue)Convert.ChangeType(pair.Value, typeof(TValue));
@@ -119,7 +119,7 @@ namespace Backend.Extensions
         public static Dictionary<string, object> ToJson<TKey, TValue>(this Dictionary<TKey, TValue> dictionary)
         {
             var result = new Dictionary<string, object>();
-            foreach (KeyValuePair<TKey, TValue> kv in dictionary)
+            foreach (var kv in dictionary)
             {
                 result[kv.Key.ToString()] = kv.Value;
             }

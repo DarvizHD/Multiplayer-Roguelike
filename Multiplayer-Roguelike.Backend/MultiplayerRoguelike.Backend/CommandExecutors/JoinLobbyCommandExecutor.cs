@@ -20,19 +20,19 @@ namespace Backend.CommandExecutors
                 return;
             }
 
-            if (!World.Players.TryGet(Command.PlayerNickname,  out var player))
+            if (!World.Players.TryGet(Command.PlayerNickname, out var player))
             {
-                Console.WriteLine($"Undefined player {player.PlayerNickname}");
+                Console.WriteLine($"Undefined player {player.PlayerSharedModel.Nickname.Value}");
                 return;
             }
-            
-            if (player.PartyId != string.Empty)
+
+            if (player.PlayerSharedModel.Lobby.LobbyId.Value != string.Empty)
             {
-                var previousLobby = World.Lobbies.Get(player.PartyId);
-                previousLobby.RemoveMember(player.PlayerNickname);
+                var previousLobby = World.Lobbies.Get(player.PlayerSharedModel.Lobby.LobbyId.Value);
+                previousLobby.RemoveMember(player.PlayerSharedModel.Nickname.Value);
             }
-            
-            lobby.AddMember(player.PlayerNickname);
+
+            lobby.AddMember(player.PlayerSharedModel.Nickname.Value);
         }
     }
 }

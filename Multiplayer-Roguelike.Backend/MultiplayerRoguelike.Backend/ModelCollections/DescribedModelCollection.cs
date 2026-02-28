@@ -6,7 +6,7 @@ namespace Backend.ModelCollections
         public virtual T Create(string descriptionKey)
         {
             DescriptionKey = descriptionKey;
-            T model = CreateModel(descriptionKey);
+            var model = CreateModel(descriptionKey);
             Add(GetCurrentKey(), model);
             return model;
         }

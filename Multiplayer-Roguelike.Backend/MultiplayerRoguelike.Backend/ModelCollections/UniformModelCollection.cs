@@ -9,7 +9,7 @@ namespace Backend.ModelCollections
 
         public void Create()
         {
-            T model = CreateModel();
+            var model = CreateModel();
             Add(GetCurrentKey(), model);
         }
 
