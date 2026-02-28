@@ -37,6 +37,10 @@ namespace Runtime.ServerInteraction
                     Debug.Log("Server disconnected");
                     break;
                 case EventType.Receive:
+                    Debug.Log("Server received");
+
+                    _serverConnectionModel.SetPacket(netEvent.Packet);
+
                     netEvent.Packet.Dispose();
                     break;
                 case EventType.Timeout:
