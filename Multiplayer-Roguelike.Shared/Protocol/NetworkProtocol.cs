@@ -113,7 +113,7 @@ namespace Shared.Protocol
                     value = (T)(object)stringData;
                     break;
                 case nameof(Vector3):
-                    var vector = new Vector3(Reader.ReadInt32(), Reader.ReadInt32(), Reader.ReadInt32());
+                    var vector = new Vector3(Reader.ReadSingle(), Reader.ReadSingle(), Reader.ReadSingle());
                     value = (T)(object)vector;
                     break;
                 default:
