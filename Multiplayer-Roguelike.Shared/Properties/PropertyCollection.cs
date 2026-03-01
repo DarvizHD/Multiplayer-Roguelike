@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Text;
+using Shared.Common;
 using Shared.Protocol;
 
 namespace Shared.Properties
 {
-    public class PropertyCollection<T> : IProperty
+    public class PropertyCollection<T> : ISharedData
     {
         public string Id { get; }
 
@@ -55,7 +56,7 @@ namespace Shared.Properties
             IsDirty = true;
         }
 
-        public void UnsetDirty()
+        public void ClearDirty()
         {
             IsDirty = false;
         }

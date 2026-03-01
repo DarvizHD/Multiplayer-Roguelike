@@ -11,9 +11,9 @@ namespace Shared.Models
 
         public LobbySharedModel(string id) : base(id)
         {
-            Properties.Add(LobbyId.Id, LobbyId);
-            Properties.Add(OwnerId.Id, OwnerId);
-            Properties.Add(Members.Id, Members);
+            Children.Add(LobbyId.Id, LobbyId);
+            Children.Add(OwnerId.Id, OwnerId);
+            Children.Add(Members.Id, Members);
         }
     }
 }
