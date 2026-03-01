@@ -80,6 +80,14 @@ namespace Backend
             }
         }
 
+        private void SendPacket(Peer peer, byte channelId, ref Packet packet)
+        {
+            if (!peer.Send(channelId, ref packet))
+            {
+                Console.WriteLine($"Error sending to peer {peer.ID} packet {channelId}");
+            }
+        }
+
         private void HandleEvent(Event netEvent)
         {
             switch (netEvent.Type)
@@ -109,13 +117,6 @@ namespace Backend
             {
                 if (player.PlayerSharedModel.IsDirty)
                 {
-                    Console.WriteLine($"\nPlayer {player.PlayerSharedModel.Nickname} has changes");
-                    player.PlayerSharedModel.GetChanges(out var changes);
-                    foreach (var change in changes)
-                    {
-                        Console.WriteLine($"{change.Key}: {change.Value}");
-                    }
-
                     var protocol = new NetworkProtocol();
                     var packet = default(Packet);
 
@@ -125,14 +126,6 @@ namespace Backend
 
                     SendPacket(player.Peer, 0, ref packet);
                 }
-            }
-        }
-
-        private void SendPacket(Peer peer, byte channelId, ref Packet packet)
-        {
-            if (!peer.Send(channelId, ref packet))
-            {
-                Console.WriteLine($"Error sending to peer {peer.ID} packet {channelId}");
             }
         }
     }

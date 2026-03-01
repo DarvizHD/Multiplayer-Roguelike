@@ -1,16 +1,24 @@
 using System.Collections.Generic;
 using System.Text;
+using Shared.Common;
 using Shared.Protocol;
 
 namespace Shared.Properties
 {
-    public class PropertyCollection<T> : IProperty
+    public class PropertyCollection<T> : ISharedData
     {
         public string Id { get; }
 
-        private readonly List<T> _values = new List<T>();
+        public bool IsDirty =>
+            _cleared ||
+            _added.Count > 0 ||
+            _removed.Count > 0;
 
-        public bool IsDirty { get; private set; }
+        private readonly List<T> _values = new List<T>();
+        private readonly List<T> _added = new List<T>();
+        private readonly List<T> _removed = new List<T>();
+
+        private bool _cleared;
 
         public PropertyCollection(string id)
         {
@@ -20,30 +28,59 @@ namespace Shared.Properties
         public void Add(T value)
         {
             _values.Add(value);
-            IsDirty = true;
+            _added.Add(value);
         }
 
         public void Remove(T value)
         {
-            _values.Remove(value);
-            IsDirty = true;
+            if (_values.Remove(value))
+            {
+                if (_added.Remove(value))
+                {
+                    return;
+                }
+
+                _removed.Add(value);
+            }
         }
 
         public void Read(NetworkProtocol protocol)
         {
-            protocol.Get(out int length);
-            for (var i = 0; i < length; i++)
+            protocol.Get(out bool cleared);
+            if (cleared)
+            {
+                _values.Clear();
+            }
+
+            protocol.Get(out int addCount);
+            for (var i = 0; i < addCount; i++)
             {
                 protocol.Get(out T value);
                 _values.Add(value);
+            }
+
+            protocol.Get(out int removeCount);
+            for (var i = 0; i < removeCount; i++)
+            {
+                protocol.Get(out T value);
+                _values.Remove(value);
             }
         }
 
         public void Write(NetworkProtocol protocol)
         {
             protocol.Add(Id);
-            protocol.Add(_values.Count);
-            foreach (var value in _values)
+
+            protocol.Add(_cleared);
+
+            protocol.Add(_added.Count);
+            foreach (var value in _added)
+            {
+                protocol.Add(value);
+            }
+
+            protocol.Add(_removed.Count);
+            foreach (var value in _removed)
             {
                 protocol.Add(value);
             }
@@ -52,12 +89,16 @@ namespace Shared.Properties
         public void Clear()
         {
             _values.Clear();
-            IsDirty = true;
+            _added.Clear();
+            _removed.Clear();
+            _cleared = true;
         }
 
-        public void UnsetDirty()
+        public void ClearDirty()
         {
-            IsDirty = false;
+            _added.Clear();
+            _removed.Clear();
+            _cleared = false;
         }
 
         public override string ToString()

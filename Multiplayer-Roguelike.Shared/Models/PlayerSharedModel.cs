@@ -10,10 +10,10 @@ namespace Shared.Models
 
         public PlayerSharedModel(string id) : base(id)
         {
-            Properties.Add(Nickname.Id, Nickname);
+            Children.Add(Nickname.Id, Nickname);
 
-            Models.Add(Lobby.Id, Lobby);
-            Models.Add(Character.Id, Character);
+            Children.Add(Lobby.Id, Lobby);
+            Children.Add(Character.Id, Character);
         }
     }
 }

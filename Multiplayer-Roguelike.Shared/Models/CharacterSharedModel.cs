@@ -11,9 +11,9 @@ namespace Shared.Models
 
         public CharacterSharedModel(string id) : base(id)
         {
-            Properties.Add(Health.Id, Health);
-            Properties.Add(Direction.Id, Direction);
-            Properties.Add(Rotation.Id, Rotation);
+            Children.Add(Health.Id, Health);
+            Children.Add(Direction.Id, Direction);
+            Children.Add(Rotation.Id, Rotation);
         }
     }
 }
