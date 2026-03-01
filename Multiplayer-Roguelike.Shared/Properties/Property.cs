@@ -8,7 +8,7 @@ namespace Shared.Properties
     {
         public string Id { get; }
 
-        private T _value;
+        public bool IsDirty { get; private set; }
 
         public T Value
         {
@@ -23,7 +23,7 @@ namespace Shared.Properties
             }
         }
 
-        public bool IsDirty { get; private set; }
+        private T _value;
 
         public Property(string id, T value)
         {
