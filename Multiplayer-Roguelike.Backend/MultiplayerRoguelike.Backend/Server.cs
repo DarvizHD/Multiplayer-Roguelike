@@ -3,6 +3,7 @@ using System.Threading;
 using Backend.CommandExecutors;
 using Backend.Lobby.Collection;
 using Backend.Player.Collection;
+using Backend.Session.Collection;
 using ENet;
 using Shared.Protocol;
 
@@ -32,6 +33,9 @@ namespace Backend
 
             var lobbyCollectionPresenter = new LobbyModelCollectionPresenter(_world.Lobbies, _world);
             lobbyCollectionPresenter.Enable();
+
+            var sessionCollectionPresenter = new SessionModelCollectionPresenter(_world.Sessions);
+            sessionCollectionPresenter.Enable();
 
             Library.Initialize();
 
@@ -77,6 +81,7 @@ namespace Backend
                 }
 
                 HandleTick();
+                HandleSessionTick();
             }
         }
 
@@ -125,6 +130,26 @@ namespace Backend
                     packet.Create(protocol.Stream.GetBuffer());
 
                     SendPacket(player.Peer, 0, ref packet);
+                }
+            }
+        }
+
+        public void HandleSessionTick()
+        {
+            foreach (var session in _world.Sessions.Models.Values)
+            {
+                var worldSharedModel = session.WorldSharedModel;
+                if (worldSharedModel.IsDirty)
+                {
+                    var protocol = new NetworkProtocol();
+                    worldSharedModel.Write(protocol);
+
+                    foreach (var player in session.Players.Models.Values)
+                    {
+                        var packet = default(Packet);
+                        packet.Create(protocol.Stream.GetBuffer());
+                        SendPacket(player.Peer, 1, ref packet);
+                    }
                 }
             }
         }
