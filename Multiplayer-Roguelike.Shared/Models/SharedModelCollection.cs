@@ -18,6 +18,8 @@ namespace Shared.Models
 
 
         private readonly Dictionary<string, T> _models = new Dictionary<string, T>();
+        public IEnumerable<T> Models => _models.Values;
+
         private readonly List<T> _added = new List<T>();
         private readonly List<T> _removed = new List<T>();
         private readonly Func<string, T> _factory;
@@ -47,6 +49,11 @@ namespace Shared.Models
                     _removed.Add(model);
                 }
             }
+        }
+
+        public bool TryGet(string id, out T model)
+        {
+            return _models.TryGetValue(id, out model);
         }
 
         public void Read(NetworkProtocol protocol)
@@ -105,7 +112,6 @@ namespace Shared.Models
             {
                 if (!_added.Contains(model) && !_removed.Contains(model))
                 {
-                    protocol.Add(model.Id);
                     model.Write(protocol);
                 }
             }

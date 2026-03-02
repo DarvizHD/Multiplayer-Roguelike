@@ -7,6 +7,7 @@ namespace Backend.Player
     {
         public PlayerSharedModel PlayerSharedModel { get; }
         public Peer Peer { get; }
+        public string SessionId { get; set; } = string.Empty;
 
         public PlayerModel(string playerNickname, Peer peer)
         {
