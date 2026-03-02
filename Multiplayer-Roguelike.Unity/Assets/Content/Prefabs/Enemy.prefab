@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.MonoBehaviorProvider
   <Animator>k__BackingField: {fileID: 2004594603268225297}
   <Transform>k__BackingField: {fileID: 8930996077387157583}
+  <Agent>k__BackingField: {fileID: 2153154220481777502}
 --- !u!195 &2153154220481777502
 NavMeshAgent:
   m_ObjectHideFlags: 0

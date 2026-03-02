@@ -59,7 +59,7 @@ namespace Runtime.ECS.Core
         }
 
 
-        public (int[] entityId, T1[] components, int count) TupleQuery<T1>() where T1 : class, IComponent
+        public (int[] entityIds, T1[] components, int count) TupleQuery<T1>() where T1 : class, IComponent
         {
             var entityId =  GetStorage<T1>().EntityIds;
             var components = GetStorage<T1>().Components;
@@ -75,76 +75,28 @@ namespace Runtime.ECS.Core
             var storage1 = GetStorage<T1>();
             var storage2 = GetStorage<T2>();
 
-            var entityIds = storage1.EntityIds;
-            var count = entityIds.Length;
-            var components1 = storage1.Components;
-            var components2 = storage2.Components;
+            IComponentStorage<IComponent> smallestStorage = storage1.Count < storage2.Count ? storage1 : storage2;
+
+            var components1 = new T1[smallestStorage.Count];
+            var components2 = new T2[smallestStorage.Count];
+            var entityIds = new int[smallestStorage.Count];
+
+            var count = smallestStorage.Count;
+
+            for (var i = 0; i < smallestStorage.Count; i++)
+            {
+                var entityId = smallestStorage.EntityIds[i];
+
+                if (storage2.Has(entityId))
+                {
+                    components1[i] =  storage1.Get(entityId);
+                    components2[i] = storage2.Get(entityId);
+                    entityIds[i] = entityId;
+                }
+            }
 
             return (entityIds, components1, components2, count);
         }
-
-        public (int[] entityIds, T1[] components1, T2[] components2, T3[] components3, int count) TupleQuery<T1, T2, T3>()
-        where T1 : class, IComponent
-        where T2 : class, IComponent
-        where T3 : class, IComponent
-    {
-        var storage1 = GetStorage<T1>();
-        var storage2 = GetStorage<T2>();
-        var storage3 = GetStorage<T3>();
-
-        var entityIds = storage1.EntityIds;
-        var count = entityIds.Length;
-        var components1 = storage1.Components;
-        var components2 = storage2.Components;
-        var components3 = storage3.Components;
-
-        return (entityIds, components1, components2, components3, count);
-    }
-
-        public (int[] entityIds, T1[] components1, T2[] components2, T3[] components3, T4[] components4, int count) TupleQuery<T1, T2, T3, T4>()
-        where T1 : class, IComponent
-        where T2 : class, IComponent
-        where T3 : class, IComponent
-        where T4 : class, IComponent
-    {
-        var storage1 = GetStorage<T1>();
-        var storage2 = GetStorage<T2>();
-        var storage3 = GetStorage<T3>();
-        var storage4 = GetStorage<T4>();
-
-        var entityIds = storage1.EntityIds;
-        var count = entityIds.Length;
-        var components1 = storage1.Components;
-        var components2 = storage2.Components;
-        var components3 = storage3.Components;
-        var components4 = storage4.Components;
-
-        return (entityIds, components1, components2, components3, components4, count);
-    }
-
-        public (int[] entityIds, T1[] components1, T2[] components2, T3[] components3, T4[] components4, T5[] components5, int count) TupleQuery<T1, T2, T3, T4, T5>()
-        where T1 : class, IComponent
-        where T2 : class, IComponent
-        where T3 : class, IComponent
-        where T4 : class, IComponent
-        where T5 : class, IComponent
-    {
-        var storage1 = GetStorage<T1>();
-        var storage2 = GetStorage<T2>();
-        var storage3 = GetStorage<T3>();
-        var storage4 = GetStorage<T4>();
-        var storage5 = GetStorage<T5>();
-
-        var entityIds = storage1.EntityIds;
-        var count = entityIds.Length;
-        var components1 = storage1.Components;
-        var components2 = storage2.Components;
-        var components3 = storage3.Components;
-        var components4 = storage4.Components;
-        var components5 = storage5.Components;
-
-        return (entityIds, components1, components2, components3, components4, components5, count);
-    }
 
         public IEnumerable<(int entityId, T1)> Query<T1>() where T1 : class, IComponent
         {

@@ -20,6 +20,7 @@ using Runtime.GameSystems;
 using Runtime.ServerInteraction;
 using Shared.Commands;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Runtime
 {
@@ -62,7 +63,7 @@ namespace Runtime
                 CreateEnemy(i, playerProvider);
             }
 
-            var spawnerEntityId = 100;
+            var spawnerEntityId = 10000;
             EcsWorld.AddEntityComponent(spawnerEntityId, new SpawnerComponent(
                 targetCount: 2,
                 prefab: EnemyPrefab.gameObject,
@@ -129,6 +130,8 @@ namespace Runtime
             EcsWorld.RegisterComponent<CameraTargetComponent>();
             EcsWorld.RegisterComponent<FreezeMovementComponent>();
             EcsWorld.RegisterComponent<FreezeMovementByDamageComponent>();
+
+            EcsWorld.RegisterComponent<NavMeshAgentComponent>();
         }
 
         private void AddSystems()
@@ -136,7 +139,9 @@ namespace Runtime
             EcsWorld.AddSystem<PlayerInputMovementSystem>();
             EcsWorld.AddSystem<FollowSystem>();
             EcsWorld.AddSystem<MovementSystem>();
-            EcsWorld.AddSystem<FollowSeparationSystem>();
+
+           // EcsWorld.AddSystem<FollowSeparationSystem>();
+
             EcsWorld.AddSystem<DirectionRotationSystem>();
             EcsWorld.AddSystem<DrawTransformSystem>();
             EcsWorld.AddSystem<MeleeAttackSystem>();
@@ -158,11 +163,14 @@ namespace Runtime
             EcsWorld.AddSystem<DamageSystem>();
             EcsWorld.AddSystem<DeathSystem>();
 
+            EcsWorld.AddSystem<AINavigationSystem>();
+
             EcsWorld.AddSystem<PlayerLookRotationSystem>();
             EcsWorld.AddSystem<CameraFocusSystem>();
             EcsWorld.AddSystem<DrawCameraTransformSystem>();
             EcsWorld.AddSystem<FreezeMovementSystem>();
             EcsWorld.AddSystem<DeathAnimationSystem>();
+
            // TODO: Fix this EcsWorld.AddSystem<SpawnerSystem>();
         }
 
@@ -187,21 +195,22 @@ namespace Runtime
         {
             var enemyProvider = Instantiate(EnemyPrefab);
 
-            EcsWorld.AddEntityComponent(entityId,
-                new PositionComponent(new Vector3(Random.Range(-100f, 100f), 0f, Random.Range(-10f, 10f))));
+            var randomPosition = new Vector3(Random.Range(-100f, 100f), 0f, Random.Range(-10f, 10f));
+            var speed = 1f;
+
+            EcsWorld.AddEntityComponent(entityId, new PositionComponent(randomPosition));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
             EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(1f));
             EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(10f));
-            EcsWorld.AddEntityComponent(entityId, new TransformComponent(enemyProvider.Transform));
             EcsWorld.AddEntityComponent(entityId, new EnemyTagComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionRotationTagComponent());
-            EcsWorld.AddEntityComponent(entityId, new FollowComponent(playerProvider.Transform));
             EcsWorld.AddEntityComponent(entityId, new SeparationComponent());
             EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(enemyProvider.Animator));
             EcsWorld.AddEntityComponent(entityId, new HealthComponent(50f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(2f, 5f));
             EcsWorld.AddEntityComponent(entityId, new FreezeMovementByDamageComponent(1.5f));
+            EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, randomPosition,  speed));
         }
 
         private void Update()
