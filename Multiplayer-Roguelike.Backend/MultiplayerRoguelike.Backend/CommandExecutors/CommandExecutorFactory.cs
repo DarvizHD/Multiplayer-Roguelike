@@ -28,6 +28,7 @@ namespace Backend.CommandExecutors
                 CommandConst.JoinLobby => new JoinLobbyCommandExecutor(new JoinLobbyCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.MovePlayer => new MoveCommandExecutor(new MoveCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.StartSession => new StartSessionCommandExecutor(new StartSessionCommand(eNetProtocol), _world, netEvent.Peer),
+                CommandConst.RotatePlayer => new RotateCommandExecutor(new RotateCommand(eNetProtocol), _world, netEvent.Peer),
                 _ => null
             };
         }
