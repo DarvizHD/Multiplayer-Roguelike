@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Codice.CM.Common;
 using Runtime.ECS.Components;
 
 namespace Runtime.ECS.Core
@@ -57,13 +58,6 @@ namespace Runtime.ECS.Core
            // return _storages.SelectMany(s => s.EntityIds).Distinct();
         }
 
-        public IEnumerable<(int entityId, T1)> Query<T1>() where T1 : class, IComponent
-        {
-            foreach (var entityId in GetStorage<T1>().EntityIds)
-            {
-                yield return (entityId, GetStorage<T1>().Get(entityId));
-            }
-        }
 
         public (int[] entityId, T1[] components, int count) TupleQuery<T1>() where T1 : class, IComponent
         {
@@ -72,6 +66,92 @@ namespace Runtime.ECS.Core
             var count = entityId.Length;
 
             return  (entityId, components, count);
+        }
+
+        public (int[] entityIds, T1[] components1, T2[] components2, int count) TupleQuery<T1, T2>()
+            where T1 : class, IComponent
+            where T2 : class, IComponent
+        {
+            var storage1 = GetStorage<T1>();
+            var storage2 = GetStorage<T2>();
+
+            var entityIds = storage1.EntityIds;
+            var count = entityIds.Length;
+            var components1 = storage1.Components;
+            var components2 = storage2.Components;
+
+            return (entityIds, components1, components2, count);
+        }
+
+        public (int[] entityIds, T1[] components1, T2[] components2, T3[] components3, int count) TupleQuery<T1, T2, T3>()
+        where T1 : class, IComponent
+        where T2 : class, IComponent
+        where T3 : class, IComponent
+    {
+        var storage1 = GetStorage<T1>();
+        var storage2 = GetStorage<T2>();
+        var storage3 = GetStorage<T3>();
+
+        var entityIds = storage1.EntityIds;
+        var count = entityIds.Length;
+        var components1 = storage1.Components;
+        var components2 = storage2.Components;
+        var components3 = storage3.Components;
+
+        return (entityIds, components1, components2, components3, count);
+    }
+
+        public (int[] entityIds, T1[] components1, T2[] components2, T3[] components3, T4[] components4, int count) TupleQuery<T1, T2, T3, T4>()
+        where T1 : class, IComponent
+        where T2 : class, IComponent
+        where T3 : class, IComponent
+        where T4 : class, IComponent
+    {
+        var storage1 = GetStorage<T1>();
+        var storage2 = GetStorage<T2>();
+        var storage3 = GetStorage<T3>();
+        var storage4 = GetStorage<T4>();
+
+        var entityIds = storage1.EntityIds;
+        var count = entityIds.Length;
+        var components1 = storage1.Components;
+        var components2 = storage2.Components;
+        var components3 = storage3.Components;
+        var components4 = storage4.Components;
+
+        return (entityIds, components1, components2, components3, components4, count);
+    }
+
+        public (int[] entityIds, T1[] components1, T2[] components2, T3[] components3, T4[] components4, T5[] components5, int count) TupleQuery<T1, T2, T3, T4, T5>()
+        where T1 : class, IComponent
+        where T2 : class, IComponent
+        where T3 : class, IComponent
+        where T4 : class, IComponent
+        where T5 : class, IComponent
+    {
+        var storage1 = GetStorage<T1>();
+        var storage2 = GetStorage<T2>();
+        var storage3 = GetStorage<T3>();
+        var storage4 = GetStorage<T4>();
+        var storage5 = GetStorage<T5>();
+
+        var entityIds = storage1.EntityIds;
+        var count = entityIds.Length;
+        var components1 = storage1.Components;
+        var components2 = storage2.Components;
+        var components3 = storage3.Components;
+        var components4 = storage4.Components;
+        var components5 = storage5.Components;
+
+        return (entityIds, components1, components2, components3, components4, components5, count);
+    }
+
+        public IEnumerable<(int entityId, T1)> Query<T1>() where T1 : class, IComponent
+        {
+            foreach (var entityId in GetStorage<T1>().EntityIds)
+            {
+                yield return (entityId, GetStorage<T1>().Get(entityId));
+            }
         }
 
         public IEnumerable<(int entityId, T1, T2)> Query<T1, T2>()
