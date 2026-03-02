@@ -16,7 +16,7 @@ namespace Runtime.ECS.Systems.Follow
         public override void Update(float deltaTime)
         {
             var positionQuery = ComponentManager.TupleQuery<PositionComponent>();
-            var entityIds = positionQuery.entityId;
+            var entityIds = positionQuery.entityIds;
             var components = positionQuery.components;
             var count = positionQuery.count;
 
