@@ -6,14 +6,11 @@ namespace Shared.Models
     {
         public readonly Property<string> Nickname = new Property<string>("nickname", string.Empty);
         public readonly LobbySharedModel Lobby = new LobbySharedModel("lobby");
-        public readonly CharacterSharedModel Character = new CharacterSharedModel("character");
 
         public PlayerSharedModel(string id) : base(id)
         {
             Children.Add(Nickname.Id, Nickname);
-
             Children.Add(Lobby.Id, Lobby);
-            Children.Add(Character.Id, Character);
         }
     }
 }

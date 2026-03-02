@@ -9,7 +9,8 @@ namespace Runtime.ServerInteraction
         public event Action PlayerConnect;
         public event Action PlayerDisconnect;
 
-        public event Action<Packet> PacketReceived;
+        public event Action<Packet> PlayerPacketReceived;
+        public event Action<Packet> WorldPacketReceived;
 
         public CustomAwaiter CompletePlayerConnectAwaiter { get; private set; } = new();
 
@@ -32,9 +33,14 @@ namespace Runtime.ServerInteraction
             CompletePlayerConnectAwaiter = new CustomAwaiter();
         }
 
-        public void SetPacket(Packet packet)
+        public void SetPlayerPacket(Packet packet)
         {
-            PacketReceived?.Invoke(packet);
+            PlayerPacketReceived?.Invoke(packet);
+        }
+
+        public void SetWorldPacket(Packet packet)
+        {
+            WorldPacketReceived?.Invoke(packet);
         }
     }
 }

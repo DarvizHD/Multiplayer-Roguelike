@@ -39,7 +39,15 @@ namespace Runtime.ServerInteraction
                 case EventType.Receive:
                     Debug.Log("Server received");
 
-                    _serverConnectionModel.SetPacket(netEvent.Packet);
+                    switch (netEvent.ChannelID)
+                    {
+                        case 0:
+                            _serverConnectionModel.SetPlayerPacket(netEvent.Packet);
+                            break;
+                        case 1:
+                            _serverConnectionModel.SetWorldPacket(netEvent.Packet);
+                            break;
+                    }
 
                     netEvent.Packet.Dispose();
                     break;
