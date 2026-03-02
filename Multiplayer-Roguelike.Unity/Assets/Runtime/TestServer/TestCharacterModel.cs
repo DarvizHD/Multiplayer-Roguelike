@@ -1,10 +1,12 @@
 using System;
 using Shared.Models;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TestCharacterModel : MonoBehaviour
 {
     [SerializeField] public Transform Transform;
+    [SerializeField] public Text NameText;
 
     public CharacterSharedModel Model;
 
