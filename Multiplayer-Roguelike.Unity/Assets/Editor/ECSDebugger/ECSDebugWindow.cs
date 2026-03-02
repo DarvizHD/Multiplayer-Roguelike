@@ -21,6 +21,7 @@ namespace Editor.ECSDebugger
             GetWindow<EcsDebugWindow>("ECS Debugger");
         }
 
+        /*
         private void OnGUI()
         {
             if (!Application.isPlaying)
@@ -55,7 +56,7 @@ namespace Editor.ECSDebugger
             EditorGUILayout.EndScrollView();
 
             Repaint();
-        }
+        }*/
 
         private void ShowEntityHeader(List<int> entities, ComponentManager componentManager)
         {

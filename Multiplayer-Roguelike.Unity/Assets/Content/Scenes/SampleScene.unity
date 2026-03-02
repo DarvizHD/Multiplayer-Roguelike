@@ -796,6 +796,7 @@ GameObject:
   - component: {fileID: 941861036}
   - component: {fileID: 941861035}
   - component: {fileID: 941861037}
+  - component: {fileID: 941861038}
   m_Layer: 0
   m_Name: EntryPoint
   m_TagString: Untagged
@@ -815,10 +816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9649d15b13fe4e8182bd35f7b677d970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.EntryPoint
-  PlayerPrefab: {fileID: 8735186825800146042, guid: 84ab6511e3e0f0643869c47787fb2b58, type: 3}
-  EnemyPrefab: {fileID: 1366633883286923307, guid: 550d87c7b3283ee4182daea2791f86b7, type: 3}
-  CameraTarget: {fileID: 71037547}
-  GizmosHelper: {fileID: 1972683687}
+  _clientUI: {fileID: 941861038}
 --- !u!4 &941861036
 Transform:
   m_ObjectHideFlags: 0
@@ -846,6 +844,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec13d70135b04d9eb2d984bdf9fbd834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.PerformanceMonitor
+--- !u!114 &941861038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941861034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91102bbe0bd14d51b78839cfa1bf1357, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.ClientUI
 --- !u!1 &1972683686
 GameObject:
   m_ObjectHideFlags: 0

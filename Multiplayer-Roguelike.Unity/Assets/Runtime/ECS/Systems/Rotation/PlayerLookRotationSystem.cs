@@ -1,24 +1,17 @@
+using Backend.CommandExecutors;
 using Runtime.ECS.Components.Movement;
 using Runtime.ECS.Components.Player;
+using Runtime.ECS.Core;
 using UnityEngine;
 
 namespace Runtime.ECS.Systems.Rotation
 {
     public class PlayerLookRotationSystem : BaseSystem
     {
-        public PlayerLookRotationSystem()
-        {
-            RegisterRequiredComponent(typeof(PlayerInputComponent));
-            RegisterRequiredComponent(typeof(PlayerLookRotationTagComponent));
-            RegisterRequiredComponent(typeof(PositionComponent));
-            RegisterRequiredComponent(typeof(RotationComponent));
-            RegisterRequiredComponent(typeof(RotationSpeedComponent));
-        }
-
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, playerInputComponent, playerLookRotationTagComponent, positionComponent, rotationComponent, rotationSpeedComponent)
-                     in ComponentManager.Query<PlayerInputComponent, PlayerLookRotationTagComponent, PositionComponent, RotationComponent, RotationSpeedComponent>())
+            foreach (var (entityId, playerInputComponent, positionComponent, characterConnectionComponent, characterNetworkSyncComponent)
+                     in ComponentManager.Query<PlayerInputComponent, PositionComponent, CharacterConnectionComponent, CharacterNetworkSyncComponent>())
             {
 
                 var mouseScreenPosition = playerInputComponent.PlayerControls.Gameplay.Look.ReadValue<Vector2>();
@@ -35,9 +28,9 @@ namespace Runtime.ECS.Systems.Rotation
                     {
                         var targetAngle = Quaternion.LookRotation(direction).eulerAngles.y;
 
-                        var smoothness = rotationSpeedComponent.Speed * deltaTime;
+                        var rotateCommand = new RotateCommand(characterNetworkSyncComponent.CharacterSharedModel.Id, targetAngle);
 
-                        rotationComponent.Angle = Mathf.LerpAngle(targetAngle, rotationComponent.Angle, smoothness);
+                        rotateCommand.Write(characterConnectionComponent.ServerConnectionModel.PlayerPeer);
                     }
                 }
             }

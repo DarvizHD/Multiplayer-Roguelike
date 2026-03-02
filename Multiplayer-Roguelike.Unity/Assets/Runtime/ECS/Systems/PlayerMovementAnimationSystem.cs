@@ -1,6 +1,7 @@
 using Runtime.ECS.Components;
 using Runtime.ECS.Components.Movement;
 using Runtime.ECS.Components.Player;
+using Runtime.ECS.Components.Tags;
 using UnityEngine;
 
 namespace Runtime.ECS.Systems
@@ -9,19 +10,16 @@ namespace Runtime.ECS.Systems
     {
         public PlayerMovementAnimationSystem()
         {
-            RegisterRequiredComponent(typeof(PlayerInputComponent));
             RegisterRequiredComponent(typeof(AnimatorComponent));
             RegisterRequiredComponent(typeof(RotationComponent));
         }
 
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, playerInputComponent, animatorComponent, rotationComponent)
-                     in ComponentManager.Query<PlayerInputComponent, AnimatorComponent, RotationComponent>())
+            foreach (var (entityId, directionComponent, playerTagComponent, animatorComponent, rotationComponent)
+                     in ComponentManager.Query<DirectionComponent, PlayerTagComponent, AnimatorComponent, RotationComponent>())
             {
-                var input = playerInputComponent.PlayerControls.Gameplay.Move.ReadValue<Vector2>().normalized;
-
-                var worldMove = new Vector3(input.x, 0f, input.y);
+                var worldMove = directionComponent.Direction;
                 var rotation = Quaternion.Euler(0f, rotationComponent.Angle, 0f);
 
                 var localMove = Quaternion.Inverse(rotation) * worldMove;
