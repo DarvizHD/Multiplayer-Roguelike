@@ -18,7 +18,14 @@ namespace Backend.CommandExecutors
                 return;
             }
 
-            player.PlayerSharedModel.Character.Direction.Value = Command.Direction;
+            if (!World.Sessions.TryGet(player.SessionId, out var session))
+            {
+                Console.WriteLine($"Player {Command.PlayerNickname} has no session");
+                return;
+            }
+
+            session.WorldSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character);
+            character.Direction.Value = Command.Direction;
         }
     }
 }
