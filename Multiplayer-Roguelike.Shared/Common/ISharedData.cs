@@ -1,13 +1,13 @@
-using Shared.Protocol;
+﻿using Shared.Protocol;
 
-namespace Shared.Properties
+namespace Shared.Common
 {
-    public interface IProperty
+    public interface ISharedData
     {
         string Id { get; }
         bool IsDirty { get; }
         void Read(NetworkProtocol protocol);
         void Write(NetworkProtocol protocol);
-        void UnsetDirty();
+        void ClearDirty();
     }
 }

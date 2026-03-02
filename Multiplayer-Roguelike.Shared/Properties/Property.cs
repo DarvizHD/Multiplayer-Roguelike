@@ -1,24 +1,29 @@
+using System.Collections.Generic;
+using Shared.Common;
 using Shared.Protocol;
 
 namespace Shared.Properties
 {
-    public class Property<T> : IProperty
+    public class Property<T> : ISharedData
     {
         public string Id { get; }
 
-        private T _value;
+        public bool IsDirty { get; private set; }
 
         public T Value
         {
             get => _value;
             set
             {
-                _value = value;
-                IsDirty = true;
+                if (!EqualityComparer<T>.Default.Equals(_value, value))
+                {
+                    _value = value;
+                    IsDirty = true;
+                }
             }
         }
 
-        public bool IsDirty { get; private set; }
+        private T _value;
 
         public Property(string id, T value)
         {
@@ -37,7 +42,7 @@ namespace Shared.Properties
             protocol.Add(_value);
         }
 
-        public void UnsetDirty()
+        public void ClearDirty()
         {
             IsDirty = false;
         }

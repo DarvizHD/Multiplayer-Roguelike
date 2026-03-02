@@ -5,5 +5,7 @@ namespace Shared.Commands
         public const string Login = "login";
         public const string CreateLobby = "create_lobby";
         public const string JoinLobby = "join_lobby";
+        public const string MovePlayer = "move_player";
+        public const string StartSession = "start_session";
     }
 }

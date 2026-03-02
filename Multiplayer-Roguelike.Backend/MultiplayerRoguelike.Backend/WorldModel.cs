@@ -1,5 +1,6 @@
 using Backend.Lobby.Collection;
 using Backend.Player.Collection;
+using Backend.Session.Collection;
 
 namespace Backend
 {
@@ -8,5 +9,7 @@ namespace Backend
         public PlayerModelCollection Players { get; set; } = new();
 
         public LobbyModelCollection Lobbies { get; set; } = new();
+
+        public SessionModelCollection Sessions { get; set; } = new();
     }
 }

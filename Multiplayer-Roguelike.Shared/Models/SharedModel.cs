@@ -1,40 +1,51 @@
 using System.Collections.Generic;
 using System.Linq;
-using Shared.Properties;
+using Shared.Common;
+using Shared.Protocol;
 
 namespace Shared.Models
 {
-    public abstract class SharedModel
+    public abstract class SharedModel : ISharedData
     {
         public string Id { get; }
 
-        public Dictionary<string, IProperty> Properties { get; } = new Dictionary<string, IProperty>();
-        public Dictionary<string, SharedModel> Models { get; } = new Dictionary<string, SharedModel>();
+        public Dictionary<string, ISharedData> Children { get; } = new Dictionary<string, ISharedData>();
 
-        public bool IsDirty => Properties.Values.Any(p => p.IsDirty) || Models.Values.Any(m => m.IsDirty);
+        public bool IsDirty => Children.Values.Any(p => p.IsDirty);
 
         protected SharedModel(string id)
         {
             Id = id;
         }
 
-        public void GetChanges(out Dictionary<string, object> changes)
+        public void Read(NetworkProtocol protocol)
         {
-            changes = new Dictionary<string, object>();
-            foreach (var property in Properties.Values.Where(p => p.IsDirty))
+            protocol.Get(out int propertyLenght);
+            for (var i = 0; i < propertyLenght; i++)
             {
-                changes.Add(property.Id, property);
-                property.UnsetDirty();
+                protocol.Get(out string propertyId);
+                Children[propertyId].Read(protocol);
             }
+        }
 
-            foreach (var model in Models.Values.Where(m => m.IsDirty))
+        public void Write(NetworkProtocol protocol)
+        {
+            protocol.Add(Id);
+
+            var changedProperties = Children.Values.Where(p => p.IsDirty).ToList();
+            protocol.Add(changedProperties.Count);
+            foreach (var property in changedProperties)
             {
-                changes.Add(model.Id, model);
-                model.GetChanges(out var innerChanges);
-                foreach (var change in innerChanges)
-                {
-                    changes.Add(change.Key, change.Value);
-                }
+                property.Write(protocol);
+                property.ClearDirty();
+            }
+        }
+
+        public void ClearDirty()
+        {
+            foreach (var child in Children.Values)
+            {
+                child.ClearDirty();
             }
         }
     }

@@ -3,7 +3,9 @@ using System.Threading;
 using Backend.CommandExecutors;
 using Backend.Lobby.Collection;
 using Backend.Player.Collection;
+using Backend.Session.Collection;
 using ENet;
+using Shared.Protocol;
 
 namespace Backend
 {
@@ -31,6 +33,9 @@ namespace Backend
 
             var lobbyCollectionPresenter = new LobbyModelCollectionPresenter(_world.Lobbies, _world);
             lobbyCollectionPresenter.Enable();
+
+            var sessionCollectionPresenter = new SessionModelCollectionPresenter(_world.Sessions);
+            sessionCollectionPresenter.Enable();
 
             Library.Initialize();
 
@@ -76,6 +81,15 @@ namespace Backend
                 }
 
                 HandleTick();
+                HandleSessionTick();
+            }
+        }
+
+        private void SendPacket(Peer peer, byte channelId, ref Packet packet)
+        {
+            if (!peer.Send(channelId, ref packet))
+            {
+                Console.WriteLine($"Error sending to peer {peer.ID} packet {channelId}");
             }
         }
 
@@ -108,21 +122,35 @@ namespace Backend
             {
                 if (player.PlayerSharedModel.IsDirty)
                 {
-                    Console.WriteLine($"\nPlayer {player.PlayerSharedModel.Nickname} has changes");
-                    player.PlayerSharedModel.GetChanges(out var changes);
-                    foreach (var change in changes)
-                    {
-                        Console.WriteLine($"{change.Key}: {change.Value}");
-                    }
+                    var protocol = new NetworkProtocol();
+                    var packet = default(Packet);
+
+                    player.PlayerSharedModel.Write(protocol);
+
+                    packet.Create(protocol.Stream.GetBuffer());
+
+                    SendPacket(player.Peer, 0, ref packet);
                 }
             }
         }
 
-        private void SendPacket(Peer peer, byte channelId, ref Packet packet)
+        public void HandleSessionTick()
         {
-            if (!peer.Send(channelId, ref packet))
+            foreach (var session in _world.Sessions.Models.Values)
             {
-                Console.WriteLine($"Error sending to peer {peer.ID} packet {channelId}");
+                var worldSharedModel = session.WorldSharedModel;
+                if (worldSharedModel.IsDirty)
+                {
+                    var protocol = new NetworkProtocol();
+                    worldSharedModel.Write(protocol);
+
+                    foreach (var player in session.Players.Models.Values)
+                    {
+                        var packet = default(Packet);
+                        packet.Create(protocol.Stream.GetBuffer());
+                        SendPacket(player.Peer, 1, ref packet);
+                    }
+                }
             }
         }
     }

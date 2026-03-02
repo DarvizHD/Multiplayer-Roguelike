@@ -37,6 +37,18 @@ namespace Runtime.ServerInteraction
                     Debug.Log("Server disconnected");
                     break;
                 case EventType.Receive:
+                    Debug.Log("Server received");
+
+                    switch (netEvent.ChannelID)
+                    {
+                        case 0:
+                            _serverConnectionModel.SetPlayerPacket(netEvent.Packet);
+                            break;
+                        case 1:
+                            _serverConnectionModel.SetWorldPacket(netEvent.Packet);
+                            break;
+                    }
+
                     netEvent.Packet.Dispose();
                     break;
                 case EventType.Timeout:
