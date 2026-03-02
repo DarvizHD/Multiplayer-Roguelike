@@ -15,5 +15,10 @@ namespace Shared.Models
             Children.Add(Direction.Id, Direction);
             Children.Add(Rotation.Id, Rotation);
         }
+
+        public static CharacterSharedModel Create(string id)
+        {
+            return new CharacterSharedModel(id);
+        }
     }
 }
