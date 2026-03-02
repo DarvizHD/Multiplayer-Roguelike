@@ -10,11 +10,13 @@ namespace Shared.Commands
 
         public string PlayerNickname;
         public Vector3 Direction;
+        public Vector3 LastPosition;
 
-        public MoveCommand(string playerNickname, Vector3 direction)
+        public MoveCommand(string playerNickname, Vector3 direction, Vector3 lastPosition)
         {
             PlayerNickname = playerNickname;
             Direction = direction;
+            LastPosition = lastPosition;
         }
 
         public MoveCommand(NetworkProtocol protocol) : base(protocol)
@@ -25,6 +27,7 @@ namespace Shared.Commands
         {
             protocol.Get(out PlayerNickname);
             protocol.Get(out Direction);
+            protocol.Get(out LastPosition);
         }
 
         public override void Write(Peer peer)
@@ -35,6 +38,7 @@ namespace Shared.Commands
             protocol.Add(Id);
             protocol.Add(PlayerNickname);
             protocol.Add(Direction);
+            protocol.Add(LastPosition);
 
             packet.Create(protocol.Stream.GetBuffer());
             peer.Send(0, ref packet);

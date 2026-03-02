@@ -64,12 +64,17 @@ public class TestServerScript : MonoBehaviour
 
         foreach (var characterSharedModel in _world.World.Characters.Models)
         {
-            if (!_world.Characters.ContainsKey(characterSharedModel.Id))
+            if (!_world.Characters.TryGetValue(characterSharedModel.Id, out var testCharacter))
             {
                 var newCharacter = Instantiate(_characterPrefab, UnityEngine.Vector3.zero, Quaternion.identity);
                 newCharacter.Model = characterSharedModel;
                 newCharacter.NameText.text = characterSharedModel.Id;
                 _world.Characters.Add(characterSharedModel.Id, newCharacter);
+            }
+            else
+            {
+                var lastPosition = characterSharedModel.LastPosition.Value;
+                testCharacter.Transform.position = new UnityEngine.Vector3(lastPosition.X, lastPosition.Y, lastPosition.Z);
             }
         }
     }
@@ -185,8 +190,15 @@ public class TestServerScript : MonoBehaviour
     private void OnMoved(Vector2 moveInput)
     {
         var direction = new Vector3(moveInput.x, 0, moveInput.y);
+        var position = new Vector3(0, 0, 0);
 
-        var moveCommand = new MoveCommand(nickname, direction);
+        if (_world.Characters.TryGetValue(nickname, out var testCharacter))
+        {
+            var characterPosition = testCharacter.Transform.position;
+            position = new Vector3(characterPosition.x, characterPosition.y, characterPosition.z);
+        }
+
+        var moveCommand = new MoveCommand(nickname, direction, position);
         moveCommand.Write(_serverConnectionModel.PlayerPeer);
     }
 }
