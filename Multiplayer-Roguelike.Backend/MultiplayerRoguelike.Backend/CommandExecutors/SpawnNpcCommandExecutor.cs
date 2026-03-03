@@ -1,6 +1,7 @@
 using System;
 using ENet;
 using Shared.Models;
+using Shared.Primitives;
 
 namespace Backend.CommandExecutors
 {
@@ -20,14 +21,20 @@ namespace Backend.CommandExecutors
                 return;
             }
 
-            var newNpc = new NpcSharedModel(Command.NpcId);
+            Random random = new();
 
-            newNpc.LastPosition.Value = Command.Position;
-            newNpc.Health.Value = Command.Health;
+            for (int i = 10; i < 10 + Command.Count; i++)
+            {
+                var randomPosition = new Vector3(random.Next(-10, 10), 0f, random.Next(-10, 10));
+                var startHealth = 100f;
 
-            sessionModel.GameSessionSharedModel.NPCs.Add(newNpc);
+                var newNpc = new NpcSharedModel(i.ToString());
 
-            Console.WriteLine($"Spawn Npc {Command.NpcId} with {Command.Health} health in {Command.Position}");
+                newNpc.LastPosition.Value = randomPosition;
+                newNpc.Health.Value = startHealth;
+
+                sessionModel.GameSessionSharedModel.NPCs.Add(newNpc);
+            }
         }
     }
 }

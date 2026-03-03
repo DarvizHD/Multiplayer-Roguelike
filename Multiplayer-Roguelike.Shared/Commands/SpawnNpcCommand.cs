@@ -10,33 +10,24 @@ namespace Backend.CommandExecutors
     {
         public override string Id => CommandConst.SpawnNpc;
 
-        public string NpcId;
-
-        public Vector3 Position;
-
-        public float Health;
+        public int Count;
 
         public string SessionId;
 
-        public SpawnNpcCommand(string npcId, string sessionId, Vector3 position, float health)
+        public SpawnNpcCommand(string sessionId, int count)
         {
-            NpcId = npcId;
-            Position = position;
-            Health = health;
-            SessionId =  sessionId;
+            SessionId = sessionId;
+            Count = count;
         }
 
         public SpawnNpcCommand(NetworkProtocol protocol) : base(protocol)
         {
-
         }
 
         public override void Read(NetworkProtocol protocol)
         {
-            protocol.Get(out NpcId);
             protocol.Get(out SessionId);
-            protocol.Get(out Position);
-            protocol.Get(out Health);
+            protocol.Get(out Count);
         }
 
         public override void Write(Peer peer)
@@ -45,10 +36,8 @@ namespace Backend.CommandExecutors
             var packet = default(Packet);
 
             protocol.Add(Id);
-            protocol.Add(NpcId);
             protocol.Add(SessionId);
-            protocol.Add(Position);
-            protocol.Add(Health);
+            protocol.Add(Count);
 
             packet.Create(protocol.Stream.GetBuffer());
             peer.Send(0, ref packet);

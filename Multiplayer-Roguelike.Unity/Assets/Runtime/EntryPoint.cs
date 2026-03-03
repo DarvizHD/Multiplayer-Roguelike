@@ -42,7 +42,8 @@ namespace Runtime
 
         private bool IsHost => _playerSharedModel.Lobby.OwnerId.Value == _playerSharedModel.Nickname.Value;
 
-        public GameSession(GameSessionSharedModel gameSessionSharedModel, PlayerSharedModel playerSharedModel, ServerConnectionModel serverConnectionModel)
+        public GameSession(GameSessionSharedModel gameSessionSharedModel, PlayerSharedModel playerSharedModel,
+            ServerConnectionModel serverConnectionModel)
         {
             _gameSessionSharedModel = gameSessionSharedModel;
             _playerSharedModel = playerSharedModel;
@@ -88,7 +89,8 @@ namespace Runtime
 
             var controllable = _playerSharedModel.Nickname.Value == characterSharedModel.Id;
 
-            CreatePlayer(entityId, characterSharedModel, characterSharedModel.LastPosition.Value.ToUnityVector3(), controllable);
+            CreatePlayer(entityId, characterSharedModel, characterSharedModel.LastPosition.Value.ToUnityVector3(),
+                controllable);
 
             _characterEntities.Add(characterSharedModel.Id, entityId);
         }
@@ -113,13 +115,9 @@ namespace Runtime
                 return;
             }
 
-            var randomPosition = new Vector3(Random.Range(-100f, 100f), 0f, Random.Range(-10f, 10f));
-            var startHealth = 100f;
-
-            var spawnNpcCommand = new SpawnNpcCommand("10", _playerSharedModel.Lobby.LobbyId.Value, randomPosition.ToSharedVector3(), startHealth);
+            var spawnNpcCommand = new SpawnNpcCommand(_playerSharedModel.Lobby.LobbyId.Value, 10);
 
             spawnNpcCommand.Write(_serverConnectionModel.PlayerPeer);
-
         }
 
         private void CreateCamera(int entityId)
@@ -128,7 +126,8 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(Camera.main.transform.parent.GetChild(2)));
         }
 
-        private void CreatePlayer(int entityId, CharacterSharedModel characterSharedModel, Vector3 position, bool controllable)
+        private void CreatePlayer(int entityId, CharacterSharedModel characterSharedModel, Vector3 position,
+            bool controllable)
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Player");
 
@@ -175,7 +174,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new HealthComponent(50f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(2f, 5f));
             EcsWorld.AddEntityComponent(entityId, new FreezeMovementByDamageComponent(1.5f));
-            EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, spawnPosition,  speed));
+            EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, spawnPosition, speed));
         }
 
         private void RegisterComponents()
@@ -228,14 +227,15 @@ namespace Runtime
             EcsWorld.AddSystem<DrawTransformSystem>();
             EcsWorld.AddSystem<DrawCameraTransformSystem>();
 
-            /*
             EcsWorld.AddSystem<AINavigationSystem>();
+            EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
+
+            /*
             EcsWorld.AddSystem<DirectionRotationSystem>();
             EcsWorld.AddSystem<FollowSystem>();
             EcsWorld.AddSystem<MeleeAttackSystem>();
             EcsWorld.AddSystem<RegenerationSystem>();
             EcsWorld.AddSystem<InvulnerabilitySystem>();
-            EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
             EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
             EcsWorld.AddSystem<AttackCooldownSystem>();
             EcsWorld.AddSystem<AttackSystem>();
@@ -283,7 +283,8 @@ namespace Runtime
             Library.Initialize();
 
             _serverConnectionModel = new ServerConnectionModel();
-            _serverConnectionPresenter = new ServerConnectionPresenter(_serverConnectionModel, _gameFixedSystemCollection);
+            _serverConnectionPresenter =
+                new ServerConnectionPresenter(_serverConnectionModel, _gameFixedSystemCollection);
             _serverConnectionPresenter.Enable();
 
             _serverConnectionModel.ConnectPlayer();

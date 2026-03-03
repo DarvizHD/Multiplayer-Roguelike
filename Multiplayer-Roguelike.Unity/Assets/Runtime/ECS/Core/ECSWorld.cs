@@ -38,7 +38,7 @@ namespace Runtime.ECS.Core
 
                 if (delta.sqrMagnitude > 0.3f)
                 {
-                  //  positionComponent.Position = Vector3.Lerp(positionComponent.Position, characterSharedModelComponent.CharacterSharedModel.LastPosition.Value.ToUnityVector3(), deltaTime);
+                    positionComponent.Position = Vector3.Lerp(positionComponent.Position, characterSharedModelComponent.CharacterSharedModel.LastPosition.Value.ToUnityVector3(), deltaTime);
                 }
 
                 rotationComponent.Angle = Mathf.LerpAngle(rotationComponent.Angle, characterSharedModelComponent.CharacterSharedModel.Rotation.Value, rotationSpeedComponent.Speed *  deltaTime);
