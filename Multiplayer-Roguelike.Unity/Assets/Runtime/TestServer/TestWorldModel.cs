@@ -7,6 +7,6 @@ namespace Runtime.TestServer
     {
         public Dictionary<string, TestCharacterModel> Characters { get; private set; } = new();
 
-        public WorldSharedModel World { get; private set; } = new("world");
+        public GameSessionSharedModel World { get; private set; } = new("world");
     }
 }

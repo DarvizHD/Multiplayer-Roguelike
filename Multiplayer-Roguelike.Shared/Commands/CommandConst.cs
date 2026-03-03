@@ -8,5 +8,6 @@ namespace Shared.Commands
         public const string MovePlayer = "move_player";
         public const string RotatePlayer = "rotate_player";
         public const string StartSession = "start_session";
+        public const string SpawnNpc = "spawn_npc";
     }
 }

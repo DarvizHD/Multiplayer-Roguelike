@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Backend.CommandExecutors;
 using ENet;
 using Runtime.ECS.Components;
 using Runtime.ECS.Components.Battle;
@@ -29,9 +30,9 @@ namespace Runtime
     {
         public ECSWorld EcsWorld { get; private set; }
 
-        private ServerConnectionModel _serverConnectionModel;
+        private readonly ServerConnectionModel _serverConnectionModel;
 
-        private readonly WorldSharedModel _worldSharedModel;
+        private readonly GameSessionSharedModel _gameSessionSharedModel;
 
         private readonly PlayerSharedModel _playerSharedModel;
 
@@ -39,45 +40,63 @@ namespace Runtime
 
         private readonly Dictionary<string, int> _characterEntities = new();
 
-        public GameSession(WorldSharedModel worldSharedModel, PlayerSharedModel playerSharedModel, ServerConnectionModel serverConnectionModel)
+        private bool IsHost => _playerSharedModel.Lobby.OwnerId.Value == _playerSharedModel.Nickname.Value;
+
+        public GameSession(GameSessionSharedModel gameSessionSharedModel, PlayerSharedModel playerSharedModel, ServerConnectionModel serverConnectionModel)
         {
-            _worldSharedModel = worldSharedModel;
+            _gameSessionSharedModel = gameSessionSharedModel;
             _playerSharedModel = playerSharedModel;
             _serverConnectionModel = serverConnectionModel;
         }
 
-        public void Run()
+        public void Enable()
         {
             EcsWorld = new ECSWorld();
+
+            RegisterComponents();
 
             _playerControls = new PlayerControls();
 
             _playerControls.Enable();
 
-            RegisterComponents();
+            _gameSessionSharedModel.Characters.Added += OnCharacterAdded;
 
+            _gameSessionSharedModel.NPCs.Added += OnNpcAdded;
+        }
+
+        public void Disable()
+        {
+            _gameSessionSharedModel.Characters.Added -= OnCharacterAdded;
+
+            _gameSessionSharedModel.NPCs.Added -= OnNpcAdded;
+        }
+
+        public void Run()
+        {
             AddSystems();
 
             CreateCamera(6);
 
-            //Setup();
+            SpawnNPCs();
         }
 
-        public void CreateConnectedPlayers()
+        private void OnCharacterAdded(CharacterSharedModel characterSharedModel)
         {
-            foreach (var character in _worldSharedModel.Characters.Models)
-            {
-                if (!_characterEntities.ContainsKey(character.Id))
-                {
-                    var entityId = _characterEntities.Count;
+            Debug.Log($"Worked");
 
-                    var controllable = _playerSharedModel.Nickname.Value == character.Id;
+            var entityId = _characterEntities.Count;
 
-                    CreatePlayer(entityId, character, character.LastPosition.Value.ToUnityVector3(), controllable);
+            var controllable = _playerSharedModel.Nickname.Value == characterSharedModel.Id;
 
-                    _characterEntities.Add(character.Id, entityId);
-                }
-            }
+            CreatePlayer(entityId, characterSharedModel, characterSharedModel.LastPosition.Value.ToUnityVector3(), controllable);
+
+            _characterEntities.Add(characterSharedModel.Id, entityId);
+        }
+
+        private void OnNpcAdded(NpcSharedModel npcSharedModel)
+        {
+            var npcId = int.Parse(npcSharedModel.Id);
+            CreateEnemy(npcId, npcSharedModel.LastPosition.Value.ToUnityVector3());
         }
 
         public void Update(float deltaTime)
@@ -85,12 +104,22 @@ namespace Runtime
             EcsWorld?.Update(deltaTime);
         }
 
-        private void Setup()
+        private void SpawnNPCs()
         {
-            for (var i = 10; i < 100; i++)
+            if (!IsHost)
             {
-                CreateEnemy(i);
+                Debug.Log($"I'm not host");
+
+                return;
             }
+
+            var randomPosition = new Vector3(Random.Range(-100f, 100f), 0f, Random.Range(-10f, 10f));
+            var startHealth = 100f;
+
+            var spawnNpcCommand = new SpawnNpcCommand("10", _playerSharedModel.Lobby.LobbyId.Value, randomPosition.ToSharedVector3(), startHealth);
+
+            spawnNpcCommand.Write(_serverConnectionModel.PlayerPeer);
+
         }
 
         private void CreateCamera(int entityId)
@@ -127,16 +156,15 @@ namespace Runtime
             }
         }
 
-        private void CreateEnemy(int entityId)
+        private void CreateEnemy(int entityId, Vector3 spawnPosition)
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Enemy");
 
             var enemyProvider = Object.Instantiate(prefab);
 
-            var randomPosition = new Vector3(Random.Range(-100f, 100f), 0f, Random.Range(-10f, 10f));
             var speed = 1f;
 
-            EcsWorld.AddEntityComponent(entityId, new PositionComponent(randomPosition));
+            EcsWorld.AddEntityComponent(entityId, new PositionComponent(spawnPosition));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
             EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(1f));
@@ -147,7 +175,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new HealthComponent(50f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(2f, 5f));
             EcsWorld.AddEntityComponent(entityId, new FreezeMovementByDamageComponent(1.5f));
-            EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, randomPosition,  speed));
+            EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, spawnPosition,  speed));
         }
 
         private void RegisterComponents()
@@ -201,6 +229,7 @@ namespace Runtime
             EcsWorld.AddSystem<DrawCameraTransformSystem>();
 
             /*
+            EcsWorld.AddSystem<AINavigationSystem>();
             EcsWorld.AddSystem<DirectionRotationSystem>();
             EcsWorld.AddSystem<FollowSystem>();
             EcsWorld.AddSystem<MeleeAttackSystem>();
@@ -214,7 +243,6 @@ namespace Runtime
             EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
             EcsWorld.AddSystem<DamageSystem>();
             EcsWorld.AddSystem<DeathSystem>();
-            EcsWorld.AddSystem<AINavigationSystem>();
             EcsWorld.AddSystem<FreezeMovementSystem>();
             EcsWorld.AddSystem<DeathAnimationSystem>();*/
         }
@@ -236,7 +264,7 @@ namespace Runtime
         private GameSession _gameSession;
         private ClientModel _clientModel;
 
-        private WorldSharedModel _worldSharedModel;
+        private GameSessionSharedModel _gameSessionSharedModel;
         private PlayerSharedModel _playerSharedModel;
 
         private ServerConnectionModel _serverConnectionModel;
@@ -249,7 +277,7 @@ namespace Runtime
             Application.runInBackground = true;
 
             _playerSharedModel = new PlayerSharedModel(string.Empty);
-            _worldSharedModel = new WorldSharedModel(string.Empty);
+            _gameSessionSharedModel = new GameSessionSharedModel(string.Empty);
             _clientModel = new ClientModel();
 
             Library.Initialize();
@@ -261,14 +289,15 @@ namespace Runtime
             _serverConnectionModel.ConnectPlayer();
             await _serverConnectionModel.CompletePlayerConnectAwaiter;
 
-            _gameSession = new GameSession(_worldSharedModel, _playerSharedModel, _serverConnectionModel);
+            _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel);
+            _gameSession.Enable();
 
             _serverConnectionModel.WorldPacketReceived += OnWorldPacketReceived;
             _serverConnectionModel.PlayerPacketReceived += OnPlayerPacketReceived;
 
             _clientUI.Construct(_clientModel, _serverConnectionModel, _gameSession);
 
-            _worldSharedModel.IsRun.OnChange += RunSession;
+            _gameSessionSharedModel.IsRun.OnChange += RunSession;
         }
 
         private void FixedUpdate()
@@ -285,9 +314,7 @@ namespace Runtime
             var protocol = new NetworkProtocol(buffer);
             protocol.Get(out string id);
 
-            _worldSharedModel.Read(protocol);
-            _gameSession.CreateConnectedPlayers();
-            Debug.Log($"Is Run {_worldSharedModel.IsRun}");
+            _gameSessionSharedModel.Read(protocol);
         }
 
         private void OnPlayerPacketReceived(Packet packet)

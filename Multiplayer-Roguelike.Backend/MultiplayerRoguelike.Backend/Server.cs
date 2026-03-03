@@ -138,7 +138,7 @@ namespace Backend
         {
             foreach (var session in _world.Sessions.Models.Values)
             {
-                var worldSharedModel = session.WorldSharedModel;
+                var worldSharedModel = session.GameSessionSharedModel;
                 if (worldSharedModel.IsDirty)
                 {
                     var protocol = new NetworkProtocol();

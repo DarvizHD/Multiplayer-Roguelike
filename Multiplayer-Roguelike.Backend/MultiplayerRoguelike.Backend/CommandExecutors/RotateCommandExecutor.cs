@@ -24,7 +24,7 @@ namespace Backend.CommandExecutors
                 return;
             }
 
-            session.WorldSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character);
+            session.GameSessionSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character);
             character.Rotation.Value = Command.Rotation;
         }
     }
