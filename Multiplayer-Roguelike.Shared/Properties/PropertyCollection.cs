@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Shared.Common;
@@ -8,6 +9,9 @@ namespace Shared.Properties
     public class PropertyCollection<T> : ISharedData
     {
         public string Id { get; }
+        public List<T> Values => _values;
+        public event Action<T> OnAdded;
+        public event Action<T> OnRemoved;
 
         public bool IsDirty =>
             _cleared ||
@@ -57,6 +61,7 @@ namespace Shared.Properties
             {
                 protocol.Get(out T value);
                 _values.Add(value);
+                OnAdded?.Invoke(value);
             }
 
             protocol.Get(out int removeCount);
@@ -64,6 +69,7 @@ namespace Shared.Properties
             {
                 protocol.Get(out T value);
                 _values.Remove(value);
+                OnRemoved?.Invoke(value);
             }
         }
 
