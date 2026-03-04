@@ -1,0 +1,111 @@
+.unity-text-field__input {
+    font-size: 18px;
+    -unity-font-style: normal;
+    -unity-text-align: middle-center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgb(74, 125, 149);
+    border-right-color: rgb(74, 125, 149);
+    border-top-color: rgb(74, 125, 149);
+    border-bottom-color: rgb(74, 125, 149);
+}
+
+.unity-base-text-field {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+.unity-base-field--no-label {
+    color: rgb(232, 224, 208);
+}
+
+.unity-base-field {
+    -unity-text-align: middle-left;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}
+
+.unity-base-text-field__input--placeholder {
+}
+
+.unity-base-text-field__input--single-line {
+}
+
+.unity-base-field__input {
+    font-size: 16px;
+    -unity-font-definition: url("project://database/Assets/Content/Imports/Fonts/Russo_One/RussoOne-Regular.ttf?fileID=12800000&guid=0ca6f19a298f9e94e8132f0ef8055d27&type=3#RussoOne-Regular");
+    -unity-font-style: normal;
+    margin-top: -3px;
+    margin-right: -3px;
+    margin-bottom: -3px;
+    margin-left: -3px;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 1px;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-text-align: middle-left;
+}
+
+.input-field-style {
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 2px;
+    border-left-width: 0;
+    border-left-color: rgb(70, 70, 70);
+    border-right-color: rgb(70, 70, 70);
+    border-top-color: rgb(70, 70, 70);
+    border-bottom-color: rgb(70, 70, 70);
+}
+
+.input-field-style:hover {
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 2px;
+    border-left-width: 0;
+    border-left-color: rgb(232, 160, 32);
+    border-right-color: rgb(232, 160, 32);
+    border-top-color: rgb(232, 160, 32);
+    border-bottom-color: rgb(232, 160, 32);
+}
+
+.input-field-style:focus {
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 2px;
+    border-left-width: 0;
+    border-left-color: rgb(232, 160, 32);
+    border-right-color: rgb(232, 160, 32);
+    border-top-color: rgb(232, 160, 32);
+    border-bottom-color: rgb(232, 160, 32);
+}

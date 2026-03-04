@@ -11,18 +11,17 @@ using Runtime.ECS.Components.Spawn;
 using Runtime.ECS.Components.Tags;
 using Runtime.ECS.Core;
 using Runtime.ECS.Systems;
-using Runtime.ECS.Systems.Battle;
-using Runtime.ECS.Systems.Battle.MeleeAttack;
 using Runtime.ECS.Systems.CameraFocus;
-using Runtime.ECS.Systems.Follow;
 using Runtime.ECS.Systems.Movement;
 using Runtime.ECS.Systems.Rotation;
-using Runtime.ECS.Systems.Rotation.Runtime.ECS.Systems;
 using Runtime.GameSystems;
 using Runtime.ServerInteraction;
+using Runtime.UI;
+using Runtime.UI.Navigation;
 using Shared.Models;
 using Shared.Protocol;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Runtime
 {
@@ -262,7 +261,6 @@ namespace Runtime
         private readonly GameSystemCollection _gameFixedSystemCollection = new();
 
         private GameSession _gameSession;
-        private ClientModel _clientModel;
 
         private GameSessionSharedModel _gameSessionSharedModel;
         private PlayerSharedModel _playerSharedModel;
@@ -270,7 +268,10 @@ namespace Runtime
         private ServerConnectionModel _serverConnectionModel;
         private ServerConnectionPresenter _serverConnectionPresenter;
 
-        [SerializeField] private ClientUI _clientUI;
+        [SerializeField] private WorldViewDescription _worldViewDescription;
+        [SerializeField] private UIDocument _document;
+
+        private readonly World _world = new();
 
         private async void Start()
         {
@@ -278,7 +279,6 @@ namespace Runtime
 
             _playerSharedModel = new PlayerSharedModel(string.Empty);
             _gameSessionSharedModel = new GameSessionSharedModel(string.Empty);
-            _clientModel = new ClientModel();
 
             Library.Initialize();
 
@@ -290,13 +290,16 @@ namespace Runtime
             _serverConnectionModel.ConnectPlayer();
             await _serverConnectionModel.CompletePlayerConnectAwaiter;
 
+            _world.Setup(_playerSharedModel, _serverConnectionModel, _gameSessionSharedModel);
+
+            var navigationPresenter = new NavigationPresenter(_world, _worldViewDescription, _document);
+            navigationPresenter.Enable();
+
             _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel);
             _gameSession.Enable();
 
             _serverConnectionModel.WorldPacketReceived += OnWorldPacketReceived;
             _serverConnectionModel.PlayerPacketReceived += OnPlayerPacketReceived;
-
-            _clientUI.Construct(_clientModel, _serverConnectionModel, _gameSession);
 
             _gameSessionSharedModel.IsRun.OnChange += RunSession;
         }
@@ -326,9 +329,6 @@ namespace Runtime
             var protocol = new NetworkProtocol(buffer);
             protocol.Get(out string id);
             _playerSharedModel.Read(protocol);
-
-            _clientModel.LobbyId = _playerSharedModel.Lobby.LobbyId.Value;
-            _clientModel.Nickname = _playerSharedModel.Nickname.Value;
         }
 
         private void RunSession()
