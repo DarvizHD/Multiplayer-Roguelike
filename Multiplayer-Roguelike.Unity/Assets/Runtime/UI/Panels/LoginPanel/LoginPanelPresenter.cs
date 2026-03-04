@@ -27,9 +27,6 @@ namespace Runtime.UI.Panels.LoginPanel
         private void OnNicknameChanged()
         {
             _model.SetUsername(_world.PlayerSharedModel.Nickname.Value);
-
-            Debug.Log($"Nickname changed to {_model.Username}");
-
             _model.Confirm();
         }
 
