@@ -62,7 +62,7 @@
 }
 
 .unity-base-field__input {
-    font-size: 20px;
+    font-size: 16px;
     -unity-font-definition: url("project://database/Assets/Content/Imports/Fonts/Russo_One/RussoOne-Regular.ttf?fileID=12800000&guid=0ca6f19a298f9e94e8132f0ef8055d27&type=3#RussoOne-Regular");
     -unity-font-style: normal;
     margin-top: -3px;
