@@ -851,7 +851,6 @@ GameObject:
   - component: {fileID: 941861036}
   - component: {fileID: 941861035}
   - component: {fileID: 941861037}
-  - component: {fileID: 941861038}
   m_Layer: 0
   m_Name: EntryPoint
   m_TagString: Untagged
@@ -900,18 +899,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec13d70135b04d9eb2d984bdf9fbd834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.PerformanceMonitor
---- !u!114 &941861038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 941861034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91102bbe0bd14d51b78839cfa1bf1357, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.ClientUI
 --- !u!1 &1972683686
 GameObject:
   m_ObjectHideFlags: 0
