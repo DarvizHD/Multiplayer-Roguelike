@@ -3,7 +3,7 @@ using Runtime.ECS.Components.Movement;
 using Runtime.ECS.Core;
 using UnityEngine;
 
-namespace Runtime
+namespace Runtime.Tools
 {
     public class GizmosHelper : MonoBehaviour
     {

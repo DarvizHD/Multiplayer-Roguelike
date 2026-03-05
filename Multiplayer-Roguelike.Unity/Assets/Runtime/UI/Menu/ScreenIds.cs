@@ -1,4 +1,4 @@
-namespace Runtime.UI.Menu.Runtime.UI.Navigation
+namespace Runtime.UI.Menu
 {
     public static class ScreenIds
     {
