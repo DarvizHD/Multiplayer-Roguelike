@@ -2,17 +2,6 @@ using System.Collections.Generic;
 
 namespace Runtime.UI.Menu
 {
-    namespace Runtime.UI.Navigation
-    {
-        public static class ScreenIds
-        {
-            public const string Login = "Login";
-            public const string StartMenu = "StartMenu";
-            public const string HostLobby = "HostLobby";
-            public const string JoinLobby = "JoinLobby";
-        }
-    }
-
     public class Router
     {
         private readonly Dictionary<string, IPresenter> _screens = new();
