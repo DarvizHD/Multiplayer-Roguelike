@@ -6,6 +6,7 @@ using Runtime.ECS.Components.Battle;
 using Runtime.ECS.Components.Camera;
 using Runtime.ECS.Components.Health;
 using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Components.Network;
 using Runtime.ECS.Components.Player;
 using Runtime.ECS.Components.Spawn;
 using Runtime.ECS.Components.Tags;
@@ -13,6 +14,7 @@ using Runtime.ECS.Core;
 using Runtime.ECS.Systems;
 using Runtime.ECS.Systems.CameraFocus;
 using Runtime.ECS.Systems.Movement;
+using Runtime.ECS.Systems.Network;
 using Runtime.ECS.Systems.Rotation;
 using Runtime.GameSystems;
 using Runtime.ServerInteraction;
@@ -151,6 +153,12 @@ namespace Runtime
             {
                 EcsWorld.AddEntityComponent(entityId, new PlayerInputComponent(_playerControls));
                 EcsWorld.AddEntityComponent(entityId, new CharacterConnectionComponent(_serverConnectionModel));
+                EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
+            }
+            else
+            {
+                EcsWorld.AddEntityComponent(entityId, new NetworkControllableTag());
+                EcsWorld.AddEntityComponent(entityId, new PositionInterpolationComponent(Vector3.zero, Vector3.zero));
             }
         }
 
@@ -174,6 +182,8 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(2f, 5f));
             EcsWorld.AddEntityComponent(entityId, new FreezeMovementByDamageComponent(1.5f));
             EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, spawnPosition, speed));
+
+            EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
         }
 
         private void RegisterComponents()
@@ -212,14 +222,26 @@ namespace Runtime
 
             EcsWorld.RegisterComponent<CharacterConnectionComponent>();
             EcsWorld.RegisterComponent<CharacterNetworkSyncComponent>();
+
+            EcsWorld.RegisterComponent<LocalControllableTag>();
+            EcsWorld.RegisterComponent<NetworkControllableTag>();
+            EcsWorld.RegisterComponent<PositionInterpolationComponent>();
         }
 
         private void AddSystems()
         {
+            EcsWorld.AddSystem<CharacterPositionSyncSystem>();
+            EcsWorld.AddSystem<CharacterRotationSyncSystem>();
+
             EcsWorld.AddSystem<PlayerInputMovementSystem>();
             EcsWorld.AddSystem<PlayerLookRotationSystem>();
+
             EcsWorld.AddSystem<MovementSystem>();
-            EcsWorld.AddSystem<CharacterSharedSyncSystem>();
+            EcsWorld.AddSystem<PositionInterpolationSystem>();
+
+            EcsWorld.AddSystem<CharacterPositionSendSystem>();
+            EcsWorld.AddSystem<CharacterRotationSendSystem>();
+
             EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
             EcsWorld.AddSystem<CameraFocusSystem>();
 
@@ -334,8 +356,6 @@ namespace Runtime
         private void RunSession()
         {
             _gameSession.Run();
-
-            Debug.Log("Session running.");
         }
     }
 }
