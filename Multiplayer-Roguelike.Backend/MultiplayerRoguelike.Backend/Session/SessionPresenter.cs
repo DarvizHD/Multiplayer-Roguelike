@@ -29,16 +29,16 @@ namespace Backend.Session
             player.SessionId = _model.Id;
 
             var character = new CharacterSharedModel(player.PlayerSharedModel.Id);
-            _model.WorldSharedModel.Characters.Add(character);
+            _model.GameSessionSharedModel.Characters.Add(character);
         }
 
         private void OnPlayerRemoved(PlayerModel player)
         {
             player.SessionId = string.Empty;
 
-            if (_model.WorldSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character))
+            if (_model.GameSessionSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character))
             {
-                _model.WorldSharedModel.Characters.Remove(character);
+                _model.GameSessionSharedModel.Characters.Remove(character);
             }
         }
     }

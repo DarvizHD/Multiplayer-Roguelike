@@ -8,6 +8,9 @@ namespace Shared.Models
 {
     public sealed class SharedModelCollection<T> : ISharedData where T : ISharedData
     {
+        public event Action<T> Added;
+        public event Action<string> Removed;
+
         public string Id { get; }
 
         public bool IsDirty =>
@@ -71,6 +74,7 @@ namespace Shared.Models
                 var model = _factory.Invoke(id);
                 model.Read(protocol);
                 _models[id] = model;
+                Added?.Invoke(model);
             }
 
             protocol.Get(out int removedCount);
@@ -78,6 +82,7 @@ namespace Shared.Models
             {
                 protocol.Get(out string id);
                 _models.Remove(id);
+                Removed?.Invoke(id);
             }
 
             protocol.Get(out int updatedCount);

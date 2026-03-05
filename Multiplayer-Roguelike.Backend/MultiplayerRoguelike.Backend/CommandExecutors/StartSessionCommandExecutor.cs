@@ -39,7 +39,9 @@ namespace Backend.CommandExecutors
             }
 
             var newSession = new SessionModel(lobby.Guid);
+            newSession.GameSessionSharedModel.IsRun.Value = true;
             World.Sessions.Add(newSession.Id, newSession);
+
             foreach (var memberId in lobby.Members)
             {
                 World.Players.TryGet(memberId, out var member);

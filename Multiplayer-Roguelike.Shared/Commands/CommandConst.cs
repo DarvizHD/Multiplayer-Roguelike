@@ -6,6 +6,8 @@ namespace Shared.Commands
         public const string CreateLobby = "create_lobby";
         public const string JoinLobby = "join_lobby";
         public const string MovePlayer = "move_player";
+        public const string RotatePlayer = "rotate_player";
         public const string StartSession = "start_session";
+        public const string SpawnNpc = "spawn_npc";
     }
 }

@@ -9,7 +9,7 @@ namespace Shared.Commands
         public string LobbyId;
         public string PlayerNickname;
 
-        public JoinLobbyCommand(string lobbyId, string playerNickname)
+        public JoinLobbyCommand(string playerNickname, string lobbyId)
         {
             LobbyId = lobbyId;
             PlayerNickname = playerNickname;

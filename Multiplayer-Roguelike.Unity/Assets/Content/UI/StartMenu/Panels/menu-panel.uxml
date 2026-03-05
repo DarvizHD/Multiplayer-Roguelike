@@ -1,0 +1,15 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="menu-panel" style="flex-grow: 1; display: flex;">
+        <ui:VisualElement name="tag" style="flex-grow: 1; min-height: 20px; max-height: 20px; margin-bottom: 15px; flex-direction: row; align-items: center; margin-top: 15px; display: flex;">
+            <ui:VisualElement name="left-line" style="flex-grow: 1; background-color: rgb(70, 70, 70); min-height: 2px; max-height: 2px;"/>
+            <ui:Label text="МЕНЮ" name="text" style="-unity-text-align: middle-center; margin-top: 0; margin-right: 5px; margin-bottom: 0; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(70, 70, 70); font-size: 16px; -unity-font-style: normal; -unity-font-definition: url(&quot;project://database/Assets/Content/Imports/Fonts/Russo_One/RussoOne-Regular.ttf?fileID=12800000&amp;guid=0ca6f19a298f9e94e8132f0ef8055d27&amp;type=3#RussoOne-Regular&quot;);"/>
+            <ui:VisualElement name="right-line" style="flex-grow: 1; background-color: rgb(70, 70, 70); min-height: 2px; max-height: 2px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="content" style="flex-grow: 0; display: flex; align-items: center; justify-content: space-evenly; flex-shrink: 1; min-height: auto; max-height: none; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(70, 70, 70); border-right-color: rgb(70, 70, 70); border-top-color: rgb(70, 70, 70); border-bottom-color: rgb(70, 70, 70); padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px;">
+            <ui:Button text="ОДИНОЧНАЯ ИГРА" name="single-game-button" class="base-button-style" style="min-width: 100%; max-width: 100%;"/>
+            <ui:Button text="СОЗДАТЬ ЛОББИ" name="create-lobby-button" class="base-button-style" style="min-width: 100%; max-width: 100%;"/>
+            <ui:Button text="ПРИСОЕДИНИТЬСЯ&#x9;" name="join-lobby-button" class="base-button-style" style="min-width: 100%; max-width: 100%;"/>
+            <ui:Button text="ВЫЙТИ" name="exit-button" class="base-button-style" style="min-width: 100%; max-width: 100%; margin-bottom: 0;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

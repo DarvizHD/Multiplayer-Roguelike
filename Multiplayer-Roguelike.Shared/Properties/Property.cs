@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Shared.Common;
 using Shared.Protocol;
@@ -6,6 +7,8 @@ namespace Shared.Properties
 {
     public class Property<T> : ISharedData
     {
+        public event Action OnChange;
+
         public string Id { get; }
 
         public bool IsDirty { get; private set; }
@@ -19,6 +22,7 @@ namespace Shared.Properties
                 {
                     _value = value;
                     IsDirty = true;
+                    OnChange?.Invoke();
                 }
             }
         }
@@ -33,7 +37,8 @@ namespace Shared.Properties
 
         public void Read(NetworkProtocol protocol)
         {
-            protocol.Get(out _value);
+            protocol.Get(out T value);
+            Value = value;
         }
 
         public void Write(NetworkProtocol protocol)

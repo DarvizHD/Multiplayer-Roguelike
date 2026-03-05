@@ -173,6 +173,8 @@ namespace Runtime.ECS.Core
             }
         }
 
+
+
         public void RemoveComponents()
         {
             if (_toRemoveEntityComponents.Count == 0)
