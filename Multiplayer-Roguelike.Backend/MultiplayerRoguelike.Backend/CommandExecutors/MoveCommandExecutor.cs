@@ -25,8 +25,8 @@ namespace Backend.CommandExecutors
             }
 
             session.GameSessionSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character);
+            character.Position.Value = Command.Position;
             character.Direction.Value = Command.Direction;
-            character.LastPosition.Value = Command.LastPosition;
         }
     }
 }

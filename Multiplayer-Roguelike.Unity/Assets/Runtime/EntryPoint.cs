@@ -88,7 +88,7 @@ namespace Runtime
 
             var controllable = _playerSharedModel.Nickname.Value == characterSharedModel.Id;
 
-            CreatePlayer(entityId, characterSharedModel, characterSharedModel.LastPosition.Value.ToUnityVector3(),
+            CreatePlayer(entityId, characterSharedModel, characterSharedModel.Position.Value.ToUnityVector3(),
                 controllable);
 
             _characterEntities.Add(characterSharedModel.Id, entityId);
