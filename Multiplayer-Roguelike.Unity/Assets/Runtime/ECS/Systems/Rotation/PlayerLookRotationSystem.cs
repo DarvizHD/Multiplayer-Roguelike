@@ -10,8 +10,8 @@ namespace Runtime.ECS.Systems.Rotation
     {
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, playerInputComponent, positionComponent, characterConnectionComponent, characterNetworkSyncComponent)
-                     in ComponentManager.Query<PlayerInputComponent, PositionComponent, CharacterConnectionComponent, CharacterNetworkSyncComponent>())
+            foreach (var (entityId, playerInputComponent, positionComponent, rotationComponent, rotationSpeedComponent)
+                     in ComponentManager.Query<PlayerInputComponent, PositionComponent, RotationComponent, RotationSpeedComponent>())
             {
 
                 var mouseScreenPosition = playerInputComponent.PlayerControls.Gameplay.Look.ReadValue<Vector2>();
@@ -27,10 +27,7 @@ namespace Runtime.ECS.Systems.Rotation
                     if (direction.sqrMagnitude > 0.01f)
                     {
                         var targetAngle = Quaternion.LookRotation(direction).eulerAngles.y;
-
-                        var rotateCommand = new RotateCommand(characterNetworkSyncComponent.CharacterSharedModel.Id, targetAngle);
-
-                        rotateCommand.Write(characterConnectionComponent.ServerConnectionModel.PlayerPeer);
+                        rotationComponent.Angle = Mathf.LerpAngle(rotationComponent.Angle, targetAngle, rotationSpeedComponent.Speed *  deltaTime);
                     }
                 }
             }
