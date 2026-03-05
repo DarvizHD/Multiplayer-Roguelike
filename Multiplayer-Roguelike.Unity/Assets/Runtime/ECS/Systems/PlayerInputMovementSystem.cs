@@ -10,14 +10,11 @@ namespace Runtime.ECS.Systems
     {
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, playerInputComponent, characterConnectionComponent, characterSyncComponent, positionComponent)
-                     in ComponentManager.Query<PlayerInputComponent, CharacterConnectionComponent, CharacterNetworkSyncComponent, PositionComponent>())
+            foreach (var (entityId, playerInputComponent, directionComponent)
+                     in ComponentManager.Query<PlayerInputComponent, DirectionComponent>())
             {
                 var moveInput = playerInputComponent.PlayerControls.Gameplay.Move.ReadValue<Vector2>();
-
-                var moveCommand = new MoveCommand(characterSyncComponent.CharacterSharedModel.Id, moveInput.ToSharedVector2(), positionComponent.Position.ToSharedVector3());
-
-                moveCommand.Write(characterConnectionComponent.ServerConnectionModel.PlayerPeer);
+                directionComponent.Direction = new Vector3(moveInput.x, 0, moveInput.y).normalized;
             }
         }
     }

@@ -1,5 +1,7 @@
 using Runtime.ECS.Components.Health;
 using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Components.Network;
+using Runtime.ECS.Core;
 
 namespace Runtime.ECS.Systems.Movement
 {
@@ -14,14 +16,14 @@ namespace Runtime.ECS.Systems.Movement
 
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, positionComponent, directionComponent, moveSpeedComponent)
-                     in ComponentManager.Query<PositionComponent, DirectionComponent, MoveSpeedComponent>())
+            foreach (var (entityId, positionComponent, directionComponent, moveSpeedComponent, _)
+                     in ComponentManager.Query<PositionComponent, DirectionComponent, MoveSpeedComponent, LocalControllableTag>())
             {
                 if (ComponentManager.HasComponent<DeathTagComponent>(entityId) ||
                     ComponentManager.HasComponent<DeathAnimationComponent>(entityId))
                     return;
 
-                positionComponent.Position += directionComponent.Direction.normalized * moveSpeedComponent.Speed * deltaTime;
+                positionComponent.Position += directionComponent.Direction.normalized * (moveSpeedComponent.Speed * deltaTime);
             }
         }
     }
