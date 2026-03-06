@@ -1,5 +1,4 @@
 using Shared.Commands;
-using UnityEngine;
 
 namespace Runtime.UI.Panels.LoginPanel
 {

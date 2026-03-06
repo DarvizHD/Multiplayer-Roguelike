@@ -20,25 +20,13 @@
     border-left-width: 2px;
     -unity-font-definition: url("project://database/Assets/Content/Imports/Fonts/Russo_One/RussoOne-Regular.ttf?fileID=12800000&guid=0ca6f19a298f9e94e8132f0ef8055d27&type=3#RussoOne-Regular");
     letter-spacing: 5px;
-    border-left-color: rgb(70, 70, 70);
-    border-right-color: rgb(70, 70, 70);
-    border-top-color: rgb(70, 70, 70);
-    border-bottom-color: rgb(70, 70, 70);
+    border-left-color: rgb(87, 87, 87);
+    border-right-color: rgb(87, 87, 87);
+    border-top-color: rgb(87, 87, 87);
+    border-bottom-color: rgb(87, 87, 87);
     background-color: rgba(0, 0, 0, 0);
     -unity-text-align: upper-center;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 .base-button-style:hover {
     border-top-left-radius: 0;
@@ -70,9 +58,3 @@
     border-bottom-color: rgb(232, 160, 32);
     color: rgb(232, 160, 32);
 }
-
-
-
-
-
-
