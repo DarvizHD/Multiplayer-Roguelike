@@ -1,6 +1,5 @@
 using Runtime.ECS.Components.Movement;
 using Runtime.ECS.Systems;
-using UnityEngine;
 
 namespace Runtime.ECS.Components
 {

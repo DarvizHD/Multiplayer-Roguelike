@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Runtime.ECS.Components
 {
     public interface IComponentStorage<out T> where T : IComponent

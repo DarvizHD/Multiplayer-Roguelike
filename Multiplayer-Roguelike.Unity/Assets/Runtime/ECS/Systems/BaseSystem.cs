@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Runtime.ECS.Core;
 
 namespace Runtime.ECS.Systems
@@ -15,7 +14,7 @@ namespace Runtime.ECS.Systems
 
         public abstract void Update(float deltaTime);
 
-        // TODO: Remove it in 58 usages. 
+        // TODO: Remove it in 58 usages.
         protected void RegisterRequiredComponent(Type componentType)
         {
         }

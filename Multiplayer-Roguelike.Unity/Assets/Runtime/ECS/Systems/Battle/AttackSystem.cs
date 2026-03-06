@@ -1,6 +1,5 @@
 using Runtime.ECS.Components;
 using Runtime.ECS.Components.Battle;
-using UnityEngine;
 
 namespace Runtime.ECS.Systems.Battle
 {
