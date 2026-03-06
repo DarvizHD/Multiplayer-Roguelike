@@ -83,7 +83,7 @@ namespace Runtime
         {
             Debug.Log("Worked");
 
-            var entityId = _characterEntities.Count;
+            var entityId = (ushort) _characterEntities.Count;
 
             var controllable = _playerSharedModel.Nickname.Value == characterSharedModel.Id;
 
@@ -95,7 +95,7 @@ namespace Runtime
 
         private void OnNpcAdded(NpcSharedModel npcSharedModel)
         {
-            var npcId = int.Parse(npcSharedModel.Id);
+            var npcId = ushort.Parse(npcSharedModel.Id);
             CreateEnemy(npcId, npcSharedModel.LastPosition.Value.ToUnityVector3());
         }
 
@@ -118,13 +118,13 @@ namespace Runtime
             spawnNpcCommand.Write(_serverConnectionModel.PlayerPeer);
         }
 
-        private void CreateCamera(int entityId)
+        private void CreateCamera(ushort entityId)
         {
             EcsWorld.AddEntityComponent(entityId, new CameraTargetComponent());
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(Camera.main?.transform.parent.GetChild(2)));
         }
 
-        private void CreatePlayer(int entityId, CharacterSharedModel characterSharedModel, Vector3 position,
+        private void CreatePlayer(ushort entityId, CharacterSharedModel characterSharedModel, Vector3 position,
             bool controllable)
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Player");
@@ -159,7 +159,7 @@ namespace Runtime
             }
         }
 
-        private void CreateEnemy(int entityId, Vector3 spawnPosition)
+        private void CreateEnemy(ushort entityId, Vector3 spawnPosition)
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Enemy");
 

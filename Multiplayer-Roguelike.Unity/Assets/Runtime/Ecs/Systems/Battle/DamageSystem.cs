@@ -1,22 +1,24 @@
 using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Core;
 using UnityEngine;
 
 namespace Runtime.Ecs.Systems.Battle
 {
     public class DamageSystem : BaseSystem
     {
-        public DamageSystem()
-        {
-            RegisterRequiredComponent(typeof(PendingDamageEventComponent));
-            RegisterRequiredComponent(typeof(HealthComponent));
-        }
+        public QueryBuffer<PendingDamageEventComponent, HealthComponent> _buffer = new();
 
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, pendingDamageEventComponent, healthComponent)
-                     in ComponentManager.Query<PendingDamageEventComponent, HealthComponent>())
+            ComponentManager.Filter.Query(ref _buffer);
+
+            for (var i = 0; i < _buffer.Count; i++)
             {
+                var entityId = _buffer.EntityIds[i];
+                var healthComponent = _buffer.Components2[i];
+                var pendingDamageEventComponent = _buffer.Components1[i];
+
                 if (healthComponent.CurrentHealth <= 0 || ComponentManager.HasComponent<InvulnerabilityComponent>(entityId))
                 {
                     return;

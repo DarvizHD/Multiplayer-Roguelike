@@ -1,33 +1,37 @@
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Tags;
+using Runtime.Ecs.Core;
 using UnityEngine;
 
 namespace Runtime.Ecs.Systems
 {
     public class AINavigationSystem : BaseSystem
     {
+        private QueryBuffer<NavMeshAgentComponent, PositionComponent> _agentsBuffer = new();
+        private QueryBuffer<PlayerTagComponent, PositionComponent> _playersBuffer = new();
+
         public override void Update(float deltaTime)
         {
-            var agents = ComponentManager.TupleQuery<NavMeshAgentComponent, PositionComponent>();
-            var players = ComponentManager.TupleQuery<PlayerTagComponent, PositionComponent>();
+            ComponentManager.Filter.Query(ref _agentsBuffer);
+            ComponentManager.Filter.Query(ref _playersBuffer);
 
-            for (var i = 0; i < agents.count; i++)
+            for (var i = 0; i < _agentsBuffer.Count; i++)
             {
-                var entityId = agents.entityIds[i];
+                var entityId = _agentsBuffer.EntityIds[i];
 
-                var navMeshAgentComponent = agents.components1[i];
-                var positionComponent = agents.components2[i];
+                var navMeshAgentComponent = _agentsBuffer.Components1[i];
+                var positionComponent = _agentsBuffer.Components2[i];
 
                 var closestDistance = float.MaxValue;
                 Vector3 closestPosition = default;
 
-                for (var j = 0; j < players.count; j++)
+                for (var j = 0; j < _playersBuffer.Count; j++)
                 {
-                    var playerId = players.entityIds[j];
+                    var playerId = _playersBuffer.EntityIds[j];
 
-                    var playerTagComponent = players.components1[j];
-                    var playerPositionComponent = players.components2[j];
+                    var playerTagComponent = _playersBuffer.Components1[j];
+                    var playerPositionComponent = _playersBuffer.Components2[j];
 
                     var distance = Vector3.Distance(positionComponent.Position, playerPositionComponent.Position);
 

@@ -1,5 +1,6 @@
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Core;
 using Runtime.Tools;
 using Shared.Commands.Player;
 
@@ -7,11 +8,20 @@ namespace Runtime.Ecs.Systems.Network
 {
     public class CharacterPositionSendSystem : BaseSystem
     {
+        private QueryBuffer<CharacterConnectionComponent, CharacterNetworkSyncComponent,
+            PositionComponent, DirectionComponent, LocalControllableTag> _buffer = new();
+
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, characterConnectionComponent, characterNetworkSyncComponent, positionComponent, directionComponent, _) in
-                     ComponentManager.Query<CharacterConnectionComponent, CharacterNetworkSyncComponent, PositionComponent, DirectionComponent, LocalControllableTag>())
+            ComponentManager.Filter.Query(ref _buffer);
+
+            for (var i = 0; i < _buffer.Count; i++)
             {
+                var characterConnectionComponent = _buffer.Components1[i];
+                var characterNetworkSyncComponent = _buffer.Components2[i];
+                var positionComponent = _buffer.Components3[i];
+                var directionComponent = _buffer.Components4[i];
+
                 var moveCommand = new MoveCommand
                 (
                     characterNetworkSyncComponent.CharacterSharedModel.Id,

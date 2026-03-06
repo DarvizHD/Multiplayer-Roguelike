@@ -1,20 +1,23 @@
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Core;
 
 namespace Runtime.Ecs.Systems
 {
     public class AIPositionSyncSystem : BaseSystem
     {
+        private QueryBuffer<NavMeshAgentComponent, PositionComponent> _buffer = new();
+
         public override void Update(float deltaTime)
         {
-            var query = ComponentManager.TupleQuery<NavMeshAgentComponent, PositionComponent>();
+            ComponentManager.Filter.Query(ref _buffer);
 
-            for (var i = 0; i < query.count; i++)
+            for (var i = 0; i < _buffer.Count; i++)
             {
-                var entityId = query.entityIds[i];
+                var entityId = _buffer.EntityIds[i];
 
-                var navMeshAgentComponent = query.components1[i];
-                var positionComponent = query.components2[i];
+                var navMeshAgentComponent = _buffer.Components1[i];
+                var positionComponent = _buffer.Components2[i];
 
                 positionComponent.Position = navMeshAgentComponent.Agent.transform.position;
             }

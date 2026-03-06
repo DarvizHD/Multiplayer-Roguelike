@@ -1,22 +1,20 @@
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle;
+using Runtime.Ecs.Core;
 
 namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackAnimationSystem : BaseSystem
     {
-        public MeleeAttackAnimationSystem()
-        {
-            RegisterRequiredComponent(typeof(AnimatorComponent));
-            RegisterRequiredComponent(typeof(MeleeAttackComponent));
-            RegisterRequiredComponent(typeof(AttackEventComponent));
-        }
+        private QueryBuffer<AnimatorComponent, MeleeAttackComponent, AttackEventComponent> _buffer;
 
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, animatorComponent, meleeAttackComponent, attackEventComponent)
-                     in ComponentManager.Query<AnimatorComponent, MeleeAttackComponent, AttackEventComponent>())
+            ComponentManager.Filter.Query(ref _buffer);
+
+            for (var i = 0; i < _buffer.Count; i++)
             {
+                var animatorComponent = _buffer.Components1[i];
                 animatorComponent.Animator.SetTrigger(animatorComponent.MeleeAttack);
             }
         }

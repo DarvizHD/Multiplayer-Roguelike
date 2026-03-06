@@ -3,25 +3,29 @@ using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Tags;
+using Runtime.Ecs.Core;
 using UnityEngine;
 
 namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackSystem : BaseSystem
     {
-        public MeleeAttackSystem()
-        {
-            RegisterRequiredComponent(typeof(PositionComponent));
-            RegisterRequiredComponent(typeof(RotationComponent));
-            RegisterRequiredComponent(typeof(MeleeAttackComponent));
-            RegisterRequiredComponent(typeof(AttackCooldownComponent));
-        }
+        private QueryBuffer<PositionComponent, EnemyTagComponent>  _targetsComponentBuffer = new();
+        private QueryBuffer<PositionComponent, RotationComponent, MeleeAttackComponent, AttackCooldownComponent> _attackerBuffer = new();
 
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, positionComponent, rotationComponent, meleeAttackComponent, attackCooldownComponent)
-                     in ComponentManager.Query<PositionComponent, RotationComponent, MeleeAttackComponent, AttackCooldownComponent>())
+            ComponentManager.Filter.Query(ref _targetsComponentBuffer);
+            ComponentManager.Filter.Query(ref _attackerBuffer);
+
+            for (var i = 0; i < _attackerBuffer.Count; i++)
             {
+                var entityId = _attackerBuffer.EntityIds[i];
+                var positionComponent = _attackerBuffer.Components1[i];
+                var rotationComponent = _attackerBuffer.Components2[i];
+                var meleeAttackComponent = _attackerBuffer.Components3[i];
+                var attackCooldownComponent = _attackerBuffer.Components4[i];
+
                 if (ComponentManager.HasComponent<DeathTagComponent>(entityId))
                 {
                     return;
@@ -35,10 +39,11 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
                 var attackDirection = Quaternion.Euler(0f, rotationComponent.Angle, 0f) * Vector3.forward;
                 attackDirection.y = 0;
 
-                var targets = ComponentManager.Query<PositionComponent, EnemyTagComponent>();
-
-                foreach (var (targetId, targetPositionComponent, enemyTagComponent) in targets)
+                for (var k = 0; k < _targetsComponentBuffer.Count; k++)
                 {
+                    var targetId = _targetsComponentBuffer.EntityIds[k];
+                    var targetPositionComponent = _targetsComponentBuffer.Components1[k];
+
                     if (ComponentManager.HasComponent<DeathTagComponent>(targetId))
                     {
                         if (targetId == entityId)
