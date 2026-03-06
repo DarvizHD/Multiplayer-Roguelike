@@ -1,17 +1,30 @@
-<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Content/UI/Styles/Input-field-style.uss?fileID=7433441132597879392&amp;guid=f2b6487d66123cd438838f57d7848f59&amp;type=3#Input-field-style"/>
-    <Style src="project://database/Assets/Content/UI/Styles/Buttons-style.uss?fileID=7433441132597879392&amp;guid=c27d3fe66dcee4046ad483deca7232d1&amp;type=3#Buttons-style"/>
+<ui:UXML xmlns:ui="UnityEngine.UIElements"
+         noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style
+            src="project://database/Assets/Content/UI/Styles/Input-field-style.uss?fileID=7433441132597879392&amp;guid=f2b6487d66123cd438838f57d7848f59&amp;type=3#Input-field-style"/>
+    <Style
+            src="project://database/Assets/Content/UI/Styles/Buttons-style.uss?fileID=7433441132597879392&amp;guid=c27d3fe66dcee4046ad483deca7232d1&amp;type=3#Buttons-style"/>
     <ui:VisualElement name="host-lobby-panel" style="flex-grow: 1; display: flex;">
-        <ui:VisualElement name="tag" style="flex-grow: 1; min-height: 20px; max-height: 20px; margin-bottom: 15px; flex-direction: row; align-items: center; margin-top: 15px;">
-            <ui:VisualElement name="left-line" style="flex-grow: 1; background-color: rgb(70, 70, 70); min-height: 2px; max-height: 2px;"/>
-            <ui:Label text="ЛОББИ" name="text" style="-unity-text-align: middle-center; margin-top: 0; margin-right: 5px; margin-bottom: 0; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(70, 70, 70); font-size: 16px; -unity-font-style: normal; -unity-font-definition: url(&quot;project://database/Assets/Content/Imports/Fonts/Russo_One/RussoOne-Regular.ttf?fileID=12800000&amp;guid=0ca6f19a298f9e94e8132f0ef8055d27&amp;type=3#RussoOne-Regular&quot;);"/>
-            <ui:VisualElement name="right-line" style="flex-grow: 1; background-color: rgb(70, 70, 70); min-height: 2px; max-height: 2px;"/>
+        <ui:VisualElement name="tag"
+                          style="flex-grow: 1; min-height: 20px; max-height: 20px; margin-bottom: 15px; flex-direction: row; align-items: center; margin-top: 15px;">
+            <ui:VisualElement name="left-line"
+                              style="flex-grow: 1; background-color: rgb(70, 70, 70); min-height: 2px; max-height: 2px;"/>
+            <ui:Label text="ЛОББИ" name="text"
+                      style="-unity-text-align: middle-center; margin-top: 0; margin-right: 5px; margin-bottom: 0; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; color: rgb(70, 70, 70); font-size: 16px; -unity-font-style: normal; -unity-font-definition: url(&quot;project://database/Assets/Content/Imports/Fonts/Russo_One/RussoOne-Regular.ttf?fileID=12800000&amp;guid=0ca6f19a298f9e94e8132f0ef8055d27&amp;type=3#RussoOne-Regular&quot;);"/>
+            <ui:VisualElement name="right-line"
+                              style="flex-grow: 1; background-color: rgb(70, 70, 70); min-height: 2px; max-height: 2px;"/>
         </ui:VisualElement>
-        <ui:VisualElement name="content" style="flex-grow: 0; display: flex; align-items: flex-start; justify-content: space-evenly; flex-shrink: 1; min-height: auto; max-height: none; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(70, 70, 70); border-right-color: rgb(70, 70, 70); border-top-color: rgb(70, 70, 70); border-bottom-color: rgb(70, 70, 70); padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px;">
-            <ui:Label text="// идентификатор лобби" name="text" selectable="true" focusable="true" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 16px; color: rgb(232, 160, 32); left: auto; -unity-font-definition: url(&quot;project://database/Assets/Content/Imports/Fonts/Russo_One/RussoOne-Regular.ttf?fileID=12800000&amp;guid=0ca6f19a298f9e94e8132f0ef8055d27&amp;type=3#RussoOne-Regular&quot;); -unity-font-style: normal;"/>
-            <ui:TextField placeholder-text="" hide-placeholder-on-focus="true" name="lobby-code-text-field" focusable="true" value="" readonly="true" class="input-field-style" style="margin-top: 0; margin-right: 0; margin-bottom: 15px; margin-left: 0; min-height: 50px; max-height: 50px; -unity-text-align: middle-center; white-space: nowrap; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; min-width: 100%; max-width: 100%; -unity-font-style: normal; -unity-font-definition: initial;"/>
-            <ui:Button text="НАЧАТЬ ИГРУ" name="start-game-button" class="base-button-style" style="min-width: 100%; max-width: 100%; margin-top: 0; margin-bottom: 10px;"/>
-            <ui:Button text="НАЗАД" name="back-button" class="base-button-style" style="min-width: 100%; max-width: 100%; margin-top: 0; margin-bottom: 0;"/>
+        <ui:VisualElement name="content"
+                          style="flex-grow: 0; display: flex; align-items: flex-start; justify-content: space-evenly; flex-shrink: 1; min-height: auto; max-height: none; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-left-color: rgb(70, 70, 70); border-right-color: rgb(70, 70, 70); border-top-color: rgb(70, 70, 70); border-bottom-color: rgb(70, 70, 70); padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px;">
+            <ui:Label text="// идентификатор лобби" name="text" selectable="true" focusable="true"
+                      style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 16px; color: rgb(232, 160, 32); left: auto; -unity-font-definition: url(&quot;project://database/Assets/Content/Imports/Fonts/Russo_One/RussoOne-Regular.ttf?fileID=12800000&amp;guid=0ca6f19a298f9e94e8132f0ef8055d27&amp;type=3#RussoOne-Regular&quot;); -unity-font-style: normal;"/>
+            <ui:TextField placeholder-text="" hide-placeholder-on-focus="true" name="lobby-code-text-field"
+                          focusable="true" value="" readonly="true" class="input-field-style"
+                          style="margin-top: 0; margin-right: 0; margin-bottom: 15px; margin-left: 0; min-height: 50px; max-height: 50px; -unity-text-align: middle-center; white-space: nowrap; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; min-width: 100%; max-width: 100%; -unity-font-style: normal; -unity-font-definition: url(&quot;project://database/Assets/Content/Imports/Fonts/Russo_One/RussoOne-Regular.ttf?fileID=12800000&amp;guid=0ca6f19a298f9e94e8132f0ef8055d27&amp;type=3#RussoOne-Regular&quot;);"/>
+            <ui:Button text="НАЧАТЬ ИГРУ" name="start-game-button" class="base-button-style"
+                       style="min-width: 100%; max-width: 100%; margin-top: 0; margin-bottom: 10px;"/>
+            <ui:Button text="НАЗАД" name="back-button" class="base-button-style"
+                       style="min-width: 100%; max-width: 100%; margin-top: 0; margin-bottom: 0;"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

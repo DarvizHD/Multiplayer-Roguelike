@@ -14,10 +14,7 @@
     border-right-color: rgb(87, 87, 87);
     border-top-color: rgb(87, 87, 87);
     border-bottom-color: rgb(87, 87, 87);
-    padding-top: 15px;
-    padding-right: 15px;
-    padding-bottom: 15px;
-    padding-left: 15px;
+    padding: 15px;
     min-width: 300px;
     max-width: 300px;
     background-color: rgb(17, 17, 17);
@@ -44,10 +41,7 @@
     border-right-color: rgb(232, 160, 32);
     border-top-color: rgb(232, 160, 32);
     border-bottom-color: rgb(232, 160, 32);
-    padding-top: 15px;
-    padding-right: 15px;
-    padding-bottom: 15px;
-    padding-left: 15px;
+    padding: 15px;
     min-width: 300px;
     max-width: 300px;
     background-color: rgb(17, 17, 17);
