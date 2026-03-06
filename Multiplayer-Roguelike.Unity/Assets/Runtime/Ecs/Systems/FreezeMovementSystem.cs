@@ -1,15 +1,24 @@
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Movement.Freeze;
+using Runtime.Ecs.Core;
 
 namespace Runtime.Ecs.Systems
 {
     public class FreezeMovementSystem : BaseSystem
     {
+        private QueryBuffer<MoveSpeedComponent, RotationSpeedComponent, FreezeMovementComponent> _buffer = new();
+
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, moveSpeedComponent, rotationSpeedComponent, freezeMovementComponent)
-                     in ComponentManager.Query<MoveSpeedComponent, RotationSpeedComponent, FreezeMovementComponent>())
+            ComponentManager.Filter.Query(ref _buffer);
+
+            for (var i = 0; i < _buffer.Count; i++)
             {
+                var moveSpeedComponent = _buffer.Components1[i];
+                var rotationSpeedComponent = _buffer.Components2[i];
+                var freezeMovementComponent = _buffer.Components3[i];
+                var entityId = _buffer.EntityIds[i];
+
                 moveSpeedComponent.Speed = 0f;
                 rotationSpeedComponent.Speed = 0f;
 

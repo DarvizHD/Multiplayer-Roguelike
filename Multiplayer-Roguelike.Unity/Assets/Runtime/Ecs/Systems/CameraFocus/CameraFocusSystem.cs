@@ -14,8 +14,7 @@ namespace Runtime.Ecs.Systems.CameraFocus
 
         public override void Update(float deltaTime)
         {
-            var players = ComponentManager.Query<PositionComponent, PlayerTagComponent, PlayerInputComponent>();
-
+            ComponentManager.Filter.Query(ref _playersBuffer);
             ComponentManager.Filter.Query(ref _cameraTargetBuffer);
 
             for (var i = 0; i < _cameraTargetBuffer.Count; i++)
@@ -23,8 +22,9 @@ namespace Runtime.Ecs.Systems.CameraFocus
                 var sum = Vector3.zero;
                 var count = 0;
 
-                foreach (var (_, positionComponent, playerTagComponent, playerInputComponent) in players)
+                for (var k = 0; k < _playersBuffer.Count; k++)
                 {
+                    var positionComponent = _playersBuffer.Components1[k];
                     sum += positionComponent.Position;
                     count++;
                 }

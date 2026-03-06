@@ -1,15 +1,24 @@
 using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Core;
 using UnityEngine;
 
 namespace Runtime.Ecs.Systems
 {
     public class RegenerationSystem : BaseSystem
     {
+        private QueryBuffer<HealthComponent, RegenerationComponent> _buffer = new();
+
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, healthComponent, regenerationComponent)
-                     in ComponentManager.Query<HealthComponent, RegenerationComponent>())
+            ComponentManager.Filter.Query(ref _buffer);
+
+
+            for (var i = 0; i < _buffer.Count; i++)
             {
+                var healthComponent = _buffer.Components1[i];
+                var regenerationComponent = _buffer.Components2[i];
+                var entityId = _buffer.EntityIds[i];
+
                 if (ComponentManager.HasComponent<DeathTagComponent>(entityId))
                 {
                     return;

@@ -1,16 +1,26 @@
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Player;
+using Runtime.Ecs.Core;
 using UnityEngine;
 
 namespace Runtime.Ecs.Systems.Rotation
 {
     public class PlayerLookRotationSystem : BaseSystem
     {
+        private QueryBuffer<PlayerInputComponent, PositionComponent, RotationComponent, RotationSpeedComponent> _buffer = new();
+
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, playerInputComponent, positionComponent, rotationComponent, rotationSpeedComponent)
-                     in ComponentManager.Query<PlayerInputComponent, PositionComponent, RotationComponent, RotationSpeedComponent>())
+            ComponentManager.Filter.Query(ref _buffer);
+
+            for (var i = 0; i < _buffer.Count; i++)
             {
+                var entityId = _buffer.EntityIds[i];
+                var playerInputComponent = _buffer.Components1[i];
+                var positionComponent = _buffer.Components2[i];
+                var rotationComponent = _buffer.Components3[i];
+                var rotationSpeedComponent = _buffer.Components4[i];
+
                 var mouseScreenPosition = playerInputComponent.PlayerControls.Gameplay.Look.ReadValue<Vector2>();
                 var mouseWorldPosition = Camera.main.ScreenPointToRay(mouseScreenPosition);
 
