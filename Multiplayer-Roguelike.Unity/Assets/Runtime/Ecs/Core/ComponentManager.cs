@@ -9,9 +9,9 @@ namespace Runtime.Ecs.Core
 
         private readonly IComponentStorage<IComponent>[] _storages;
 
-        private readonly Dictionary<int, int> _toRemoveEntityComponents = new();
+        private readonly Dictionary<ushort, ushort> _toRemoveEntityComponents = new();
 
-        public ComponentManager(int maxComponentsTypes)
+        public ComponentManager(ushort maxComponentsTypes)
         {
             _storages = new IComponentStorage<IComponent>[maxComponentsTypes];
 
@@ -24,22 +24,24 @@ namespace Runtime.Ecs.Core
             _storages[id] = new ComponentStorage<T>();
         }
 
-        public void AddComponent<T>(int entityId, T component) where T : class, IComponent
+        public void AddComponent<T>(ushort entityId, T component) where T : class, IComponent
         {
-            GetStorage<T>().Add(entityId, component);
+            var storage = (ComponentStorage<T>)_storages[ComponentId<T>.Id];
+
+            storage.Add(entityId, component);
         }
 
-        public void RemoveComponent<T>(int entityId) where T : class, IComponent
+        public void RemoveComponent<T>(ushort entityId) where T : class, IComponent
         {
             _toRemoveEntityComponents[ComponentId<T>.Id] = entityId;
         }
 
-        public T GetComponent<T>(int entityId) where T : class, IComponent
+        public T GetComponent<T>(ushort entityId) where T : class, IComponent
         {
             return (T)_storages[ComponentId<T>.Id].Get(entityId);
         }
 
-        public bool TryGetComponent<T>(int entityId, out T component) where T : class, IComponent
+        public bool TryGetComponent<T>(ushort entityId, out T component) where T : class, IComponent
         {
             var success = _storages[ComponentId<T>.Id].TryGet(entityId, out var founded);
 
@@ -48,19 +50,10 @@ namespace Runtime.Ecs.Core
             return success;
         }
 
-        public bool HasComponent<T>(int entityId) where T : class, IComponent
+        public bool HasComponent<T>(ushort entityId) where T : class, IComponent
         {
             return _storages[ComponentId<T>.Id].Has(entityId);
         }
-
-        public IEnumerable<int> GetAllEntities()
-        {
-            // TODO: Rework this
-            yield break;
-
-            // return _storages.SelectMany(s => s.EntityIds).Distinct();
-        }
-
 
         public void RemoveComponents()
         {
@@ -75,16 +68,6 @@ namespace Runtime.Ecs.Core
             }
 
             _toRemoveEntityComponents.Clear();
-        }
-
-        private ComponentStorage<T> GetStorage<T>() where T : class, IComponent
-        {
-            return (ComponentStorage<T>)_storages[ComponentId<T>.Id];
-        }
-
-        public void RemoveEntity(int entityId)
-        {
-            // TODO: Rework this
         }
     }
 }

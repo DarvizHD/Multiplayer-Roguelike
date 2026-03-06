@@ -26,8 +26,6 @@ namespace Runtime.Ecs.Systems
                     {
                         Object.Destroy(gameObjectComponent.GameObject);
                     }
-
-                    ComponentManager.RemoveEntity(entityId);
                 }
             }
         }

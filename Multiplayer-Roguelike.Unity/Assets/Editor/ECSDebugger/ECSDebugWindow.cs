@@ -20,8 +20,7 @@ namespace Editor.EcsDebugger
             GetWindow<EcsDebugWindow>("ECS Debugger");
         }
 
-        /*
-        private void OnGUI()
+        /*private void OnGUI()
         {
             if (!Application.isPlaying)
             {
