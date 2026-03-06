@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Content/UI/Styles/Progress-bar-style.uss?fileID=7433441132597879392&amp;guid=b049ac705b4041849b6ab37e732d9f2d&amp;type=3#Progress-bar-style"/>
+    <ui:VisualElement name="world-unit-hud" style="flex-grow: 1; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; align-items: stretch; justify-content: flex-start; align-self: auto;">
+        <ui:Label text="Имя игрока" name="name-text" style="margin-top: 0; margin-right: 0; margin-bottom: 4px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 24px; -unity-font-definition: url(&quot;project://database/Assets/Content/Imports/Fonts/Russo_One/RussoOne-Regular.ttf?fileID=12800000&amp;guid=0ca6f19a298f9e94e8132f0ef8055d27&amp;type=3#RussoOne-Regular&quot;); -unity-font-style: normal; color: rgb(255, 255, 255); -unity-text-align: middle-center; -unity-text-outline-width: 0.5px; -unity-text-outline-color: rgb(0, 0, 0);"/>
+        <ui:ProgressBar value="22" title="" name="health-bar" class="enemy" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-grow: 0; flex-shrink: 0;"/>
+    </ui:VisualElement>
+</ui:UXML>
