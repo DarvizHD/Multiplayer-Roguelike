@@ -1,13 +1,12 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Runtime;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Core;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Editor.ECSDebugger
+namespace Editor.EcsDebugger
 {
     public class EcsDebugWindow : EditorWindow
     {

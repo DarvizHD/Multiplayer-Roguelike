@@ -1,15 +1,15 @@
-using Runtime.ECS.Components.Battle;
-using Runtime.ECS.Components.Movement;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components.Battle;
+using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Core;
 using UnityEngine;
 
 namespace Runtime.Tools
 {
     public class GizmosHelper : MonoBehaviour
     {
-        private ECSWorld _ecsWorld;
+        private EcsWorld _ecsWorld;
 
-        public void Initialize(ECSWorld ecsWorld)
+        public void Initialize(EcsWorld ecsWorld)
         {
             _ecsWorld = ecsWorld;
         }

@@ -1,22 +1,24 @@
 using System.Collections.Generic;
-using Backend.CommandExecutors;
-using Runtime.ECS.Components;
-using Runtime.ECS.Components.Battle;
-using Runtime.ECS.Components.Camera;
-using Runtime.ECS.Components.Health;
-using Runtime.ECS.Components.Movement;
-using Runtime.ECS.Components.Network;
-using Runtime.ECS.Components.Player;
-using Runtime.ECS.Components.Spawn;
-using Runtime.ECS.Components.Tags;
-using Runtime.ECS.Core;
-using Runtime.ECS.Systems;
-using Runtime.ECS.Systems.CameraFocus;
-using Runtime.ECS.Systems.Movement;
-using Runtime.ECS.Systems.Network;
-using Runtime.ECS.Systems.Rotation;
+using Runtime.Ecs.Components;
+using Runtime.Ecs.Components.Battle;
+using Runtime.Ecs.Components.Camera;
+using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Components.Movement.Freeze;
+using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Components.Player;
+using Runtime.Ecs.Components.Spawn;
+using Runtime.Ecs.Components.Tags;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems;
+using Runtime.Ecs.Systems.Battle;
+using Runtime.Ecs.Systems.CameraFocus;
+using Runtime.Ecs.Systems.Movement;
+using Runtime.Ecs.Systems.Network;
+using Runtime.Ecs.Systems.Rotation;
 using Runtime.ServerInteraction;
 using Runtime.Tools;
+using Shared.Commands;
 using Shared.Models;
 using UnityEngine;
 
@@ -24,7 +26,7 @@ namespace Runtime
 {
     public class GameSession
     {
-        public ECSWorld EcsWorld { get; private set; }
+        public EcsWorld EcsWorld { get; private set; }
 
         private readonly ServerConnectionModel _serverConnectionModel;
 
@@ -48,7 +50,7 @@ namespace Runtime
 
         public void Enable()
         {
-            EcsWorld = new ECSWorld();
+            EcsWorld = new EcsWorld();
 
             RegisterComponents();
 

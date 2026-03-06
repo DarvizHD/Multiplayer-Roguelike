@@ -1,10 +1,7 @@
-using System;
 using ENet;
-using Shared.Commands;
-using Shared.Primitives;
 using Shared.Protocol;
 
-namespace Backend.CommandExecutors
+namespace Shared.Commands
 {
     public class SpawnNpcCommand : BaseCommand
     {

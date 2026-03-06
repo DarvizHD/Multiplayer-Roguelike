@@ -1,8 +1,7 @@
 using ENet;
-using Shared.Commands;
 using Shared.Protocol;
 
-namespace Backend.CommandExecutors
+namespace Shared.Commands
 {
     public class RotateCommand : BaseCommand
     {
