@@ -173,7 +173,6 @@ namespace Runtime.Ecs.Core
         }
 
 
-
         public void RemoveComponents()
         {
             if (_toRemoveEntityComponents.Count == 0)
@@ -197,7 +196,6 @@ namespace Runtime.Ecs.Core
         public void RemoveEntity(int entityId)
         {
             // TODO: Rework this
-
         }
     }
 }

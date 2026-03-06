@@ -4,13 +4,13 @@ namespace Runtime.UI.Panels.HostLobbyPanel
     {
         private readonly HostLobbyPanelModel _model;
         private readonly HostLobbyPanelView _view;
-        private readonly World _world;
+        private readonly UICoreModel _uiCoreModel;
 
-        public HostLobbyPanelPresenter(HostLobbyPanelModel model, HostLobbyPanelView view, World world)
+        public HostLobbyPanelPresenter(HostLobbyPanelModel model, HostLobbyPanelView view, UICoreModel uiCoreModel)
         {
             _model = model;
             _view = view;
-            _world = world;
+            _uiCoreModel = uiCoreModel;
         }
 
         public void Enable()
@@ -19,14 +19,14 @@ namespace Runtime.UI.Panels.HostLobbyPanel
             _view.BackButton.clicked += _model.OnBackButtonClickedInvoke;
             _view.StartGameButton.clicked += _model.OnStartGameButtonClickedInvoke;
 
-            _world.PlayerSharedModel.Lobby.LobbyId.OnChange += HandleChangeLobbyCode;
+            _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChange += HandleChangeLobbyCode;
 
             HandleChangeLobbyCode();
         }
 
         private void HandleChangeLobbyCode()
         {
-            _view.LobbyCodeTextField.value = _world.PlayerSharedModel.Lobby.LobbyId.Value;
+            _view.LobbyCodeTextField.value = _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value;
         }
 
         public void Disable()

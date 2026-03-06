@@ -17,7 +17,6 @@ namespace Runtime.Ecs.Systems.Battle
             foreach (var (entityId, pendingDamageEventComponent, healthComponent)
                      in ComponentManager.Query<PendingDamageEventComponent, HealthComponent>())
             {
-
                 if (healthComponent.CurrentHealth <= 0 || ComponentManager.HasComponent<InvulnerabilityComponent>(entityId))
                 {
                     return;

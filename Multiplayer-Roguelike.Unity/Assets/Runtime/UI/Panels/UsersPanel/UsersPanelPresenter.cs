@@ -6,21 +6,22 @@ namespace Runtime.UI.Panels.UsersPanel
     {
         private readonly UsersPanelView _view;
         private readonly WorldViewDescription _viewDescription;
-        private readonly World _world;
-        public UsersPanelPresenter(UsersPanelView view, WorldViewDescription viewDescription, World world)
+        private readonly UICoreModel _uiCoreModel;
+
+        public UsersPanelPresenter(UsersPanelView view, WorldViewDescription viewDescription, UICoreModel uiCoreModel)
         {
             _view = view;
             _viewDescription = viewDescription;
-            _world = world;
+            _uiCoreModel = uiCoreModel;
         }
 
         public void Enable()
         {
             _view.ParentRoot.Add(_view.Root);
 
-            _world.PlayerSharedModel.Lobby.Members.OnAdded += OnMemberAdded;
+            _uiCoreModel.PlayerSharedModel.Lobby.Members.OnAdded += OnMemberAdded;
 
-            foreach (var username in _world.PlayerSharedModel.Lobby.Members.Values)
+            foreach (var username in _uiCoreModel.PlayerSharedModel.Lobby.Members.Values)
             {
                 OnMemberAdded(username);
             }

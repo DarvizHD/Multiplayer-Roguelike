@@ -10,9 +10,9 @@ namespace Editor.EcsDebugger
 {
     public class EcsDebugWindow : EditorWindow
     {
-        private Vector2 _scrollPos;
-        private EntryPoint _entryPoint;
         private readonly Dictionary<int, bool> _foldouts = new();
+        private EntryPoint _entryPoint;
+        private Vector2 _scrollPos;
 
         [MenuItem("Tools/ECS Debugger")]
         public static void ShowWindow()

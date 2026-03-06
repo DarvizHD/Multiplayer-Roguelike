@@ -4,12 +4,13 @@ namespace Runtime.UI.Panels.JoinLobbyPanel
     {
         private readonly JoinLobbyPanelModel _model;
         private readonly JoinLobbyPanelView _view;
-        private readonly World _world;
-        public JoinLobbyPanelPresenter(JoinLobbyPanelModel model, JoinLobbyPanelView view, World world)
+        private readonly UICoreModel _uiCoreModel;
+
+        public JoinLobbyPanelPresenter(JoinLobbyPanelModel model, JoinLobbyPanelView view, UICoreModel uiCoreModel)
         {
             _model = model;
             _view = view;
-            _world = world;
+            _uiCoreModel = uiCoreModel;
         }
 
         public void Enable()

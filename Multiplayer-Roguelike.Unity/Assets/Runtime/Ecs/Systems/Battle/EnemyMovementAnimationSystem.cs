@@ -19,7 +19,6 @@ namespace Runtime.Ecs.Systems.Battle
             foreach (var (entityId, enemyTagComponent, animatorComponent, directionComponent)
                      in ComponentManager.Query<EnemyTagComponent, AnimatorComponent, DirectionComponent>())
             {
-
                 animatorComponent.Animator.SetBool(animatorComponent.IsRun, directionComponent.Direction != Vector3.zero);
             }
         }

@@ -5,8 +5,9 @@ namespace Runtime.Ecs.Components
 {
     public class ComponentStorage<T> : IComponentStorage<T> where T : IComponent
     {
-        public int Count => _count;
-        public int[] EntityIds => _entityIds[.._count];
+        public int Count { get; private set; }
+
+        public int[] EntityIds => _entityIds[..Count];
 
         public T[] Components => _components;
 
@@ -14,7 +15,6 @@ namespace Runtime.Ecs.Components
 
         private readonly Dictionary<int, int> _entityToComponentsMap = new();
         private T[] _components;
-        private int _count;
 
         public ComponentStorage(int initialCapacity = 16)
         {
@@ -31,26 +31,26 @@ namespace Runtime.Ecs.Components
                 return;
             }
 
-            if (_count >= _components.Length)
+            if (Count >= _components.Length)
             {
                 Resize();
             }
 
-            _entityIds[_count] = entityId;
-            _components[_count] = component;
-            _entityToComponentsMap[entityId] = _count;
+            _entityIds[Count] = entityId;
+            _components[Count] = component;
+            _entityToComponentsMap[entityId] = Count;
 
-            _count++;
+            Count++;
         }
 
         public T Get(int entityId)
         {
-            return (T)_components[_entityToComponentsMap[entityId]];
+            return _components[_entityToComponentsMap[entityId]];
         }
 
         public bool TryGet(int entityId, out IComponent component)
         {
-            if (_entityToComponentsMap.TryGetValue(entityId, out int index))
+            if (_entityToComponentsMap.TryGetValue(entityId, out var index))
             {
                 component = _components[index];
                 return true;
@@ -72,7 +72,7 @@ namespace Runtime.Ecs.Components
                 return;
             }
 
-            var lastIndex = _count - 1;
+            var lastIndex = Count - 1;
             var lastEntity = _entityIds[lastIndex];
 
             _components[index] = _components[lastIndex];
@@ -80,17 +80,17 @@ namespace Runtime.Ecs.Components
 
             _entityToComponentsMap[lastEntity] = index;
 
-            _components[lastIndex] = default(T);
+            _components[lastIndex] = default;
             _entityIds[lastIndex] = default;
 
             _entityToComponentsMap.Remove(entityId);
 
-            _count--;
+            Count--;
         }
 
         private void Resize()
         {
-            int newSize = EntityIds.Length * 2;
+            var newSize = EntityIds.Length * 2;
 
             Array.Resize(ref _entityIds, newSize);
             Array.Resize(ref _components, newSize);

@@ -52,7 +52,7 @@ namespace Runtime.Ecs.Systems.Spawn
 
         private int CountAliveSpawnedUnits()
         {
-            int count = 0;
+            var count = 0;
             foreach (var entityId in ComponentManager.GetAllEntities())
             {
                 if (ComponentManager.HasComponent<SpawnedUnitTagComponent>(entityId))
@@ -63,6 +63,7 @@ namespace Runtime.Ecs.Systems.Spawn
                     }
                 }
             }
+
             return count;
         }
 

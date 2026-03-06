@@ -11,15 +11,16 @@ namespace Runtime.UI.Navigation.Screens
         private readonly HostLobbyPanelPresenter _hostPresenter;
         private readonly UsersPanelPresenter _usersPresenter;
         private readonly HostLobbyPanelModel _model;
-        private readonly World _world;
+        private readonly UICoreModel _uiCoreModel;
+
         public HostLobbyScreen(Router router, HostLobbyPanelPresenter hostPresenter,
-            UsersPanelPresenter usersPresenter, HostLobbyPanelModel model, World world)
+            UsersPanelPresenter usersPresenter, HostLobbyPanelModel model, UICoreModel uiCoreModel)
         {
             _router = router;
             _hostPresenter = hostPresenter;
             _usersPresenter = usersPresenter;
             _model = model;
-            _world = world;
+            _uiCoreModel = uiCoreModel;
         }
 
         public void Enable()
@@ -45,8 +46,9 @@ namespace Runtime.UI.Navigation.Screens
 
         private void HandleStartGame()
         {
-            var startGameCommand = new StartSessionCommand(_world.PlayerSharedModel.Nickname.Value, _world.PlayerSharedModel.Lobby.LobbyId.Value);
-            startGameCommand.Write(_world.ServerConnectionModel.PlayerPeer);
+            var startGameCommand = new StartSessionCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value,
+                _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value);
+            startGameCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
         }
     }
 }

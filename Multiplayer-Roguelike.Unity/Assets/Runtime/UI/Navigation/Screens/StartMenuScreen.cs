@@ -10,13 +10,14 @@ namespace Runtime.UI.Navigation.Screens
         private readonly Router _router;
         private readonly StartMenuPanelPresenter _presenter;
         private readonly StartMenuPanelModel _model;
-        private readonly World _world;
-        public StartMenuScreen(Router router, StartMenuPanelPresenter presenter, StartMenuPanelModel model, World world)
+        private readonly UICoreModel _uiCoreModel;
+
+        public StartMenuScreen(Router router, StartMenuPanelPresenter presenter, StartMenuPanelModel model, UICoreModel uiCoreModel)
         {
             _router = router;
             _presenter = presenter;
             _model = model;
-            _world = world;
+            _uiCoreModel = uiCoreModel;
         }
 
         public void Enable()
@@ -39,17 +40,18 @@ namespace Runtime.UI.Navigation.Screens
 
         private void HandleSingleGame()
         {
-            var createLobbyCommand = new CreateLobbyCommand(_world.PlayerSharedModel.Nickname.Value);
-            createLobbyCommand.Write(_world.ServerConnectionModel.PlayerPeer);
+            var createLobbyCommand = new CreateLobbyCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value);
+            createLobbyCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
 
-            var startSessionCommand = new StartSessionCommand(_world.PlayerSharedModel.Nickname.Value, _world.PlayerSharedModel.Lobby.LobbyId.Value);
-            startSessionCommand.Write(_world.ServerConnectionModel.PlayerPeer);
+            var startSessionCommand = new StartSessionCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value,
+                _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value);
+            startSessionCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
         }
 
         private void HandleCreateLobby()
         {
-            var createLobbyCommand = new CreateLobbyCommand(_world.PlayerSharedModel.Nickname.Value);
-            createLobbyCommand.Write(_world.ServerConnectionModel.PlayerPeer);
+            var createLobbyCommand = new CreateLobbyCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value);
+            createLobbyCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
 
             _router.NavigateTo(ScreenIds.HostLobby);
         }

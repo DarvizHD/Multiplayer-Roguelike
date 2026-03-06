@@ -17,7 +17,7 @@ namespace Runtime.Tools
 
         private void Update()
         {
-            float currentTime = Time.realtimeSinceStartup;
+            var currentTime = Time.realtimeSinceStartup;
 
             _deltaTime = currentTime - _lastTime;
             _delayMs = _deltaTime * 1000f;
@@ -32,7 +32,7 @@ namespace Runtime.Tools
 
         private void OnGUI()
         {
-            GUIStyle style = new GUIStyle(GUI.skin.label);
+            var style = new GUIStyle(GUI.skin.label);
             style.fontSize = 20;
             style.normal.textColor = Color.green;
 

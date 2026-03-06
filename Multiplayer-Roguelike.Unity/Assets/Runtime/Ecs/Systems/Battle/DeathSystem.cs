@@ -15,7 +15,6 @@ namespace Runtime.Ecs.Systems.Battle
             foreach (var (entityId, healthComponent)
                      in ComponentManager.Query<HealthComponent>())
             {
-
                 if (healthComponent.CurrentHealth <= 0 && !ComponentManager.HasComponent<DeathTagComponent>(entityId))
                 {
                     ComponentManager.AddComponent(entityId, new DeathTagComponent());

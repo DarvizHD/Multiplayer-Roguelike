@@ -11,7 +11,6 @@ namespace Runtime.Ecs.Systems.Rotation
             foreach (var (entityId, playerInputComponent, positionComponent, rotationComponent, rotationSpeedComponent)
                      in ComponentManager.Query<PlayerInputComponent, PositionComponent, RotationComponent, RotationSpeedComponent>())
             {
-
                 var mouseScreenPosition = playerInputComponent.PlayerControls.Gameplay.Look.ReadValue<Vector2>();
                 var mouseWorldPosition = Camera.main.ScreenPointToRay(mouseScreenPosition);
 

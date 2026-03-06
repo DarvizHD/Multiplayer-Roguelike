@@ -6,13 +6,13 @@ namespace Runtime.UI.Panels.LoginPanel
     {
         private readonly LoginPanelView _view;
         private readonly LoginPanelModel _model;
-        private readonly World _world;
+        private readonly UICoreModel _uiCoreModel;
 
-        public LoginPanelPresenter(LoginPanelModel model, LoginPanelView view, World world)
+        public LoginPanelPresenter(LoginPanelModel model, LoginPanelView view, UICoreModel uiCoreModel)
         {
             _model = model;
             _view = view;
-            _world = world;
+            _uiCoreModel = uiCoreModel;
         }
 
         public void Enable()
@@ -20,12 +20,12 @@ namespace Runtime.UI.Panels.LoginPanel
             _view.ParentRoot.Add(_view.Root);
             _view.ConfirmButton.clicked += OnConfirmButtonClicked;
 
-            _world.PlayerSharedModel.Nickname.OnChange += OnNicknameChanged;
+            _uiCoreModel.PlayerSharedModel.Nickname.OnChange += OnNicknameChanged;
         }
 
         private void OnNicknameChanged()
         {
-            _model.SetUsername(_world.PlayerSharedModel.Nickname.Value);
+            _model.SetUsername(_uiCoreModel.PlayerSharedModel.Nickname.Value);
             _model.Confirm();
         }
 
@@ -43,7 +43,7 @@ namespace Runtime.UI.Panels.LoginPanel
             }
 
             var loginCommand = new LoginCommand(_view.UsernameTextField.value);
-            loginCommand.Write(_world.ServerConnectionModel.PlayerPeer);
+            loginCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Runtime.Ecs.Systems.Follow
             foreach (var (entityId, positionComponent, separationComponent)
                      in ComponentManager.Query<PositionComponent, SeparationComponent>())
             {
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     var otherId = entityIds[i];
                     var otherComponent = components[i];

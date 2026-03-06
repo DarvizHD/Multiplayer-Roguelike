@@ -26,7 +26,8 @@ namespace Runtime.Tools
 
         private void DrawAttackRangeGizmos()
         {
-            var results = _ecsWorld.ComponentManager.Query<PositionComponent, RotationComponent, MeleeAttackComponent>();
+            var results = _ecsWorld.ComponentManager
+                .Query<PositionComponent, RotationComponent, MeleeAttackComponent>();
 
             foreach (var (id, positionComponent, rotationComponent, meleeAttackComponent) in results)
             {

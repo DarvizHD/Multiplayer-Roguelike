@@ -24,7 +24,6 @@ namespace Runtime.Ecs.Systems.Rotation
                 foreach (var (entityId, directionRotationTagComponent, transformComponent, directionComponent, rotationComponent, rotationSpeedComponent)
                          in ComponentManager.Query<DirectionRotationTagComponent, TransformComponent, DirectionComponent, RotationComponent, RotationSpeedComponent>())
                 {
-
                     var dir = directionComponent!.Direction;
 
                     if (dir == Vector3.zero)

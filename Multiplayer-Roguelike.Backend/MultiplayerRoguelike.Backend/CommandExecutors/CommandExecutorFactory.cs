@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics;
 using ENet;
 using Shared.Commands;
 using Shared.Protocol;

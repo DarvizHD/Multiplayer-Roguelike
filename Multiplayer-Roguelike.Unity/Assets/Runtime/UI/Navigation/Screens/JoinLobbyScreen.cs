@@ -9,13 +9,14 @@ namespace Runtime.UI.Navigation.Screens
         private readonly Router _router;
         private readonly JoinLobbyPanelPresenter _presenter;
         private readonly JoinLobbyPanelModel _model;
-        private readonly World _world;
-        public JoinLobbyScreen(Router router, JoinLobbyPanelPresenter presenter, JoinLobbyPanelModel model, World world)
+        private readonly UICoreModel _uiCoreModel;
+
+        public JoinLobbyScreen(Router router, JoinLobbyPanelPresenter presenter, JoinLobbyPanelModel model, UICoreModel uiCoreModel)
         {
             _router = router;
             _presenter = presenter;
             _model = model;
-            _world = world;
+            _uiCoreModel = uiCoreModel;
         }
 
         public void Enable()
@@ -39,8 +40,8 @@ namespace Runtime.UI.Navigation.Screens
 
         private void HandleJoin()
         {
-            var joinCommand = new JoinLobbyCommand(_world.PlayerSharedModel.Nickname.Value, _model.LobbyCode);
-            joinCommand.Write(_world.ServerConnectionModel.PlayerPeer);
+            var joinCommand = new JoinLobbyCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value, _model.LobbyCode);
+            joinCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
 
             _router.NavigateTo(ScreenIds.HostLobby);
         }

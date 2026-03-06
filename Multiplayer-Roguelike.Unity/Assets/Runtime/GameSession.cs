@@ -76,12 +76,12 @@ namespace Runtime
 
             CreateCamera(6);
 
-            SpawnNPCs();
+            SpawnNpc();
         }
 
         private void OnCharacterAdded(CharacterSharedModel characterSharedModel)
         {
-            Debug.Log($"Worked");
+            Debug.Log("Worked");
 
             var entityId = _characterEntities.Count;
 
@@ -104,11 +104,11 @@ namespace Runtime
             EcsWorld?.Update(deltaTime);
         }
 
-        private void SpawnNPCs()
+        private void SpawnNpc()
         {
             if (!IsHost)
             {
-                Debug.Log($"I'm not host");
+                Debug.Log("I'm not host");
 
                 return;
             }
@@ -121,7 +121,7 @@ namespace Runtime
         private void CreateCamera(int entityId)
         {
             EcsWorld.AddEntityComponent(entityId, new CameraTargetComponent());
-            EcsWorld.AddEntityComponent(entityId, new TransformComponent(Camera.main.transform.parent.GetChild(2)));
+            EcsWorld.AddEntityComponent(entityId, new TransformComponent(Camera.main?.transform.parent.GetChild(2)));
         }
 
         private void CreatePlayer(int entityId, CharacterSharedModel characterSharedModel, Vector3 position,

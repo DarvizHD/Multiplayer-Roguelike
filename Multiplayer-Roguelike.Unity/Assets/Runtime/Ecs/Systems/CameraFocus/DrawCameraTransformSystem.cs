@@ -17,9 +17,7 @@ namespace Runtime.Ecs.Systems.CameraFocus
             foreach (var (entityId, cameraTargetComponent, transformComponent)
                      in ComponentManager.Query<CameraTargetComponent, TransformComponent>())
             {
-
                 transformComponent.Transform.position = Vector3.Lerp(transformComponent.Transform.position, cameraTargetComponent.TargetPosition, deltaTime * 5f);
-
             }
         }
     }

@@ -12,7 +12,11 @@ namespace Runtime
 {
     public class EntryPoint : MonoBehaviour
     {
+        [SerializeField] private WorldViewDescription worldViewDescription;
+        [SerializeField] private UIDocument document;
         private readonly GameSystemCollection _gameFixedSystemCollection = new();
+
+        private readonly UICoreModel _uiCoreModel = new();
 
         private GameSession _gameSession;
 
@@ -21,11 +25,6 @@ namespace Runtime
 
         private ServerConnectionModel _serverConnectionModel;
         private ServerConnectionPresenter _serverConnectionPresenter;
-
-        [SerializeField] private WorldViewDescription _worldViewDescription;
-        [SerializeField] private UIDocument _document;
-
-        private readonly World _world = new();
 
         private async void Start()
         {
@@ -44,9 +43,9 @@ namespace Runtime
             _serverConnectionModel.ConnectPlayer();
             await _serverConnectionModel.CompletePlayerConnectAwaiter;
 
-            _world.Setup(_playerSharedModel, _serverConnectionModel, _gameSessionSharedModel);
+            _uiCoreModel.Setup(_playerSharedModel, _serverConnectionModel, _gameSessionSharedModel);
 
-            var navigationPresenter = new NavigationPresenter(_world, _worldViewDescription, _document);
+            var navigationPresenter = new NavigationPresenter(_uiCoreModel, worldViewDescription, document);
             navigationPresenter.Enable();
 
             _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel);

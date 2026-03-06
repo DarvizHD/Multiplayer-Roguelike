@@ -11,7 +11,6 @@ namespace Backend.CommandExecutors
         public SpawnNpcCommandExecutor(SpawnNpcCommand command, WorldModel world, Peer peer)
             : base(command, world, ref peer)
         {
-
         }
 
         public override void Execute()
@@ -24,7 +23,7 @@ namespace Backend.CommandExecutors
 
             Random random = new();
 
-            for (int i = 10; i < 10 + Command.Count; i++)
+            for (var i = 10; i < 10 + Command.Count; i++)
             {
                 var randomPosition = new Vector3(random.Next(-10, 10), 0f, random.Next(-10, 10));
                 var startHealth = 100f;
