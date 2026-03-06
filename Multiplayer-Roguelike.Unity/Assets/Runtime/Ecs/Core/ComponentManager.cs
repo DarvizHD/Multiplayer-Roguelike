@@ -3,8 +3,68 @@ using Runtime.Ecs.Components;
 
 namespace Runtime.Ecs.Core
 {
+    public class QueryBuffer<T> where T : IComponent
+    {
+        public int Count;
+
+        public int[] EntityIds;
+
+        public T[] Components;
+
+        public QueryBuffer(int initialCapacity = 32)
+        {
+            EntityIds = new int[initialCapacity];
+            Components = new T[initialCapacity];
+            Count = 0;
+        }
+    }
+
+    public class QueryBuffer<T1, T2> where T1 : IComponent where T2 : IComponent
+    {
+        public int Count = 0;
+
+        public int[] EntityIds;
+
+        public T1[] Components1;
+
+        public T2[] Components2;
+
+        public QueryBuffer(int initialCapacity = 32)
+        {
+            EntityIds = new int[initialCapacity];
+            Components1 = new T1[initialCapacity];
+            Components2 = new T2[initialCapacity];
+            Count = initialCapacity;
+        }
+    }
+
+    public class ComponentFilter
+    {
+        private readonly IComponentStorage<IComponent>[] _storages;
+
+        public ComponentFilter(IComponentStorage<IComponent>[] storages)
+        {
+            _storages = storages;
+        }
+
+        public void Query<T>(ref QueryBuffer<T> buffer) where T : IComponent
+        {
+            var storage = _storages[ComponentId<T>.Id];
+            buffer.Components = storage.Components as T[];
+            buffer.Count = storage.Count;
+            buffer.EntityIds = storage.EntityIds;
+        }
+
+        public void Query<T1, T2>(ref QueryBuffer<T1, T2> buffer) where T1 : IComponent where T2 : IComponent
+        {
+
+        }
+    }
+
     public class ComponentManager
     {
+        public ComponentFilter Filter { get; private set; }
+
         private readonly IComponentStorage<IComponent>[] _storages;
 
         private readonly Dictionary<int, int> _toRemoveEntityComponents = new();
@@ -12,6 +72,8 @@ namespace Runtime.Ecs.Core
         public ComponentManager(int maxComponentsTypes)
         {
             _storages = new IComponentStorage<IComponent>[maxComponentsTypes];
+
+            Filter = new ComponentFilter(_storages);
         }
 
         public void RegisterComponent<T>() where T : class, IComponent
@@ -57,16 +119,6 @@ namespace Runtime.Ecs.Core
             // return _storages.SelectMany(s => s.EntityIds).Distinct();
         }
 
-
-        public (int[] entityIds, T1[] components, int count) TupleQuery<T1>() where T1 : class, IComponent
-        {
-            var entityId = GetStorage<T1>().EntityIds;
-            var components = GetStorage<T1>().Components;
-            var count = entityId.Length;
-
-            return (entityId, components, count);
-        }
-
         public (int[] entityIds, T1[] components1, T2[] components2, int count) TupleQuery<T1, T2>()
             where T1 : class, IComponent
             where T2 : class, IComponent
@@ -97,13 +149,14 @@ namespace Runtime.Ecs.Core
             return (entityIds, components1, components2, count);
         }
 
+        /*
         public IEnumerable<(int entityId, T1)> Query<T1>() where T1 : class, IComponent
         {
             foreach (var entityId in GetStorage<T1>().EntityIds)
             {
                 yield return (entityId, GetStorage<T1>().Get(entityId));
             }
-        }
+        }*/
 
         public IEnumerable<(int entityId, T1, T2)> Query<T1, T2>()
             where T1 : class, IComponent

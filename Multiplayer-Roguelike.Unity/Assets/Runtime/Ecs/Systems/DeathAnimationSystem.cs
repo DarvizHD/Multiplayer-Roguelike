@@ -1,16 +1,23 @@
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Core;
 using UnityEngine;
 
 namespace Runtime.Ecs.Systems
 {
     public class DeathAnimationSystem : BaseSystem
     {
+        private QueryBuffer<DeathAnimationComponent> _deathAnimationBuffer = new();
+
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, deathAnimationComponent)
-                     in ComponentManager.Query<DeathAnimationComponent>())
+            ComponentManager.Filter.Query(ref _deathAnimationBuffer);
+
+            for (var i = 0; i < _deathAnimationBuffer.Count; ++i)
             {
+                var deathAnimationComponent = _deathAnimationBuffer.Components[i];
+                var entityId = _deathAnimationBuffer.EntityIds[i];
+
                 deathAnimationComponent.Timer -= deltaTime;
 
                 if (deathAnimationComponent.Timer <= 0)
