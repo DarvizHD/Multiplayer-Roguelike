@@ -1,19 +1,18 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Runtime;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Core;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Editor.ECSDebugger
+namespace Editor.EcsDebugger
 {
     public class EcsDebugWindow : EditorWindow
     {
-        private Vector2 _scrollPos;
-        private EntryPoint _entryPoint;
         private readonly Dictionary<int, bool> _foldouts = new();
+        private EntryPoint _entryPoint;
+        private Vector2 _scrollPos;
 
         [MenuItem("Tools/ECS Debugger")]
         public static void ShowWindow()
@@ -21,6 +20,7 @@ namespace Editor.ECSDebugger
             GetWindow<EcsDebugWindow>("ECS Debugger");
         }
 
+        /*
         private void OnGUI()
         {
             if (!Application.isPlaying)
@@ -55,7 +55,7 @@ namespace Editor.ECSDebugger
             EditorGUILayout.EndScrollView();
 
             Repaint();
-        }
+        }*/
 
         private void ShowEntityHeader(List<int> entities, ComponentManager componentManager)
         {

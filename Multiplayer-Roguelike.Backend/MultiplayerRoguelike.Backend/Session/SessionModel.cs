@@ -9,12 +9,12 @@ namespace Backend.Session
 
         public PlayerModelCollection Players { get; set; } = new();
 
-        public WorldSharedModel WorldSharedModel { get; set; }
+        public GameSessionSharedModel GameSessionSharedModel { get; set; }
 
         public SessionModel(string id)
         {
             Id = id;
-            WorldSharedModel = new WorldSharedModel(id);
+            GameSessionSharedModel = new GameSessionSharedModel(id);
         }
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Runtime
+namespace Runtime.Tools
 {
     public class MonoBehaviorProvider : MonoBehaviour
     {

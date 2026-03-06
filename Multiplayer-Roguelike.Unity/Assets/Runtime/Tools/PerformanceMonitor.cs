@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Runtime
+namespace Runtime.Tools
 {
     public class PerformanceMonitor : MonoBehaviour
     {
@@ -15,22 +15,24 @@ namespace Runtime
             _lastTime = Time.realtimeSinceStartup;
         }
 
-        void Update()
+        private void Update()
         {
-            float currentTime = Time.realtimeSinceStartup;
+            var currentTime = Time.realtimeSinceStartup;
 
             _deltaTime = currentTime - _lastTime;
             _delayMs = _deltaTime * 1000f;
 
             if (_deltaTime > 0f)
+            {
                 _fps = 1f / _deltaTime;
+            }
 
             _lastTime = currentTime;
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
-            GUIStyle style = new GUIStyle(GUI.skin.label);
+            var style = new GUIStyle(GUI.skin.label);
             style.fontSize = 20;
             style.normal.textColor = Color.green;
 

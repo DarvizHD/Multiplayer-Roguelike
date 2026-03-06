@@ -1,4 +1,4 @@
-﻿using Shared.Protocol;
+using Shared.Protocol;
 
 namespace Shared.Common
 {

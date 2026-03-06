@@ -24,6 +24,7 @@ namespace Backend.Session.Collection
             {
                 presenter.Disable();
             }
+
             _presenters.Clear();
 
             _models.OnAdded -= OnAdded;

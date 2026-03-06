@@ -1,0 +1,53 @@
+.weapon-panel {
+    flex-grow: 1;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-shrink: 1;
+    min-height: auto;
+    max-height: none;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-left-color: rgb(87, 87, 87);
+    border-right-color: rgb(87, 87, 87);
+    border-top-color: rgb(87, 87, 87);
+    border-bottom-color: rgb(87, 87, 87);
+    padding: 15px;
+    min-width: 300px;
+    max-width: 300px;
+    background-color: rgb(17, 17, 17);
+    position: absolute;
+    bottom: 30px;
+    left: auto;
+    right: 30px;
+    flex-direction: row;
+}
+
+.weapon-panel-selected {
+    flex-grow: 1;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-shrink: 1;
+    min-height: auto;
+    max-height: none;
+    border-top-width: 3px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-left-color: rgb(232, 160, 32);
+    border-right-color: rgb(232, 160, 32);
+    border-top-color: rgb(232, 160, 32);
+    border-bottom-color: rgb(232, 160, 32);
+    padding: 15px;
+    min-width: 300px;
+    max-width: 300px;
+    background-color: rgb(17, 17, 17);
+    position: absolute;
+    bottom: 30px;
+    left: auto;
+    right: 30px;
+    flex-direction: row;
+}

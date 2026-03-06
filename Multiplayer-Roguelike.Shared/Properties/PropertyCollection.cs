@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Shared.Common;
@@ -8,13 +9,16 @@ namespace Shared.Properties
     public class PropertyCollection<T> : ISharedData
     {
         public string Id { get; }
+        public List<T> Values { get; } = new List<T>();
+
+        public event Action<T> OnAdded;
+        public event Action<T> OnRemoved;
 
         public bool IsDirty =>
             _cleared ||
             _added.Count > 0 ||
             _removed.Count > 0;
 
-        private readonly List<T> _values = new List<T>();
         private readonly List<T> _added = new List<T>();
         private readonly List<T> _removed = new List<T>();
 
@@ -27,13 +31,13 @@ namespace Shared.Properties
 
         public void Add(T value)
         {
-            _values.Add(value);
+            Values.Add(value);
             _added.Add(value);
         }
 
         public void Remove(T value)
         {
-            if (_values.Remove(value))
+            if (Values.Remove(value))
             {
                 if (_added.Remove(value))
                 {
@@ -49,21 +53,23 @@ namespace Shared.Properties
             protocol.Get(out bool cleared);
             if (cleared)
             {
-                _values.Clear();
+                Values.Clear();
             }
 
             protocol.Get(out int addCount);
             for (var i = 0; i < addCount; i++)
             {
                 protocol.Get(out T value);
-                _values.Add(value);
+                Values.Add(value);
+                OnAdded?.Invoke(value);
             }
 
             protocol.Get(out int removeCount);
             for (var i = 0; i < removeCount; i++)
             {
                 protocol.Get(out T value);
-                _values.Remove(value);
+                Values.Remove(value);
+                OnRemoved?.Invoke(value);
             }
         }
 
@@ -88,7 +94,7 @@ namespace Shared.Properties
 
         public void Clear()
         {
-            _values.Clear();
+            Values.Clear();
             _added.Clear();
             _removed.Clear();
             _cleared = true;
@@ -105,7 +111,7 @@ namespace Shared.Properties
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append('[');
-            foreach (var value in _values)
+            foreach (var value in Values)
             {
                 stringBuilder.Append(value);
                 stringBuilder.Append(',');

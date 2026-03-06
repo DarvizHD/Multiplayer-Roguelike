@@ -9,7 +9,8 @@ namespace Runtime.ServerInteraction
         private readonly GameSystemCollection _systemCollection;
         private ServerPlayerConnectionSystem _serverConnectionSystem;
 
-        public ServerConnectionPresenter(ServerConnectionModel serverConnectionModel, GameSystemCollection gameSystemCollection)
+        public ServerConnectionPresenter(ServerConnectionModel serverConnectionModel,
+            GameSystemCollection gameSystemCollection)
         {
             _model = serverConnectionModel;
             _systemCollection = gameSystemCollection;

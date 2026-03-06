@@ -1,0 +1,102 @@
+using Runtime.Ecs.Components;
+using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Components.Movement.Freeze;
+using Runtime.Ecs.Components.Spawn;
+using Runtime.Ecs.Components.Tags;
+using UnityEngine;
+
+namespace Runtime.Ecs.Systems.Spawn
+{
+    public class SpawnerSystem : BaseSystem
+    {
+        private int _nextEntityId = 64; //TODO: нужен уникальный id
+        private Transform _playerTransform;
+
+        public SpawnerSystem()
+        {
+            RegisterRequiredComponent(typeof(SpawnerComponent));
+        }
+
+        public override void Update(float deltaTime)
+        {
+            foreach (var (entityId, spawner)
+                     in ComponentManager.Query<SpawnerComponent>())
+            {
+                if (_playerTransform == null)
+                {
+                    FindPlayerTransform();
+                }
+
+                spawner.CurrentCount = CountAliveSpawnedUnits();
+
+                if (spawner.CurrentCount < spawner.TargetCount)
+                {
+                    SpawnUnit(spawner);
+                }
+            }
+        }
+
+        private void FindPlayerTransform()
+        {
+            foreach (var entityId in ComponentManager.GetAllEntities())
+            {
+                if (ComponentManager.HasComponent<PlayerTagComponent>(entityId) &&
+                    ComponentManager.TryGetComponent<TransformComponent>(entityId, out var transformComponent))
+                {
+                    _playerTransform = transformComponent.Transform;
+                    break;
+                }
+            }
+        }
+
+        private int CountAliveSpawnedUnits()
+        {
+            var count = 0;
+            foreach (var entityId in ComponentManager.GetAllEntities())
+            {
+                if (ComponentManager.HasComponent<SpawnedUnitTagComponent>(entityId))
+                {
+                    if (!ComponentManager.HasComponent<DeathTagComponent>(entityId))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        private void SpawnUnit(SpawnerComponent spawner)
+        {
+            var entityId = _nextEntityId++;
+
+            var randomCircle = Random.insideUnitCircle * spawner.SpawnRadius;
+            var spawnPosition = spawner.CenterPosition + new Vector3(randomCircle.x, 0, randomCircle.y);
+
+            var instance = Object.Instantiate(spawner.Prefab);
+            instance.transform.position = spawnPosition;
+
+            ComponentManager.AddComponent(entityId, new GameObjectComponent(instance));
+
+            ComponentManager.AddComponent(entityId, new SpawnedUnitTagComponent());
+            ComponentManager.AddComponent(entityId, new EnemyTagComponent());
+            ComponentManager.AddComponent(entityId, new PositionComponent(spawnPosition));
+            ComponentManager.AddComponent(entityId, new RotationComponent());
+            ComponentManager.AddComponent(entityId, new DirectionComponent(Vector3.zero));
+            ComponentManager.AddComponent(entityId, new TransformComponent(instance.transform));
+            ComponentManager.AddComponent(entityId, new MoveSpeedComponent(2f));
+            ComponentManager.AddComponent(entityId, new RotationSpeedComponent(100f));
+            ComponentManager.AddComponent(entityId, new HealthComponent(50f));
+            ComponentManager.AddComponent(entityId, new FollowComponent(_playerTransform));
+            ComponentManager.AddComponent(entityId, new DirectionRotationTagComponent());
+            ComponentManager.AddComponent(entityId, new SeparationComponent());
+            ComponentManager.AddComponent(entityId, new RegenerationComponent(2f, 5f));
+            ComponentManager.AddComponent(entityId, new FreezeMovementByDamageComponent(1f));
+
+
+            var animator = instance.GetComponentInChildren<Animator>();
+            ComponentManager.AddComponent(entityId, new AnimatorComponent(animator));
+        }
+    }
+}
