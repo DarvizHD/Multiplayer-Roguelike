@@ -21,7 +21,9 @@ namespace Runtime.ECS.Systems.Movement
             {
                 if (ComponentManager.HasComponent<DeathTagComponent>(entityId) ||
                     ComponentManager.HasComponent<DeathAnimationComponent>(entityId))
+                {
                     return;
+                }
 
                 positionComponent.Position += directionComponent.Direction.normalized * (moveSpeedComponent.Speed * deltaTime);
             }

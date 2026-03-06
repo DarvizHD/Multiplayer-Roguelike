@@ -15,7 +15,7 @@ namespace Runtime.ECS.Systems.Network
                 (
                     rotationComponent.Angle,
                     characterSharedModelComponent.CharacterSharedModel.Rotation.Value,
-                    rotationSpeedComponent.Speed *  deltaTime
+                    rotationSpeedComponent.Speed * deltaTime
                 );
             }
         }

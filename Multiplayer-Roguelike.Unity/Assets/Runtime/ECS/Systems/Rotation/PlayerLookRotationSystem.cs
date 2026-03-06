@@ -27,7 +27,7 @@ namespace Runtime.ECS.Systems.Rotation
                     if (direction.sqrMagnitude > 0.01f)
                     {
                         var targetAngle = Quaternion.LookRotation(direction).eulerAngles.y;
-                        rotationComponent.Angle = Mathf.LerpAngle(rotationComponent.Angle, targetAngle, rotationSpeedComponent.Speed *  deltaTime);
+                        rotationComponent.Angle = Mathf.LerpAngle(rotationComponent.Angle, targetAngle, rotationSpeedComponent.Speed * deltaTime);
                     }
                 }
             }

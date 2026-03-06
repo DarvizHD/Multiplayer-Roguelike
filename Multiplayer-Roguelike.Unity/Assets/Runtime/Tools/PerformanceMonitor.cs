@@ -15,7 +15,7 @@ namespace Runtime.Tools
             _lastTime = Time.realtimeSinceStartup;
         }
 
-        void Update()
+        private void Update()
         {
             float currentTime = Time.realtimeSinceStartup;
 
@@ -23,12 +23,14 @@ namespace Runtime.Tools
             _delayMs = _deltaTime * 1000f;
 
             if (_deltaTime > 0f)
+            {
                 _fps = 1f / _deltaTime;
+            }
 
             _lastTime = currentTime;
         }
 
-        void OnGUI()
+        private void OnGUI()
         {
             GUIStyle style = new GUIStyle(GUI.skin.label);
             style.fontSize = 20;

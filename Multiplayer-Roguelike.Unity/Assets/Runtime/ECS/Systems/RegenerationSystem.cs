@@ -17,7 +17,9 @@ namespace Runtime.ECS.Systems
                      in ComponentManager.Query<HealthComponent, RegenerationComponent>())
             {
                 if (ComponentManager.HasComponent<DeathTagComponent>(entityId))
+                {
                     return;
+                }
 
                 regenerationComponent.LastDamageTime += deltaTime;
 

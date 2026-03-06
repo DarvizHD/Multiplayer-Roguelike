@@ -7,7 +7,7 @@ namespace Runtime.ECS.Components
     {
         public readonly NavMeshAgent Agent;
 
-        public NavMeshAgentComponent(NavMeshAgent agent, Vector3 startPosition,float speed)
+        public NavMeshAgentComponent(NavMeshAgent agent, Vector3 startPosition, float speed)
         {
             Agent = agent;
             Agent.transform.position = startPosition;

@@ -23,7 +23,9 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
                      in ComponentManager.Query<PositionComponent, RotationComponent, MeleeAttackComponent, AttackCooldownComponent>())
             {
                 if (ComponentManager.HasComponent<DeathTagComponent>(entityId))
+                {
                     return;
+                }
 
                 if (attackCooldownComponent.CurrentCooldown > 0)
                 {
@@ -38,15 +40,24 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
                 foreach (var (targetId, targetPositionComponent, enemyTagComponent) in targets)
                 {
                     if (ComponentManager.HasComponent<DeathTagComponent>(targetId))
+                    {
                         if (targetId == entityId)
+                        {
                             continue;
+                        }
+                    }
 
                     if (ComponentManager.HasComponent<DeathAnimationComponent>(targetId))
+                    {
                         continue;
+                    }
 
                     var distance = Vector3.Distance(targetPositionComponent.Position, positionComponent.Position);
 
-                    if (distance >= meleeAttackComponent.Range) continue;
+                    if (distance >= meleeAttackComponent.Range)
+                    {
+                        continue;
+                    }
 
                     var toTarget = targetPositionComponent.Position - positionComponent.Position;
                     toTarget.y = 0;
@@ -54,7 +65,10 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
 
                     var angle = Vector3.Angle(attackDirection, toTarget);
 
-                    if (angle > meleeAttackComponent.Angle * 0.5f) continue;
+                    if (angle > meleeAttackComponent.Angle * 0.5f)
+                    {
+                        continue;
+                    }
 
                     if (!ComponentManager.HasComponent<AttackEventComponent>(entityId))
                     {

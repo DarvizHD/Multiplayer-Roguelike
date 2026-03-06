@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Runtime.ECS.Components
 {
-    public class AnimatorComponent  : IComponent
+    public class AnimatorComponent : IComponent
     {
         public int X => Animator.StringToHash("X");
         public int Z => Animator.StringToHash("Z");

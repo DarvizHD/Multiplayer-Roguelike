@@ -5,7 +5,7 @@ namespace Shared.Models
     public class GameSessionSharedModel : SharedModel
     {
         public readonly SharedModelCollection<CharacterSharedModel> Characters =
-            new SharedModelCollection<CharacterSharedModel>("characters", CharacterSharedModel.Create );
+            new SharedModelCollection<CharacterSharedModel>("characters", CharacterSharedModel.Create);
 
         public readonly SharedModelCollection<NpcSharedModel> NPCs = new SharedModelCollection<NpcSharedModel>("npcs", NpcSharedModel.Create);
 

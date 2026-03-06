@@ -17,7 +17,7 @@ namespace Runtime.ECS.Systems.Network
                     return;
                 }
 
-                var t = (interpolationComponent.TotalTime - interpolationComponent.TargetTime) / (interpolationComponent.TargetTime - interpolationComponent.LastTime) ;
+                var t = (interpolationComponent.TotalTime - interpolationComponent.TargetTime) / (interpolationComponent.TargetTime - interpolationComponent.LastTime);
                 if (t <= 1)
                 {
                     positionComponent.Position = Vector3.Lerp(interpolationComponent.LastPosition,

@@ -54,17 +54,17 @@ namespace Runtime.ECS.Core
             // TODO: Rework this
             yield break;
 
-           // return _storages.SelectMany(s => s.EntityIds).Distinct();
+            // return _storages.SelectMany(s => s.EntityIds).Distinct();
         }
 
 
         public (int[] entityIds, T1[] components, int count) TupleQuery<T1>() where T1 : class, IComponent
         {
-            var entityId =  GetStorage<T1>().EntityIds;
+            var entityId = GetStorage<T1>().EntityIds;
             var components = GetStorage<T1>().Components;
             var count = entityId.Length;
 
-            return  (entityId, components, count);
+            return (entityId, components, count);
         }
 
         public (int[] entityIds, T1[] components1, T2[] components2, int count) TupleQuery<T1, T2>()
@@ -88,7 +88,7 @@ namespace Runtime.ECS.Core
 
                 if (storage2.Has(entityId))
                 {
-                    components1[i] =  storage1.Get(entityId);
+                    components1[i] = storage1.Get(entityId);
                     components2[i] = storage2.Get(entityId);
                     entityIds[i] = entityId;
                 }
@@ -160,7 +160,7 @@ namespace Runtime.ECS.Core
         {
             foreach (var entityId in GetStorage<T1>().EntityIds)
             {
-                if (GetStorage<T2>().Has(entityId) && GetStorage<T3>().Has(entityId) && GetStorage<T4>().Has(entityId) &&  GetStorage<T5>().Has(entityId))
+                if (GetStorage<T2>().Has(entityId) && GetStorage<T3>().Has(entityId) && GetStorage<T4>().Has(entityId) && GetStorage<T5>().Has(entityId))
                 {
                     yield return (entityId,
                         GetStorage<T1>().Get(entityId),
@@ -191,7 +191,7 @@ namespace Runtime.ECS.Core
 
         private ComponentStorage<T> GetStorage<T>() where T : class, IComponent
         {
-            return (ComponentStorage<T>) _storages[ComponentId<T>.Id];
+            return (ComponentStorage<T>)_storages[ComponentId<T>.Id];
         }
 
         public void RemoveEntity(int entityId)
