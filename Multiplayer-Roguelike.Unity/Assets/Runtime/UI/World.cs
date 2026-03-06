@@ -1,5 +1,4 @@
 using Runtime.ServerInteraction;
-using Runtime.UI.Navigation;
 using Runtime.UI.Panels.HostLobbyPanel;
 using Runtime.UI.Panels.JoinLobbyPanel;
 using Runtime.UI.Panels.LoginPanel;
