@@ -1,19 +1,20 @@
 using ENet;
+using Shared.Commands.Common;
 using Shared.Protocol;
 
-namespace Shared.Commands
+namespace Shared.Commands.Player
 {
-    public class CreateLobbyCommand : BaseCommand
+    public class LoginCommand : BaseCommand
     {
-        public override string Id => CommandConst.CreateLobby;
+        public override string Id => CommandConst.Login;
         public string PlayerNickname;
 
-        public CreateLobbyCommand(string playerNickname)
+        public LoginCommand(string playerNickname)
         {
             PlayerNickname = playerNickname;
         }
 
-        public CreateLobbyCommand(NetworkProtocol protocol) : base(protocol)
+        public LoginCommand(NetworkProtocol protocol) : base(protocol)
         {
         }
 

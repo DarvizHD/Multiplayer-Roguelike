@@ -1,29 +1,32 @@
 using ENet;
+using Shared.Commands.Common;
 using Shared.Protocol;
 
-namespace Shared.Commands
+namespace Shared.Commands.Player
 {
-    public class StartSessionCommand : BaseCommand
+    public class RotateCommand : BaseCommand
     {
-        public override string Id => CommandConst.StartSession;
+        public override string Id => CommandConst.RotatePlayer;
 
         public string PlayerNickname;
-        public string LobbyId;
 
-        public StartSessionCommand(string playerNickname, string lobbyId)
+        public float Rotation;
+
+        public RotateCommand(string playerNickname, float rotation)
         {
             PlayerNickname = playerNickname;
-            LobbyId = lobbyId;
+            Rotation = rotation;
         }
 
-        public StartSessionCommand(NetworkProtocol protocol) : base(protocol)
+
+        public RotateCommand(NetworkProtocol protocol) : base(protocol)
         {
         }
 
         public override void Read(NetworkProtocol protocol)
         {
             protocol.Get(out PlayerNickname);
-            protocol.Get(out LobbyId);
+            protocol.Get(out Rotation);
         }
 
         public override void Write(Peer peer)
@@ -33,7 +36,7 @@ namespace Shared.Commands
 
             protocol.Add(Id);
             protocol.Add(PlayerNickname);
-            protocol.Add(LobbyId);
+            protocol.Add(Rotation);
 
             packet.Create(protocol.Stream.GetBuffer());
             peer.Send(0, ref packet);

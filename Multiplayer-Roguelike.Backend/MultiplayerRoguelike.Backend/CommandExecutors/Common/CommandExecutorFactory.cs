@@ -1,8 +1,13 @@
+using Backend.CommandExecutors.Lobby;
+using Backend.CommandExecutors.Player;
 using ENet;
 using Shared.Commands;
+using Shared.Commands.Common;
+using Shared.Commands.Lobby;
+using Shared.Commands.Player;
 using Shared.Protocol;
 
-namespace Backend.CommandExecutors
+namespace Backend.CommandExecutors.Common
 {
     public class CommandExecutorFactory
     {

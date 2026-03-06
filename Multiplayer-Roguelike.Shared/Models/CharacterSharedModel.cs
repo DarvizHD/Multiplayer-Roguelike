@@ -1,3 +1,4 @@
+using Shared.Models.Common;
 using Shared.Primitives;
 using Shared.Properties;
 

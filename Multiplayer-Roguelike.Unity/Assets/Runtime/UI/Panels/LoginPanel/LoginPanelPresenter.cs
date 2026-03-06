@@ -1,4 +1,4 @@
-using Shared.Commands;
+using Shared.Commands.Player;
 
 namespace Runtime.UI.Panels.LoginPanel
 {

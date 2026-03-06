@@ -1,8 +1,9 @@
 using System;
+using Backend.CommandExecutors.Common;
 using ENet;
-using Shared.Commands;
+using Shared.Commands.Lobby;
 
-namespace Backend.CommandExecutors
+namespace Backend.CommandExecutors.Lobby
 {
     public class JoinLobbyCommandExecutor : BaseCommandExecutor<JoinLobbyCommand>
     {

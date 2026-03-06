@@ -1,8 +1,9 @@
 using ENet;
+using Shared.Commands.Common;
 using Shared.Primitives;
 using Shared.Protocol;
 
-namespace Shared.Commands
+namespace Shared.Commands.Player
 {
     public class MoveCommand : BaseCommand
     {

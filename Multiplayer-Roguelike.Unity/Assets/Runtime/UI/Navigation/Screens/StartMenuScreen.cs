@@ -1,6 +1,6 @@
 using Runtime.UI.Menu;
 using Runtime.UI.Panels.StartMenuPanel;
-using Shared.Commands;
+using Shared.Commands.Lobby;
 using UnityEngine;
 
 namespace Runtime.UI.Navigation.Screens

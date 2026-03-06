@@ -1,12 +1,13 @@
 using System;
+using Backend.CommandExecutors.Common;
 using ENet;
-using Shared.Commands;
+using Shared.Commands.Player;
 
-namespace Backend.CommandExecutors
+namespace Backend.CommandExecutors.Player
 {
-    public class RotateCommandExecutor : BaseCommandExecutor<RotateCommand>
+    public class MoveCommandExecutor : BaseCommandExecutor<MoveCommand>
     {
-        public RotateCommandExecutor(RotateCommand command, WorldModel world, Peer peer) : base(command, world, ref peer)
+        public MoveCommandExecutor(MoveCommand command, WorldModel world, Peer peer) : base(command, world, ref peer)
         {
         }
 
@@ -25,7 +26,8 @@ namespace Backend.CommandExecutors
             }
 
             session.GameSessionSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character);
-            character.Rotation.Value = Command.Rotation;
+            character.Position.Value = Command.Position;
+            character.Direction.Value = Command.Direction;
         }
     }
 }

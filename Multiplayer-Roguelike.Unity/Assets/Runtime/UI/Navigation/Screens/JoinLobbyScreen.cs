@@ -1,6 +1,6 @@
 using Runtime.UI.Menu;
 using Runtime.UI.Panels.JoinLobbyPanel;
-using Shared.Commands;
+using Shared.Commands.Lobby;
 
 namespace Runtime.UI.Navigation.Screens
 {

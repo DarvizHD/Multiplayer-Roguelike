@@ -4,7 +4,7 @@ using System.Linq;
 using Shared.Common;
 using Shared.Protocol;
 
-namespace Shared.Models
+namespace Shared.Models.Common
 {
     public sealed class SharedModelCollection<T> : ISharedData where T : ISharedData
     {

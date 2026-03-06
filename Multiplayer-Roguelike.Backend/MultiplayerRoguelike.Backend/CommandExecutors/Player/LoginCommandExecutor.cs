@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
+using Backend.CommandExecutors.Common;
 using Backend.Player;
 using ENet;
-using Shared.Commands;
+using Shared.Commands.Player;
 
-namespace Backend.CommandExecutors
+namespace Backend.CommandExecutors.Player
 {
     public class LoginCommandExecutor : BaseCommandExecutor<LoginCommand>
     {

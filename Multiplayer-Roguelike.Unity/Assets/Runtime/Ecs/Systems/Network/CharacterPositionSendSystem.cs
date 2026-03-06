@@ -1,7 +1,7 @@
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Network;
 using Runtime.Tools;
-using Shared.Commands;
+using Shared.Commands.Player;
 
 namespace Runtime.Ecs.Systems.Network
 {

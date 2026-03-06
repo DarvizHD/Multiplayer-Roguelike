@@ -1,25 +1,30 @@
 using ENet;
+using Shared.Commands.Common;
 using Shared.Protocol;
 
-namespace Shared.Commands
+namespace Shared.Commands.Lobby
 {
-    public class LoginCommand : BaseCommand
+    public class StartSessionCommand : BaseCommand
     {
-        public override string Id => CommandConst.Login;
-        public string PlayerNickname;
+        public override string Id => CommandConst.StartSession;
 
-        public LoginCommand(string playerNickname)
+        public string PlayerNickname;
+        public string LobbyId;
+
+        public StartSessionCommand(string playerNickname, string lobbyId)
         {
             PlayerNickname = playerNickname;
+            LobbyId = lobbyId;
         }
 
-        public LoginCommand(NetworkProtocol protocol) : base(protocol)
+        public StartSessionCommand(NetworkProtocol protocol) : base(protocol)
         {
         }
 
         public override void Read(NetworkProtocol protocol)
         {
             protocol.Get(out PlayerNickname);
+            protocol.Get(out LobbyId);
         }
 
         public override void Write(Peer peer)
@@ -29,6 +34,7 @@ namespace Shared.Commands
 
             protocol.Add(Id);
             protocol.Add(PlayerNickname);
+            protocol.Add(LobbyId);
 
             packet.Create(protocol.Stream.GetBuffer());
             peer.Send(0, ref packet);

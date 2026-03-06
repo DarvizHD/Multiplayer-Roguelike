@@ -1,4 +1,4 @@
-namespace Shared.Commands
+namespace Shared.Commands.Common
 {
     public static class CommandConst
     {

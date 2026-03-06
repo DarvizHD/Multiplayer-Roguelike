@@ -1,9 +1,10 @@
 using System;
+using Backend.CommandExecutors.Common;
 using Backend.Lobby;
 using ENet;
-using Shared.Commands;
+using Shared.Commands.Lobby;
 
-namespace Backend.CommandExecutors
+namespace Backend.CommandExecutors.Lobby
 {
     public class CreateLobbyCommandExecutor : BaseCommandExecutor<CreateLobbyCommand>
     {

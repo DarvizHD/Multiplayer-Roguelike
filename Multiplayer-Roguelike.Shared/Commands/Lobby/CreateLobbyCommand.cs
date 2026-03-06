@@ -1,27 +1,25 @@
 using ENet;
+using Shared.Commands.Common;
 using Shared.Protocol;
 
-namespace Shared.Commands
+namespace Shared.Commands.Lobby
 {
-    public class JoinLobbyCommand : BaseCommand
+    public class CreateLobbyCommand : BaseCommand
     {
-        public override string Id => CommandConst.JoinLobby;
-        public string LobbyId;
+        public override string Id => CommandConst.CreateLobby;
         public string PlayerNickname;
 
-        public JoinLobbyCommand(string playerNickname, string lobbyId)
+        public CreateLobbyCommand(string playerNickname)
         {
-            LobbyId = lobbyId;
             PlayerNickname = playerNickname;
         }
 
-        public JoinLobbyCommand(NetworkProtocol protocol) : base(protocol)
+        public CreateLobbyCommand(NetworkProtocol protocol) : base(protocol)
         {
         }
 
         public override void Read(NetworkProtocol protocol)
         {
-            protocol.Get(out LobbyId);
             protocol.Get(out PlayerNickname);
         }
 
@@ -31,7 +29,6 @@ namespace Shared.Commands
             var packet = default(Packet);
 
             protocol.Add(Id);
-            protocol.Add(LobbyId);
             protocol.Add(PlayerNickname);
 
             packet.Create(protocol.Stream.GetBuffer());

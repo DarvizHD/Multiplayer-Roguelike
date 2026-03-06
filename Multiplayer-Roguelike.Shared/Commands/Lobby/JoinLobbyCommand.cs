@@ -1,31 +1,29 @@
 using ENet;
+using Shared.Commands.Common;
 using Shared.Protocol;
 
-namespace Shared.Commands
+namespace Shared.Commands.Lobby
 {
-    public class RotateCommand : BaseCommand
+    public class JoinLobbyCommand : BaseCommand
     {
-        public override string Id => CommandConst.RotatePlayer;
-
+        public override string Id => CommandConst.JoinLobby;
+        public string LobbyId;
         public string PlayerNickname;
 
-        public float Rotation;
-
-        public RotateCommand(string playerNickname, float rotation)
+        public JoinLobbyCommand(string playerNickname, string lobbyId)
         {
+            LobbyId = lobbyId;
             PlayerNickname = playerNickname;
-            Rotation = rotation;
         }
 
-
-        public RotateCommand(NetworkProtocol protocol) : base(protocol)
+        public JoinLobbyCommand(NetworkProtocol protocol) : base(protocol)
         {
         }
 
         public override void Read(NetworkProtocol protocol)
         {
+            protocol.Get(out LobbyId);
             protocol.Get(out PlayerNickname);
-            protocol.Get(out Rotation);
         }
 
         public override void Write(Peer peer)
@@ -34,8 +32,8 @@ namespace Shared.Commands
             var packet = default(Packet);
 
             protocol.Add(Id);
+            protocol.Add(LobbyId);
             protocol.Add(PlayerNickname);
-            protocol.Add(Rotation);
 
             packet.Create(protocol.Stream.GetBuffer());
             peer.Send(0, ref packet);

@@ -1,4 +1,4 @@
-namespace Backend.CommandExecutors
+namespace Backend.CommandExecutors.Common
 {
     public interface ICommandExecutor
     {

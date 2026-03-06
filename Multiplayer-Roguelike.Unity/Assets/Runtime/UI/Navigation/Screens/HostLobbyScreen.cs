@@ -1,7 +1,7 @@
 using Runtime.UI.Menu;
 using Runtime.UI.Panels.HostLobbyPanel;
 using Runtime.UI.Panels.UsersPanel;
-using Shared.Commands;
+using Shared.Commands.Lobby;
 
 namespace Runtime.UI.Navigation.Screens
 {

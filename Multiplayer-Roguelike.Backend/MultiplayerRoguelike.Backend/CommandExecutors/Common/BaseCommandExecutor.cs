@@ -1,7 +1,7 @@
 using ENet;
-using Shared.Commands;
+using Shared.Commands.Common;
 
-namespace Backend.CommandExecutors
+namespace Backend.CommandExecutors.Common
 {
     public abstract class BaseCommandExecutor<T> : ICommandExecutor where T : BaseCommand
     {

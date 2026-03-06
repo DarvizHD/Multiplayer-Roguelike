@@ -1,7 +1,7 @@
 using ENet;
 using Shared.Protocol;
 
-namespace Shared.Commands
+namespace Shared.Commands.Common
 {
     public interface ICommand
     {

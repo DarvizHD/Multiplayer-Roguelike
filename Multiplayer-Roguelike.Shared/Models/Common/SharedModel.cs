@@ -3,7 +3,7 @@ using System.Linq;
 using Shared.Common;
 using Shared.Protocol;
 
-namespace Shared.Models
+namespace Shared.Models.Common
 {
     public abstract class SharedModel : ISharedData
     {

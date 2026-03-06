@@ -1,3 +1,4 @@
+using Shared.Models.Common;
 using Shared.Properties;
 
 namespace Shared.Models
@@ -9,7 +10,7 @@ namespace Shared.Models
 
         public readonly SharedModelCollection<NpcSharedModel> NPCs = new SharedModelCollection<NpcSharedModel>("npcs", NpcSharedModel.Create);
 
-        public Property<bool> IsRun = new Property<bool>("is_run", false);
+        public readonly Property<bool> IsRun = new Property<bool>("is_run", false);
 
         public GameSessionSharedModel(string id) : base(id)
         {
