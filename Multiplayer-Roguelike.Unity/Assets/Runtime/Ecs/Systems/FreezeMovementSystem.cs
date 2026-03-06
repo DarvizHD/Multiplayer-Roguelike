@@ -5,13 +5,6 @@ namespace Runtime.Ecs.Systems
 {
     public class FreezeMovementSystem : BaseSystem
     {
-        public FreezeMovementSystem()
-        {
-            RegisterRequiredComponent(typeof(MoveSpeedComponent));
-            RegisterRequiredComponent(typeof(RotationSpeedComponent));
-            RegisterRequiredComponent(typeof(FreezeMovementComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, moveSpeedComponent, rotationSpeedComponent, freezeMovementComponent)

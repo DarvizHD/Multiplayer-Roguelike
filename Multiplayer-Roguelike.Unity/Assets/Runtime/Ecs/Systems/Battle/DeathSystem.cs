@@ -5,11 +5,6 @@ namespace Runtime.Ecs.Systems.Battle
 {
     public class DeathSystem : BaseSystem
     {
-        public DeathSystem()
-        {
-            RegisterRequiredComponent(typeof(HealthComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, healthComponent)

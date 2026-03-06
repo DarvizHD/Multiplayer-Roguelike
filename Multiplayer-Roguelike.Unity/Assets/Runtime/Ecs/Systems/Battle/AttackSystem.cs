@@ -5,11 +5,6 @@ namespace Runtime.Ecs.Systems.Battle
 {
     public class AttackSystem : BaseSystem
     {
-        public AttackSystem()
-        {
-            RegisterRequiredComponent(typeof(AttackEventComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, attackEventComponent)

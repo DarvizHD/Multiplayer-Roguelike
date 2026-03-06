@@ -6,12 +6,6 @@ namespace Runtime.Ecs.Systems.CameraFocus
 {
     public class DrawCameraTransformSystem : BaseSystem
     {
-        public DrawCameraTransformSystem()
-        {
-            RegisterRequiredComponent(typeof(CameraTargetComponent));
-            RegisterRequiredComponent(typeof(TransformComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, cameraTargetComponent, transformComponent)

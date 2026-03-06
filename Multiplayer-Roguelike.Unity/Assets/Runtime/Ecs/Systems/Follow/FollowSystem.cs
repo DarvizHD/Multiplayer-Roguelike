@@ -7,13 +7,6 @@ namespace Runtime.Ecs.Systems.Follow
     {
         private const float StopDistance = 1f;
 
-        public FollowSystem()
-        {
-            RegisterRequiredComponent(typeof(FollowComponent));
-            RegisterRequiredComponent(typeof(DirectionComponent));
-            RegisterRequiredComponent(typeof(PositionComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, followComponent, directionComponent, positionComponent)

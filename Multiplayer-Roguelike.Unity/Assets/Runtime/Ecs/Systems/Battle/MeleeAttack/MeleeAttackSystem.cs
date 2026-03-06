@@ -9,14 +9,6 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackSystem : BaseSystem
     {
-        public MeleeAttackSystem()
-        {
-            RegisterRequiredComponent(typeof(PositionComponent));
-            RegisterRequiredComponent(typeof(RotationComponent));
-            RegisterRequiredComponent(typeof(MeleeAttackComponent));
-            RegisterRequiredComponent(typeof(AttackCooldownComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, positionComponent, rotationComponent, meleeAttackComponent, attackCooldownComponent)

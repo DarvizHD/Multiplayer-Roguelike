@@ -6,11 +6,6 @@ namespace Runtime.Ecs.Systems
 {
     public class DeathAnimationSystem : BaseSystem
     {
-        public DeathAnimationSystem()
-        {
-            RegisterRequiredComponent(typeof(DeathAnimationComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, deathAnimationComponent)

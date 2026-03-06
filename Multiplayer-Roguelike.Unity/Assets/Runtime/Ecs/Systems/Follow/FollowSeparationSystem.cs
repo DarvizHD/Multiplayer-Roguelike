@@ -6,13 +6,6 @@ namespace Runtime.Ecs.Systems.Follow
     {
         private const float MinDistance = 1.5f;
 
-        public FollowSeparationSystem()
-        {
-            RegisterRequiredComponent(typeof(PositionComponent));
-            RegisterRequiredComponent(typeof(SeparationComponent));
-        }
-
-
         public override void Update(float deltaTime)
         {
             var positionQuery = ComponentManager.TupleQuery<PositionComponent>();

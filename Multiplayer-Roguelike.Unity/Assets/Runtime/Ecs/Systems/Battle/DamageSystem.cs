@@ -6,12 +6,6 @@ namespace Runtime.Ecs.Systems.Battle
 {
     public class DamageSystem : BaseSystem
     {
-        public DamageSystem()
-        {
-            RegisterRequiredComponent(typeof(PendingDamageEventComponent));
-            RegisterRequiredComponent(typeof(HealthComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, pendingDamageEventComponent, healthComponent)

@@ -7,11 +7,6 @@ namespace Runtime.Ecs.Systems
 {
     public class PlayerMovementAnimationSystem : BaseSystem
     {
-        public PlayerMovementAnimationSystem()
-        {
-            RegisterRequiredComponent(typeof(AnimatorComponent));
-            RegisterRequiredComponent(typeof(RotationComponent));
-        }
 
         public override void Update(float deltaTime)
         {

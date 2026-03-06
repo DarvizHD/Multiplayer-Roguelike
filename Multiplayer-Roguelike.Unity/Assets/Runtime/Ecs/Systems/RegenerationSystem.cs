@@ -5,12 +5,6 @@ namespace Runtime.Ecs.Systems
 {
     public class RegenerationSystem : BaseSystem
     {
-        public RegenerationSystem()
-        {
-            RegisterRequiredComponent(typeof(HealthComponent));
-            RegisterRequiredComponent(typeof(RegenerationComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, healthComponent, regenerationComponent)

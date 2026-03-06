@@ -10,15 +10,6 @@ namespace Runtime.Ecs.Systems.Rotation
             private const float RotationSpeed = 900f;
             private const float MinAngle = 0.01f;
 
-            public DirectionRotationSystem()
-            {
-                RegisterRequiredComponent(typeof(DirectionRotationTagComponent));
-                RegisterRequiredComponent(typeof(TransformComponent));
-                RegisterRequiredComponent(typeof(DirectionComponent));
-                RegisterRequiredComponent(typeof(RotationComponent));
-                RegisterRequiredComponent(typeof(RotationSpeedComponent));
-            }
-
             public override void Update(float deltaTime)
             {
                 foreach (var (entityId, directionRotationTagComponent, transformComponent, directionComponent, rotationComponent, rotationSpeedComponent)

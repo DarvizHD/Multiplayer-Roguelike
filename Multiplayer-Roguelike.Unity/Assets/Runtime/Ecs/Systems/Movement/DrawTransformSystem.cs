@@ -5,13 +5,6 @@ namespace Runtime.Ecs.Systems.Movement
 {
     public class DrawTransformSystem : BaseSystem
     {
-        public DrawTransformSystem()
-        {
-            RegisterRequiredComponent(typeof(PositionComponent));
-            RegisterRequiredComponent(typeof(RotationComponent));
-            RegisterRequiredComponent(typeof(TransformComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, positionComponent, rotationComponent, transformComponent)

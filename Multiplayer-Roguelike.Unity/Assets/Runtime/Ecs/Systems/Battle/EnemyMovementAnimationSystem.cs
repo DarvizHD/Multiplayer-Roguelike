@@ -7,13 +7,6 @@ namespace Runtime.Ecs.Systems.Battle
 {
     public class EnemyMovementAnimationSystem : BaseSystem
     {
-        public EnemyMovementAnimationSystem()
-        {
-            RegisterRequiredComponent(typeof(EnemyTagComponent));
-            RegisterRequiredComponent(typeof(AnimatorComponent));
-            RegisterRequiredComponent(typeof(DirectionComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, enemyTagComponent, animatorComponent, directionComponent)

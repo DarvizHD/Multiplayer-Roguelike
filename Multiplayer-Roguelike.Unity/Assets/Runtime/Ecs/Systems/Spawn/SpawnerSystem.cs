@@ -13,11 +13,6 @@ namespace Runtime.Ecs.Systems.Spawn
         private int _nextEntityId = 64; //TODO: нужен уникальный id
         private Transform _playerTransform;
 
-        public SpawnerSystem()
-        {
-            RegisterRequiredComponent(typeof(SpawnerComponent));
-        }
-
         public override void Update(float deltaTime)
         {
             foreach (var (entityId, spawner)
