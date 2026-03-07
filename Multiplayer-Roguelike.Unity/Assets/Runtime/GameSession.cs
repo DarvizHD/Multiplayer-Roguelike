@@ -12,6 +12,7 @@ using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems;
 using Runtime.ECS.Systems.AI;
+using Runtime.Ecs.Systems.Battle;
 using Runtime.ECS.Systems.Battle;
 using Runtime.ECS.Systems.Battle.MeleeAttack;
 using Runtime.ECS.Systems.CameraFocus;
@@ -271,6 +272,7 @@ namespace Runtime
             EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
             EcsWorld.AddSystem<FreezeMovementSystem>();
 
+            EcsWorld.AddSystem<DamageAnimationSystem>();
             EcsWorld.AddSystem<DamageSystem>();
             EcsWorld.AddSystem<AIDeathSystem>();
 
