@@ -3,6 +3,7 @@ using Runtime.GameSystems;
 using Runtime.ServerInteraction;
 using Runtime.UI;
 using Runtime.UI.Navigation;
+using Shared.Commands.Player;
 using Shared.Models;
 using Shared.Protocol;
 using UnityEngine;
@@ -55,7 +56,22 @@ namespace Runtime
             _serverConnectionModel.PlayerPacketReceived += OnPlayerPacketReceived;
 
             _gameSessionSharedModel.IsRun.OnChange += RunSession;
+
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+#endif
         }
+
+#if UNITY_EDITOR
+        private void OnPlayModeStateChanged(UnityEditor.PlayModeStateChange state)
+        {
+            if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
+            {
+                var commandLogout = new LogoutCommand(_playerSharedModel.Nickname.Value);
+                commandLogout.Write(_serverConnectionModel.PlayerPeer);
+            }
+        }
+#endif
 
         private void FixedUpdate()
         {
