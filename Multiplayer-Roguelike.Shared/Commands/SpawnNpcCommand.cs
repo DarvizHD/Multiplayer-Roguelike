@@ -12,10 +12,13 @@ namespace Shared.Commands
 
         public string SessionId;
 
-        public SpawnNpcCommand(string sessionId, int count)
+        public string TargetId;
+
+        public SpawnNpcCommand(string sessionId, string targetId, int count)
         {
             SessionId = sessionId;
             Count = count;
+            TargetId = targetId;
         }
 
         public SpawnNpcCommand(NetworkProtocol protocol) : base(protocol)
@@ -26,6 +29,7 @@ namespace Shared.Commands
         {
             protocol.Get(out SessionId);
             protocol.Get(out Count);
+            protocol.Get(out TargetId);
         }
 
         public override void Write(Peer peer)
@@ -36,6 +40,7 @@ namespace Shared.Commands
             protocol.Add(Id);
             protocol.Add(SessionId);
             protocol.Add(Count);
+            protocol.Add(TargetId);
 
             packet.Create(protocol.Stream.GetBuffer());
             peer.Send(0, ref packet);

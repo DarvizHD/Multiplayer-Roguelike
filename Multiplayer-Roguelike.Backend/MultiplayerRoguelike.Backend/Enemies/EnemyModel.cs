@@ -6,16 +6,16 @@ namespace Backend.Enemies
     public class EnemyModel
     {
         public int Id { get; }
+        public NavAgentModel Agent { get; }
 
         public Vector3 Position;
 
         public string TargetPlayerId;
 
-        public NavAgentModel Agent;
-
-        public EnemyModel(int id)
+        public EnemyModel(int id, NavAgentModel agent)
         {
             Id = id;
+            Agent = agent;
         }
     }
 }
