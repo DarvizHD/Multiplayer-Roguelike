@@ -25,7 +25,7 @@ namespace Runtime.Ecs.Core
             ComponentManager.RegisterComponent<T>();
         }
 
-        public void AddEntityComponent<T>(int entityId, T component) where T : class, IComponent
+        public void AddEntityComponent<T>(ushort entityId, T component) where T : class, IComponent
         {
             ComponentManager.AddComponent(entityId, component);
         }

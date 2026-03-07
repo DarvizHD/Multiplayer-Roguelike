@@ -4,7 +4,7 @@ namespace Runtime.Ecs.Core
 {
     public static class ComponentId<T> where T : IComponent
     {
-        public static readonly int Id;
+        public static readonly ushort Id;
 
         static ComponentId()
         {
