@@ -10,7 +10,7 @@ namespace Backend.Navigation
 
         public int Id { get; private set; }
 
-        public Vector3 Position { get; private set; }
+        public Vector3 Position { get; private set; } = new Vector3(0, 0, 0);
         public Vector3 Target { get; private set; }
 
         public float Speed { get; private set; } = 2.5f;
