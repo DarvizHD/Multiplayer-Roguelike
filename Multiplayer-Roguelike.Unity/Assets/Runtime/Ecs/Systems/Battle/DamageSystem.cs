@@ -21,7 +21,7 @@ namespace Runtime.Ecs.Systems.Battle
 
                 if (healthComponent.CurrentHealth <= 0 || ComponentManager.HasComponent<InvulnerabilityComponent>(entityId))
                 {
-                    return;
+                    continue;
                 }
 
                 healthComponent.CurrentHealth -= pendingDamageEventComponent.TotalDamage;

@@ -6,7 +6,7 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackAnimationSystem : BaseSystem
     {
-        private QueryBuffer<AnimatorComponent, MeleeAttackComponent, AttackEventComponent> _buffer;
+        private QueryBuffer<AnimatorComponent, MeleeAttackComponent, AttackEventComponent> _buffer = new();
 
         public override void Update(float deltaTime)
         {

@@ -26,47 +26,28 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
                 var meleeAttackComponent = _attackerBuffer.Components3[i];
                 var attackCooldownComponent = _attackerBuffer.Components4[i];
 
-                if (ComponentManager.HasComponent<DeathTagComponent>(entityId))
+                if (attackCooldownComponent.CurrentCooldown > 0f)
                 {
-                    return;
-                }
-
-                if (attackCooldownComponent.CurrentCooldown > 0)
-                {
-                    return;
+                    continue;
                 }
 
                 var attackDirection = Quaternion.Euler(0f, rotationComponent.Angle, 0f) * Vector3.forward;
                 attackDirection.y = 0;
+                attackDirection.Normalize();
 
                 for (var k = 0; k < _targetsComponentBuffer.Count; k++)
                 {
                     var targetId = _targetsComponentBuffer.EntityIds[k];
                     var targetPositionComponent = _targetsComponentBuffer.Components1[k];
 
-                    if (ComponentManager.HasComponent<DeathTagComponent>(targetId))
-                    {
-                        if (targetId == entityId)
-                        {
-                            continue;
-                        }
-                    }
-
-                    if (ComponentManager.HasComponent<DeathAnimationComponent>(targetId))
-                    {
-                        continue;
-                    }
-
-                    var distance = Vector3.Distance(targetPositionComponent.Position, positionComponent.Position);
+                    var toTarget = targetPositionComponent.Position - positionComponent.Position;
+                    toTarget.y = 0;
+                    var distance = toTarget.magnitude;
 
                     if (distance >= meleeAttackComponent.Range)
                     {
                         continue;
                     }
-
-                    var toTarget = targetPositionComponent.Position - positionComponent.Position;
-                    toTarget.y = 0;
-                    toTarget.Normalize();
 
                     var angle = Vector3.Angle(attackDirection, toTarget);
 
@@ -75,12 +56,8 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
                         continue;
                     }
 
-                    if (!ComponentManager.HasComponent<AttackEventComponent>(entityId))
-                    {
-                        attackCooldownComponent.CurrentCooldown = attackCooldownComponent.Cooldown;
-
-                        ComponentManager.AddComponent(entityId, new AttackEventComponent(targetId, meleeAttackComponent.Damage));
-                    }
+                    ComponentManager.AddComponent(entityId, new AttackEventComponent(targetId, meleeAttackComponent.Damage));
+                    attackCooldownComponent.CurrentCooldown = attackCooldownComponent.Cooldown;
                 }
             }
         }

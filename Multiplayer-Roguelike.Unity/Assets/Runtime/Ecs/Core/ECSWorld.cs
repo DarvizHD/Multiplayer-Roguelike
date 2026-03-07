@@ -5,11 +5,14 @@ namespace Runtime.Ecs.Core
 {
     public class EcsWorld
     {
+        public static EcsWorld DebugInstance { get; private set; }
+
         public ComponentManager ComponentManager { get; }
         public SystemManager SystemManager { get; }
 
         public EcsWorld()
         {
+            DebugInstance = this;
             ComponentManager = new ComponentManager(64);
             SystemManager = new SystemManager(ComponentManager);
         }

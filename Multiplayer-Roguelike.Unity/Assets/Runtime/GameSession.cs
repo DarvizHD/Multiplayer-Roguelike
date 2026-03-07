@@ -12,6 +12,7 @@ using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems;
 using Runtime.Ecs.Systems.Battle;
+using Runtime.Ecs.Systems.Battle.MeleeAttack;
 using Runtime.Ecs.Systems.CameraFocus;
 using Runtime.Ecs.Systems.Movement;
 using Runtime.Ecs.Systems.Network;
@@ -134,7 +135,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(position));
             EcsWorld.AddEntityComponent(entityId, new PlayerTagComponent());
             EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(8f));
-            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(10f));
+            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(360f));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.zero));
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(provider.Transform));
@@ -172,7 +173,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
             EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(1f));
-            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(10f));
+            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(360f));
             EcsWorld.AddEntityComponent(entityId, new EnemyTagComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionRotationTagComponent());
             EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(enemyProvider.Animator));
@@ -248,22 +249,25 @@ namespace Runtime
             EcsWorld.AddSystem<DrawCameraTransformSystem>();
 
             EcsWorld.AddSystem<AINavigationSystem>();
+            EcsWorld.AddSystem<AIPositionSyncSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
 
-            /*
-            EcsWorld.AddSystem<DirectionRotationSystem>();
-            EcsWorld.AddSystem<FollowSystem>();
+            EcsWorld.AddSystem<AttackCooldownSystem>();
+
             EcsWorld.AddSystem<MeleeAttackSystem>();
+            EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
+
+            EcsWorld.AddSystem<AttackSystem>();
+            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
+            EcsWorld.AddSystem<FreezeMovementSystem>();
+
+            EcsWorld.AddSystem<DamageAnimationSystem>();
+            EcsWorld.AddSystem<DamageSystem>();
+
+            /*
             EcsWorld.AddSystem<RegenerationSystem>();
             EcsWorld.AddSystem<InvulnerabilitySystem>();
-            EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
-            EcsWorld.AddSystem<AttackCooldownSystem>();
-            EcsWorld.AddSystem<AttackSystem>();
-            EcsWorld.AddSystem<DamageAnimationSystem>();
-            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
-            EcsWorld.AddSystem<DamageSystem>();
             EcsWorld.AddSystem<DeathSystem>();
-            EcsWorld.AddSystem<FreezeMovementSystem>();
             EcsWorld.AddSystem<DeathAnimationSystem>();*/
         }
     }
