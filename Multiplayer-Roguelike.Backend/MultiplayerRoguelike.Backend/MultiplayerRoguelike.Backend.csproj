@@ -18,4 +18,12 @@
     <ItemGroup>
         <ProjectReference Include="..\..\Multiplayer-Roguelike.Shared\Multiplayer-Roguelike.Shared.csproj"/>
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Resources\" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="Resources\base.navmesh">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 </Project>
