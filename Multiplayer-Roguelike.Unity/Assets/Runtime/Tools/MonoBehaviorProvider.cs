@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 namespace Runtime.Tools
 {
@@ -10,5 +11,6 @@ namespace Runtime.Tools
         [field: SerializeField] public Transform Transform { get; private set; }
 
         [field: SerializeField] public NavMeshAgent Agent { get; private set; }
+        [field: SerializeField] public Rigidbody Rigidbody { get; set; }
     }
 }

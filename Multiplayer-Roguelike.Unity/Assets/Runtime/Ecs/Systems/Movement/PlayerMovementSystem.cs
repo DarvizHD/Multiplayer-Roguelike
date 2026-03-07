@@ -5,9 +5,10 @@ using Runtime.Ecs.Core;
 
 namespace Runtime.Ecs.Systems.Movement
 {
-    public class MovementSystem : BaseSystem
+    public class PlayerMovementSystem : BaseSystem
     {
-        private QueryBuffer<PositionComponent, DirectionComponent, MoveSpeedComponent, LocalControllableTag> _buffer = new();
+        private QueryBuffer<PositionComponent, DirectionComponent,
+            MoveSpeedComponent, RigidbodyComponent, LocalControllableTag> _buffer = new();
 
         public override void Update(float deltaTime)
         {
@@ -19,6 +20,7 @@ namespace Runtime.Ecs.Systems.Movement
                 var positionComponent = _buffer.Components1[i];
                 var directionComponent = _buffer.Components2[i];
                 var moveSpeedComponent = _buffer.Components3[i];
+                var rigidbodyComponent = _buffer.Components4[i];
 
                 if (ComponentManager.HasComponent<DeathTagComponent>(entityId) ||
                     ComponentManager.HasComponent<DeathAnimationComponent>(entityId))
@@ -26,7 +28,11 @@ namespace Runtime.Ecs.Systems.Movement
                     return;
                 }
 
-                positionComponent.Position += directionComponent.Direction.normalized * (moveSpeedComponent.Speed * deltaTime);
+                var move = directionComponent.Direction.normalized * moveSpeedComponent.Speed * deltaTime;
+
+                rigidbodyComponent.Rigidbody.MovePosition(rigidbodyComponent.Rigidbody.position + move);
+
+                positionComponent.Position = rigidbodyComponent.Rigidbody.position;
             }
         }
     }
