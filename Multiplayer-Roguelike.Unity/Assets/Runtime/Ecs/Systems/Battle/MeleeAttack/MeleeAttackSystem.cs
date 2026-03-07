@@ -1,5 +1,6 @@
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle;
+using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
@@ -9,7 +10,7 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackSystem : BaseSystem
     {
-        private QueryBuffer<PositionComponent, EnemyTagComponent>  _targetsComponentBuffer = new();
+        private QueryBuffer<PositionComponent, EnemyTagComponent, AliveTagComponent>  _targetsComponentBuffer = new();
         private QueryBuffer<PositionComponent, RotationComponent, MeleeAttackComponent, AttackCooldownComponent> _attackerBuffer = new();
 
         public override void Update(float deltaTime)
