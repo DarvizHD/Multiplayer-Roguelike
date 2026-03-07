@@ -3,7 +3,7 @@ using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Core;
 using Runtime.Tools;
 
-namespace Runtime.Ecs.Systems.Network
+namespace Runtime.ECS.Systems.Network
 {
     public class CharacterPositionSyncSystem : BaseSystem
     {

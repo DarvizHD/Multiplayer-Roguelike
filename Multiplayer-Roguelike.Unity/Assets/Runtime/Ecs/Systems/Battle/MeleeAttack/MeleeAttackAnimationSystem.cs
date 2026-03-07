@@ -2,11 +2,11 @@ using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Core;
 
-namespace Runtime.Ecs.Systems.Battle.MeleeAttack
+namespace Runtime.ECS.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackAnimationSystem : BaseSystem
     {
-        private QueryBuffer<AnimatorComponent, MeleeAttackComponent, AttackEventComponent> _buffer;
+        private QueryBuffer<AnimatorComponent, MeleeAttackComponent, AttackEventComponent> _buffer = new();
 
         public override void Update(float deltaTime)
         {

@@ -1,14 +1,15 @@
 using Runtime.Ecs.Components;
+using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.Ecs.Systems
+namespace Runtime.ECS.Systems.AI
 {
     public class AINavigationSystem : BaseSystem
     {
-        private QueryBuffer<NavMeshAgentComponent, PositionComponent> _agentsBuffer = new();
+        private QueryBuffer<NavMeshAgentComponent, PositionComponent, MoveSpeedComponent, RotationSpeedComponent, AliveTagComponent> _agentsBuffer = new();
         private QueryBuffer<PlayerTagComponent, PositionComponent> _playersBuffer = new();
 
         public override void Update(float deltaTime)
@@ -22,6 +23,8 @@ namespace Runtime.Ecs.Systems
 
                 var navMeshAgentComponent = _agentsBuffer.Components1[i];
                 var positionComponent = _agentsBuffer.Components2[i];
+                var moveSpeedComponent = _agentsBuffer.Components3[i];
+                var rotationComponent = _agentsBuffer.Components4[i];
 
                 var closestDistance = float.MaxValue;
                 Vector3 closestPosition = default;
@@ -48,6 +51,8 @@ namespace Runtime.Ecs.Systems
                 }
 
                 navMeshAgentComponent.Agent.SetDestination(closestPosition);
+                navMeshAgentComponent.Agent.speed = moveSpeedComponent.Speed;
+                navMeshAgentComponent.Agent.angularSpeed = rotationComponent.Speed;
             }
         }
     }

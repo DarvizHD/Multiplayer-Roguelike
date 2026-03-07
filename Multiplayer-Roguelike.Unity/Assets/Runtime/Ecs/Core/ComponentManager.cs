@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using Runtime.Ecs.Components;
 
@@ -68,6 +70,68 @@ namespace Runtime.Ecs.Core
             }
 
             _toRemoveEntityComponents.Clear();
+        }
+
+        public List<ushort> GetAllEntities()
+        {
+            var entities = new HashSet<ushort>();
+
+            foreach (var storage in _storages)
+            {
+                if (storage == null)
+                {
+                    continue;
+                }
+
+                foreach (var entity in storage.EntityIds)
+                {
+                    entities.Add(entity);
+                }
+            }
+
+            return new List<ushort>(entities);
+        }
+
+        public List<Type> GetComponentTypes(ushort entityId)
+        {
+            var types = new List<Type>();
+
+            for (ushort i = 0; i < _storages.Length; i++)
+            {
+                var storage = _storages[i];
+
+                if (storage == null)
+                {
+                    continue;
+                }
+
+                if (storage.Has(entityId))
+                {
+                    types.Add(storage.GetType());
+                }
+            }
+
+            return types;
+        }
+
+        public List<IComponent> GetAllComponents(ushort entityId)
+        {
+            var result = new List<IComponent>();
+
+            foreach (var storage in _storages)
+            {
+                if (storage == null)
+                {
+                    continue;
+                }
+
+                if (storage.TryGet(entityId, out var component))
+                {
+                    result.Add(component);
+                }
+            }
+
+            return result;
         }
     }
 }

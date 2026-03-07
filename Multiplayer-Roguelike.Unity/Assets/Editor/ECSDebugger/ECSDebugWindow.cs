@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Runtime;
+using Runtime.Ecs.Components;
 using Runtime.Ecs.Core;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace Editor.EcsDebugger
 {
     public class EcsDebugWindow : EditorWindow
     {
-        private readonly Dictionary<int, bool> _foldouts = new();
+        private readonly Dictionary<ushort, bool> _entityFoldouts = new();
         private EntryPoint _entryPoint;
         private Vector2 _scrollPos;
 
@@ -20,103 +21,95 @@ namespace Editor.EcsDebugger
             GetWindow<EcsDebugWindow>("ECS Debugger");
         }
 
-        /*private void OnGUI()
+        private void OnGUI()
         {
             if (!Application.isPlaying)
             {
                 EditorGUILayout.HelpBox("Available only in Play Mode", MessageType.Info);
-                {
-                    return;
-                }
+                return;
             }
 
             _entryPoint = FindFirstObjectByType<EntryPoint>();
 
             if (!_entryPoint)
             {
-                EditorGUILayout.HelpBox("EntryPoint not found in the scene", MessageType.Warning);
-                {
-                    return;
-                }
+                EditorGUILayout.HelpBox("EntryPoint not found", MessageType.Warning);
+                return;
             }
 
-            var componentManager = _entryPoint.EcsWorld.ComponentManager;
+            var componentManager = EcsWorld.DebugInstance?.ComponentManager;
+
+            if (componentManager == null)
+            {
+                return;
+            }
+
+            var entities = componentManager.GetAllEntities();
 
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
-
-            var entities = componentManager.GetAllEntities().ToList();
 
             EditorGUILayout.LabelField($"Total Entities: {entities.Count}", EditorStyles.boldLabel);
             EditorGUILayout.Space();
 
-            ShowEntityHeader(entities, componentManager);
+            foreach (var entity in entities)
+            {
+                DrawEntity(componentManager, entity);
+            }
 
             EditorGUILayout.EndScrollView();
 
             Repaint();
-        }*/
+        }
 
-        private void ShowEntityHeader(List<int> entities, ComponentManager componentManager)
+        private void DrawEntity(ComponentManager componentManager, ushort entityId)
         {
-            foreach (var entityId in entities)
+            _entityFoldouts.TryAdd(entityId, false);
+
+            _entityFoldouts[entityId] =
+                EditorGUILayout.Foldout(_entityFoldouts[entityId], $"Entity {entityId}", true);
+
+            if (!_entityFoldouts[entityId])
+                return;
+
+            EditorGUI.indentLevel++;
+
+            DrawComponents(componentManager, entityId);
+
+            EditorGUI.indentLevel--;
+        }
+
+        private void DrawComponents(ComponentManager componentManager, ushort entityId)
+        {
+            foreach (var component in componentManager.GetAllComponents(entityId))
             {
-                _foldouts.TryAdd(entityId, false);
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
-                _foldouts[entityId] = EditorGUILayout.Foldout(_foldouts[entityId], $"Entity {entityId}", true);
+                var type = component.GetType();
 
-                if (!_foldouts[entityId])
-                {
-                    continue;
-                }
+                EditorGUILayout.LabelField(type.Name, EditorStyles.boldLabel);
 
                 EditorGUI.indentLevel++;
 
-                ShowComponentHeader(componentManager, entityId);
+                DrawFields(component);
 
                 EditorGUI.indentLevel--;
-            }
-        }
-
-        private void ShowComponentHeader(ComponentManager componentManager, int entityId)
-        {
-            /*
-             TODO: Rework this.
-
-             var componentTypes = componentManager.GetComponentTypes(entityId);
-
-            foreach (var componentType in componentTypes)
-            {
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                EditorGUILayout.LabelField(componentType.Name, EditorStyles.boldLabel);
-
-                var component = componentManager.GetComponent(entityId, componentType);
-                if (component != null)
-                {
-                    EditorGUI.indentLevel++;
-                    ShowComponentFields(component);
-                    EditorGUI.indentLevel--;
-                }
 
                 EditorGUILayout.EndVertical();
                 EditorGUILayout.Space(2);
-            }*/
+            }
         }
 
-        private void ShowComponentFields(object component)
+        private void DrawFields(object component)
         {
-            var fields = component.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
-            var properties = component.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var fields = component.GetType()
+                .GetFields(BindingFlags.Public | BindingFlags.Instance);
 
             foreach (var field in fields)
             {
                 var value = field.GetValue(component);
-                EditorGUILayout.LabelField($"{field.Name}: {(value is Object obj ? obj.name : value)}");
-            }
 
-            foreach (var property in properties)
-            {
-                var value = property.GetValue(component);
-                EditorGUILayout.LabelField($"{property.Name}: {(value is Object obj ? obj.name : value)}");
+                EditorGUILayout.LabelField(
+                    $"{field.Name}: {(value is Object obj ? obj.name : value)}");
             }
         }
     }
