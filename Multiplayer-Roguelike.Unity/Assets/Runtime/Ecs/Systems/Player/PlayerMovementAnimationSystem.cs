@@ -4,7 +4,7 @@ using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.Ecs.Systems
+namespace Runtime.ECS.Systems.Player
 {
     public class PlayerMovementAnimationSystem : BaseSystem
     {

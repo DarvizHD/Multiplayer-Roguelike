@@ -3,7 +3,7 @@ using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.Ecs.Systems
+namespace Runtime.ECS.Systems.Battle.Health
 {
     public class DeathAnimationSystem : BaseSystem
     {

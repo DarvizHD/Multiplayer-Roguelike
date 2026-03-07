@@ -1,12 +1,11 @@
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle;
-using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.Ecs.Systems.Battle.MeleeAttack
+namespace Runtime.ECS.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackSystem : BaseSystem
     {

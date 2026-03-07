@@ -3,7 +3,7 @@ using Runtime.Ecs.Components.Player;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.Ecs.Systems
+namespace Runtime.ECS.Systems.Player
 {
     public class PlayerInputMovementSystem : BaseSystem
     {

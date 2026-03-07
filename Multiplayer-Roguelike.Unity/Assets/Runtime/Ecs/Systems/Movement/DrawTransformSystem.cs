@@ -2,7 +2,7 @@ using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.Ecs.Systems.Movement
+namespace Runtime.ECS.Systems.Movement
 {
     public class DrawTransformSystem : BaseSystem
     {

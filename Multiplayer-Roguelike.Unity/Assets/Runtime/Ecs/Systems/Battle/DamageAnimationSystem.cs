@@ -2,7 +2,7 @@ using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Core;
 
-namespace Runtime.Ecs.Systems.Battle
+namespace Runtime.ECS.Systems.Battle
 {
     public class DamageAnimationSystem : BaseSystem
     {
