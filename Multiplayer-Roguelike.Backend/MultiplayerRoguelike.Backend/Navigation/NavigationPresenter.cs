@@ -14,6 +14,9 @@ namespace Backend.Navigation
         private readonly NavigationSystem _navigationSystem;
         private readonly ServerSystemCollection _serverSystems;
 
+        private DtNavMesh _navMesh;
+        private DtNavMeshQuery _query;
+
         public NavigationPresenter(WorldModel worldModel)
         {
             _worldModel = worldModel;
@@ -23,6 +26,8 @@ namespace Backend.Navigation
 
         public void Enable()
         {
+            LoadNavMesh();
+
             _worldModel.Sessions.OnAdded += HandleSessionAdd;
 
             foreach (var session in _worldModel.Sessions.Models.Values)
@@ -40,16 +45,20 @@ namespace Backend.Navigation
             _serverSystems.Remove(_navigationSystem);
         }
 
-        private void HandleSessionAdd(SessionModel session)
+        private void LoadNavMesh()
         {
             using var stream = new FileStream(_filename, FileMode.Open);
             using var br = new BinaryReader(stream);
 
             var reader = new DtMeshSetReader();
-            var mesh = reader.Read(br, 6);
+            _navMesh = reader.Read(br, 6);
+            _query = new DtNavMeshQuery(_navMesh);
+        }
 
-            session.NavMesh.NavMesh = mesh;
-            session.NavMesh.Query = new DtNavMeshQuery(mesh);
+        private void HandleSessionAdd(SessionModel session)
+        {
+            session.NavMesh.NavMesh = _navMesh;
+            session.NavMesh.Query = _query;
         }
     }
 }
