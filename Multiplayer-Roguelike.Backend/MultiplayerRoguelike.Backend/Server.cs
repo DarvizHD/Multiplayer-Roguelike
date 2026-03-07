@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using Backend.CommandExecutors;
 using Backend.CommandExecutors.Common;
@@ -113,6 +114,12 @@ namespace Backend
 
                 case EventType.Timeout:
                     Console.WriteLine($"{netEvent.Peer.ID} timed out");
+
+                    var player = _world.Players.Models.Values.FirstOrDefault(p => p.Peer.ID == netEvent.Peer.ID);
+                    if (player is { SessionId: "" })
+                    {
+                        _world.Players.Remove(player.PlayerSharedModel.Id);
+                    }
                     break;
             }
         }
@@ -121,12 +128,20 @@ namespace Backend
         {
             foreach (var player in _world.Players.Models.Values)
             {
-                if (player.PlayerSharedModel.IsDirty)
+                if (player.PlayerSharedModel.IsDirty || player.IsReconnecting)
                 {
                     var protocol = new NetworkProtocol();
                     var packet = default(Packet);
 
-                    player.PlayerSharedModel.Write(protocol);
+                    if (player.IsReconnecting)
+                    {
+                        player.PlayerSharedModel.WriteAll(protocol);
+                        player.IsReconnecting = player.SessionId != string.Empty;
+                    }
+                    else
+                    {
+                        player.PlayerSharedModel.Write(protocol);
+                    }
 
                     packet.Create(protocol.Stream.GetBuffer());
 
@@ -140,15 +155,21 @@ namespace Backend
             foreach (var session in _world.Sessions.Models.Values)
             {
                 var worldSharedModel = session.GameSessionSharedModel;
-                if (worldSharedModel.IsDirty)
+                if (worldSharedModel.IsDirty || session.Players.Models.Values.Any(p => p.IsReconnecting))
                 {
                     var protocol = new NetworkProtocol();
                     worldSharedModel.Write(protocol);
 
+                    var fullWorldProtocol = new NetworkProtocol();
+                    worldSharedModel.WriteAll(fullWorldProtocol);
+
                     foreach (var player in session.Players.Models.Values)
                     {
                         var packet = default(Packet);
-                        packet.Create(protocol.Stream.GetBuffer());
+                        packet.Create(player.IsReconnecting
+                            ? fullWorldProtocol.Stream.GetBuffer()
+                            : protocol.Stream.GetBuffer());
+                        player.IsReconnecting = false;
                         SendPacket(player.Peer, 1, ref packet);
                     }
                 }

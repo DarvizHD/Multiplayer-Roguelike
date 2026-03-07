@@ -19,7 +19,15 @@ namespace Backend.CommandExecutors.Player
 
             if (World.Players.TryGet(Command.PlayerNickname, out var existedPlayer))
             {
-                Console.WriteLine($"Player with name {existedPlayer.PlayerSharedModel.Nickname.Value} has already been logged in");
+                if (World.Sessions.TryGet(existedPlayer.SessionId, out var session))
+                {
+                    existedPlayer.Peer = Peer;
+                    existedPlayer.IsReconnecting = true;
+                }
+                else
+                {
+                    Console.WriteLine($"Player with name {existedPlayer.PlayerSharedModel.Nickname.Value} has already been logged in");
+                }
                 return;
             }
 

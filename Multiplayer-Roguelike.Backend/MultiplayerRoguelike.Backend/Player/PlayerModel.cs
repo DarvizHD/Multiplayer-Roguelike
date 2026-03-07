@@ -6,8 +6,9 @@ namespace Backend.Player
     public class PlayerModel
     {
         public PlayerSharedModel PlayerSharedModel { get; }
-        public Peer Peer { get; }
+        public Peer Peer { get; set; }
         public string SessionId { get; set; } = string.Empty;
+        public bool IsReconnecting { get; set; }
 
         public PlayerModel(string playerNickname, Peer peer)
         {

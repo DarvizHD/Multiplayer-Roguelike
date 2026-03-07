@@ -30,6 +30,7 @@ namespace Backend.CommandExecutors.Common
             return commandName switch
             {
                 CommandConst.Login => new LoginCommandExecutor(new LoginCommand(eNetProtocol), _world, netEvent.Peer),
+                CommandConst.Logout => new LogoutCommandExecutor(new LogoutCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.CreateLobby => new CreateLobbyCommandExecutor(new CreateLobbyCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.JoinLobby => new JoinLobbyCommandExecutor(new JoinLobbyCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.MovePlayer => new MoveCommandExecutor(new MoveCommand(eNetProtocol), _world, netEvent.Peer),
