@@ -1,8 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
-using Backend.CommandExecutors;
 using Backend.CommandExecutors.Common;
 using Backend.Lobby.Collection;
+using Backend.Navigation;
 using Backend.Player.Collection;
 using Backend.Session.Collection;
 using ENet;
@@ -12,6 +13,8 @@ namespace Backend
 {
     public class Server
     {
+        private const int _tickRate = 30;
+        private const float _tickInterval = 1f / _tickRate;
         private readonly ushort _port;
 
         private Host _host;
@@ -38,6 +41,9 @@ namespace Backend
             var sessionCollectionPresenter = new SessionModelCollectionPresenter(_world.Sessions);
             sessionCollectionPresenter.Enable();
 
+            var navigationPresenter = new NavigationPresenter(_world);
+            navigationPresenter.Enable();
+
             Library.Initialize();
 
             var address = new Address { Port = _port };
@@ -49,7 +55,7 @@ namespace Backend
 
             _commandExecutorFactory = new CommandExecutorFactory(_world);
 
-            _thread = new Thread(NetworkLoop);
+            _thread = new Thread(Update);
             _thread.Start();
 
             Console.WriteLine($"Server started on port {_port}");
@@ -67,8 +73,12 @@ namespace Backend
             Console.WriteLine("Server stopped");
         }
 
-        private void NetworkLoop()
+        private void Update()
         {
+            var stopwatch = Stopwatch.StartNew();
+            var lastTime = stopwatch.Elapsed.TotalSeconds;
+            double accumulator = 0;
+
             while (_isRunning)
             {
                 while (_host.CheckEvents(out var netEvent) > 0)
@@ -81,8 +91,21 @@ namespace Backend
                     HandleEvent(netEvent);
                 }
 
-                HandleTick();
-                HandleSessionTick();
+                var now = stopwatch.Elapsed.TotalSeconds;
+                var frameTime = now - lastTime;
+                lastTime = now;
+                accumulator += frameTime;
+
+                while (accumulator >= _tickInterval)
+                {
+                    _world.ServerSystems.Update(_tickInterval);
+                    accumulator -= _tickInterval;
+                }
+
+                HandlePlayers();
+                HandleSessions();
+
+                Thread.Sleep(1);
             }
         }
 
@@ -117,7 +140,7 @@ namespace Backend
             }
         }
 
-        public void HandleTick()
+        private void HandlePlayers()
         {
             foreach (var player in _world.Players.Models.Values)
             {
@@ -135,7 +158,7 @@ namespace Backend
             }
         }
 
-        public void HandleSessionTick()
+        private void HandleSessions()
         {
             foreach (var session in _world.Sessions.Models.Values)
             {
