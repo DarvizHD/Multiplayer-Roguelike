@@ -32,9 +32,12 @@ namespace Backend.Navigation
                 {
                     foreach (var enemy in session.Enemies.Models.Values)
                     {
-                        if (session.GameSessionSharedModel.Characters.TryGet(enemy.TargetPlayerId, out var player))
+                        if (enemy.TargetPlayerId != null)
                         {
-                            RecalculatePath(enemy.Agent, player.Position, session.NavMesh);
+                            if (session.GameSessionSharedModel.Characters.TryGet(enemy.TargetPlayerId, out var player))
+                            {
+                                RecalculatePath(enemy.Agent, player.Position, session.NavMesh);
+                            }
                         }
                     }
                 }

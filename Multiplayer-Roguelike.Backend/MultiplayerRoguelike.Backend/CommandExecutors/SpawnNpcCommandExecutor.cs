@@ -1,5 +1,7 @@
 using System;
 using Backend.CommandExecutors.Common;
+using Backend.Enemies;
+using Backend.Navigation;
 using ENet;
 using Shared.Commands;
 using Shared.Models;
@@ -34,7 +36,11 @@ namespace Backend.CommandExecutors
                 newNpc.LastPosition.Value = randomPosition;
                 newNpc.Health.Value = startHealth;
 
+                var enemy = new EnemyModel(i, new NavAgentModel(i));
+                enemy.TargetPlayerId = Command.TargetId;
+
                 sessionModel.GameSessionSharedModel.NPCs.Add(newNpc);
+                sessionModel.Enemies.Add(i, enemy);
             }
         }
     }

@@ -119,7 +119,7 @@ namespace Runtime
                 return;
             }
 
-            var spawnNpcCommand = new SpawnNpcCommand(_playerSharedModel.Lobby.LobbyId.Value, 10);
+            var spawnNpcCommand = new SpawnNpcCommand(_playerSharedModel.Lobby.LobbyId.Value, _playerSharedModel.Nickname.Value, 10);
 
             spawnNpcCommand.Write(_serverConnectionModel.PlayerPeer);
         }
