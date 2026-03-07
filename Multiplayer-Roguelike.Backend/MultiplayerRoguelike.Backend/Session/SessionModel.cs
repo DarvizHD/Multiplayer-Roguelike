@@ -15,7 +15,7 @@ namespace Backend.Session
 
         public EnemyModelCollection  Enemies { get; } = new();
 
-        public NavMeshModel NavMesh { get; } = new();
+        public NavMeshModel NavMesh { get; set; } = new();
 
         public SessionModel(string id)
         {

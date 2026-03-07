@@ -8,11 +8,5 @@ namespace Backend.Navigation
         public DtNavMeshQuery Query { get; set; }
 
         public bool IsLoaded => NavMesh != null;
-
-        public void SetNavMesh(DtNavMesh navMesh)
-        {
-            NavMesh = navMesh;
-            Query = new DtNavMeshQuery(NavMesh);
-        }
     }
 }
