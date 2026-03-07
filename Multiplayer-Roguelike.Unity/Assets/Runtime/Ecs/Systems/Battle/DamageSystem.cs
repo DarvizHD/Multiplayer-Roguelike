@@ -7,7 +7,7 @@ namespace Runtime.ECS.Systems.Battle
 {
     public class DamageSystem : BaseSystem
     {
-        public QueryBuffer<PendingDamageEventComponent, HealthComponent> _buffer = new();
+        public QueryBuffer<PendingDamageEventComponent, HealthComponent, AliveTagComponent> _buffer = new();
 
         public override void Update(float deltaTime)
         {
@@ -25,6 +25,13 @@ namespace Runtime.ECS.Systems.Battle
                 }
 
                 healthComponent.CurrentHealth -= pendingDamageEventComponent.TotalDamage;
+
+                if (healthComponent.CurrentHealth <= 0)
+                {
+                    ComponentManager.RemoveComponent<AliveTagComponent>(entityId);
+                    ComponentManager.AddComponent(entityId, new DeathEventComponent());
+                    ComponentManager.AddComponent(entityId, new DeathTagComponent());
+                }
 
                 if (ComponentManager.TryGetComponent<RegenerationComponent>(entityId, out var regenerationComponent))
                 {

@@ -1,4 +1,5 @@
 using Runtime.Ecs.Components;
+using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
@@ -8,7 +9,7 @@ namespace Runtime.ECS.Systems.AI
 {
     public class AINavigationSystem : BaseSystem
     {
-        private QueryBuffer<NavMeshAgentComponent, PositionComponent, MoveSpeedComponent, RotationSpeedComponent> _agentsBuffer = new();
+        private QueryBuffer<NavMeshAgentComponent, PositionComponent, MoveSpeedComponent, RotationSpeedComponent, AliveTagComponent> _agentsBuffer = new();
         private QueryBuffer<PlayerTagComponent, PositionComponent> _playersBuffer = new();
 
         public override void Update(float deltaTime)

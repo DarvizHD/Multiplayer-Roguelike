@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8930996077387157583}
   - component: {fileID: 1366633883286923307}
   - component: {fileID: 2153154220481777502}
+  - component: {fileID: 2982487598444492898}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -51,6 +52,7 @@ MonoBehaviour:
   <Transform>k__BackingField: {fileID: 8930996077387157583}
   <Agent>k__BackingField: {fileID: 2153154220481777502}
   <Rigidbody>k__BackingField: {fileID: 0}
+  <RagdollProvider>k__BackingField: {fileID: 2982487598444492898}
 --- !u!195 &2153154220481777502
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -73,6 +75,42 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &2982487598444492898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4409722934381763222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4832d46bd16a8a4ab10e2c6c279b42d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::RagdollProvider
+  _rigidbodies:
+  - {fileID: 7332127513657624072}
+  - {fileID: 6786295835762792400}
+  - {fileID: 1053785958957675089}
+  - {fileID: 7814276512166572537}
+  - {fileID: 4461232637677291854}
+  - {fileID: 5623383012812447465}
+  - {fileID: 4775025641381629753}
+  - {fileID: 5714605135751724701}
+  - {fileID: 5304204533719685607}
+  - {fileID: 5680007353717943819}
+  - {fileID: 4174151466499136626}
+  _colliders:
+  - {fileID: 6783552988935270963}
+  - {fileID: 2708986507688307018}
+  - {fileID: 3408137591316006203}
+  - {fileID: 8365248509721560091}
+  - {fileID: 8074768256884716339}
+  - {fileID: 6293076307562083346}
+  - {fileID: 1393520604448227982}
+  - {fileID: 1258757396723749631}
+  - {fileID: 1735000695592214073}
+  - {fileID: 1681441650378072745}
+  - {fileID: 7941609580492517037}
 --- !u!1 &5696601046524692218
 GameObject:
   m_ObjectHideFlags: 0
