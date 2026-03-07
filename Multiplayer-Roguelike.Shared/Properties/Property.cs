@@ -43,6 +43,11 @@ namespace Shared.Properties
 
         public void Write(NetworkProtocol protocol)
         {
+            WriteAll(protocol);
+        }
+
+        public void WriteAll(NetworkProtocol protocol)
+        {
             protocol.Add(Id);
             protocol.Add(_value);
         }

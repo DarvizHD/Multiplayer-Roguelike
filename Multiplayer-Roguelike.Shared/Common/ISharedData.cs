@@ -8,6 +8,7 @@ namespace Shared.Common
         bool IsDirty { get; }
         void Read(NetworkProtocol protocol);
         void Write(NetworkProtocol protocol);
+        void WriteAll(NetworkProtocol protocol);
         void ClearDirty();
     }
 }
