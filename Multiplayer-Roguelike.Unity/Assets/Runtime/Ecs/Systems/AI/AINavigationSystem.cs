@@ -5,7 +5,7 @@ using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.AI
+namespace Runtime.Ecs.Systems.AI
 {
     public class AINavigationSystem : BaseSystem
     {
