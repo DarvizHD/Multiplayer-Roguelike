@@ -38,5 +38,10 @@ namespace Runtime.Ecs.Core
         {
             SystemManager.RegisterSystem<T>();
         }
+
+        public void AddSystem<T>(T system) where T : BaseSystem
+        {
+            SystemManager.RegisterSystem(system);
+        }
     }
 }

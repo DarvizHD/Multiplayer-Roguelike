@@ -24,6 +24,8 @@ using Runtime.ECS.Systems.Player;
 using Runtime.ECS.Systems.Rotation;
 using Runtime.ServerInteraction;
 using Runtime.Tools;
+using Runtime.UI;
+using Runtime.UI.HUD;
 using Shared.Commands;
 using Shared.Models;
 using UnityEngine;
@@ -35,23 +37,22 @@ namespace Runtime
         public EcsWorld EcsWorld { get; private set; }
 
         private readonly ServerConnectionModel _serverConnectionModel;
-
         private readonly GameSessionSharedModel _gameSessionSharedModel;
-
         private readonly PlayerSharedModel _playerSharedModel;
+        private readonly Dictionary<string, int> _characterEntities = new();
 
         private PlayerControls _playerControls;
-
-        private readonly Dictionary<string, int> _characterEntities = new();
+        private readonly UIHudView _hudView;
 
         private bool IsHost => _playerSharedModel.Lobby.OwnerId.Value == _playerSharedModel.Nickname.Value;
 
         public GameSession(GameSessionSharedModel gameSessionSharedModel, PlayerSharedModel playerSharedModel,
-            ServerConnectionModel serverConnectionModel)
+            ServerConnectionModel serverConnectionModel, UIHudView hudView)
         {
             _gameSessionSharedModel = gameSessionSharedModel;
             _playerSharedModel = playerSharedModel;
             _serverConnectionModel = serverConnectionModel;
+            _hudView = hudView;
         }
 
         public void Enable()
@@ -137,6 +138,7 @@ namespace Runtime
 
             var provider = Object.Instantiate(prefab);
 
+            EcsWorld.AddEntityComponent(entityId, new NameComponent(characterSharedModel.Id));
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(position));
             EcsWorld.AddEntityComponent(entityId, new PlayerTagComponent());
             EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(8f));
@@ -175,6 +177,7 @@ namespace Runtime
 
             var speed = 1f;
 
+            EcsWorld.AddEntityComponent(entityId, new NameComponent($"Zombie {entityId}"));
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(spawnPosition));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
@@ -237,6 +240,7 @@ namespace Runtime
             EcsWorld.RegisterComponent<DeathEventComponent>();
 
             EcsWorld.RegisterComponent<RagdollComponent>();
+            EcsWorld.RegisterComponent<NameComponent>();
         }
 
         private void AddSystems()
@@ -275,6 +279,8 @@ namespace Runtime
             EcsWorld.AddSystem<DamageAnimationSystem>();
             EcsWorld.AddSystem<DamageSystem>();
             EcsWorld.AddSystem<AIDeathSystem>();
+
+            EcsWorld.AddSystem<UIDrawNameSystem>(new UIDrawNameSystem(_hudView));
 
             /*
             EcsWorld.AddSystem<RegenerationSystem>();
