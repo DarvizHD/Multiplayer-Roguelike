@@ -39,7 +39,7 @@ namespace Backend.Enemies
         {
             var halfExtents = new RcVec3f(1, 2, 1);
             navigation.Query.FindNearestPoly(
-                new RcVec3f(targetPosition.X, targetPosition.Y, targetPosition.Z),
+                new RcVec3f(-targetPosition.X, targetPosition.Y, targetPosition.Z),
                 halfExtents,
                 new DtQueryDefaultFilter(),
                 out var nearestRef,

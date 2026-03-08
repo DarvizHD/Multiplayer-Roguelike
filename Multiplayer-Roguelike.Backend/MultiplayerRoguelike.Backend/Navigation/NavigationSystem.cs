@@ -17,7 +17,7 @@ namespace Backend.Navigation
             foreach (var enemy in session.Enemies.Models.Values)
             {
                 var agent = session.Navigation.Crowd.GetAgent(enemy.CrowdAgent.idx);
-                enemy.Shared.Position.Value = new Vector3(agent.npos.X, agent.npos.Y, agent.npos.Z);
+                enemy.Shared.Position.Value = new Vector3(-agent.npos.X, agent.npos.Y, agent.npos.Z);
             }
         }
     }
