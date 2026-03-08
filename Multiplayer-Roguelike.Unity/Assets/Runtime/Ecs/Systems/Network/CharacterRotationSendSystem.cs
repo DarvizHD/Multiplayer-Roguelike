@@ -3,7 +3,7 @@ using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Core;
 using Shared.Commands.Player;
 
-namespace Runtime.ECS.Systems.Network
+namespace Runtime.Ecs.Systems.Network
 {
     public class CharacterRotationSendSystem : BaseSystem
     {
