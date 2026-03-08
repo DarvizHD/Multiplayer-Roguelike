@@ -1,6 +1,7 @@
 using Backend.Enemies;
 using Backend.Navigation;
 using Backend.Player.Collection;
+using DotRecast.Detour;
 using Shared.Models;
 
 namespace Backend.Session
@@ -13,14 +14,20 @@ namespace Backend.Session
 
         public GameSessionSharedModel GameSessionSharedModel { get; }
 
-        public EnemyModelCollection  Enemies { get; } = new();
+        public EnemyModelCollection Enemies { get; } = new();
 
-        public NavMeshModel NavMesh { get; set; } = new();
+        public NavigationModel Navigation { get; set; }
 
         public SessionModel(string id)
         {
             Id = id;
             GameSessionSharedModel = new GameSessionSharedModel(id);
+        }
+
+        public void SetupNavigation(DtNavMesh navMesh)
+        {
+            Navigation = new NavigationModel(navMesh);
+            Navigation.SetupObstacleAvoidance();
         }
     }
 }
