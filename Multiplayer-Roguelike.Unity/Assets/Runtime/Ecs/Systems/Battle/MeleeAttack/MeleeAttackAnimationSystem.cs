@@ -1,12 +1,12 @@
 using Runtime.Ecs.Components;
-using Runtime.Ecs.Components.Battle;
+using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Core;
 
-namespace Runtime.ECS.Systems.Battle.MeleeAttack
+namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackAnimationSystem : BaseSystem
     {
-        private QueryBuffer<AnimatorComponent, MeleeAttackComponent, AttackEventComponent> _buffer = new();
+        private QueryBuffer<AnimatorComponent, CurrentWeaponComponent, AttackEventComponent> _buffer = new();
 
         public override void Update(float deltaTime)
         {
@@ -14,8 +14,15 @@ namespace Runtime.ECS.Systems.Battle.MeleeAttack
 
             for (var i = 0; i < _buffer.Count; i++)
             {
-                var animatorComponent = _buffer.Components1[i];
-                animatorComponent.Animator.SetTrigger(animatorComponent.MeleeAttack);
+                var animator = _buffer.Components1[i];
+                var current = _buffer.Components2[i];
+
+                if (!ComponentManager.HasComponent<MeleeAttackComponent>(current.WeaponEntityId))
+                {
+                    continue;
+                }
+
+                animator.Animator.SetTrigger(animator.MeleeAttack);
             }
         }
     }

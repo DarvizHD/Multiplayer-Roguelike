@@ -4,7 +4,7 @@ using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Battle
+namespace Runtime.Ecs.Systems.Battle
 {
     public class EnemyMovementAnimationSystem : BaseSystem
     {

@@ -1,50 +1,53 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class RagdollProvider : MonoBehaviour
+namespace Runtime.Tools
 {
-    public bool Enable
+    public class RagdollProvider : MonoBehaviour
     {
-        get => _enable;
-
-        set
+        public bool Enable
         {
-            foreach (var rb in _rigidbodies)
-            {
-                rb.isKinematic = !value;
-            }
+            get => _enable;
 
-            foreach (var col in _colliders)
+            set
             {
-                col.enabled = value;
+                foreach (var rb in _rigidbodies)
+                {
+                    rb.isKinematic = !value;
+                }
+
+                foreach (var col in _colliders)
+                {
+                    col.enabled = value;
+                }
             }
         }
-    }
 
-    private bool _enable;
+        private bool _enable;
 
-    [SerializeField] private List<Rigidbody> _rigidbodies = new List<Rigidbody>();
-    [SerializeField] private List<Collider> _colliders = new List<Collider>();
+        [SerializeField] private List<Rigidbody> _rigidbodies = new List<Rigidbody>();
+        [SerializeField] private List<Collider> _colliders = new List<Collider>();
 
-    private void Start()
-    {
-        Debug.Log($"{_rigidbodies.Count} Rigidbodies");
-        Debug.Log($"{_colliders.Count} Rigidbodies");
-        Enable = false;
-    }
+        private void Start()
+        {
+            Debug.Log($"{_rigidbodies.Count} Rigidbodies");
+            Debug.Log($"{_colliders.Count} Rigidbodies");
+            Enable = false;
+        }
 
-    [ContextMenu("Register Ragdoll Components")]
-    public void RegisterRagdollComponents()
-    {
-        _rigidbodies.Clear();
-        _colliders.Clear();
+        [ContextMenu("Register Ragdoll Components")]
+        public void RegisterRagdollComponents()
+        {
+            _rigidbodies.Clear();
+            _colliders.Clear();
 
-        var rigidbodies = GetComponentsInChildren<Rigidbody>();
-        var colliders = GetComponentsInChildren<Collider>();
+            var rigidbodies = GetComponentsInChildren<Rigidbody>();
+            var colliders = GetComponentsInChildren<Collider>();
 
-        _rigidbodies.AddRange(rigidbodies);
-        _colliders.AddRange(colliders);
+            _rigidbodies.AddRange(rigidbodies);
+            _colliders.AddRange(colliders);
 
-        Debug.Log($"Ragdoll registered: {_rigidbodies.Count} Rigidbodies, {_colliders.Count} Colliders");
+            Debug.Log($"Ragdoll registered: {_rigidbodies.Count} Rigidbodies, {_colliders.Count} Colliders");
+        }
     }
 }

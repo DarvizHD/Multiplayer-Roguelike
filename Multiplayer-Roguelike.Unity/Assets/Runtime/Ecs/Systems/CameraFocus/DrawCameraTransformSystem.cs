@@ -3,7 +3,7 @@ using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.CameraFocus
+namespace Runtime.Ecs.Systems.CameraFocus
 {
     public class DrawCameraTransformSystem : BaseSystem
     {

@@ -4,7 +4,7 @@ using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.CameraFocus
+namespace Runtime.Ecs.Systems.CameraFocus
 {
     public class CameraFocusSystem : BaseSystem
     {

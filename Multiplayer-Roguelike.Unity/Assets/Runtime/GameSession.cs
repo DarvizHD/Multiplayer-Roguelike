@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle;
+using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Camera;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
@@ -9,22 +10,21 @@ using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Components.Player;
 using Runtime.Ecs.Components.Spawn;
 using Runtime.Ecs.Components.Tags;
+using Runtime.Ecs.Components.UI;
 using Runtime.Ecs.Core;
-using Runtime.Ecs.Systems;
-using Runtime.ECS.Systems.AI;
+using Runtime.Ecs.Systems.AI;
 using Runtime.Ecs.Systems.Battle;
-using Runtime.ECS.Systems.Battle;
-using Runtime.ECS.Systems.Battle.MeleeAttack;
-using Runtime.ECS.Systems.CameraFocus;
+using Runtime.Ecs.Systems.Battle.MeleeAttack;
+using Runtime.Ecs.Systems.Battle.RangeAttack;
+using Runtime.Ecs.Systems.CameraFocus;
 using Runtime.Ecs.Systems.Movement;
-using Runtime.ECS.Systems.Movement;
-using Runtime.ECS.Systems.Movement.Freeze;
-using Runtime.ECS.Systems.Network;
-using Runtime.ECS.Systems.Player;
-using Runtime.ECS.Systems.Rotation;
+using Runtime.Ecs.Systems.Movement.Freeze;
+using Runtime.Ecs.Systems.Network;
+using Runtime.Ecs.Systems.Player;
+using Runtime.Ecs.Systems.Rotation;
+using Runtime.Ecs.Systems.UI;
 using Runtime.ServerInteraction;
 using Runtime.Tools;
-using Runtime.UI;
 using Runtime.UI.HUD;
 using Shared.Commands;
 using Shared.Models;
@@ -88,9 +88,7 @@ namespace Runtime
 
         private void OnCharacterAdded(CharacterSharedModel characterSharedModel)
         {
-            Debug.Log("Worked");
-
-            var entityId = (ushort) _characterEntities.Count;
+            var entityId = EcsWorld.CreateEntity();
 
             var controllable = _playerSharedModel.Nickname.Value == characterSharedModel.Id;
 
@@ -131,11 +129,27 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(Camera.main?.transform.parent.GetChild(2)));
         }
 
+        private ushort CreateMeleeWeapon()
+        {
+            var entityId = EcsWorld.CreateEntity();
+            EcsWorld.AddEntityComponent(entityId, new MeleeAttackComponent(2f, 5f));
+            EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(2f));
+            return entityId;
+        }
+
+        private ushort CreateRangedWeapon()
+        {
+            var entityId = EcsWorld.CreateEntity();
+            EcsWorld.AddEntityComponent(entityId, new RangedWeaponComponent(10f, 2f, 3f));
+            EcsWorld.AddEntityComponent(entityId, new AmmoComponent(10));
+            EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(0.5f));
+            return entityId;
+        }
+
         private void CreatePlayer(ushort entityId, CharacterSharedModel characterSharedModel, Vector3 position,
             bool controllable)
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Player");
-
             var provider = Object.Instantiate(prefab);
 
             EcsWorld.AddEntityComponent(entityId, new NameComponent(characterSharedModel.Id));
@@ -146,14 +160,17 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.zero));
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(provider.Transform));
-            EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(3f));
-            EcsWorld.AddEntityComponent(entityId, new MeleeAttackComponent(2f, 5f));
             EcsWorld.AddEntityComponent(entityId, new PlayerLookRotationTagComponent());
             EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(provider.Animator));
             EcsWorld.AddEntityComponent(entityId, new HealthComponent(100f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(5f, 3f));
             EcsWorld.AddEntityComponent(entityId, new CharacterNetworkSyncComponent(characterSharedModel));
-            EcsWorld.AddEntityComponent(entityId, new AliveTagComponent());
+
+            var meleeId = CreateMeleeWeapon();
+            var rangedId = CreateRangedWeapon();
+
+            EcsWorld.AddEntityComponent(entityId, new WeaponSlotsComponent(new[] { meleeId, rangedId }));
+            EcsWorld.AddEntityComponent(entityId, new CurrentWeaponComponent(meleeId));
 
             if (controllable)
             {
@@ -161,6 +178,7 @@ namespace Runtime
                 EcsWorld.AddEntityComponent(entityId, new CharacterConnectionComponent(_serverConnectionModel));
                 EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
                 EcsWorld.AddEntityComponent(entityId, new RigidbodyComponent(provider.Rigidbody));
+                EcsWorld.AddEntityComponent(entityId, new CursorWorldPositionComponent());
             }
             else
             {
@@ -241,6 +259,14 @@ namespace Runtime
 
             EcsWorld.RegisterComponent<RagdollComponent>();
             EcsWorld.RegisterComponent<NameComponent>();
+
+            EcsWorld.RegisterComponent<RangedWeaponComponent>();
+            EcsWorld.RegisterComponent<AmmoComponent>();
+            EcsWorld.RegisterComponent<WeaponSlotsComponent>();
+            EcsWorld.RegisterComponent<CurrentWeaponComponent>();
+            EcsWorld.RegisterComponent<SwitchWeaponEventComponent>();
+            EcsWorld.RegisterComponent<ReloadEventComponent>();
+            EcsWorld.RegisterComponent<CursorWorldPositionComponent>();
         }
 
         private void AddSystems()
@@ -267,10 +293,16 @@ namespace Runtime
             EcsWorld.AddSystem<AIPositionSyncSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
 
+            EcsWorld.AddSystem<CursorWorldPositionSystem>();
+            EcsWorld.AddSystem<WeaponInputSystem>();
+            EcsWorld.AddSystem<WeaponSwitchSystem>();
+
             EcsWorld.AddSystem<AttackCooldownSystem>();
 
             EcsWorld.AddSystem<MeleeAttackSystem>();
             EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
+            EcsWorld.AddSystem<RangedAttackSystem>();
+            EcsWorld.AddSystem<ReloadSystem>();
 
             EcsWorld.AddSystem<AttackSystem>();
             EcsWorld.AddSystem<FreezeMovementByDamageSystem>();

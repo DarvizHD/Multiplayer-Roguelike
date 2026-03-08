@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Core;
-using Runtime.ECS.Systems;
+using Runtime.UI.HUD;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Runtime.UI.HUD
+namespace Runtime.Ecs.Systems.UI
 {
     public class UIDrawHealthSystem : BaseSystem
     {

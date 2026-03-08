@@ -1,6 +1,6 @@
 using Runtime.Ecs.Core;
 
-namespace Runtime.ECS.Systems
+namespace Runtime.Ecs.Systems
 {
     public abstract class BaseSystem
     {

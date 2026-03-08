@@ -1,6 +1,4 @@
-using Runtime.Ecs.Components;
-
-namespace Runtime.UI.HUD
+namespace Runtime.Ecs.Components.UI
 {
     public class NameComponent : IComponent
     {

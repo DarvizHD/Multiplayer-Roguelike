@@ -2,7 +2,7 @@ using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Movement.Freeze;
 using Runtime.Ecs.Core;
 
-namespace Runtime.ECS.Systems.Movement.Freeze
+namespace Runtime.Ecs.Systems.Movement.Freeze
 {
     public class FreezeMovementSystem : BaseSystem
     {
