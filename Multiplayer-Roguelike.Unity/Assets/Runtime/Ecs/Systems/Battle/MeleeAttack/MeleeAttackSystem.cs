@@ -1,63 +1,73 @@
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle;
+using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Battle.MeleeAttack
+namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackSystem : BaseSystem
     {
-        private QueryBuffer<PositionComponent, EnemyTagComponent, AliveTagComponent>  _targetsComponentBuffer = new();
-        private QueryBuffer<PositionComponent, RotationComponent, MeleeAttackComponent, AttackCooldownComponent> _attackerBuffer = new();
+        private QueryBuffer<PositionComponent, EnemyTagComponent, AliveTagComponent> _targetsBuffer = new();
+        private QueryBuffer<PositionComponent, RotationComponent, CurrentWeaponComponent> _attackerBuffer = new();
 
         public override void Update(float deltaTime)
         {
-            ComponentManager.Filter.Query(ref _targetsComponentBuffer);
+            ComponentManager.Filter.Query(ref _targetsBuffer);
             ComponentManager.Filter.Query(ref _attackerBuffer);
 
             for (var i = 0; i < _attackerBuffer.Count; i++)
             {
                 var entityId = _attackerBuffer.EntityIds[i];
-                var positionComponent = _attackerBuffer.Components1[i];
-                var rotationComponent = _attackerBuffer.Components2[i];
-                var meleeAttackComponent = _attackerBuffer.Components3[i];
-                var attackCooldownComponent = _attackerBuffer.Components4[i];
+                var position = _attackerBuffer.Components1[i];
+                var rotation = _attackerBuffer.Components2[i];
+                var current = _attackerBuffer.Components3[i];
 
-                if (attackCooldownComponent.CurrentCooldown > 0f)
+                if (!ComponentManager.TryGetComponent<MeleeAttackComponent>(current.WeaponEntityId, out var melee))
                 {
                     continue;
                 }
 
-                var attackDirection = Quaternion.Euler(0f, rotationComponent.Angle, 0f) * Vector3.forward;
-                attackDirection.y = 0;
-                attackDirection.Normalize();
-
-                for (var k = 0; k < _targetsComponentBuffer.Count; k++)
+                if (!ComponentManager.TryGetComponent<AttackCooldownComponent>(current.WeaponEntityId,
+                        out var cooldown))
                 {
-                    var targetId = _targetsComponentBuffer.EntityIds[k];
-                    var targetPositionComponent = _targetsComponentBuffer.Components1[k];
+                    continue;
+                }
 
-                    var toTarget = targetPositionComponent.Position - positionComponent.Position;
+                if (cooldown.CurrentCooldown > 0f)
+                {
+                    continue;
+                }
+
+                var attackDir = Quaternion.Euler(0f, rotation.Angle, 0f) * Vector3.forward;
+                attackDir.y = 0;
+                attackDir.Normalize();
+
+                for (var k = 0; k < _targetsBuffer.Count; k++)
+                {
+                    var targetId = _targetsBuffer.EntityIds[k];
+                    var targetPos = _targetsBuffer.Components1[k];
+
+                    var toTarget = targetPos.Position - position.Position;
                     toTarget.y = 0;
                     var distance = toTarget.magnitude;
 
-                    if (distance >= meleeAttackComponent.Range)
+                    if (distance >= melee.Range)
                     {
                         continue;
                     }
 
-                    var angle = Vector3.Angle(attackDirection, toTarget);
-
-                    if (angle > meleeAttackComponent.Angle * 0.5f)
+                    var angle = Vector3.Angle(attackDir, toTarget);
+                    if (angle > melee.Angle * 0.5f)
                     {
                         continue;
                     }
 
-                    ComponentManager.AddComponent(entityId, new AttackEventComponent(targetId, meleeAttackComponent.Damage));
-                    attackCooldownComponent.CurrentCooldown = attackCooldownComponent.Cooldown;
+                    ComponentManager.AddComponent(entityId, new AttackEventComponent(targetId, melee.Damage));
+                    cooldown.CurrentCooldown = cooldown.Cooldown;
                 }
             }
         }
