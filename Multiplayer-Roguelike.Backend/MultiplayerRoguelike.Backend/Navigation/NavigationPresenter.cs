@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Backend.ServerSystems;
 using Backend.Session;
 using DotRecast.Detour;
 using DotRecast.Detour.Io;
@@ -12,37 +11,35 @@ namespace Backend.Navigation
 
         private readonly WorldModel _worldModel;
         private readonly NavigationSystem _navigationSystem;
-        private readonly ServerSystemCollection _serverSystems;
 
         private DtNavMesh _navMesh;
-        private DtNavMeshQuery _query;
 
         public NavigationPresenter(WorldModel worldModel)
         {
             _worldModel = worldModel;
-            _navigationSystem = new NavigationSystem(worldModel);
-            _serverSystems = worldModel.ServerSystems;
+            _navigationSystem = new NavigationSystem("navigation");
         }
 
         public void Enable()
         {
             LoadNavMesh();
 
-            _worldModel.Sessions.OnAdded += HandleSessionAdd;
+            _worldModel.Sessions.OnAdded += HandleSessionAdded;
+            _worldModel.Sessions.OnRemoved += HandleSessionRemoved;
 
             foreach (var session in _worldModel.Sessions.Models.Values)
             {
-                HandleSessionAdd(session);
+                HandleSessionAdded(session);
             }
 
-            _serverSystems.Add(_navigationSystem);
+            _worldModel.ServerSystems.Add(_navigationSystem);
         }
 
         public void Disable()
         {
-            _worldModel.Sessions.OnAdded -= HandleSessionAdd;
-
-            _serverSystems.Remove(_navigationSystem);
+            _worldModel.Sessions.OnAdded -= HandleSessionAdded;
+            _worldModel.Sessions.OnRemoved -= HandleSessionRemoved;
+            _worldModel.ServerSystems.Remove(_navigationSystem);
         }
 
         private void LoadNavMesh()
@@ -52,13 +49,18 @@ namespace Backend.Navigation
 
             var reader = new DtMeshSetReader();
             _navMesh = reader.Read(br, 6);
-            _query = new DtNavMeshQuery(_navMesh);
         }
 
-        private void HandleSessionAdd(SessionModel session)
+        private void HandleSessionAdded(SessionModel session)
         {
-            session.NavMesh.NavMesh = _navMesh;
-            session.NavMesh.Query = _query;
+            session.SetupNavigation(_navMesh);
+            _navigationSystem.Register(session);
+        }
+
+        private void HandleSessionRemoved(SessionModel session)
+        {
+            _navigationSystem.Unregister(session);
+            session.Navigation = null;
         }
     }
 }
