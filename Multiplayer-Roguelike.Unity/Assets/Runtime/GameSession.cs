@@ -281,6 +281,7 @@ namespace Runtime
             EcsWorld.AddSystem<AIDeathSystem>();
 
             EcsWorld.AddSystem<UIDrawNameSystem>(new UIDrawNameSystem(_hudView));
+            EcsWorld.AddSystem<UIDrawHealthSystem>(new UIDrawHealthSystem(_hudView));
 
             /*
             EcsWorld.AddSystem<RegenerationSystem>();

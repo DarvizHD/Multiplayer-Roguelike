@@ -14,7 +14,6 @@ namespace Runtime.UI.HUD
         private readonly Dictionary<int, TextElement> _labels = new();
 
         private readonly UIHudView _uiHudView;
-        private readonly UIViewDescription _uiViewDescription;
         private readonly Camera _camera;
 
         public UIDrawNameSystem(UIHudView uiHudView)
