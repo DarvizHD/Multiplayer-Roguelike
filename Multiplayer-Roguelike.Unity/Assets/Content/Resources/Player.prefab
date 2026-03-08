@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 2269872164986582665}
   - component: {fileID: 2690411617519485846}
   - component: {fileID: 760376834490022040}
-  - component: {fileID: 8735186825800146042}
   - component: {fileID: 921683554836180217}
+  - component: {fileID: 8735186825800146042}
+  - component: {fileID: 2899899281721966434}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -108,23 +109,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8735186825800146042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3652991558215106615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b31a41b391874d1693c467a0467fa992, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.MonoBehaviorProvider
-  <Animator>k__BackingField: {fileID: 7267215439272415420}
-  <Transform>k__BackingField: {fileID: 2269872164986582665}
-  <Agent>k__BackingField: {fileID: 0}
-  <Rigidbody>k__BackingField: {fileID: 921683554836180217}
-  <RagdollProvider>k__BackingField: {fileID: 0}
 --- !u!54 &921683554836180217
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -152,6 +136,39 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &8735186825800146042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3652991558215106615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b31a41b391874d1693c467a0467fa992, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.MonoBehaviorProvider
+  <Animator>k__BackingField: {fileID: 7267215439272415420}
+  <Transform>k__BackingField: {fileID: 2269872164986582665}
+  <Agent>k__BackingField: {fileID: 0}
+  <Rigidbody>k__BackingField: {fileID: 921683554836180217}
+  <RagdollProvider>k__BackingField: {fileID: 0}
+  <WeaponProvider>k__BackingField: {fileID: 2899899281721966434}
+--- !u!114 &2899899281721966434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3652991558215106615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89531d31ec5541748b55908455beccbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.Tools.WeaponProvider
+  _weapons:
+  - {fileID: 4240591375285295118}
+  - {fileID: 1115017860508878373}
 --- !u!1001 &268033480377777012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -218,6 +235,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0ed9f6cf61aef8949a94b73f5f6bce6b, type: 3}
   m_PrefabInstance: {fileID: 268033480377777012}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1115017860508878373 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0ed9f6cf61aef8949a94b73f5f6bce6b, type: 3}
+  m_PrefabInstance: {fileID: 268033480377777012}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3898132326046639455
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -278,6 +300,11 @@ PrefabInstance:
 --- !u!4 &3572000811112678068 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce33392111af1104da02f8a900e55e3b, type: 3}
+  m_PrefabInstance: {fileID: 3898132326046639455}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4240591375285295118 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ce33392111af1104da02f8a900e55e3b, type: 3}
   m_PrefabInstance: {fileID: 3898132326046639455}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6315787896707230932
