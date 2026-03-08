@@ -50,7 +50,6 @@ namespace Runtime.Ecs.Systems.AI
                     }
                 }
 
-                navMeshAgentComponent.Agent.SetDestination(closestPosition);
                 navMeshAgentComponent.Agent.speed = moveSpeedComponent.Speed;
                 navMeshAgentComponent.Agent.angularSpeed = rotationComponent.Speed;
             }

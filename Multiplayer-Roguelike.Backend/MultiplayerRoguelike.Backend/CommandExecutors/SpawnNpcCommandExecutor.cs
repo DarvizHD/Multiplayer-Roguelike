@@ -30,7 +30,7 @@ namespace Backend.CommandExecutors
                 var startHealth = 100f;
 
                 var enemy = new EnemyModel(i);
-                enemy.TargetPlayerId = Command.TargetId;
+                enemy.Shared.TargetPlayerId.Value = Command.TargetId;
                 enemy.Shared.Position.Value = randomPosition;
                 enemy.Shared.Health.Value = startHealth;
                 sessionModel.GameSessionSharedModel.Characters.TryGet(Command.TargetId, out var target);

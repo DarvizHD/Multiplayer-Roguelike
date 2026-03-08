@@ -8,7 +8,6 @@ namespace Backend.Enemies
         public int Id { get; }
         public EnemySharedModel Shared { get; }
         public DtCrowdAgent CrowdAgent { get; set; }
-        public string TargetPlayerId { get; set; }
 
         public EnemyModel(int id)
         {
