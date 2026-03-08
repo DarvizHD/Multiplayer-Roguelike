@@ -13,6 +13,6 @@ namespace Backend
 
         public SessionModelCollection Sessions { get; set; } = new();
 
-        public ServerSystemCollection  ServerSystems { get; set; } = new();
+        public ServerSystemCollection ServerSystems { get; set; } = new();
     }
 }

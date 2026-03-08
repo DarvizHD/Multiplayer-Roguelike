@@ -56,6 +56,7 @@ namespace Backend.Enemies
             {
                 return character;
             }
+
             return null;
         }
     }

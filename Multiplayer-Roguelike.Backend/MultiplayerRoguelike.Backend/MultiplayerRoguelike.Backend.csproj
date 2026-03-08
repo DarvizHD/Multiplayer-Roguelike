@@ -8,22 +8,22 @@
         <RootNamespace>Backend</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="DotRecast.Core" Version="2026.1.3" />
-        <PackageReference Include="DotRecast.Detour" Version="2026.1.3" />
-        <PackageReference Include="DotRecast.Detour.Crowd" Version="2026.1.3" />
-        <PackageReference Include="DotRecast.Recast" Version="2026.1.3" />
-        <PackageReference Include="DotRecast.Recast.Toolset" Version="2026.1.3" />
+        <PackageReference Include="DotRecast.Core" Version="2026.1.3"/>
+        <PackageReference Include="DotRecast.Detour" Version="2026.1.3"/>
+        <PackageReference Include="DotRecast.Detour.Crowd" Version="2026.1.3"/>
+        <PackageReference Include="DotRecast.Recast" Version="2026.1.3"/>
+        <PackageReference Include="DotRecast.Recast.Toolset" Version="2026.1.3"/>
         <PackageReference Include="ENet-CSharp" Version="2.4.8"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Multiplayer-Roguelike.Shared\Multiplayer-Roguelike.Shared.csproj"/>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Resources\" />
+        <Folder Include="Resources\"/>
     </ItemGroup>
     <ItemGroup>
-      <None Update="Resources\base.navmesh">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <None Update="Resources\base.navmesh">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 </Project>

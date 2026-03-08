@@ -10,7 +10,7 @@ namespace Backend.Enemies
         private readonly EnemyModelCollection _modelCollection;
         private readonly SessionModel _sessionModel;
         private readonly ServerSystemCollection _serverSystems;
-        private readonly EnemyTargetSystem  _targetSystem;
+        private readonly EnemyTargetSystem _targetSystem;
 
         public EnemyModelCollectionPresenter(EnemyModelCollection modelCollection, SessionModel sessionModel, ServerSystemCollection serverSystems)
         {
