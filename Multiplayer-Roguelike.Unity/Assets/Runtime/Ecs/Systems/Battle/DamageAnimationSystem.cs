@@ -1,7 +1,6 @@
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Core;
-using Runtime.ECS.Systems;
 
 namespace Runtime.Ecs.Systems.Battle
 {
