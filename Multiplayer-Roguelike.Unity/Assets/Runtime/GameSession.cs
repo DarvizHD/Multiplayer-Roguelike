@@ -165,6 +165,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new HealthComponent(100f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(5f, 3f));
             EcsWorld.AddEntityComponent(entityId, new CharacterNetworkSyncComponent(characterSharedModel));
+            EcsWorld.AddEntityComponent(entityId, new WeaponProviderComponent(provider.WeaponProvider));
 
             var meleeId = CreateMeleeWeapon();
             var rangedId = CreateRangedWeapon();
@@ -267,6 +268,8 @@ namespace Runtime
             EcsWorld.RegisterComponent<SwitchWeaponEventComponent>();
             EcsWorld.RegisterComponent<ReloadEventComponent>();
             EcsWorld.RegisterComponent<CursorWorldPositionComponent>();
+
+            EcsWorld.RegisterComponent<WeaponProviderComponent>();
         }
 
         private void AddSystems()
@@ -295,6 +298,8 @@ namespace Runtime
 
             EcsWorld.AddSystem<CursorWorldPositionSystem>();
             EcsWorld.AddSystem<WeaponInputSystem>();
+            EcsWorld.AddSystem<DrawWeaponSwitcherSystem>();
+            EcsWorld.AddSystem<WeaponAnimationSwitcherSystem>();
             EcsWorld.AddSystem<WeaponSwitchSystem>();
 
             EcsWorld.AddSystem<AttackCooldownSystem>();

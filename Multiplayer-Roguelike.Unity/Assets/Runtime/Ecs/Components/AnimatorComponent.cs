@@ -8,8 +8,9 @@ namespace Runtime.Ecs.Components
         public int Z => Animator.StringToHash("Z");
         public int IsRun => Animator.StringToHash("IsRun");
         public int MeleeAttack => Animator.StringToHash("MeleeAttack");
-
         public int Damage => Animator.StringToHash("Damage");
+
+        public int WeaponId => Animator.StringToHash("WeaponId");
 
         public readonly Animator Animator;
 
