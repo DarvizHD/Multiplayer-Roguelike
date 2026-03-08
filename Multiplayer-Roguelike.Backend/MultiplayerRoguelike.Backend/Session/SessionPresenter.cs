@@ -1,3 +1,4 @@
+using Backend.Enemies;
 using Backend.Player;
 using Shared.Models;
 
@@ -7,21 +8,29 @@ namespace Backend.Session
     {
         private readonly SessionModel _model;
 
+        private readonly EnemyModelCollectionPresenter _enemyModelCollectionPresenter;
+
         public SessionPresenter(SessionModel model)
         {
             _model = model;
+
+            _enemyModelCollectionPresenter = new EnemyModelCollectionPresenter(model.Enemies, model);
         }
 
         public void Enable()
         {
             _model.Players.OnAdded += OnPlayerAdded;
             _model.Players.OnRemoved += OnPlayerRemoved;
+
+            _enemyModelCollectionPresenter.Enable();
         }
 
         public void Disable()
         {
             _model.Players.OnAdded -= OnPlayerAdded;
             _model.Players.OnRemoved -= OnPlayerRemoved;
+
+            _enemyModelCollectionPresenter.Disable();
         }
 
         private void OnPlayerAdded(PlayerModel player)

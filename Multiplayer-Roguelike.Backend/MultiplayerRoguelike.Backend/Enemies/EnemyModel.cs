@@ -1,21 +1,19 @@
-﻿using Backend.Navigation;
-using Shared.Primitives;
+﻿using DotRecast.Detour.Crowd;
+using Shared.Models;
 
 namespace Backend.Enemies
 {
     public class EnemyModel
     {
         public int Id { get; }
-        public NavAgentModel Agent { get; }
+        public EnemySharedModel Shared { get; }
+        public DtCrowdAgent CrowdAgent { get; set; }
+        public string TargetPlayerId { get; set; }
 
-        public Vector3 Position;
-
-        public string TargetPlayerId;
-
-        public EnemyModel(int id, NavAgentModel agent)
+        public EnemyModel(int id)
         {
             Id = id;
-            Agent = agent;
+            Shared = new EnemySharedModel(id.ToString());
         }
     }
 }
