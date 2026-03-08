@@ -13,7 +13,7 @@ namespace Backend
 {
     public class Server
     {
-        private const int _tickRate = 30;
+        private const int _tickRate = 32;
         private const float _tickInterval = 1f / _tickRate;
         private readonly ushort _port;
 
