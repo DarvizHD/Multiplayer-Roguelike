@@ -1,4 +1,4 @@
-namespace Runtime.Ecs.Components.Battle
+namespace Runtime.Ecs.Components.Battle.Weapon
 {
     public class MeleeAttackComponent : IComponent
     {

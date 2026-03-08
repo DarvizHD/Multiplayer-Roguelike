@@ -1,3 +1,5 @@
+using Runtime.Tools;
+
 namespace Runtime.Ecs.Components.Health
 {
     public class RagdollComponent : IComponent
