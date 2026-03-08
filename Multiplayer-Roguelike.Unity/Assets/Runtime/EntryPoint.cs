@@ -16,7 +16,7 @@ namespace Runtime
     {
         [SerializeField] private WorldViewDescription _worldViewDescription;
         [SerializeField] private UIDocument document;
-        [SerializeField] private UIHudView _uihudView;
+        [SerializeField] private UIHudView _uiHudView;
 
         private readonly GameSystemCollection _gameFixedSystemCollection = new();
 
@@ -52,7 +52,7 @@ namespace Runtime
             var navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, document);
             navigationPresenter.Enable();
 
-            _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel, _uihudView);
+            _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel, _uiHudView);
             _gameSession.Enable();
 
             _serverConnectionModel.WorldPacketReceived += OnWorldPacketReceived;

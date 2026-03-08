@@ -2744,7 +2744,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.EntryPoint
   _worldViewDescription: {fileID: 11400000, guid: 9ee1005542c23d347bbb70c4163e4c5e, type: 2}
   document: {fileID: 739111413}
-  _uihudView: {fileID: 941861038}
+  _uiHudView: {fileID: 941861038}
 --- !u!4 &941861036
 Transform:
   m_ObjectHideFlags: 0
