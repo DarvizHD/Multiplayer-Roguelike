@@ -2722,6 +2722,7 @@ GameObject:
   - component: {fileID: 941861036}
   - component: {fileID: 941861035}
   - component: {fileID: 941861037}
+  - component: {fileID: 941861038}
   m_Layer: 0
   m_Name: EntryPoint
   m_TagString: Untagged
@@ -2741,8 +2742,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9649d15b13fe4e8182bd35f7b677d970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.EntryPoint
-  worldViewDescription: {fileID: 11400000, guid: 9ee1005542c23d347bbb70c4163e4c5e, type: 2}
+  _worldViewDescription: {fileID: 11400000, guid: 9ee1005542c23d347bbb70c4163e4c5e, type: 2}
   document: {fileID: 739111413}
+  _uihudView: {fileID: 941861038}
 --- !u!4 &941861036
 Transform:
   m_ObjectHideFlags: 0
@@ -2770,6 +2772,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec13d70135b04d9eb2d984bdf9fbd834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.PerformanceMonitor
+--- !u!114 &941861038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941861034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b43f8febce0341a4867df19c927dce5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.UI.HUD.UIHudView
+  _uiDocument: {fileID: 1172141499}
 --- !u!1 &990348327 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3250530071779546737, guid: d53e7b3281d7a804b93ec5d93d585885, type: 3}

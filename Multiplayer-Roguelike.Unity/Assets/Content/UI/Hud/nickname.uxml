@@ -1,0 +1,3 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Label text="Имя игрока" name="nickname" style="margin-top: 0; margin-right: 0; margin-bottom: 4px; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 24px; -unity-font-definition: url(&quot;project://database/Assets/Content/Imports/Fonts/Russo_One/RussoOne-Regular.ttf?fileID=12800000&amp;guid=0ca6f19a298f9e94e8132f0ef8055d27&amp;type=3#RussoOne-Regular&quot;); -unity-font-style: normal; color: rgb(255, 255, 255); -unity-text-align: middle-center; -unity-text-outline-width: 0.5px; -unity-text-outline-color: rgb(0, 0, 0);"/>
+</ui:UXML>

@@ -2,18 +2,22 @@ using ENet;
 using Runtime.GameSystems;
 using Runtime.ServerInteraction;
 using Runtime.UI;
+using Runtime.UI.HUD;
 using Runtime.UI.Navigation;
 using Shared.Models;
 using Shared.Protocol;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace Runtime
 {
     public class EntryPoint : MonoBehaviour
     {
-        [SerializeField] private WorldViewDescription worldViewDescription;
+        [SerializeField] private WorldViewDescription _worldViewDescription;
         [SerializeField] private UIDocument document;
+        [SerializeField] private UIHudView _uihudView;
+
         private readonly GameSystemCollection _gameFixedSystemCollection = new();
 
         private readonly UICoreModel _uiCoreModel = new();
@@ -45,10 +49,10 @@ namespace Runtime
 
             _uiCoreModel.Setup(_playerSharedModel, _serverConnectionModel, _gameSessionSharedModel);
 
-            var navigationPresenter = new NavigationPresenter(_uiCoreModel, worldViewDescription, document);
+            var navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, document);
             navigationPresenter.Enable();
 
-            _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel);
+            _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel, _uihudView);
             _gameSession.Enable();
 
             _serverConnectionModel.WorldPacketReceived += OnWorldPacketReceived;

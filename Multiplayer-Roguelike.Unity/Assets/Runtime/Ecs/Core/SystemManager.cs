@@ -25,6 +25,13 @@ namespace Runtime.Ecs.Core
             _systems[typeof(T)] = system;
         }
 
+        public void RegisterSystem<T>(T system) where T : BaseSystem
+        {
+            system.Initialize(_componentManager);
+
+            _systems[typeof(T)] = system;
+        }
+
         public void UnregisterSystem<T>()
         {
             _systems.Remove(typeof(T));

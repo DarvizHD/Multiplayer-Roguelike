@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="health-bar" src="project://database/Assets/Content/UI/Hud/health-bar.uxml?fileID=9197481963319205126&amp;guid=6cd408dc0bd99b24f989f135ee55db10&amp;type=3#health-bar"/>
+    <ui:Template name="nickname" src="project://database/Assets/Content/UI/Hud/nickname.uxml?fileID=9197481963319205126&amp;guid=a826c092469be794ea08789fe160431d&amp;type=3#nickname"/>
+    <Style src="project://database/Assets/Content/UI/Styles/Progress-bar-style.uss?fileID=7433441132597879392&amp;guid=b049ac705b4041849b6ab37e732d9f2d&amp;type=3#Progress-bar-style"/>
+    <ui:VisualElement name="character-info" style="flex-grow: 1; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; align-items: stretch; justify-content: flex-start; align-self: auto;">
+        <ui:Instance template="nickname" name="nickname"/>
+        <ui:Instance template="health-bar" name="health-bar"/>
+    </ui:VisualElement>
+</ui:UXML>

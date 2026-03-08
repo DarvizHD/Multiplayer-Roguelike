@@ -1,0 +1,21 @@
+.nickname {
+    color: rgba(255, 255, 255, 0.36);
+    -unity-text-align: upper-center;
+    font-size: 12px;
+    -unity-font-style: normal;
+    text-shadow: 2px 2px 0 rgb(0, 0, 0);
+}
+
+.health-bar {
+    background-color: rgba(0, 0, 0, 0.45);
+    width: 64px;
+    height: 8px;
+    flex-grow: 0;
+}
+
+.health-bar #fill {
+    background-color: rgba(25, 70, 0, 0.84);
+    width: 94%;
+    height: 100%;
+    flex-grow: 0;
+}
