@@ -5,11 +5,13 @@ namespace Backend.Session.Collection
     public class SessionModelCollectionPresenter : IPresenter
     {
         private readonly SessionModelCollection _models;
+        private readonly WorldModel _worldModel;
         private readonly Dictionary<string, SessionPresenter> _presenters = new();
 
-        public SessionModelCollectionPresenter(SessionModelCollection models)
+        public SessionModelCollectionPresenter(SessionModelCollection models, WorldModel worldModel)
         {
             _models = models;
+            _worldModel = worldModel;
         }
 
         public void Enable()
@@ -33,7 +35,7 @@ namespace Backend.Session.Collection
 
         private void OnAdded(SessionModel session)
         {
-            var presenter = new SessionPresenter(session);
+            var presenter = new SessionPresenter(session, _worldModel);
             presenter.Enable();
             _presenters.Add(session.Id, presenter);
         }

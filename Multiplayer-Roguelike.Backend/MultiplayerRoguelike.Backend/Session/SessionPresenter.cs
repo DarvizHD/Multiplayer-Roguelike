@@ -10,11 +10,11 @@ namespace Backend.Session
 
         private readonly EnemyModelCollectionPresenter _enemyModelCollectionPresenter;
 
-        public SessionPresenter(SessionModel model)
+        public SessionPresenter(SessionModel model, WorldModel worldModel)
         {
             _model = model;
 
-            _enemyModelCollectionPresenter = new EnemyModelCollectionPresenter(model.Enemies, model);
+            _enemyModelCollectionPresenter = new EnemyModelCollectionPresenter(model.Enemies, model, worldModel.ServerSystems);
         }
 
         public void Enable()

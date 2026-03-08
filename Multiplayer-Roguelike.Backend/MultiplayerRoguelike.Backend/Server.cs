@@ -38,7 +38,7 @@ namespace Backend
             var lobbyCollectionPresenter = new LobbyModelCollectionPresenter(_world.Lobbies, _world);
             lobbyCollectionPresenter.Enable();
 
-            var sessionCollectionPresenter = new SessionModelCollectionPresenter(_world.Sessions);
+            var sessionCollectionPresenter = new SessionModelCollectionPresenter(_world.Sessions, _world);
             sessionCollectionPresenter.Enable();
 
             var navigationPresenter = new NavigationPresenter(_world);
