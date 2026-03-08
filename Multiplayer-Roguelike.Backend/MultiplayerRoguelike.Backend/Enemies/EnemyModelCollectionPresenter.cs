@@ -42,7 +42,7 @@ namespace Backend.Enemies
 
             var dtCrowdAgent = _sessionModel.Navigation.Crowd.AddAgent(startPosition, CreateAgentParams());
             enemy.CrowdAgent = dtCrowdAgent;
-            _sessionModel.GameSessionSharedModel.Characters.TryGet(enemy.TargetPlayerId, out var character);
+            _sessionModel.GameSessionSharedModel.Characters.TryGet(enemy.Shared.TargetPlayerId.Value, out var character);
             _sessionModel.Navigation.SetAgentTarget(dtCrowdAgent, character.Position.Value);
         }
 
@@ -59,7 +59,7 @@ namespace Backend.Enemies
                 radius = 0.6f,
                 height = 2.0f,
                 maxAcceleration = 8.0f,
-                maxSpeed = 3.5f,
+                maxSpeed = 1f,
                 collisionQueryRange = 2.0f,
                 pathOptimizationRange = 1.5f,
                 separationWeight = 2.0f,

@@ -7,7 +7,7 @@ namespace Backend.Navigation
 {
     public class NavigationPresenter : IPresenter
     {
-        private const string _filename = "base.navmesh";
+        private const string _filename = "Resources/base.navmesh";
 
         private readonly WorldModel _worldModel;
         private readonly NavigationSystem _navigationSystem;

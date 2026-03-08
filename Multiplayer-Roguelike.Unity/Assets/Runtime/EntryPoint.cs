@@ -7,7 +7,6 @@ using Runtime.UI.Navigation;
 using Shared.Models;
 using Shared.Protocol;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace Runtime

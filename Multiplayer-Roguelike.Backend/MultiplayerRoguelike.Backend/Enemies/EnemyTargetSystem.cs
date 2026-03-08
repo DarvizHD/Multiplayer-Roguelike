@@ -27,7 +27,7 @@ namespace Backend.Enemies
             {
                 var player = SelectTargetPlayer(_sessionModel, enemy);
 
-                enemy.TargetPlayerId = player.Id;
+                enemy.Shared.TargetPlayerId.Value = player.Id;
 
                 var targetPosition = player.Position.Value;
 
@@ -52,12 +52,21 @@ namespace Backend.Enemies
 
         private CharacterSharedModel SelectTargetPlayer(SessionModel session, EnemyModel enemy)
         {
+            CharacterSharedModel closestCharacter = null;
+            var closestDistance = float.MaxValue;
+
             foreach (var character in session.GameSessionSharedModel.Characters.Models)
             {
-                return character;
+                var distance = (enemy.Shared.Position.Value - character.Position.Value).LengthSquared();
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestCharacter = character;
+                }
             }
 
-            return null;
+            return closestCharacter;
         }
     }
 }

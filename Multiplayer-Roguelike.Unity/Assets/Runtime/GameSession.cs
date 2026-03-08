@@ -29,6 +29,7 @@ using Runtime.UI.HUD;
 using Shared.Commands;
 using Shared.Models;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Runtime
 {
@@ -200,8 +201,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(spawnPosition));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
-            EcsWorld.AddEntityComponent(entityId, new TransformComponent(enemyProvider.Transform));
-            EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(1f));
+            EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(speed));
             EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(360f));
             EcsWorld.AddEntityComponent(entityId, new EnemyTagComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionRotationTagComponent());
@@ -212,6 +212,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new AliveTagComponent());
             EcsWorld.AddEntityComponent(entityId, new EnemyNetworkSyncComponent(enemySharedModel));
             EcsWorld.AddEntityComponent(entityId, new PositionInterpolationComponent(Vector3.zero, Vector3.zero));
+            EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, spawnPosition, speed));
 
             EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
             EcsWorld.AddEntityComponent(entityId, new RagdollComponent(enemyProvider.RagdollProvider));
@@ -299,7 +300,7 @@ namespace Runtime
             EcsWorld.AddSystem<AINavigationSystem>();
             EcsWorld.AddSystem<AIPositionSyncSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
-            EcsWorld.AddSystem<EnemyPositionSyncSystem>();
+            EcsWorld.AddSystem<AISyncSystem>();
 
             EcsWorld.AddSystem<CursorWorldPositionSystem>();
             EcsWorld.AddSystem<WeaponInputSystem>();
