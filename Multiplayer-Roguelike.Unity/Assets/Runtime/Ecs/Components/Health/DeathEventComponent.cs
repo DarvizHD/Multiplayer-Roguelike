@@ -1,6 +1,4 @@
-using Runtime.Ecs.Components;
-
-namespace Runtime.ECS.Systems.Battle
+namespace Runtime.Ecs.Components.Health
 {
     public class DeathEventComponent : IComponent
     {

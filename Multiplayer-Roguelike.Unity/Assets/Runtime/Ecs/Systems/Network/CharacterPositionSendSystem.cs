@@ -4,7 +4,7 @@ using Runtime.Ecs.Core;
 using Runtime.Tools;
 using Shared.Commands.Player;
 
-namespace Runtime.ECS.Systems.Network
+namespace Runtime.Ecs.Systems.Network
 {
     public class CharacterPositionSendSystem : BaseSystem
     {

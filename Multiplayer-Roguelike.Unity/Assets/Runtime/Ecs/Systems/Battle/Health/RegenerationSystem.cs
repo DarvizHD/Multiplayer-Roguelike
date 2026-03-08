@@ -2,7 +2,7 @@ using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Battle.Health
+namespace Runtime.Ecs.Systems.Battle.Health
 {
     public class RegenerationSystem : BaseSystem
     {

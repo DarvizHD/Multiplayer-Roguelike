@@ -1,13 +1,12 @@
 using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Core;
-using UnityEngine;
 
-namespace Runtime.ECS.Systems.Battle
+namespace Runtime.Ecs.Systems.Battle
 {
     public class DamageSystem : BaseSystem
     {
-        public QueryBuffer<PendingDamageEventComponent, HealthComponent, AliveTagComponent> _buffer = new();
+        private QueryBuffer<PendingDamageEventComponent, HealthComponent, AliveTagComponent> _buffer = new();
 
         public override void Update(float deltaTime)
         {
@@ -37,8 +36,6 @@ namespace Runtime.ECS.Systems.Battle
                 {
                     regenerationComponent.LastDamageTime = 0f;
                 }
-
-                Debug.Log($"{GetType().Name} {entityId}: dealt {pendingDamageEventComponent.TotalDamage} damage, health left: {healthComponent.CurrentHealth}");
 
                 ComponentManager.RemoveComponent<PendingDamageEventComponent>(entityId);
             }

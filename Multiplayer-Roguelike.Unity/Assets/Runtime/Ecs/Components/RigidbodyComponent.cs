@@ -1,7 +1,6 @@
-using Runtime.Ecs.Components;
 using UnityEngine;
 
-namespace Runtime.Ecs.Systems.Movement
+namespace Runtime.Ecs.Components
 {
     public class RigidbodyComponent : IComponent
     {

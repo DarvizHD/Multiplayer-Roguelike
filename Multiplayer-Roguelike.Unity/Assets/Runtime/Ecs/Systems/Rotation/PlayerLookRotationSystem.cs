@@ -3,7 +3,7 @@ using Runtime.Ecs.Components.Player;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Rotation
+namespace Runtime.Ecs.Systems.Rotation
 {
     public class PlayerLookRotationSystem : BaseSystem
     {

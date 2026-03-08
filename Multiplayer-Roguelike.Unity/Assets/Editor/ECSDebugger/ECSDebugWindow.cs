@@ -69,7 +69,9 @@ namespace Editor.EcsDebugger
                 EditorGUILayout.Foldout(_entityFoldouts[entityId], $"Entity {entityId}", true);
 
             if (!_entityFoldouts[entityId])
+            {
                 return;
+            }
 
             EditorGUI.indentLevel++;
 
@@ -101,15 +103,25 @@ namespace Editor.EcsDebugger
 
         private void DrawFields(object component)
         {
-            var fields = component.GetType()
-                .GetFields(BindingFlags.Public | BindingFlags.Instance);
+            var type = component.GetType();
 
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
             foreach (var field in fields)
             {
                 var value = field.GetValue(component);
+                EditorGUILayout.LabelField($"{field.Name}: {(value is Object obj ? obj.name : value)}");
+            }
 
-                EditorGUILayout.LabelField(
-                    $"{field.Name}: {(value is Object obj ? obj.name : value)}");
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var property in properties)
+            {
+                if (!property.CanRead)
+                {
+                    continue;
+                }
+
+                var value = property.GetValue(component);
+                EditorGUILayout.LabelField($"{property.Name}: {(value is Object obj ? obj.name : value)}");
             }
         }
     }

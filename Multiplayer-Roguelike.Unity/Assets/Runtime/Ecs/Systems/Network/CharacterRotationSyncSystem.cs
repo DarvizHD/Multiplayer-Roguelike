@@ -3,7 +3,7 @@ using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Network
+namespace Runtime.Ecs.Systems.Network
 {
     public class CharacterRotationSyncSystem : BaseSystem
     {

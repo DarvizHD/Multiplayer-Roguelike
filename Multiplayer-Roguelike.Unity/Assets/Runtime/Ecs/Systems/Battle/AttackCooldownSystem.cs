@@ -1,7 +1,7 @@
 using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Core;
 
-namespace Runtime.ECS.Systems.Battle
+namespace Runtime.Ecs.Systems.Battle
 {
     public class AttackCooldownSystem : BaseSystem
     {
