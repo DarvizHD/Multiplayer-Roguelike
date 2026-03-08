@@ -1,8 +1,8 @@
 using System;
 using Backend.CommandExecutors.Common;
+using Backend.Enemies;
 using ENet;
 using Shared.Commands;
-using Shared.Models;
 using Shared.Primitives;
 
 namespace Backend.CommandExecutors
@@ -29,12 +29,13 @@ namespace Backend.CommandExecutors
                 var randomPosition = new Vector3(random.Next(-10, 10), 0f, random.Next(-10, 10));
                 var startHealth = 100f;
 
-                var newNpc = new NpcSharedModel(i.ToString());
-
-                newNpc.LastPosition.Value = randomPosition;
-                newNpc.Health.Value = startHealth;
-
-                sessionModel.GameSessionSharedModel.NPCs.Add(newNpc);
+                var enemy = new EnemyModel(i);
+                enemy.TargetPlayerId = Command.TargetId;
+                enemy.Shared.Position.Value = randomPosition;
+                enemy.Shared.Health.Value = startHealth;
+                sessionModel.GameSessionSharedModel.Characters.TryGet(Command.TargetId, out var target);
+                sessionModel.GameSessionSharedModel.Enemies.Add(enemy.Shared);
+                sessionModel.Enemies.Add(i, enemy);
             }
         }
     }

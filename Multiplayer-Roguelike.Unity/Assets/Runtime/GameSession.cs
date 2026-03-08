@@ -67,14 +67,14 @@ namespace Runtime
 
             _gameSessionSharedModel.Characters.Added += OnCharacterAdded;
 
-            _gameSessionSharedModel.NPCs.Added += OnNpcAdded;
+            _gameSessionSharedModel.Enemies.Added += OnNpcAdded;
         }
 
         public void Disable()
         {
             _gameSessionSharedModel.Characters.Added -= OnCharacterAdded;
 
-            _gameSessionSharedModel.NPCs.Added -= OnNpcAdded;
+            _gameSessionSharedModel.Enemies.Added -= OnNpcAdded;
         }
 
         public void Run()
@@ -98,10 +98,10 @@ namespace Runtime
             _characterEntities.Add(characterSharedModel.Id, entityId);
         }
 
-        private void OnNpcAdded(NpcSharedModel npcSharedModel)
+        private void OnNpcAdded(EnemySharedModel enemySharedModel)
         {
-            var npcId = ushort.Parse(npcSharedModel.Id);
-            CreateEnemy(npcId, npcSharedModel.LastPosition.Value.ToUnityVector3());
+            var npcId = ushort.Parse(enemySharedModel.Id);
+            CreateEnemy(npcId, enemySharedModel.Position.Value.ToUnityVector3(), enemySharedModel);
         }
 
         public void Update(float deltaTime)
@@ -118,7 +118,7 @@ namespace Runtime
                 return;
             }
 
-            var spawnNpcCommand = new SpawnNpcCommand(_playerSharedModel.Lobby.LobbyId.Value, 10);
+            var spawnNpcCommand = new SpawnNpcCommand(_playerSharedModel.Lobby.LobbyId.Value, _playerSharedModel.Nickname.Value, 10);
 
             spawnNpcCommand.Write(_serverConnectionModel.PlayerPeer);
         }
@@ -188,7 +188,7 @@ namespace Runtime
             }
         }
 
-        private void CreateEnemy(ushort entityId, Vector3 spawnPosition)
+        private void CreateEnemy(ushort entityId, Vector3 spawnPosition,  EnemySharedModel enemySharedModel)
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Enemy");
 
@@ -200,6 +200,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(spawnPosition));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
+            EcsWorld.AddEntityComponent(entityId, new TransformComponent(enemyProvider.Transform));
             EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(1f));
             EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(360f));
             EcsWorld.AddEntityComponent(entityId, new EnemyTagComponent());
@@ -208,8 +209,10 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new HealthComponent(10f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(2f, 5f));
             EcsWorld.AddEntityComponent(entityId, new FreezeMovementByDamageComponent(1.5f));
-            EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, spawnPosition, speed));
             EcsWorld.AddEntityComponent(entityId, new AliveTagComponent());
+            EcsWorld.AddEntityComponent(entityId, new EnemyNetworkSyncComponent(enemySharedModel));
+            EcsWorld.AddEntityComponent(entityId, new PositionInterpolationComponent(Vector3.zero, Vector3.zero));
+
             EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
             EcsWorld.AddEntityComponent(entityId, new RagdollComponent(enemyProvider.RagdollProvider));
         }
@@ -247,6 +250,7 @@ namespace Runtime
             EcsWorld.RegisterComponent<FreezeMovementComponent>();
             EcsWorld.RegisterComponent<FreezeMovementByDamageComponent>();
             EcsWorld.RegisterComponent<NavMeshAgentComponent>();
+            EcsWorld.RegisterComponent<EnemyNetworkSyncComponent>();
 
             EcsWorld.RegisterComponent<CharacterConnectionComponent>();
             EcsWorld.RegisterComponent<CharacterNetworkSyncComponent>();
@@ -295,6 +299,7 @@ namespace Runtime
             EcsWorld.AddSystem<AINavigationSystem>();
             EcsWorld.AddSystem<AIPositionSyncSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
+            EcsWorld.AddSystem<EnemyPositionSyncSystem>();
 
             EcsWorld.AddSystem<CursorWorldPositionSystem>();
             EcsWorld.AddSystem<WeaponInputSystem>();
