@@ -1,15 +1,19 @@
+using UnityEngine;
+
 namespace Runtime.Ecs.Components.Battle.Weapon
 {
     public class MeleeAttackComponent : IComponent
     {
+        public float Damage { get; set; }
         public float Range { get; set; }
         public float Angle { get; set; }
-        public float Damage { get; set; }
+        public AudioClip AttackClip { get; }
 
-        public MeleeAttackComponent(float range, float damage, float angle = 90f)
+        public MeleeAttackComponent(float damage, float range, AudioClip attackClip, float angle = 90f)
         {
-            Range = range;
             Damage = damage;
+            Range = range;
+            AttackClip = attackClip;
             Angle = angle;
         }
     }
