@@ -41,6 +41,10 @@ namespace Runtime.UI.Navigation.Screens
 
         private void HandleBack()
         {
+            var leaveCommand = new LeaveLobbyCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value,
+                _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value);
+            leaveCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
+
             _router.GoBack();
         }
 
