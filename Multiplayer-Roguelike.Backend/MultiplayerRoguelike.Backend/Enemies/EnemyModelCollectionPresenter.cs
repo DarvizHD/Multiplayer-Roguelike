@@ -1,0 +1,54 @@
+﻿using Backend.ServerSystems;
+using Backend.Session;
+using DotRecast.Core.Numerics;
+
+namespace Backend.Enemies
+{
+    public class EnemyModelCollectionPresenter : IPresenter
+    {
+        private readonly EnemyModelCollection _modelCollection;
+        private readonly SessionModel _sessionModel;
+        private readonly ServerSystemCollection _serverSystems;
+        private readonly EnemyTargetSystem _targetSystem;
+
+        public EnemyModelCollectionPresenter(EnemyModelCollection modelCollection, SessionModel sessionModel, ServerSystemCollection serverSystems)
+        {
+            _modelCollection = modelCollection;
+            _sessionModel = sessionModel;
+            _serverSystems = serverSystems;
+            _targetSystem = new EnemyTargetSystem(sessionModel.Id, sessionModel);
+        }
+
+        public void Enable()
+        {
+            _modelCollection.OnAdded += HandleEnemyAdded;
+            _modelCollection.OnRemoved += HandleEnemyRemoved;
+
+            _serverSystems.Add(_targetSystem);
+        }
+
+        public void Disable()
+        {
+            _modelCollection.OnAdded -= HandleEnemyAdded;
+            _modelCollection.OnRemoved -= HandleEnemyRemoved;
+
+            _serverSystems.Remove(_targetSystem);
+        }
+
+        private void HandleEnemyAdded(EnemyModel enemy)
+        {
+            var startPosition = new RcVec3f(enemy.Shared.Position.Value.Xf, enemy.Shared.Position.Value.Yf, enemy.Shared.Position.Value.Zf);
+
+            var dtCrowdAgent = _sessionModel.Navigation.Crowd.AddAgent(startPosition, _sessionModel.Navigation.Config.AgentParams);
+            enemy.CrowdAgent = dtCrowdAgent;
+            _sessionModel.GameSessionSharedModel.Characters.TryGet(enemy.Shared.TargetPlayerId.Value, out var character);
+            _sessionModel.Navigation.SetAgentTarget(dtCrowdAgent, character.Position.Value);
+        }
+
+        private void HandleEnemyRemoved(EnemyModel enemy)
+        {
+            _sessionModel.Navigation.Crowd.RemoveAgent(enemy.CrowdAgent);
+            enemy.CrowdAgent = null;
+        }
+    }
+}

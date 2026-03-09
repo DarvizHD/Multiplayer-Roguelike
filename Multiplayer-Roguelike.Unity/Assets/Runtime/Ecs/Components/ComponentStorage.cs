@@ -5,25 +5,25 @@ namespace Runtime.Ecs.Components
 {
     public class ComponentStorage<T> : IComponentStorage<T> where T : IComponent
     {
-        public int Count { get; private set; }
+        public ushort Count { get; private set; }
 
-        public int[] EntityIds => _entityIds[..Count];
+        public ushort[] EntityIds => _entityIds[..Count];
 
         public T[] Components => _components;
 
-        private int[] _entityIds;
+        private ushort[] _entityIds;
 
-        private readonly Dictionary<int, int> _entityToComponentsMap = new();
+        private readonly Dictionary<ushort, ushort> _entityToComponentsMap = new();
         private T[] _components;
 
-        public ComponentStorage(int initialCapacity = 16)
+        public ComponentStorage(ushort initialCapacity = 16)
         {
-            _entityIds = new int[initialCapacity];
+            _entityIds = new ushort[initialCapacity];
             _components = new T[initialCapacity];
-            _entityToComponentsMap = new Dictionary<int, int>();
+            _entityToComponentsMap = new Dictionary<ushort, ushort>();
         }
 
-        public void Add(int entityId, T component)
+        public void Add(ushort entityId, T component)
         {
             if (_entityToComponentsMap.TryGetValue(entityId, out var existingIndex))
             {
@@ -43,12 +43,12 @@ namespace Runtime.Ecs.Components
             Count++;
         }
 
-        public T Get(int entityId)
+        public T Get(ushort entityId)
         {
             return _components[_entityToComponentsMap[entityId]];
         }
 
-        public bool TryGet(int entityId, out IComponent component)
+        public bool TryGet(ushort entityId, out IComponent component)
         {
             if (_entityToComponentsMap.TryGetValue(entityId, out var index))
             {
@@ -60,12 +60,12 @@ namespace Runtime.Ecs.Components
             return false;
         }
 
-        public bool Has(int entityId)
+        public bool Has(ushort entityId)
         {
             return _entityToComponentsMap.ContainsKey(entityId);
         }
 
-        public void Remove(int entityId)
+        public void Remove(ushort entityId)
         {
             if (!_entityToComponentsMap.TryGetValue(entityId, out var index))
             {

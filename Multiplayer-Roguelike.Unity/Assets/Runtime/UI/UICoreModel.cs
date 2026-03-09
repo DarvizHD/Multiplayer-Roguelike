@@ -4,7 +4,8 @@ using Runtime.UI.Panels.JoinLobbyPanel;
 using Runtime.UI.Panels.LoginPanel;
 using Runtime.UI.Panels.StartMenuPanel;
 using Runtime.UI.Panels.UsersPanel;
-using Shared.Models;
+using Shared.Models.GameSession;
+using Shared.Models.Player;
 
 namespace Runtime.UI
 {

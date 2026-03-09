@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle;
+using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Camera;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
@@ -9,17 +10,26 @@ using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Components.Player;
 using Runtime.Ecs.Components.Spawn;
 using Runtime.Ecs.Components.Tags;
+using Runtime.Ecs.Components.UI;
 using Runtime.Ecs.Core;
-using Runtime.Ecs.Systems;
+using Runtime.Ecs.Systems.AI;
 using Runtime.Ecs.Systems.Battle;
+using Runtime.Ecs.Systems.Battle.MeleeAttack;
+using Runtime.Ecs.Systems.Battle.RangeAttack;
 using Runtime.Ecs.Systems.CameraFocus;
 using Runtime.Ecs.Systems.Movement;
+using Runtime.Ecs.Systems.Movement.Freeze;
 using Runtime.Ecs.Systems.Network;
+using Runtime.Ecs.Systems.Player;
 using Runtime.Ecs.Systems.Rotation;
+using Runtime.Ecs.Systems.UI;
 using Runtime.ServerInteraction;
 using Runtime.Tools;
+using Runtime.UI.HUD;
 using Shared.Commands;
-using Shared.Models;
+using Shared.Models.Enemy;
+using Shared.Models.GameSession;
+using Shared.Models.Player;
 using UnityEngine;
 
 namespace Runtime
@@ -29,23 +39,22 @@ namespace Runtime
         public EcsWorld EcsWorld { get; private set; }
 
         private readonly ServerConnectionModel _serverConnectionModel;
-
         private readonly GameSessionSharedModel _gameSessionSharedModel;
-
         private readonly PlayerSharedModel _playerSharedModel;
+        private readonly Dictionary<string, int> _characterEntities = new();
 
         private PlayerControls _playerControls;
-
-        private readonly Dictionary<string, int> _characterEntities = new();
+        private readonly UIHudView _hudView;
 
         private bool IsHost => _playerSharedModel.Lobby.OwnerId.Value == _playerSharedModel.Nickname.Value;
 
         public GameSession(GameSessionSharedModel gameSessionSharedModel, PlayerSharedModel playerSharedModel,
-            ServerConnectionModel serverConnectionModel)
+            ServerConnectionModel serverConnectionModel, UIHudView hudView)
         {
             _gameSessionSharedModel = gameSessionSharedModel;
             _playerSharedModel = playerSharedModel;
             _serverConnectionModel = serverConnectionModel;
+            _hudView = hudView;
         }
 
         public void Enable()
@@ -60,14 +69,14 @@ namespace Runtime
 
             _gameSessionSharedModel.Characters.Added += OnCharacterAdded;
 
-            _gameSessionSharedModel.NPCs.Added += OnNpcAdded;
+            _gameSessionSharedModel.Enemies.Added += OnNpcAdded;
         }
 
         public void Disable()
         {
             _gameSessionSharedModel.Characters.Added -= OnCharacterAdded;
 
-            _gameSessionSharedModel.NPCs.Added -= OnNpcAdded;
+            _gameSessionSharedModel.Enemies.Added -= OnNpcAdded;
         }
 
         public void Run()
@@ -81,9 +90,7 @@ namespace Runtime
 
         private void OnCharacterAdded(CharacterSharedModel characterSharedModel)
         {
-            Debug.Log("Worked");
-
-            var entityId = _characterEntities.Count;
+            var entityId = EcsWorld.CreateEntity();
 
             var controllable = _playerSharedModel.Nickname.Value == characterSharedModel.Id;
 
@@ -93,10 +100,10 @@ namespace Runtime
             _characterEntities.Add(characterSharedModel.Id, entityId);
         }
 
-        private void OnNpcAdded(NpcSharedModel npcSharedModel)
+        private void OnNpcAdded(EnemySharedModel enemySharedModel)
         {
-            var npcId = int.Parse(npcSharedModel.Id);
-            CreateEnemy(npcId, npcSharedModel.LastPosition.Value.ToUnityVector3());
+            var npcId = ushort.Parse(enemySharedModel.Id);
+            CreateEnemy(npcId, enemySharedModel.Position.Value.ToUnityVector3(), enemySharedModel);
         }
 
         public void Update(float deltaTime)
@@ -113,44 +120,68 @@ namespace Runtime
                 return;
             }
 
-            var spawnNpcCommand = new SpawnNpcCommand(_playerSharedModel.Lobby.LobbyId.Value, 10);
+            var spawnNpcCommand = new SpawnNpcCommand(_playerSharedModel.Lobby.LobbyId.Value, _playerSharedModel.Nickname.Value, 10);
 
             spawnNpcCommand.Write(_serverConnectionModel.PlayerPeer);
         }
 
-        private void CreateCamera(int entityId)
+        private void CreateCamera(ushort entityId)
         {
             EcsWorld.AddEntityComponent(entityId, new CameraTargetComponent());
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(Camera.main?.transform.parent.GetChild(2)));
         }
 
-        private void CreatePlayer(int entityId, CharacterSharedModel characterSharedModel, Vector3 position,
+        private ushort CreateMeleeWeapon()
+        {
+            var entityId = EcsWorld.CreateEntity();
+            EcsWorld.AddEntityComponent(entityId, new MeleeAttackComponent(2f, 5f));
+            EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(2f));
+            return entityId;
+        }
+
+        private ushort CreateRangedWeapon()
+        {
+            var entityId = EcsWorld.CreateEntity();
+            EcsWorld.AddEntityComponent(entityId, new RangedWeaponComponent(10f, 2f, 3f));
+            EcsWorld.AddEntityComponent(entityId, new AmmoComponent(10));
+            EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(0.5f));
+            return entityId;
+        }
+
+        private void CreatePlayer(ushort entityId, CharacterSharedModel characterSharedModel, Vector3 position,
             bool controllable)
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Player");
-
             var provider = Object.Instantiate(prefab);
 
+            EcsWorld.AddEntityComponent(entityId, new NameComponent(characterSharedModel.Id));
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(position));
             EcsWorld.AddEntityComponent(entityId, new PlayerTagComponent());
             EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(8f));
-            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(10f));
+            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(360f));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.zero));
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(provider.Transform));
-            EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(3f));
-            EcsWorld.AddEntityComponent(entityId, new MeleeAttackComponent(2f, 10f));
             EcsWorld.AddEntityComponent(entityId, new PlayerLookRotationTagComponent());
             EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(provider.Animator));
             EcsWorld.AddEntityComponent(entityId, new HealthComponent(100f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(5f, 3f));
             EcsWorld.AddEntityComponent(entityId, new CharacterNetworkSyncComponent(characterSharedModel));
+            EcsWorld.AddEntityComponent(entityId, new WeaponProviderComponent(provider.WeaponProvider));
+
+            var meleeId = CreateMeleeWeapon();
+            var rangedId = CreateRangedWeapon();
+
+            EcsWorld.AddEntityComponent(entityId, new WeaponSlotsComponent(new[] { meleeId, rangedId }));
+            EcsWorld.AddEntityComponent(entityId, new CurrentWeaponComponent(meleeId));
 
             if (controllable)
             {
                 EcsWorld.AddEntityComponent(entityId, new PlayerInputComponent(_playerControls));
                 EcsWorld.AddEntityComponent(entityId, new CharacterConnectionComponent(_serverConnectionModel));
                 EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
+                EcsWorld.AddEntityComponent(entityId, new RigidbodyComponent(provider.Rigidbody));
+                EcsWorld.AddEntityComponent(entityId, new CursorWorldPositionComponent());
             }
             else
             {
@@ -159,7 +190,7 @@ namespace Runtime
             }
         }
 
-        private void CreateEnemy(int entityId, Vector3 spawnPosition)
+        private void CreateEnemy(ushort entityId, Vector3 spawnPosition, EnemySharedModel enemySharedModel)
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Enemy");
 
@@ -167,20 +198,25 @@ namespace Runtime
 
             var speed = 1f;
 
+            EcsWorld.AddEntityComponent(entityId, new NameComponent($"Zombie {entityId}"));
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(spawnPosition));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
-            EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(1f));
-            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(10f));
+            EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(speed));
+            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(360f));
             EcsWorld.AddEntityComponent(entityId, new EnemyTagComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionRotationTagComponent());
             EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(enemyProvider.Animator));
-            EcsWorld.AddEntityComponent(entityId, new HealthComponent(50f));
+            EcsWorld.AddEntityComponent(entityId, new HealthComponent(10f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(2f, 5f));
             EcsWorld.AddEntityComponent(entityId, new FreezeMovementByDamageComponent(1.5f));
+            EcsWorld.AddEntityComponent(entityId, new AliveTagComponent());
+            EcsWorld.AddEntityComponent(entityId, new EnemyNetworkSyncComponent(enemySharedModel));
+            EcsWorld.AddEntityComponent(entityId, new PositionInterpolationComponent(Vector3.zero, Vector3.zero));
             EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, spawnPosition, speed));
 
             EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
+            EcsWorld.AddEntityComponent(entityId, new RagdollComponent(enemyProvider.RagdollProvider));
         }
 
         private void RegisterComponents()
@@ -216,6 +252,7 @@ namespace Runtime
             EcsWorld.RegisterComponent<FreezeMovementComponent>();
             EcsWorld.RegisterComponent<FreezeMovementByDamageComponent>();
             EcsWorld.RegisterComponent<NavMeshAgentComponent>();
+            EcsWorld.RegisterComponent<EnemyNetworkSyncComponent>();
 
             EcsWorld.RegisterComponent<CharacterConnectionComponent>();
             EcsWorld.RegisterComponent<CharacterNetworkSyncComponent>();
@@ -223,6 +260,22 @@ namespace Runtime
             EcsWorld.RegisterComponent<LocalControllableTag>();
             EcsWorld.RegisterComponent<NetworkControllableTag>();
             EcsWorld.RegisterComponent<PositionInterpolationComponent>();
+            EcsWorld.RegisterComponent<RigidbodyComponent>();
+            EcsWorld.RegisterComponent<AliveTagComponent>();
+            EcsWorld.RegisterComponent<DeathEventComponent>();
+
+            EcsWorld.RegisterComponent<RagdollComponent>();
+            EcsWorld.RegisterComponent<NameComponent>();
+
+            EcsWorld.RegisterComponent<RangedWeaponComponent>();
+            EcsWorld.RegisterComponent<AmmoComponent>();
+            EcsWorld.RegisterComponent<WeaponSlotsComponent>();
+            EcsWorld.RegisterComponent<CurrentWeaponComponent>();
+            EcsWorld.RegisterComponent<SwitchWeaponEventComponent>();
+            EcsWorld.RegisterComponent<ReloadEventComponent>();
+            EcsWorld.RegisterComponent<CursorWorldPositionComponent>();
+
+            EcsWorld.RegisterComponent<WeaponProviderComponent>();
         }
 
         private void AddSystems()
@@ -233,7 +286,7 @@ namespace Runtime
             EcsWorld.AddSystem<PlayerInputMovementSystem>();
             EcsWorld.AddSystem<PlayerLookRotationSystem>();
 
-            EcsWorld.AddSystem<MovementSystem>();
+            EcsWorld.AddSystem<PlayerMovementSystem>();
             EcsWorld.AddSystem<PositionInterpolationSystem>();
 
             EcsWorld.AddSystem<CharacterPositionSendSystem>();
@@ -246,22 +299,37 @@ namespace Runtime
             EcsWorld.AddSystem<DrawCameraTransformSystem>();
 
             EcsWorld.AddSystem<AINavigationSystem>();
+            EcsWorld.AddSystem<AIPositionSyncSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
+            EcsWorld.AddSystem<AISyncSystem>();
+
+            EcsWorld.AddSystem<CursorWorldPositionSystem>();
+            EcsWorld.AddSystem<WeaponInputSystem>();
+            EcsWorld.AddSystem<DrawWeaponSwitcherSystem>();
+            EcsWorld.AddSystem<WeaponAnimationSwitcherSystem>();
+            EcsWorld.AddSystem<WeaponSwitchSystem>();
+
+            EcsWorld.AddSystem<AttackCooldownSystem>();
+
+            EcsWorld.AddSystem<MeleeAttackSystem>();
+            EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
+            EcsWorld.AddSystem<RangedAttackSystem>();
+            EcsWorld.AddSystem<ReloadSystem>();
+
+            EcsWorld.AddSystem<AttackSystem>();
+            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
+            EcsWorld.AddSystem<FreezeMovementSystem>();
+
+            EcsWorld.AddSystem<DamageAnimationSystem>();
+            EcsWorld.AddSystem<DamageSystem>();
+            EcsWorld.AddSystem<AIDeathSystem>();
+
+            EcsWorld.AddSystem(new UIDrawNameSystem(_hudView));
+            EcsWorld.AddSystem(new UIDrawHealthSystem(_hudView));
 
             /*
-            EcsWorld.AddSystem<DirectionRotationSystem>();
-            EcsWorld.AddSystem<FollowSystem>();
-            EcsWorld.AddSystem<MeleeAttackSystem>();
             EcsWorld.AddSystem<RegenerationSystem>();
             EcsWorld.AddSystem<InvulnerabilitySystem>();
-            EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
-            EcsWorld.AddSystem<AttackCooldownSystem>();
-            EcsWorld.AddSystem<AttackSystem>();
-            EcsWorld.AddSystem<DamageAnimationSystem>();
-            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
-            EcsWorld.AddSystem<DamageSystem>();
-            EcsWorld.AddSystem<DeathSystem>();
-            EcsWorld.AddSystem<FreezeMovementSystem>();
             EcsWorld.AddSystem<DeathAnimationSystem>();*/
         }
     }

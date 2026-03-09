@@ -1,5 +1,5 @@
 using ENet;
-using Shared.Models;
+using Shared.Models.Player;
 
 namespace Backend.Player
 {

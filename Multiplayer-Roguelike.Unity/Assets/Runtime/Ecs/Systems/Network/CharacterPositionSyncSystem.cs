@@ -1,16 +1,26 @@
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Core;
 using Runtime.Tools;
 
 namespace Runtime.Ecs.Systems.Network
 {
     public class CharacterPositionSyncSystem : BaseSystem
     {
+        private QueryBuffer<CharacterNetworkSyncComponent, PositionComponent,
+            PositionInterpolationComponent, DirectionComponent, NetworkControllableTag> _buffer = new();
+
         public override void Update(float deltaTime)
         {
-            foreach (var (entityId, characterSharedModelComponent, positionComponent, interpolationComponent, directionComponent, _)
-                     in ComponentManager.Query<CharacterNetworkSyncComponent, PositionComponent, PositionInterpolationComponent, DirectionComponent, NetworkControllableTag>())
+            ComponentManager.Filter.Query(ref _buffer);
+
+            for (var i = 0; i < _buffer.Count; i++)
             {
+                var characterSharedModelComponent = _buffer.Components1[i];
+                var positionComponent = _buffer.Components2[i];
+                var interpolationComponent = _buffer.Components3[i];
+                var directionComponent = _buffer.Components4[i];
+
                 if (characterSharedModelComponent.CharacterSharedModel.Position.IsDirty)
                 {
                     interpolationComponent.LastTime = interpolationComponent.TargetTime;

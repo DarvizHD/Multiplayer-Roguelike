@@ -1,4 +1,3 @@
-using System;
 using Runtime.Ecs.Core;
 
 namespace Runtime.Ecs.Systems
@@ -13,10 +12,5 @@ namespace Runtime.Ecs.Systems
         }
 
         public abstract void Update(float deltaTime);
-
-        // TODO: Remove it in 58 usages.
-        protected void RegisterRequiredComponent(Type componentType)
-        {
-        }
     }
 }

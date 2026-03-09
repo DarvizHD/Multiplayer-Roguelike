@@ -2,9 +2,12 @@ using ENet;
 using Runtime.GameSystems;
 using Runtime.ServerInteraction;
 using Runtime.UI;
+using Runtime.UI.HUD;
 using Runtime.UI.Navigation;
 using Shared.Commands.Player;
 using Shared.Models;
+using Shared.Models.GameSession;
+using Shared.Models.Player;
 using Shared.Protocol;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,8 +16,10 @@ namespace Runtime
 {
     public class EntryPoint : MonoBehaviour
     {
-        [SerializeField] private WorldViewDescription worldViewDescription;
+        [SerializeField] private WorldViewDescription _worldViewDescription;
         [SerializeField] private UIDocument document;
+        [SerializeField] private UIHudView _uiHudView;
+
         private readonly GameSystemCollection _gameFixedSystemCollection = new();
 
         private readonly UICoreModel _uiCoreModel = new();
@@ -46,10 +51,10 @@ namespace Runtime
 
             _uiCoreModel.Setup(_playerSharedModel, _serverConnectionModel, _gameSessionSharedModel);
 
-            var navigationPresenter = new NavigationPresenter(_uiCoreModel, worldViewDescription, document);
+            var navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, document);
             navigationPresenter.Enable();
 
-            _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel);
+            _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel, _uiHudView);
             _gameSession.Enable();
 
             _serverConnectionModel.WorldPacketReceived += OnWorldPacketReceived;
@@ -81,7 +86,7 @@ namespace Runtime
 
         private void OnWorldPacketReceived(Packet packet)
         {
-            var buffer = new byte[1024];
+            var buffer = new byte[packet.Length];
             packet.CopyTo(buffer);
 
             var protocol = new NetworkProtocol(buffer);

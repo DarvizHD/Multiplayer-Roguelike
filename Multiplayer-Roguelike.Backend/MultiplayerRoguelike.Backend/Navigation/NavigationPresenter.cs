@@ -1,0 +1,66 @@
+﻿using System.IO;
+using Backend.Session;
+using DotRecast.Detour;
+using DotRecast.Detour.Io;
+
+namespace Backend.Navigation
+{
+    public class NavigationPresenter : IPresenter
+    {
+        private const string _filename = "Resources/base.navmesh";
+
+        private readonly WorldModel _worldModel;
+        private readonly NavigationSystem _navigationSystem;
+
+        private DtNavMesh _navMesh;
+
+        public NavigationPresenter(WorldModel worldModel)
+        {
+            _worldModel = worldModel;
+            _navigationSystem = new NavigationSystem("navigation");
+        }
+
+        public void Enable()
+        {
+            LoadNavMesh();
+
+            _worldModel.Sessions.OnAdded += HandleSessionAdded;
+            _worldModel.Sessions.OnRemoved += HandleSessionRemoved;
+
+            foreach (var session in _worldModel.Sessions.Models.Values)
+            {
+                HandleSessionAdded(session);
+            }
+
+            _worldModel.ServerSystems.Add(_navigationSystem);
+        }
+
+        public void Disable()
+        {
+            _worldModel.Sessions.OnAdded -= HandleSessionAdded;
+            _worldModel.Sessions.OnRemoved -= HandleSessionRemoved;
+            _worldModel.ServerSystems.Remove(_navigationSystem);
+        }
+
+        private void LoadNavMesh()
+        {
+            using var stream = new FileStream(_filename, FileMode.Open);
+            using var br = new BinaryReader(stream);
+
+            var reader = new DtMeshSetReader();
+            _navMesh = reader.Read(br, 6);
+        }
+
+        private void HandleSessionAdded(SessionModel session)
+        {
+            session.SetupNavigation(_navMesh);
+            _navigationSystem.Register(session);
+        }
+
+        private void HandleSessionRemoved(SessionModel session)
+        {
+            _navigationSystem.Unregister(session);
+            session.Navigation = null;
+        }
+    }
+}
