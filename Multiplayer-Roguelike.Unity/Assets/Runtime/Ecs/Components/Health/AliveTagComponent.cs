@@ -1,4 +1,4 @@
-namespace Runtime.Ecs.Components.Health
+namespace Runtime.ECS.Components.Health
 {
     public class AliveTagComponent : IComponent
     {

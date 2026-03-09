@@ -206,6 +206,7 @@ namespace Runtime
             {
                 EcsWorld.AddEntityComponent(entityId, new NetworkControllableTag());
                 EcsWorld.AddEntityComponent(entityId, new PositionInterpolationComponent(Vector3.zero, Vector3.zero));
+                EcsWorld.AddEntityComponent(entityId, new CharacterNetworkEventComponent(string.Empty));
             }
         }
 
@@ -303,6 +304,9 @@ namespace Runtime
 
             EcsWorld.RegisterComponent<WeaponProviderComponent>();
 
+            EcsWorld.RegisterComponent<DamageAnimationEventComponent>();
+            EcsWorld.RegisterComponent<AttackAnimationEventComponent>();
+            EcsWorld.RegisterComponent<CharacterNetworkEventComponent>();
             EcsWorld.RegisterComponent<SfxContainerComponent>();
             EcsWorld.RegisterComponent<PlaySoundEventComponent>();
             EcsWorld.RegisterComponent<HitSoundComponent>();
@@ -335,10 +339,15 @@ namespace Runtime
             EcsWorld.AddSystem<AISyncSystem>();
 
             EcsWorld.AddSystem<CursorWorldPositionSystem>();
-            EcsWorld.AddSystem<WeaponInputSystem>();
+
+            EcsWorld.AddSystem<WeaponSwitchInputSystem>();
+            EcsWorld.AddSystem<WeaponSwitchSyncSystem>();
+
+            EcsWorld.AddSystem<WeaponSwitchNetworkSystem>();
+
             EcsWorld.AddSystem<DrawWeaponSwitcherSystem>();
             EcsWorld.AddSystem<WeaponAnimationSwitcherSystem>();
-            EcsWorld.AddSystem<WeaponSwitchSystem>();
+            EcsWorld.AddSystem<WeaponSwitchHandlerSystem>();
 
             EcsWorld.AddSystem<AttackCooldownSystem>();
 
@@ -347,13 +356,13 @@ namespace Runtime
             EcsWorld.AddSystem<RangedAttackSystem>();
             EcsWorld.AddSystem<ReloadSystem>();
 
-            EcsWorld.AddSystem<AttackSystem>();
-            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
-            EcsWorld.AddSystem<FreezeMovementSystem>();
+            EcsWorld.AddSystem<CharacterAttackSystem>();
 
-            EcsWorld.AddSystem<DamageAnimationSystem>();
-            EcsWorld.AddSystem<DamageSystem>();
+            EcsWorld.AddSystem<AIHealthSync>();
             EcsWorld.AddSystem<AIDeathSystem>();
+            EcsWorld.AddSystem<DamageAnimationSystem>();
+
+            EcsWorld.AddSystem<CharacterAnimationSyncSystem>();
 
             EcsWorld.AddSystem(new PlaySoundSystem());
             EcsWorld.AddSystem<ZombieVoiceSystem>();
@@ -361,7 +370,10 @@ namespace Runtime
             EcsWorld.AddSystem(new UIDrawNameSystem(_hudView));
             EcsWorld.AddSystem(new UIDrawHealthSystem(_hudView));
 
+
             /*
+            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
+            EcsWorld.AddSystem<FreezeMovementSystem>();
             EcsWorld.AddSystem<RegenerationSystem>();
             EcsWorld.AddSystem<InvulnerabilitySystem>();
             EcsWorld.AddSystem<DeathAnimationSystem>();*/

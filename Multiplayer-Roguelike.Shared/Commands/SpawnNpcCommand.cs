@@ -9,9 +9,7 @@ namespace Shared.Commands
         public override string Id => CommandConst.SpawnNpc;
 
         public int Count;
-
         public string SessionId;
-
         public string TargetId;
 
         public SpawnNpcCommand(string sessionId, string targetId, int count)

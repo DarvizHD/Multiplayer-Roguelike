@@ -30,8 +30,6 @@ namespace Runtime.Tools
 
         private void Start()
         {
-            Debug.Log($"{_rigidbodies.Count} Rigidbodies");
-            Debug.Log($"{_colliders.Count} Rigidbodies");
             Enable = false;
         }
 

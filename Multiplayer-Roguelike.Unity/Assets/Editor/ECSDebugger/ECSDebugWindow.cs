@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Runtime;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Core;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;

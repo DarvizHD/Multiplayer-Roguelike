@@ -8,11 +8,11 @@ using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using UnityEngine;
 
-namespace Runtime.Ecs.Systems.Battle.RangeAttack
+namespace Runtime.ECS.Systems.Battle.RangeAttack
 {
     public class RangedAttackSystem : BaseSystem
     {
-        private QueryBuffer<CurrentWeaponComponent, CursorWorldPositionComponent> _attackerBuffer = new();
+        private QueryBuffer<CurrentWeaponComponent, CursorWorldPositionComponent, WeaponSlotsComponent, LocalControllableTag> _attackerBuffer = new();
         private QueryBuffer<PositionComponent, EnemyTagComponent, AliveTagComponent> _targetsBuffer = new();
 
         public override void Update(float deltaTime)
@@ -25,6 +25,7 @@ namespace Runtime.Ecs.Systems.Battle.RangeAttack
                 var entityId = _attackerBuffer.EntityIds[i];
                 var current = _attackerBuffer.Components1[i];
                 var cursorPos = _attackerBuffer.Components2[i];
+                var weaponSlots = _attackerBuffer.Components3[i];
 
                 if (!ComponentManager.TryGetComponent<RangedWeaponComponent>(current.WeaponEntityId, out var ranged))
                 {
@@ -63,7 +64,7 @@ namespace Runtime.Ecs.Systems.Battle.RangeAttack
                     continue;
                 }
 
-                ComponentManager.AddComponent(entityId, new AttackEventComponent(target.Value, ranged.Damage));
+                ComponentManager.AddComponent(entityId, new AttackEventComponent(entityId, target.Value));
                 ammo.Current--;
                 cooldown.CurrentCooldown = cooldown.Cooldown;
 

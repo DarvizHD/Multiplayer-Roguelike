@@ -3,7 +3,7 @@ using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Sound;
 using Runtime.Ecs.Core;
 
-namespace Runtime.Ecs.Systems.Battle
+namespace Runtime.ECS.Systems.Battle
 {
     public class DamageSystem : BaseSystem
     {
@@ -33,9 +33,9 @@ namespace Runtime.Ecs.Systems.Battle
 
                 if (healthComponent.CurrentHealth <= 0)
                 {
-                    ComponentManager.RemoveComponent<AliveTagComponent>(entityId);
                     ComponentManager.AddComponent(entityId, new DeathEventComponent());
                     ComponentManager.AddComponent(entityId, new DeathTagComponent());
+                    ComponentManager.RemoveComponent<AliveTagComponent>(entityId);
                 }
 
                 if (ComponentManager.TryGetComponent<RegenerationComponent>(entityId, out var regenerationComponent))

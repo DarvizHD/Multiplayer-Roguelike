@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Runtime.Ecs.Components
+namespace Runtime.ECS.Components
 {
     public class GameObjectComponent : IComponent
     {

@@ -2,7 +2,7 @@ using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Sound;
 using Runtime.Ecs.Core;
 
-namespace Runtime.Ecs.Systems.Battle.RangeAttack
+namespace Runtime.ECS.Systems.Battle.RangeAttack
 {
     public class ReloadSystem : BaseSystem
     {

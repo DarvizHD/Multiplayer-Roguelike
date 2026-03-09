@@ -1,6 +1,6 @@
 using Shared.Models.Enemy;
 
-namespace Runtime.Ecs.Components.Network
+namespace Runtime.ECS.Components.Network
 {
     public class EnemyNetworkSyncComponent : IComponent
     {

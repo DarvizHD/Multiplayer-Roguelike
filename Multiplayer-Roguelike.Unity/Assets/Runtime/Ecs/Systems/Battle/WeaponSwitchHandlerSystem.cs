@@ -1,9 +1,9 @@
-using Runtime.Ecs.Components.Battle.Weapon;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components.Battle.Weapon;
+using Runtime.ECS.Core;
 
-namespace Runtime.Ecs.Systems.Battle
+namespace Runtime.ECS.Systems.Battle
 {
-    public class WeaponSwitchSystem : BaseSystem
+    public class WeaponSwitchHandlerSystem : BaseSystem
     {
         private QueryBuffer<SwitchWeaponEventComponent, WeaponSlotsComponent, CurrentWeaponComponent> _buffer = new();
 

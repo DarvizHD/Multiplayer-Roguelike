@@ -1,4 +1,4 @@
-using Runtime.Ecs.Components;
+using Runtime.ECS.Components;
 using Runtime.Tools;
 
 namespace Runtime.Ecs.Systems
