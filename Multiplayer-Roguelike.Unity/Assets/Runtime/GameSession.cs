@@ -304,10 +304,15 @@ namespace Runtime
             EcsWorld.AddSystem<AISyncSystem>();
 
             EcsWorld.AddSystem<CursorWorldPositionSystem>();
-            EcsWorld.AddSystem<WeaponInputSystem>();
+
+            EcsWorld.AddSystem<WeaponSwitchInputSystem>();
+            EcsWorld.AddSystem<WeaponSwitchSyncSystem>();
+
+            EcsWorld.AddSystem<WeaponSwitchNetworkSystem>();
+
             EcsWorld.AddSystem<DrawWeaponSwitcherSystem>();
             EcsWorld.AddSystem<WeaponAnimationSwitcherSystem>();
-            EcsWorld.AddSystem<WeaponSwitchSystem>();
+            EcsWorld.AddSystem<WeaponSwitchHandlerSystem>();
 
             EcsWorld.AddSystem<AttackCooldownSystem>();
 
