@@ -10,18 +10,18 @@ namespace Shared.Primitives
         public float Yf => Y / _scale;
         public float Zf => Z / _scale;
 
-        public readonly int X;
-        public readonly int Y;
-        public readonly int Z;
+        public readonly short X;
+        public readonly short Y;
+        public readonly short Z;
 
         public Vector3(float x, float y, float z)
         {
-            X = (int)MathF.Round(x * _scale);
-            Y = (int)MathF.Round(y * _scale);
-            Z = (int)MathF.Round(z * _scale);
+            X = (short)MathF.Round(x * _scale);
+            Y = (short)MathF.Round(y * _scale);
+            Z = (short)MathF.Round(z * _scale);
         }
 
-        public Vector3(int x, int y, int z)
+        public Vector3(short x, short y, short z)
         {
             X = x;
             Y = y;
