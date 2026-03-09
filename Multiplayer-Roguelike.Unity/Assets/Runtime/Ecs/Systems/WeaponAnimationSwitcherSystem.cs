@@ -2,7 +2,7 @@ using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Core;
 
-namespace Runtime.Ecs.Systems.Player
+namespace Runtime.Ecs.Systems
 {
     public class WeaponAnimationSwitcherSystem : BaseSystem
     {
