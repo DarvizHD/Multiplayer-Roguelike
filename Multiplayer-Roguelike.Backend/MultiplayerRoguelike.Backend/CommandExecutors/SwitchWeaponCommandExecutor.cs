@@ -28,8 +28,6 @@ namespace Backend.CommandExecutors
 
             session.GameSessionSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character);
             character.EquippedWeaponSlotId.Value = Command.WeaponId;
-
-            Console.WriteLine($"{character.Id}  has been equipped {character.EquippedWeaponSlotId.Value}");
         }
     }
 }

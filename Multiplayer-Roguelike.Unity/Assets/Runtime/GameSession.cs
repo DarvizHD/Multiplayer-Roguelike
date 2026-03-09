@@ -207,7 +207,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new EnemyTagComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionRotationTagComponent());
             EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(enemyProvider.Animator));
-            EcsWorld.AddEntityComponent(entityId, new HealthComponent(10f));
+            EcsWorld.AddEntityComponent(entityId, new HealthComponent(100f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(2f, 5f));
             EcsWorld.AddEntityComponent(entityId, new FreezeMovementByDamageComponent(1.5f));
             EcsWorld.AddEntityComponent(entityId, new AliveTagComponent());
@@ -321,12 +321,12 @@ namespace Runtime
             EcsWorld.AddSystem<RangedAttackSystem>();
             EcsWorld.AddSystem<ReloadSystem>();
 
-            EcsWorld.AddSystem<AttackSystem>();
+            EcsWorld.AddSystem<PlayerAttackSystem>();
             EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
             EcsWorld.AddSystem<FreezeMovementSystem>();
 
             EcsWorld.AddSystem<DamageAnimationSystem>();
-            EcsWorld.AddSystem<DamageSystem>();
+            EcsWorld.AddSystem<AIHealthSync>();
             EcsWorld.AddSystem<AIDeathSystem>();
 
             EcsWorld.AddSystem(new UIDrawNameSystem(_hudView));

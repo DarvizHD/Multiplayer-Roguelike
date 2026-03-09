@@ -2,7 +2,6 @@ using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Core;
 using Shared.Commands;
-using UnityEngine;
 
 namespace Runtime.Ecs.Systems.Battle
 {
@@ -22,8 +21,6 @@ namespace Runtime.Ecs.Systems.Battle
                 var characterNetwork = _buffer.Components1[i];
                 var characterConnection = _buffer.Components2[i];
                 var switchWeaponEvent = _buffer.Components3[i];
-
-                Debug.Log($"Sync {characterNetwork.CharacterSharedModel.Id}: {switchWeaponEvent.TargetSlot} | {characterNetwork.CharacterSharedModel.EquippedWeaponSlotId.Value}");
 
                 var switchWeaponCommand = new SwitchWeaponCommand(characterNetwork.CharacterSharedModel.Id,
                     (ushort)switchWeaponEvent.TargetSlot);

@@ -2,13 +2,13 @@ namespace Runtime.Ecs.Components
 {
     public class AttackEventComponent : IComponent
     {
+        public ushort AttackerId;
         public ushort TargetId;
-        public float Damage;
 
-        public AttackEventComponent(ushort targetId, float damage)
+        public AttackEventComponent(ushort attackerId, ushort targetId)
         {
             TargetId = targetId;
-            Damage = damage;
+            AttackerId = attackerId;
         }
     }
 }

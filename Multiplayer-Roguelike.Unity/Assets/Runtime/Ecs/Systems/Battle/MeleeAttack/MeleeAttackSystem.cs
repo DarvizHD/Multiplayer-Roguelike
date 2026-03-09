@@ -1,8 +1,10 @@
+using System;
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using UnityEngine;
@@ -11,8 +13,8 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackSystem : BaseSystem
     {
+        private QueryBuffer<PositionComponent, RotationComponent, CurrentWeaponComponent, LocalControllableTag> _attackerBuffer = new();
         private QueryBuffer<PositionComponent, EnemyTagComponent, AliveTagComponent> _targetsBuffer = new();
-        private QueryBuffer<PositionComponent, RotationComponent, CurrentWeaponComponent> _attackerBuffer = new();
 
         public override void Update(float deltaTime)
         {
@@ -66,7 +68,7 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
                         continue;
                     }
 
-                    ComponentManager.AddComponent(entityId, new AttackEventComponent(targetId, melee.Damage));
+                    ComponentManager.AddComponent(entityId, new AttackEventComponent(entityId, targetId));
                     cooldown.CurrentCooldown = cooldown.Cooldown;
                 }
             }

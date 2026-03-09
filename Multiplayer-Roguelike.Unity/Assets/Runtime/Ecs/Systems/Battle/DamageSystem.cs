@@ -27,9 +27,9 @@ namespace Runtime.Ecs.Systems.Battle
 
                 if (healthComponent.CurrentHealth <= 0)
                 {
-                    ComponentManager.RemoveComponent<AliveTagComponent>(entityId);
                     ComponentManager.AddComponent(entityId, new DeathEventComponent());
                     ComponentManager.AddComponent(entityId, new DeathTagComponent());
+                    ComponentManager.RemoveComponent<AliveTagComponent>(entityId);
                 }
 
                 if (ComponentManager.TryGetComponent<RegenerationComponent>(entityId, out var regenerationComponent))

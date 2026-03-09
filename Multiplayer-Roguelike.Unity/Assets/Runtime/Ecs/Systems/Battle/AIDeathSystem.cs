@@ -19,7 +19,9 @@ namespace Runtime.Ecs.Systems.Battle
                 var ragdollComponent = _buffer.Components3[i];
                 var navMeshAgentComponent = _buffer.Components4[i];
 
+                ComponentManager.RemoveComponent<AliveTagComponent>(entityId);
                 ComponentManager.RemoveComponent<DeathEventComponent>(entityId);
+                ComponentManager.AddComponent(entityId, new DeathTagComponent());
 
                 ragdollComponent.RagdollProvider.Enable = true;
                 animatorComponent.Animator.enabled = false;
