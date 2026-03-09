@@ -5,10 +5,9 @@ namespace Shared.Models
 {
     public class GameSessionSharedModel : SharedModel
     {
-        public readonly SharedModelCollection<CharacterSharedModel> Characters =
-            new SharedModelCollection<CharacterSharedModel>("characters", CharacterSharedModel.Create);
+        public readonly CharacterSharedModelCollection Characters = new CharacterSharedModelCollection("characters");
 
-        public readonly SharedModelCollection<EnemySharedModel> Enemies = new SharedModelCollection<EnemySharedModel>("enemies", EnemySharedModel.Create);
+        public readonly EnemySharedModelCollection Enemies = new EnemySharedModelCollection("enemies");
 
         public readonly Property<bool> IsRun = new Property<bool>("is_run", false);
 

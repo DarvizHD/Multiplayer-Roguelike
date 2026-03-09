@@ -6,7 +6,7 @@ using Shared.Protocol;
 
 namespace Shared.Models.Common
 {
-    public sealed class SharedModelCollection<T> : ISharedData where T : ISharedData
+    public abstract class SharedModelCollection<T> : ISharedData where T : ISharedData
     {
         public event Action<T> Added;
         public event Action<string> Removed;
@@ -25,13 +25,11 @@ namespace Shared.Models.Common
 
         private readonly List<T> _added = new List<T>();
         private readonly List<T> _removed = new List<T>();
-        private readonly Func<string, T> _factory;
 
         private bool _cleared;
 
-        public SharedModelCollection(string id, Func<string, T> factory)
+        public SharedModelCollection(string id)
         {
-            _factory = factory;
             Id = id;
         }
 
@@ -71,7 +69,7 @@ namespace Shared.Models.Common
             for (var i = 0; i < addedCount; i++)
             {
                 protocol.Get(out string id);
-                var model = _factory.Invoke(id);
+                var model = CreateInstance(id);
                 model.Read(protocol);
                 _models[id] = model;
                 Added?.Invoke(model);
@@ -121,6 +119,8 @@ namespace Shared.Models.Common
                 }
             }
         }
+
+        protected abstract T CreateInstance(string id);
 
         public void Clear()
         {
