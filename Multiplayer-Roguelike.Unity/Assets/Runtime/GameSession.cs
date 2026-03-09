@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Runtime.Ecs.Components;
+using Runtime.ECS.Components;
 using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Camera;
@@ -187,6 +188,7 @@ namespace Runtime
             {
                 EcsWorld.AddEntityComponent(entityId, new NetworkControllableTag());
                 EcsWorld.AddEntityComponent(entityId, new PositionInterpolationComponent(Vector3.zero, Vector3.zero));
+                EcsWorld.AddEntityComponent(entityId, new CharacterNetworkEventComponent(string.Empty));
             }
         }
 
@@ -276,6 +278,10 @@ namespace Runtime
             EcsWorld.RegisterComponent<CursorWorldPositionComponent>();
 
             EcsWorld.RegisterComponent<WeaponProviderComponent>();
+
+            EcsWorld.RegisterComponent<DamageAnimationEventComponent>();
+            EcsWorld.RegisterComponent<AttackAnimationEventComponent>();
+            EcsWorld.RegisterComponent<CharacterNetworkEventComponent>();
         }
 
         private void AddSystems()
@@ -321,18 +327,21 @@ namespace Runtime
             EcsWorld.AddSystem<RangedAttackSystem>();
             EcsWorld.AddSystem<ReloadSystem>();
 
-            EcsWorld.AddSystem<PlayerAttackSystem>();
-            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
-            EcsWorld.AddSystem<FreezeMovementSystem>();
+            EcsWorld.AddSystem<CharacterAttackSystem>();
 
-            EcsWorld.AddSystem<DamageAnimationSystem>();
             EcsWorld.AddSystem<AIHealthSync>();
             EcsWorld.AddSystem<AIDeathSystem>();
+            EcsWorld.AddSystem<DamageAnimationSystem>();
+
+            EcsWorld.AddSystem<CharacterAnimationSyncSystem>();
 
             EcsWorld.AddSystem(new UIDrawNameSystem(_hudView));
             EcsWorld.AddSystem(new UIDrawHealthSystem(_hudView));
 
+
             /*
+            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
+            EcsWorld.AddSystem<FreezeMovementSystem>();
             EcsWorld.AddSystem<RegenerationSystem>();
             EcsWorld.AddSystem<InvulnerabilitySystem>();
             EcsWorld.AddSystem<DeathAnimationSystem>();*/

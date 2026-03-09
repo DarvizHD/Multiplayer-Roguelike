@@ -1,5 +1,6 @@
 using System;
 using Runtime.Ecs.Components;
+using Runtime.ECS.Components;
 using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Health;
@@ -68,6 +69,7 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
                         continue;
                     }
 
+                    ComponentManager.AddComponent(entityId, new AttackAnimationEventComponent());
                     ComponentManager.AddComponent(entityId, new AttackEventComponent(entityId, targetId));
                     cooldown.CurrentCooldown = cooldown.Cooldown;
                 }

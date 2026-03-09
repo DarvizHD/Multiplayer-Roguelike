@@ -26,11 +26,8 @@ namespace Runtime.Ecs.Systems.Battle
                 var currentWeaponSlot = Array.IndexOf(weaponSlots.SlotEntityIds, currentWeaponComponent.WeaponEntityId);
                 var hasDifferent = targetSlot != currentWeaponSlot;
 
-                Debug.Log($"Network player: {networkSyncComponent.CharacterSharedModel.Id}Current slot: {currentWeaponSlot} | Target slot: {targetSlot}");
-
                 if (hasDifferent)
                 {
-                    Debug.Log($"NETWORK SWITCH {entityId}: network: {targetSlot} current: {currentWeaponSlot}");
                     ComponentManager.AddComponent(entityId, new SwitchWeaponEventComponent(targetSlot));
                 }
             }

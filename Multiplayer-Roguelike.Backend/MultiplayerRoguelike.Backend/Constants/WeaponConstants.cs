@@ -7,5 +7,11 @@ namespace Backend.Constants
             40,
             25
         };
+
+        public static readonly string[] Events =
+        {
+            "bat_attack",
+            "pistol_attack"
+        };
     }
 }

@@ -25,8 +25,6 @@ public class WeaponSwitchHandlerSystem : BaseSystem
                 current.WeaponEntityId = slots.SlotEntityIds[targetSlot];
             }
 
-            Debug.Log($"REMOVED EVENT FOR {entityId}");
-
             ComponentManager.RemoveComponent<SwitchWeaponEventComponent>(entityId);
         }
     }

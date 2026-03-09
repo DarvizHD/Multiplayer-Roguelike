@@ -1,13 +1,11 @@
 using Runtime.Ecs.Components;
-using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Core;
 using Shared.Commands;
-using UnityEngine;
 
 namespace Runtime.Ecs.Systems.Battle
 {
-    public class PlayerAttackSystem : BaseSystem
+    public class CharacterAttackSystem : BaseSystem
     {
         private QueryBuffer<AttackEventComponent, CharacterNetworkSyncComponent, CharacterConnectionComponent, LocalControllableTag>  _attackEventBuffer = new();
 
@@ -27,16 +25,9 @@ namespace Runtime.Ecs.Systems.Battle
                     continue;
                 }
 
-                if (!ComponentManager.TryGetComponent<PendingDamageEventComponent>(attackEventComponent.TargetId, out var pendingDamageEventComponent))
-                {
-                    ComponentManager.AddComponent(attackEventComponent.TargetId, pendingDamageEventComponent = new PendingDamageEventComponent());
-                }
-
                 var targetId = enemyNetworkSyncComponent.EnemySharedModel.Id;
 
-                Debug.Log($"Player {characterNetworkSyncComponent.CharacterSharedModel.Id} Attack {targetId}");
-
-                var attackCommand = new PlayerAttackCommand(characterNetworkSyncComponent.CharacterSharedModel.Id, targetId, $"test");
+                var attackCommand = new PlayerAttackCommand(characterNetworkSyncComponent.CharacterSharedModel.Id, targetId);
 
                 attackCommand.Write(characterConnectionComponent.ServerConnectionModel.PlayerPeer);
 

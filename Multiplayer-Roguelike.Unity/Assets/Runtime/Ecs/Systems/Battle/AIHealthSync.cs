@@ -1,3 +1,5 @@
+using Runtime.Ecs.Components;
+using Runtime.ECS.Components;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Components.Tags;
@@ -24,6 +26,11 @@ namespace Runtime.Ecs.Systems.Battle
 
                 if (hasDifferent)
                 {
+                    if (healthComponent.CurrentHealth > enemyNetworkSyncComponent.EnemySharedModel.Health.Value)
+                    {
+                        ComponentManager.AddComponent(entityId, new DamageAnimationEventComponent());
+                    }
+
                     healthComponent.CurrentHealth = enemyNetworkSyncComponent.EnemySharedModel.Health.Value;
                 }
 

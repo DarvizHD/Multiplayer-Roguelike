@@ -40,11 +40,11 @@ namespace Backend.CommandExecutors.Player
                 return;
             }
 
-            character.EventId.Value = Command.EventId;
-
             var weaponId = character.EquippedWeaponSlotId.Value;
             var damage = weaponId < WeaponConstants.Damages.Length ? WeaponConstants.Damages[character.EquippedWeaponSlotId.Value] : 10f;
-
+            var time = DateTime.UtcNow.ToString("HH:mm:ss");
+            var eventName = weaponId < WeaponConstants.Events.Length ? WeaponConstants.Events[character.EquippedWeaponSlotId.Value] : "default";
+            character.EventId.Value = $"{eventName}_{time}";
             target.Health.Value -= damage;
         }
     }
