@@ -34,6 +34,12 @@ namespace Backend.CommandExecutors.Lobby
             }
 
             lobby.AddMember(player.PlayerSharedModel.Nickname.Value);
+
+            if (World.Sessions.TryGet(lobby.Guid, out var session))
+            {
+                session.Players.Add(player.PlayerSharedModel.Id, player);
+                player.IsConnectingToSession = true;
+            }
         }
     }
 }
