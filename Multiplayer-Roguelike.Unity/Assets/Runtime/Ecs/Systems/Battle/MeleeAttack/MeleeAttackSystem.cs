@@ -3,6 +3,7 @@ using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Components.Sound;
 using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using UnityEngine;
@@ -68,6 +69,8 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 
                     ComponentManager.AddComponent(entityId, new AttackEventComponent(targetId, melee.Damage));
                     cooldown.CurrentCooldown = cooldown.Cooldown;
+
+                    ComponentManager.AddComponent(entityId, new PlaySoundEventComponent(melee.AttackClip));
                 }
             }
         }
