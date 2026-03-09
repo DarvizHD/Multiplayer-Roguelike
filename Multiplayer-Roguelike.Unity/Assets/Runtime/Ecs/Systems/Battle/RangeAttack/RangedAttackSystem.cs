@@ -3,6 +3,7 @@ using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Components.Sound;
 using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
 using UnityEngine;
@@ -65,6 +66,8 @@ namespace Runtime.Ecs.Systems.Battle.RangeAttack
                 ComponentManager.AddComponent(entityId, new AttackEventComponent(target.Value, ranged.Damage));
                 ammo.Current--;
                 cooldown.CurrentCooldown = cooldown.Cooldown;
+
+                ComponentManager.AddComponent(entityId, new PlaySoundEventComponent(ranged.ShootClip));
             }
         }
 
