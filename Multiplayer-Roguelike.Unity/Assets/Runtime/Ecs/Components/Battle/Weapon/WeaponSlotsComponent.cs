@@ -4,6 +4,8 @@ namespace Runtime.Ecs.Components.Battle.Weapon
     {
         public ushort[] SlotEntityIds { get; }
 
+
+
         public WeaponSlotsComponent(ushort[] slotEntityIds)
         {
             SlotEntityIds = slotEntityIds;
