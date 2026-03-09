@@ -1,6 +1,7 @@
 using ENet;
 using Runtime.GameSystems;
 using Runtime.ServerInteraction;
+using Runtime.Sound;
 using Runtime.UI;
 using Runtime.UI.HUD;
 using Runtime.UI.Navigation;
@@ -15,8 +16,9 @@ namespace Runtime
     public class EntryPoint : MonoBehaviour
     {
         [SerializeField] private WorldViewDescription _worldViewDescription;
-        [SerializeField] private UIDocument document;
+        [SerializeField] private UIDocument _document;
         [SerializeField] private UIHudView _uiHudView;
+        [SerializeField] private AudioSource _ambientSoundSource;
 
         private readonly GameSystemCollection _gameFixedSystemCollection = new();
 
@@ -49,8 +51,11 @@ namespace Runtime
 
             _uiCoreModel.Setup(_playerSharedModel, _serverConnectionModel, _gameSessionSharedModel);
 
-            var navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, document);
+            var navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, _document);
             navigationPresenter.Enable();
+
+            var ambientSoundPresenter = new AmbientSoundPresenter(_ambientSoundSource, _gameSessionSharedModel);
+            ambientSoundPresenter.Enable();
 
             _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel, _uiHudView);
             _gameSession.Enable();
