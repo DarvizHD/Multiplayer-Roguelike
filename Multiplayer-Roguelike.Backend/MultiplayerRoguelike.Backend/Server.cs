@@ -128,15 +128,15 @@ namespace Backend
         {
             foreach (var player in _world.Players.Models.Values)
             {
-                if (player.PlayerSharedModel.IsDirty || player.IsReconnecting)
+                if (player.PlayerSharedModel.IsDirty || player.IsConnectingToSession)
                 {
                     var protocol = new NetworkProtocol();
                     var packet = default(Packet);
 
-                    if (player.IsReconnecting)
+                    if (player.IsConnectingToSession)
                     {
                         player.PlayerSharedModel.WriteAll(protocol);
-                        player.IsReconnecting = player.SessionId != string.Empty;
+                        player.IsConnectingToSession = player.SessionId != string.Empty;
                     }
                     else
                     {
@@ -155,7 +155,7 @@ namespace Backend
             foreach (var session in _world.Sessions.Models.Values)
             {
                 var worldSharedModel = session.GameSessionSharedModel;
-                if (worldSharedModel.IsDirty || session.Players.Models.Values.Any(p => p.IsReconnecting))
+                if (worldSharedModel.IsDirty || session.Players.Models.Values.Any(p => p.IsConnectingToSession))
                 {
                     var protocol = new NetworkProtocol();
                     worldSharedModel.Write(protocol);
@@ -166,10 +166,10 @@ namespace Backend
                     foreach (var player in session.Players.Models.Values)
                     {
                         var packet = default(Packet);
-                        packet.Create(player.IsReconnecting
+                        packet.Create(player.IsConnectingToSession
                             ? fullWorldProtocol.Stream.GetBuffer()
                             : protocol.Stream.GetBuffer());
-                        player.IsReconnecting = false;
+                        player.IsConnectingToSession = false;
                         SendPacket(player.Peer, 1, ref packet);
                     }
                 }

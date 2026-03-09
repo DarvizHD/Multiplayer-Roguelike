@@ -8,7 +8,8 @@ namespace Backend.Player
         public PlayerSharedModel PlayerSharedModel { get; }
         public Peer Peer { get; set; }
         public string SessionId { get; set; } = string.Empty;
-        public bool IsReconnecting { get; set; }
+        public bool IsActive { get; set; } = true;
+        public bool IsConnectingToSession { get; set; }
 
         public PlayerModel(string playerNickname, Peer peer)
         {

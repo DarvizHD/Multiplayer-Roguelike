@@ -19,6 +19,12 @@ namespace Backend.CommandExecutors.Player
                 return;
             }
 
+            if (World.Lobbies.TryGet(existedPlayer.PlayerSharedModel.Lobby.LobbyId.Value, out var lobby))
+            {
+                lobby.RemoveMember(existedPlayer.PlayerSharedModel.Nickname.Value);
+            }
+
+            existedPlayer.IsActive = false;
             if (!World.Sessions.TryGet(existedPlayer.SessionId, out var session))
             {
                 World.Players.Remove(existedPlayer.PlayerSharedModel.Id);

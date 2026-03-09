@@ -19,10 +19,11 @@ namespace Backend.CommandExecutors.Player
 
             if (World.Players.TryGet(Command.PlayerNickname, out var existedPlayer))
             {
-                if (World.Sessions.TryGet(existedPlayer.SessionId, out var session))
+                if (!existedPlayer.IsActive && World.Sessions.TryGet(existedPlayer.SessionId, out var session))
                 {
                     existedPlayer.Peer = Peer;
-                    existedPlayer.IsReconnecting = true;
+                    existedPlayer.IsActive = true;
+                    existedPlayer.IsConnectingToSession = true;
                 }
                 else
                 {
