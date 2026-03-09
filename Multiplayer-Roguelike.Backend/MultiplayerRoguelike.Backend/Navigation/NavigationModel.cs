@@ -32,7 +32,7 @@ namespace Backend.Navigation
 
         public void SetAgentTarget(DtCrowdAgent agent, Vector3 target)
         {
-            var targetPos = new RcVec3f(target.X, target.Y, target.Z);
+            var targetPos = new RcVec3f(target.Xf, target.Yf, target.Zf);
 
             var halfExtents = new RcVec3f(2, 4, 2);
 

@@ -38,7 +38,7 @@ namespace Backend.Enemies
 
         private void HandleEnemyAdded(EnemyModel enemy)
         {
-            var startPosition = new RcVec3f(enemy.Shared.Position.Value.X, enemy.Shared.Position.Value.Y, enemy.Shared.Position.Value.Z);
+            var startPosition = new RcVec3f(enemy.Shared.Position.Value.Xf, enemy.Shared.Position.Value.Yf, enemy.Shared.Position.Value.Zf);
 
             var dtCrowdAgent = _sessionModel.Navigation.Crowd.AddAgent(startPosition, CreateAgentParams());
             enemy.CrowdAgent = dtCrowdAgent;

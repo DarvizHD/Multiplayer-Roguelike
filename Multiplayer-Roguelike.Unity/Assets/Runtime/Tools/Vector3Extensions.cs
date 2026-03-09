@@ -6,7 +6,7 @@ namespace Runtime.Tools
     {
         public static Vector3 ToUnityVector3(this Shared.Primitives.Vector3 vector3)
         {
-            return new Vector3(vector3.X, vector3.Y, vector3.Z);
+            return new Vector3(vector3.Xf, vector3.Yf, vector3.Zf);
         }
 
         public static Shared.Primitives.Vector3 ToSharedVector2(this Vector2 vector2)
