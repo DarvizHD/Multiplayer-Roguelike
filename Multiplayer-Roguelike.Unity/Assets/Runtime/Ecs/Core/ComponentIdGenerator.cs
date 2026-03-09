@@ -1,4 +1,4 @@
-namespace Runtime.Ecs.Core
+namespace Runtime.ECS.Core
 {
     public static class ComponentIdGenerator
     {

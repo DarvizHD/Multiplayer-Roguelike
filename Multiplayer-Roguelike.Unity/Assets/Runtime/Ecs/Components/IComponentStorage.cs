@@ -1,4 +1,4 @@
-namespace Runtime.Ecs.Components
+namespace Runtime.ECS.Components
 {
     public interface IComponentStorage<out T> where T : IComponent
     {

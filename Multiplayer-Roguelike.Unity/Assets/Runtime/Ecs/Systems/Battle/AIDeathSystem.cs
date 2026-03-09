@@ -1,8 +1,8 @@
-using Runtime.Ecs.Components;
-using Runtime.Ecs.Components.Health;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components;
+using Runtime.ECS.Components.Health;
+using Runtime.ECS.Core;
 
-namespace Runtime.Ecs.Systems.Battle
+namespace Runtime.ECS.Systems.Battle
 {
     public class AIDeathSystem : BaseSystem
     {

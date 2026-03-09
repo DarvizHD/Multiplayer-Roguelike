@@ -1,8 +1,8 @@
-using Runtime.Ecs.Components.Battle;
-using Runtime.Ecs.Components.Health;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components.Battle;
+using Runtime.ECS.Components.Health;
+using Runtime.ECS.Core;
 
-namespace Runtime.Ecs.Systems.Battle
+namespace Runtime.ECS.Systems.Battle
 {
     public class DamageSystem : BaseSystem
     {

@@ -1,31 +1,32 @@
-using Runtime.Ecs.Components.Battle.Weapon;
-using Runtime.Ecs.Core;
-using Runtime.Ecs.Systems;
-using UnityEngine;
+using Runtime.ECS.Components.Battle.Weapon;
+using Runtime.ECS.Core;
 
-public class WeaponSwitchHandlerSystem : BaseSystem
+namespace Runtime.ECS.Systems.Battle
 {
-    private QueryBuffer<SwitchWeaponEventComponent, WeaponSlotsComponent, CurrentWeaponComponent> _buffer = new();
-
-    public override void Update(float deltaTime)
+    public class WeaponSwitchHandlerSystem : BaseSystem
     {
-        ComponentManager.Filter.Query(ref _buffer);
+        private QueryBuffer<SwitchWeaponEventComponent, WeaponSlotsComponent, CurrentWeaponComponent> _buffer = new();
 
-        for (var i = 0; i < _buffer.Count; i++)
+        public override void Update(float deltaTime)
         {
-            var entityId = _buffer.EntityIds[i];
-            var switchEvent = _buffer.Components1[i];
-            var slots = _buffer.Components2[i];
-            var current = _buffer.Components3[i];
+            ComponentManager.Filter.Query(ref _buffer);
 
-            var targetSlot = switchEvent.TargetSlot;
-
-            if (targetSlot >= 0 && targetSlot < slots.SlotEntityIds.Length)
+            for (var i = 0; i < _buffer.Count; i++)
             {
-                current.WeaponEntityId = slots.SlotEntityIds[targetSlot];
-            }
+                var entityId = _buffer.EntityIds[i];
+                var switchEvent = _buffer.Components1[i];
+                var slots = _buffer.Components2[i];
+                var current = _buffer.Components3[i];
 
-            ComponentManager.RemoveComponent<SwitchWeaponEventComponent>(entityId);
+                var targetSlot = switchEvent.TargetSlot;
+
+                if (targetSlot >= 0 && targetSlot < slots.SlotEntityIds.Length)
+                {
+                    current.WeaponEntityId = slots.SlotEntityIds[targetSlot];
+                }
+
+                ComponentManager.RemoveComponent<SwitchWeaponEventComponent>(entityId);
+            }
         }
     }
 }

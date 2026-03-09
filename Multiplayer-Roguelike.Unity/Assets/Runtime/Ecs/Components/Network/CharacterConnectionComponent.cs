@@ -1,6 +1,6 @@
 using Runtime.ServerInteraction;
 
-namespace Runtime.Ecs.Components.Network
+namespace Runtime.ECS.Components.Network
 {
     public class CharacterConnectionComponent : IComponent
     {

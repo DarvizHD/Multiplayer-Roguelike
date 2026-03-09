@@ -1,12 +1,12 @@
-using Runtime.Ecs.Components;
-using Runtime.Ecs.Components.Health;
-using Runtime.Ecs.Components.Network;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components;
+using Runtime.ECS.Components.Health;
+using Runtime.ECS.Components.Network;
+using Runtime.ECS.Core;
 using Runtime.Tools;
 using Shared.Models.Player;
 using UnityEngine;
 
-namespace Runtime.Ecs.Systems.Network
+namespace Runtime.ECS.Systems.Network
 {
     public class AISyncSystem : BaseSystem
     {

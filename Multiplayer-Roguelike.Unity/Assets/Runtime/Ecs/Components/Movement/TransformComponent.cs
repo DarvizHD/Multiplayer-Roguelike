@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Runtime.Ecs.Components.Movement
+namespace Runtime.ECS.Components.Movement
 {
     public class TransformComponent : IComponent
     {
