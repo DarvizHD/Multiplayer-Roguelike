@@ -2,7 +2,7 @@ using Shared.Models.Common;
 using Shared.Primitives;
 using Shared.Properties;
 
-namespace Shared.Models
+namespace Shared.Models.Player
 {
     public class CharacterSharedModel : SharedModel
     {

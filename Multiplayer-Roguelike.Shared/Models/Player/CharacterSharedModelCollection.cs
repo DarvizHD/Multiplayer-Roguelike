@@ -1,6 +1,6 @@
 ﻿using Shared.Models.Common;
 
-namespace Shared.Models
+namespace Shared.Models.Player
 {
     public class CharacterSharedModelCollection : SharedModelCollection<CharacterSharedModel>
     {

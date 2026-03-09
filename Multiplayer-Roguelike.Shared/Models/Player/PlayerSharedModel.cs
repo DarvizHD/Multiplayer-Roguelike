@@ -1,7 +1,8 @@
 using Shared.Models.Common;
+using Shared.Models.Lobby;
 using Shared.Properties;
 
-namespace Shared.Models
+namespace Shared.Models.Player
 {
     public class PlayerSharedModel : SharedModel
     {

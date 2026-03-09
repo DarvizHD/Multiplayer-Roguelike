@@ -5,6 +5,7 @@ using DotRecast.Core.Numerics;
 using DotRecast.Detour;
 using DotRecast.Detour.Crowd;
 using Shared.Models;
+using Shared.Models.Player;
 using Shared.Primitives;
 
 namespace Backend.Enemies

@@ -27,9 +27,10 @@ using Runtime.ServerInteraction;
 using Runtime.Tools;
 using Runtime.UI.HUD;
 using Shared.Commands;
-using Shared.Models;
+using Shared.Models.Enemy;
+using Shared.Models.GameSession;
+using Shared.Models.Player;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Runtime
 {

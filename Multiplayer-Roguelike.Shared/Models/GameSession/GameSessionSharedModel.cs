@@ -1,7 +1,9 @@
 using Shared.Models.Common;
+using Shared.Models.Enemy;
+using Shared.Models.Player;
 using Shared.Properties;
 
-namespace Shared.Models
+namespace Shared.Models.GameSession
 {
     public class GameSessionSharedModel : SharedModel
     {

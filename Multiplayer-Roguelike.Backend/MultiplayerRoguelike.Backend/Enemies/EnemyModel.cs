@@ -1,5 +1,6 @@
 ﻿using DotRecast.Detour.Crowd;
 using Shared.Models;
+using Shared.Models.Enemy;
 using Shared.Primitives;
 
 namespace Backend.Enemies

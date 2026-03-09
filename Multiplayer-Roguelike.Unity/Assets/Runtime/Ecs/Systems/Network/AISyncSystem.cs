@@ -3,7 +3,7 @@ using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Core;
 using Runtime.Tools;
-using Shared.Models;
+using Shared.Models.Player;
 using UnityEngine;
 
 namespace Runtime.Ecs.Systems.Network

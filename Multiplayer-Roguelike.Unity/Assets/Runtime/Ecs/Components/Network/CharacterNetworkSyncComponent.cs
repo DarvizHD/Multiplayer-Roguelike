@@ -1,4 +1,4 @@
-using Shared.Models;
+using Shared.Models.Player;
 
 namespace Runtime.Ecs.Components.Network
 {

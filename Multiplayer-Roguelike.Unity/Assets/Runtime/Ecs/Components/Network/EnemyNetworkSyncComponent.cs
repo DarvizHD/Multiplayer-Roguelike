@@ -1,4 +1,4 @@
-using Shared.Models;
+using Shared.Models.Enemy;
 
 namespace Runtime.Ecs.Components.Network
 {
