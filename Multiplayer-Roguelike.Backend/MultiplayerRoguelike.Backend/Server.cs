@@ -3,11 +3,13 @@ using System.Linq;
 using System.Diagnostics;
 using System.Threading;
 using Backend.CommandExecutors.Common;
+using Backend.CommandExecutors.Player;
 using Backend.Lobby.Collection;
 using Backend.Navigation;
 using Backend.Player.Collection;
 using Backend.Session.Collection;
 using ENet;
+using Shared.Commands.Player;
 using Shared.Protocol;
 
 namespace Backend
@@ -139,9 +141,11 @@ namespace Backend
                     Console.WriteLine($"{netEvent.Peer.ID} timed out");
 
                     var player = _world.Players.Models.Values.FirstOrDefault(p => p.Peer.ID == netEvent.Peer.ID);
-                    if (player is { SessionId: "" })
+                    if (player != null)
                     {
-                        _world.Players.Remove(player.PlayerSharedModel.Id);
+                        var logoutCommand = new LogoutCommand(player.PlayerSharedModel.Nickname.Value);
+                        var logoutExecutor = new LogoutCommandExecutor(logoutCommand, _world, player.Peer);
+                        logoutExecutor.Execute();
                     }
                     break;
             }
