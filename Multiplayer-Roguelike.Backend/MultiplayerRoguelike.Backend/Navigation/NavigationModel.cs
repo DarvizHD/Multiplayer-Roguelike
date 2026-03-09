@@ -9,24 +9,22 @@ namespace Backend.Navigation
     {
         public DtNavMesh NavMesh { get; }
         public DtNavMeshQuery Query { get; }
-
         public DtCrowd Crowd { get; }
+        public NavigationConfig Config { get; }
 
         public NavigationModel(DtNavMesh navMesh)
         {
             NavMesh = navMesh;
+            Config = new NavigationConfig();
             Query = new DtNavMeshQuery(navMesh);
-            var config = new DtCrowdConfig(0.6f);
-            Crowd = new DtCrowd(config, NavMesh);
+            Crowd = new DtCrowd(Config.CrowdConfig, NavMesh);
         }
 
         public void SetupObstacleAvoidance()
         {
-            var obstacleAvoidanceParams = new DtObstacleAvoidanceParams();
-
             for (var i = 0; i < 4; i++)
             {
-                Crowd.SetObstacleAvoidanceParams(i, obstacleAvoidanceParams);
+                Crowd.SetObstacleAvoidanceParams(i, Config.ObstacleParams);
             }
         }
 
