@@ -6,9 +6,10 @@ namespace Runtime.Ecs.Components
     {
         public Rigidbody Rigidbody;
 
-        public RigidbodyComponent(Rigidbody rigidbody)
+        public RigidbodyComponent(Rigidbody rigidbody, Vector3 position)
         {
             Rigidbody = rigidbody;
+            Rigidbody.position = position;
         }
     }
 }
