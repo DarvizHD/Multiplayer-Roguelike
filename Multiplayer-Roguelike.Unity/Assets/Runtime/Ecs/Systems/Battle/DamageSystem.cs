@@ -1,5 +1,6 @@
 using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Components.Sound;
 using Runtime.Ecs.Core;
 
 namespace Runtime.Ecs.Systems.Battle
@@ -24,6 +25,11 @@ namespace Runtime.Ecs.Systems.Battle
                 }
 
                 healthComponent.CurrentHealth -= pendingDamageEventComponent.TotalDamage;
+
+                if (ComponentManager.TryGetComponent<HitSoundComponent>(entityId, out var hitSound) && healthComponent.CurrentHealth >= 0)
+                {
+                    ComponentManager.AddComponent(entityId, new PlaySoundEventComponent(hitSound.Clip));
+                }
 
                 if (healthComponent.CurrentHealth <= 0)
                 {
