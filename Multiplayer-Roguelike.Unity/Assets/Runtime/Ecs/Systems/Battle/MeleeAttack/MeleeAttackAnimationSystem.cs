@@ -1,9 +1,8 @@
-using Runtime.Ecs.Components;
 using Runtime.ECS.Components;
-using Runtime.Ecs.Components.Battle.Weapon;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components.Battle.Weapon;
+using Runtime.ECS.Core;
 
-namespace Runtime.Ecs.Systems.Battle.MeleeAttack
+namespace Runtime.ECS.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackAnimationSystem : BaseSystem
     {

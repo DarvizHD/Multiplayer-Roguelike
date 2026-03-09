@@ -1,8 +1,8 @@
 using Runtime.ECS.Components;
-using Runtime.Ecs.Components.Network;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components.Network;
+using Runtime.ECS.Core;
 
-namespace Runtime.Ecs.Systems.Battle
+namespace Runtime.ECS.Systems.Battle
 {
     public class CharacterAnimationSyncSystem : BaseSystem
     {
