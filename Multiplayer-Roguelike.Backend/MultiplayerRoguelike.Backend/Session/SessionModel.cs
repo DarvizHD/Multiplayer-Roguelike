@@ -2,7 +2,6 @@ using Backend.Enemies;
 using Backend.Navigation;
 using Backend.Player.Collection;
 using DotRecast.Detour;
-using Shared.Models;
 using Shared.Models.GameSession;
 
 namespace Backend.Session

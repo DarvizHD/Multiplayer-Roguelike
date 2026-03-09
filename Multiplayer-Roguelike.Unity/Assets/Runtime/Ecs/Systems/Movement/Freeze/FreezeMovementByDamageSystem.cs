@@ -19,7 +19,7 @@ namespace Runtime.Ecs.Systems.Movement.Freeze
                 var entityId = _buffer.EntityIds[i];
                 var moveSpeedComponent = _buffer.Components1[i];
                 var freezeMovementByDamageComponent = _buffer.Components2[i];
-                var rotationSpeedComponent =  _buffer.Components3[i];
+                var rotationSpeedComponent = _buffer.Components3[i];
 
                 if (ComponentManager.HasComponent<FreezeMovementComponent>(entityId))
                 {

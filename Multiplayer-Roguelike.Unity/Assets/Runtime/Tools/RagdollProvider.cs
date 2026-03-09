@@ -25,8 +25,8 @@ namespace Runtime.Tools
 
         private bool _enable;
 
-        [SerializeField] private List<Rigidbody> _rigidbodies = new List<Rigidbody>();
-        [SerializeField] private List<Collider> _colliders = new List<Collider>();
+        [SerializeField] private List<Rigidbody> _rigidbodies = new();
+        [SerializeField] private List<Collider> _colliders = new();
 
         private void Start()
         {

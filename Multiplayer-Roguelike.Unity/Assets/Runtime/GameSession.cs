@@ -190,7 +190,7 @@ namespace Runtime
             }
         }
 
-        private void CreateEnemy(ushort entityId, Vector3 spawnPosition,  EnemySharedModel enemySharedModel)
+        private void CreateEnemy(ushort entityId, Vector3 spawnPosition, EnemySharedModel enemySharedModel)
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Enemy");
 
@@ -324,8 +324,8 @@ namespace Runtime
             EcsWorld.AddSystem<DamageSystem>();
             EcsWorld.AddSystem<AIDeathSystem>();
 
-            EcsWorld.AddSystem<UIDrawNameSystem>(new UIDrawNameSystem(_hudView));
-            EcsWorld.AddSystem<UIDrawHealthSystem>(new UIDrawHealthSystem(_hudView));
+            EcsWorld.AddSystem(new UIDrawNameSystem(_hudView));
+            EcsWorld.AddSystem(new UIDrawHealthSystem(_hudView));
 
             /*
             EcsWorld.AddSystem<RegenerationSystem>();

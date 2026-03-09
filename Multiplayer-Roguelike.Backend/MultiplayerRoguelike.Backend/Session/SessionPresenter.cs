@@ -1,6 +1,5 @@
 using Backend.Enemies;
 using Backend.Player;
-using Shared.Models;
 using Shared.Models.Player;
 
 namespace Backend.Session

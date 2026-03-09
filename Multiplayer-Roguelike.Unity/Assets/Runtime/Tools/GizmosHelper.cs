@@ -3,6 +3,7 @@ using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Core;
+using UnityEditor;
 using UnityEngine;
 
 namespace Runtime.Tools
@@ -89,7 +90,7 @@ namespace Runtime.Tools
 
 #if UNITY_EDITOR
             var label = ready ? "READY" : $"CD {cooldown.CurrentCooldown:F1}s";
-            UnityEditor.Handles.Label(position + Vector3.up * 2f, label);
+            Handles.Label(position + Vector3.up * 2f, label);
 #endif
         }
 
@@ -126,7 +127,7 @@ namespace Runtime.Tools
                     label = ammo != null ? $"{ammo.Current}/{ammo.Max}" : "READY";
                 }
 
-                UnityEditor.Handles.Label(position + Vector3.up * 2f, label);
+                Handles.Label(position + Vector3.up * 2f, label);
 #endif
             }
         }

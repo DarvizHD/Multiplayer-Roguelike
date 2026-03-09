@@ -20,7 +20,7 @@ namespace Runtime.Ecs.Core
 
     public class QueryBuffer<T1, T2> where T1 : IComponent where T2 : IComponent
     {
-        public ushort Count = 0;
+        public ushort Count;
 
         public ushort[] EntityIds;
 

@@ -35,16 +35,16 @@ namespace Runtime.Ecs.Systems.UI
 
                 if (!_bars.TryGetValue(entityId, out var bar) || !_fills.TryGetValue(entityId, out var fill))
                 {
-                    bar = new VisualElement()
+                    bar = new VisualElement
                     {
                         name = $"health-{entityId}",
                         style =
                         {
-                            position = Position.Absolute,
+                            position = Position.Absolute
                         }
                     };
 
-                    fill = new VisualElement()
+                    fill = new VisualElement
                     {
                         name = "fill"
                     };

@@ -4,7 +4,6 @@ using Backend.Session;
 using DotRecast.Core.Numerics;
 using DotRecast.Detour;
 using DotRecast.Detour.Crowd;
-using Shared.Models;
 using Shared.Models.Player;
 using Shared.Primitives;
 
@@ -22,7 +21,7 @@ namespace Backend.Enemies
 
         private readonly SessionModel _sessionModel;
         private readonly IDtQueryFilter _filter = new DtQueryDefaultFilter();
-        private static readonly RcVec3f _halfExtents = new(1,2,1);
+        private static readonly RcVec3f _halfExtents = new(1, 2, 1);
 
         public EnemyTargetSystem(string id, SessionModel sessionModel)
         {

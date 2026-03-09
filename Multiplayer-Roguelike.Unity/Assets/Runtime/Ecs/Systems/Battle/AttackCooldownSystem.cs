@@ -5,13 +5,13 @@ namespace Runtime.Ecs.Systems.Battle
 {
     public class AttackCooldownSystem : BaseSystem
     {
-        private QueryBuffer<AttackCooldownComponent> _attackCooldownBuffer = new ();
+        private QueryBuffer<AttackCooldownComponent> _attackCooldownBuffer = new();
 
         public override void Update(float deltaTime)
         {
             ComponentManager.Filter.Query(ref _attackCooldownBuffer);
 
-            for(var i = 0; i < _attackCooldownBuffer.Count; i++)
+            for (var i = 0; i < _attackCooldownBuffer.Count; i++)
             {
                 var attackCooldownComponent = _attackCooldownBuffer.Components[i];
 

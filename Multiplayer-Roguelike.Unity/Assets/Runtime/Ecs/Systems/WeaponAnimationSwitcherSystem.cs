@@ -14,7 +14,7 @@ namespace Runtime.Ecs.Systems.Player
 
             for (var i = 0; i < _buffer.Count; i++)
             {
-                var switchEventComponent =  _buffer.Components1[i];
+                var switchEventComponent = _buffer.Components1[i];
                 var animatorComponent = _buffer.Components2[i];
 
                 animatorComponent.Animator.SetInteger(animatorComponent.WeaponId, switchEventComponent.TargetSlot);

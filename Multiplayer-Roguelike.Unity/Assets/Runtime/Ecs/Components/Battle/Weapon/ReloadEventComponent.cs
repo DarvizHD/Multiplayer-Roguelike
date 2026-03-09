@@ -1,4 +1,6 @@
 namespace Runtime.Ecs.Components.Battle.Weapon
 {
-    public class ReloadEventComponent : IComponent { }
+    public class ReloadEventComponent : IComponent
+    {
+    }
 }

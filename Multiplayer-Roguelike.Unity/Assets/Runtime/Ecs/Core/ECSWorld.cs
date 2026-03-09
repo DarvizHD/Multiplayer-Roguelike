@@ -8,7 +8,7 @@ namespace Runtime.Ecs.Core
         public static EcsWorld DebugInstance { get; private set; }
         public ComponentManager ComponentManager { get; }
         public SystemManager SystemManager { get; }
-        private ushort _nextEntityId = 0;
+        private ushort _nextEntityId;
 
         public EcsWorld()
         {

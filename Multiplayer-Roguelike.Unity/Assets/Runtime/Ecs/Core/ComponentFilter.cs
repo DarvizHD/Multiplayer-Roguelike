@@ -65,10 +65,14 @@ namespace Runtime.Ecs.Core
             var smallestStorage = storage1;
 
             if (storage2.Count < smallestStorage.Count)
+            {
                 smallestStorage = storage2;
+            }
 
             if (storage3.Count < smallestStorage.Count)
+            {
                 smallestStorage = storage3;
+            }
 
             for (var i = 0; i < smallestStorage.Count; i++)
             {
@@ -109,13 +113,19 @@ namespace Runtime.Ecs.Core
             var smallestStorage = storage1;
 
             if (storage2.Count < smallestStorage.Count)
+            {
                 smallestStorage = storage2;
+            }
 
             if (storage3.Count < smallestStorage.Count)
+            {
                 smallestStorage = storage3;
+            }
 
             if (storage4.Count < smallestStorage.Count)
+            {
                 smallestStorage = storage4;
+            }
 
             for (var i = 0; i < smallestStorage.Count; i++)
             {
@@ -160,16 +170,24 @@ namespace Runtime.Ecs.Core
             var smallestStorage = storage1;
 
             if (storage2.Count < smallestStorage.Count)
+            {
                 smallestStorage = storage2;
+            }
 
             if (storage3.Count < smallestStorage.Count)
+            {
                 smallestStorage = storage3;
+            }
 
             if (storage4.Count < smallestStorage.Count)
+            {
                 smallestStorage = storage4;
+            }
 
             if (storage5.Count < smallestStorage.Count)
+            {
                 smallestStorage = storage5;
+            }
 
             for (var i = 0; i < smallestStorage.Count; i++)
             {

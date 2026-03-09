@@ -35,13 +35,13 @@ namespace Runtime.Ecs.Systems.UI
 
                 if (!_labels.TryGetValue(entityId, out var label))
                 {
-                    label = new Label()
+                    label = new Label
                     {
                         name = $"entity-{entityId}",
                         style =
                         {
                             position = Position.Absolute,
-                            unityTextAlign =  TextAnchor.MiddleCenter,
+                            unityTextAlign = TextAnchor.MiddleCenter
                         },
                         text = nameComponent.Name
                     };
@@ -54,9 +54,9 @@ namespace Runtime.Ecs.Systems.UI
                 var worldPosition = positionComponent.Position;
                 var screenPosition = _camera.WorldToScreenPoint(worldPosition);
 
-                bool outScreen = screenPosition.z <= 0 ||
-                                 screenPosition.x < 0 || screenPosition.x > Screen.width ||
-                                 screenPosition.y < 0 || screenPosition.y > Screen.height;
+                var outScreen = screenPosition.z <= 0 ||
+                                screenPosition.x < 0 || screenPosition.x > Screen.width ||
+                                screenPosition.y < 0 || screenPosition.y > Screen.height;
 
                 if (outScreen)
                 {
@@ -66,7 +66,7 @@ namespace Runtime.Ecs.Systems.UI
 
                 label.style.display = DisplayStyle.Flex;
 
-                float offsetY = 30f;
+                var offsetY = 30f;
 
                 var x = screenPosition.x - label.resolvedStyle.width * 0.5f;
                 var y = Screen.height - screenPosition.y + offsetY;
