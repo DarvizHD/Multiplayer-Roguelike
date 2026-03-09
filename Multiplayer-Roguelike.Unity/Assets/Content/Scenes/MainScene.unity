@@ -701,6 +701,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 266859391}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!82 &280380133 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 4559029666064226909, guid: c2ba29ec77126ab449c7a1df89285e39, type: 3}
+  m_PrefabInstance: {fileID: 5015789299074462661}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &299958417
 GameObject:
   m_ObjectHideFlags: 0
@@ -2951,7 +2956,7 @@ MonoBehaviour:
   _worldViewDescription: {fileID: 11400000, guid: 9ee1005542c23d347bbb70c4163e4c5e, type: 2}
   _document: {fileID: 739111413}
   _uiHudView: {fileID: 941861038}
-  _ambientSoundSource: {fileID: 651755458}
+  _ambientSoundSource: {fileID: 280380133}
 --- !u!4 &941861036
 Transform:
   m_ObjectHideFlags: 0
@@ -3356,7 +3361,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.2
+  m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 8fa6b102ada903d448e5abe050ef5b9e, type: 2}
   m_BuildHeightMesh: 0

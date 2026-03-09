@@ -1,6 +1,7 @@
 using Runtime.Ecs.Components.Battle.Weapon;
+using Runtime.ECS.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Sound;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Core;
 
 namespace Runtime.ECS.Systems.Battle.RangeAttack
 {

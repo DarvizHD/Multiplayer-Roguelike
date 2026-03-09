@@ -1,5 +1,6 @@
 using Runtime.Ecs.Components.Sound;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Core;
+using Runtime.ECS.Systems;
 using Runtime.Sound;
 using UnityEngine;
 

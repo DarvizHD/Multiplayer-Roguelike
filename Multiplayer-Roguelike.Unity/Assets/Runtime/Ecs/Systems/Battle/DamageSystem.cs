@@ -1,7 +1,8 @@
 using Runtime.Ecs.Components.Battle;
-using Runtime.Ecs.Components.Health;
+using Runtime.ECS.Components.Battle;
+using Runtime.ECS.Components.Health;
 using Runtime.Ecs.Components.Sound;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Core;
 
 namespace Runtime.ECS.Systems.Battle
 {
