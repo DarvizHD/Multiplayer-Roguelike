@@ -1,5 +1,6 @@
-using Runtime.ECS.Components.Battle.Weapon;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components.Battle.Weapon;
+using Runtime.Ecs.Components.Sound;
+using Runtime.Ecs.Core;
 
 namespace Runtime.ECS.Systems.Battle.RangeAttack
 {
@@ -31,6 +32,7 @@ namespace Runtime.ECS.Systems.Battle.RangeAttack
                 ranged.IsReloading = true;
                 ranged.ReloadTimer = ranged.ReloadTime;
                 ComponentManager.RemoveComponent<ReloadEventComponent>(entityId);
+                ComponentManager.AddComponent(entityId, new PlaySoundEventComponent(ranged.ReloadClip));
             }
 
             for (var i = 0; i < _tickBuffer.Count; i++)
