@@ -10,9 +10,11 @@ namespace Runtime.Ecs.Systems.Network
 {
     public class AISyncSystem : BaseSystem
     {
+        private const float _softThreshold = 0.25f;
+        private const float _hardThreshold = 4f;
+
         private QueryBuffer<EnemyNetworkSyncComponent, NavMeshAgentComponent, AliveTagComponent> _buffer = new();
         private QueryBuffer<CharacterNetworkSyncComponent> _playersBuffer = new();
-
 
         public override void Update(float deltaTime)
         {
@@ -28,9 +30,15 @@ namespace Runtime.Ecs.Systems.Network
 
                 var delta = (navMeshAgentComponent.Agent.nextPosition - serverPosition).sqrMagnitude;
 
-                if (delta > 0.25f)
+                if (delta is > _softThreshold and < _hardThreshold)
                 {
-                    navMeshAgentComponent.Agent.nextPosition = Vector3.Lerp(navMeshAgentComponent.Agent.nextPosition, serverPosition, delta);
+                    navMeshAgentComponent.Agent.Warp(
+                        Vector3.Lerp(navMeshAgentComponent.Agent.transform.position, serverPosition, 0.1f)
+                    );
+                }
+                else if (delta >= _hardThreshold)
+                {
+                    navMeshAgentComponent.Agent.Warp(serverPosition);
                 }
 
                 var targetId = enemySharedModel.EnemySharedModel.TargetPlayerId.Value;
@@ -48,7 +56,10 @@ namespace Runtime.Ecs.Systems.Network
                     }
                 }
 
-                navMeshAgentComponent.Agent.SetDestination(founded.Position.Value.ToUnityVector3());
+                if (founded != null)
+                {
+                    navMeshAgentComponent.Agent.SetDestination(founded.Position.Value.ToUnityVector3());
+                }
             }
         }
     }

@@ -38,9 +38,9 @@ namespace Backend.Enemies
 
         private void HandleEnemyAdded(EnemyModel enemy)
         {
-            var startPosition = new RcVec3f(enemy.Shared.Position.Value.X, enemy.Shared.Position.Value.Y, enemy.Shared.Position.Value.Z);
+            var startPosition = new RcVec3f(enemy.Shared.Position.Value.Xf, enemy.Shared.Position.Value.Yf, enemy.Shared.Position.Value.Zf);
 
-            var dtCrowdAgent = _sessionModel.Navigation.Crowd.AddAgent(startPosition, CreateAgentParams());
+            var dtCrowdAgent = _sessionModel.Navigation.Crowd.AddAgent(startPosition, _sessionModel.Navigation.Config.AgentParams);
             enemy.CrowdAgent = dtCrowdAgent;
             _sessionModel.GameSessionSharedModel.Characters.TryGet(enemy.Shared.TargetPlayerId.Value, out var character);
             _sessionModel.Navigation.SetAgentTarget(dtCrowdAgent, character.Position.Value);
@@ -50,24 +50,6 @@ namespace Backend.Enemies
         {
             _sessionModel.Navigation.Crowd.RemoveAgent(enemy.CrowdAgent);
             enemy.CrowdAgent = null;
-        }
-
-        private DtCrowdAgentParams CreateAgentParams()
-        {
-            return new DtCrowdAgentParams
-            {
-                radius = 0.6f,
-                height = 2.0f,
-                maxAcceleration = 8.0f,
-                maxSpeed = 1f,
-                collisionQueryRange = 2.0f,
-                pathOptimizationRange = 1.5f,
-                separationWeight = 2.0f,
-                updateFlags = 0,
-                obstacleAvoidanceType = 3,
-                queryFilterType = 0,
-                userData = null
-            };
         }
     }
 }

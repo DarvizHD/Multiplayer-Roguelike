@@ -1,5 +1,6 @@
 ﻿using DotRecast.Detour.Crowd;
 using Shared.Models;
+using Shared.Primitives;
 
 namespace Backend.Enemies
 {
@@ -8,6 +9,7 @@ namespace Backend.Enemies
         public int Id { get; }
         public EnemySharedModel Shared { get; }
         public DtCrowdAgent CrowdAgent { get; set; }
+        public Vector3 LastTargetPosition { get; set; } = new(0, 0, 0);
 
         public EnemyModel(int id)
         {

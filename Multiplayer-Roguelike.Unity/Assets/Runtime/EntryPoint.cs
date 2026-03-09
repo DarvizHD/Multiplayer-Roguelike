@@ -68,7 +68,7 @@ namespace Runtime
 
         private void OnWorldPacketReceived(Packet packet)
         {
-            var buffer = new byte[1024];
+            var buffer = new byte[packet.Length];
             packet.CopyTo(buffer);
 
             var protocol = new NetworkProtocol(buffer);
