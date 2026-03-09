@@ -33,6 +33,7 @@ namespace Backend.CommandExecutors.Common
                 CommandConst.Logout => new LogoutCommandExecutor(new LogoutCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.CreateLobby => new CreateLobbyCommandExecutor(new CreateLobbyCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.JoinLobby => new JoinLobbyCommandExecutor(new JoinLobbyCommand(eNetProtocol), _world, netEvent.Peer),
+                CommandConst.LeaveLobby => new LeaveLobbyCommandExecutor(new LeaveLobbyCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.MovePlayer => new MoveCommandExecutor(new MoveCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.StartSession => new StartSessionCommandExecutor(new StartSessionCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.RotatePlayer => new RotateCommandExecutor(new RotateCommand(eNetProtocol), _world, netEvent.Peer),

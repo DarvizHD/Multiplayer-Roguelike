@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Backend.Lobby
 {
     public class LobbyPresenter : IPresenter
@@ -47,11 +49,24 @@ namespace Backend.Lobby
             removedPlayer.PlayerSharedModel.Lobby.OwnerId.Value = string.Empty;
             removedPlayer.PlayerSharedModel.Lobby.Members.Clear();
 
+            if (_model.Members.Count == 0)
+            {
+                _world.Lobbies.Remove(_model.Guid);
+                return;
+            }
+
+            if (removedPlayerNickname == _model.OwnerNickname)
+            {
+                _model.OwnerNickname = _model.Members.First();
+            }
+
             foreach (var memberNickname in _model.Members)
             {
                 var member = _world.Players.Get(memberNickname);
                 member.PlayerSharedModel.Lobby.Members.Remove(removedPlayerNickname);
+                member.PlayerSharedModel.Lobby.OwnerId.Value = _model.OwnerNickname;
             }
+
         }
     }
 }

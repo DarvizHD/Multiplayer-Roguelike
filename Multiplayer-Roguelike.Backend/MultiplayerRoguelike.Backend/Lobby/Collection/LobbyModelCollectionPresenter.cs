@@ -47,6 +47,8 @@ namespace Backend.Lobby.Collection
 
         private void OnLobbyRemoved(LobbyModel lobbyModel)
         {
+            Console.WriteLine($"Lobby {lobbyModel.Guid} removed");
+
             var presenter = _presenters[lobbyModel.Guid];
             presenter.Disable();
 
