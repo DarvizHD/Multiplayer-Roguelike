@@ -16,7 +16,7 @@ namespace Runtime
     public class EntryPoint : MonoBehaviour
     {
         [SerializeField] private WorldViewDescription _worldViewDescription;
-        [SerializeField] private UIDocument _document;
+        [SerializeField] private UIDocument _menuDocument;
         [SerializeField] private UIHudView _uiHudView;
         [SerializeField] private AudioSource _ambientSoundSource;
 
@@ -51,13 +51,13 @@ namespace Runtime
 
             _uiCoreModel.Setup(_playerSharedModel, _serverConnectionModel, _gameSessionSharedModel);
 
-            var audioSource = _document.GetComponent<AudioSource>();
+            var audioSource = _menuDocument.GetComponent<AudioSource>();
             var buttonClickClip = Resources.Load<AudioClip>(AudioResourcesConstants.Menu.ButtonClick);
             var joinToLobbyClip = Resources.Load<AudioClip>(AudioResourcesConstants.Menu.JoinToLobby);
 
             var uiAudioService = new UIAudioService(audioSource, buttonClickClip, joinToLobbyClip);
 
-            var navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, _document, uiAudioService);
+            var navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, _menuDocument, uiAudioService);
             navigationPresenter.Enable();
 
             var ambientSoundPresenter = new AmbientSoundPresenter(_ambientSoundSource, _gameSessionSharedModel);

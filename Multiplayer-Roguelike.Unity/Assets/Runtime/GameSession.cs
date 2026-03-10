@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Runtime.Ecs.Components;
 using Runtime.ECS.Components;
-using Runtime.Ecs.Components.Battle;
 using Runtime.ECS.Components.Battle;
 using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.ECS.Components.Battle.Weapon;
@@ -27,6 +25,7 @@ using Runtime.ECS.Systems.Network;
 using Runtime.ECS.Systems.Player;
 using Runtime.ECS.Systems.Rotation;
 using Runtime.Ecs.Systems.Sound;
+using Runtime.Ecs.Systems.UI;
 using Runtime.ECS.Systems.UI;
 using Runtime.ServerInteraction;
 using Runtime.Sound;
@@ -52,7 +51,6 @@ namespace Runtime
 
         private PlayerControls _playerControls;
         private readonly UIHudView _hudView;
-        private Transform _audioContainer;
 
         private bool IsHost => _playerSharedModel.Lobby.OwnerId.Value == _playerSharedModel.Nickname.Value;
 
@@ -78,9 +76,6 @@ namespace Runtime
             _gameSessionSharedModel.Characters.Added += OnCharacterAdded;
 
             _gameSessionSharedModel.Enemies.Added += OnNpcAdded;
-
-            var audioGo = new GameObject("AudioContainer");
-            _audioContainer = audioGo.transform;
 
             _zombieVoiceClips = Resources.LoadAll<AudioClip>("Audio/SFX/Enemies/ZombieVoices");
         }
@@ -159,7 +154,7 @@ namespace Runtime
             var shootClip = Resources.Load<AudioClip>(AudioResourcesConstants.Weapon.PistolShot);
             var reloadClip = Resources.Load<AudioClip>(AudioResourcesConstants.Weapon.WeaponReload);
             EcsWorld.AddEntityComponent(entityId, new RangedWeaponComponent(50f, 2f, 2f, shootClip, reloadClip));
-            EcsWorld.AddEntityComponent(entityId, new AmmoComponent(7));
+            EcsWorld.AddEntityComponent(entityId, new AmmoComponent(7, 30));
             EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(0.75f));
             return entityId;
         }
@@ -371,7 +366,9 @@ namespace Runtime
 
             EcsWorld.AddSystem(new UIDrawNameSystem(_hudView));
             EcsWorld.AddSystem(new UIDrawHealthSystem(_hudView));
-
+            EcsWorld.AddSystem(new UIDrawSwitchWeapon(_hudView));
+            EcsWorld.AddSystem(new UIDrawAmmo(_hudView));
+            EcsWorld.AddSystem(new UIDrawTeammates(_hudView));
 
             /*
             EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
