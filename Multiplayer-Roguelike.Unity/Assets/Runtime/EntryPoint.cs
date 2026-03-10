@@ -51,7 +51,13 @@ namespace Runtime
 
             _uiCoreModel.Setup(_playerSharedModel, _serverConnectionModel, _gameSessionSharedModel);
 
-            var navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, _document);
+            var audioSource = _document.GetComponent<AudioSource>();
+            var buttonClickClip = Resources.Load<AudioClip>(AudioResourcesConstants.Menu.ButtonClick);
+            var joinToLobbyClip = Resources.Load<AudioClip>(AudioResourcesConstants.Menu.JoinToLobby);
+
+            var uiAudioService = new UIAudioService(audioSource, buttonClickClip, joinToLobbyClip);
+
+            var navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, _document, uiAudioService);
             navigationPresenter.Enable();
 
             var ambientSoundPresenter = new AmbientSoundPresenter(_ambientSoundSource, _gameSessionSharedModel);
