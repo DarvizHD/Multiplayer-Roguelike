@@ -3016,7 +3016,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.EntryPoint
   _worldViewDescription: {fileID: 11400000, guid: 9ee1005542c23d347bbb70c4163e4c5e, type: 2}
-  _document: {fileID: 739111413}
+  _menuDocument: {fileID: 739111413}
   _uiHudView: {fileID: 941861038}
   _ambientSoundSource: {fileID: 651755458}
 --- !u!4 &941861036
@@ -3058,7 +3058,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43f8febce0341a4867df19c927dce5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.UI.HUD.UIHudView
-  _uiDocument: {fileID: 1172141499}
+  <TeammateAsset>k__BackingField: {fileID: 9197481963319205126, guid: df2bf4257ea70f1468693c7971d1e6b0, type: 3}
+  <NameAsset>k__BackingField: {fileID: 9197481963319205126, guid: a826c092469be794ea08789fe160431d, type: 3}
+  <HealthAsset>k__BackingField: {fileID: 9197481963319205126, guid: 6cd408dc0bd99b24f989f135ee55db10, type: 3}
+  _hudDocument: {fileID: 1172141499}
+  _worldHudDocument: {fileID: 1665815417}
 --- !u!1 &990348327 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3250530071779546737, guid: d53e7b3281d7a804b93ec5d93d585885, type: 3}
@@ -3322,7 +3326,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 5201c29cf3cb7434d83dfb89414da764, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: fe6d7962c82f40146bfb5c3865159585, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
@@ -4208,6 +4212,61 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2427874768195867146, guid: 37affcaa500dc86419c43bb2fe8fb368, type: 3}
+--- !u!1 &1665815415
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1665815416}
+  - component: {fileID: 1665815417}
+  m_Layer: 0
+  m_Name: WorldHUD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1665815416
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665815415}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2046895242}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1665815417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1665815415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: a523a38375bf10d40b136a1d82b20a66, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 9f35f711dd72b0140bc9748724f3f22e, type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
 --- !u!1 &1675567553
 GameObject:
   m_ObjectHideFlags: 0
@@ -4808,6 +4867,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1172141498}
+  - {fileID: 1665815416}
   - {fileID: 739111412}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

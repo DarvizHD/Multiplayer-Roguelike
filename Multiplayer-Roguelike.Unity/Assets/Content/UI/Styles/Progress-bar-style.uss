@@ -1,13 +1,6 @@
 .unity-progress-bar {
 }
 
-.unity-progress-bar__container {
-    border-top-width: 0;
-    border-right-width: 0;
-    border-bottom-width: 0;
-    border-left-width: 0;
-}
-
 .unity-progress-bar__background {
     background-color: rgb(70, 70, 70);
     border-top-width: 0;
@@ -32,8 +25,18 @@
     background-color: rgb(192, 52, 52);
 }
 
+.enemy .unity-progress-bar__container {
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    min-height: 15px;
+    max-height: 15px;
+}
 
-
-
-
-
+.player .unity-progress-bar__container {
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+}

@@ -1,6 +1,4 @@
-using Runtime.Ecs.Components;
 using Runtime.ECS.Components;
-using Runtime.Ecs.Components.Battle;
 using Runtime.ECS.Components.Battle;
 using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.ECS.Components.Battle.Weapon;

@@ -1,3 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:ProgressBar value="22" title="" name="health-bar" class="enemy" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-grow: 0; flex-shrink: 0;"/>
+    <Style src="project://database/Assets/Content/UI/Styles/Progress-bar-style.uss?fileID=7433441132597879392&amp;guid=b049ac705b4041849b6ab37e732d9f2d&amp;type=3#Progress-bar-style"/>
+    <ui:ProgressBar value="22" title="" name="health-bar" class="enemy" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-grow: 0; flex-shrink: 0; min-width: 100px; max-width: 100px;"/>
 </ui:UXML>
