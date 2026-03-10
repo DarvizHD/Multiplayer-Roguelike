@@ -10,8 +10,4 @@
         <PackageReference Include="ENet-CSharp" Version="2.4.8"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Commands\Battle\" />
-    </ItemGroup>
-
 </Project>
