@@ -125,7 +125,7 @@ namespace Runtime.Tools
                 }
                 else
                 {
-                    label = ammo != null ? $"{ammo.Current}/{ammo.Max}" : "READY";
+                    label = ammo != null ? $"{ammo.Current}/{ammo.Reserve}" : "READY";
                 }
 
                 Handles.Label(position + Vector3.up * 2f, label);
