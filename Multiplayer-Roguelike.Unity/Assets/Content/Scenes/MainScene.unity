@@ -2995,7 +2995,6 @@ GameObject:
   - component: {fileID: 941861036}
   - component: {fileID: 941861035}
   - component: {fileID: 941861037}
-  - component: {fileID: 941861038}
   m_Layer: 0
   m_Name: EntryPoint
   m_TagString: Untagged
@@ -3017,7 +3016,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.EntryPoint
   _worldViewDescription: {fileID: 11400000, guid: 9ee1005542c23d347bbb70c4163e4c5e, type: 2}
   _menuDocument: {fileID: 739111413}
-  _uiHudView: {fileID: 941861038}
+  _uiHudView: {fileID: 1172141500}
   _ambientSoundSource: {fileID: 651755458}
 --- !u!4 &941861036
 Transform:
@@ -3046,23 +3045,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec13d70135b04d9eb2d984bdf9fbd834, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.PerformanceMonitor
---- !u!114 &941861038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 941861034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b43f8febce0341a4867df19c927dce5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.UI.HUD.UIHudView
-  <TeammateAsset>k__BackingField: {fileID: 9197481963319205126, guid: df2bf4257ea70f1468693c7971d1e6b0, type: 3}
-  <NameAsset>k__BackingField: {fileID: 9197481963319205126, guid: a826c092469be794ea08789fe160431d, type: 3}
-  <HealthAsset>k__BackingField: {fileID: 9197481963319205126, guid: 6cd408dc0bd99b24f989f135ee55db10, type: 3}
-  _hudDocument: {fileID: 1172141499}
-  _worldHudDocument: {fileID: 1665815417}
 --- !u!1 &990348327 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3250530071779546737, guid: d53e7b3281d7a804b93ec5d93d585885, type: 3}
@@ -3289,6 +3271,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1172141498}
   - component: {fileID: 1172141499}
+  - component: {fileID: 1172141500}
   m_Layer: 0
   m_Name: HUD
   m_TagString: Untagged
@@ -3334,6 +3317,23 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
+--- !u!114 &1172141500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172141497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b43f8febce0341a4867df19c927dce5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.UI.HUD.UIHudView
+  <TeammateAsset>k__BackingField: {fileID: 9197481963319205126, guid: df2bf4257ea70f1468693c7971d1e6b0, type: 3}
+  <NameAsset>k__BackingField: {fileID: 9197481963319205126, guid: a826c092469be794ea08789fe160431d, type: 3}
+  <HealthAsset>k__BackingField: {fileID: 9197481963319205126, guid: 6cd408dc0bd99b24f989f135ee55db10, type: 3}
+  _hudDocument: {fileID: 1172141499}
+  _worldHudDocument: {fileID: 1665815417}
 --- !u!1 &1215277623
 GameObject:
   m_ObjectHideFlags: 0
@@ -3359,7 +3359,7 @@ Transform:
   m_GameObject: {fileID: 1215277623}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -24.13002, y: 66.84476, z: 48.1679}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
