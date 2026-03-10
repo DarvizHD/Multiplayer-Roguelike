@@ -19,6 +19,12 @@ namespace Runtime.Sound
             public const string PlayerTakeDamage = "Audio/SFX/Player/player-take-damage";
         }
 
+        public static class Menu
+        {
+            public const string ButtonClick = "Audio/SFX/Menu/button-click";
+            public const string JoinToLobby = "Audio/SFX/Menu/join-to-lobby";
+        }
+
         public static class Ambient
         {
             public const string MenuAmbientPath = "Audio/Ambient/menu-ambient";

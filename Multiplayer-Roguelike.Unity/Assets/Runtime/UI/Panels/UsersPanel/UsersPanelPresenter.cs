@@ -7,12 +7,14 @@ namespace Runtime.UI.Panels.UsersPanel
         private readonly UsersPanelView _view;
         private readonly WorldViewDescription _viewDescription;
         private readonly UICoreModel _uiCoreModel;
+        private readonly UIAudioService _audioService;
 
-        public UsersPanelPresenter(UsersPanelView view, WorldViewDescription viewDescription, UICoreModel uiCoreModel)
+        public UsersPanelPresenter(UsersPanelView view, WorldViewDescription viewDescription, UICoreModel uiCoreModel, UIAudioService audioService)
         {
             _view = view;
             _viewDescription = viewDescription;
             _uiCoreModel = uiCoreModel;
+            _audioService = audioService;
         }
 
         public void Enable()
@@ -29,6 +31,11 @@ namespace Runtime.UI.Panels.UsersPanel
 
         private void OnMemberAdded(string username)
         {
+            if (_uiCoreModel.PlayerSharedModel.Lobby.Members.Values.Count > 1)
+            {
+                _audioService.PlayJoinToLobby();
+            }
+
             var userAsset = _viewDescription.UI.UserAsset;
             var user = userAsset.CloneTree().Q<VisualElement>("user-panel");
             user.Q<Label>("username-text").text = username;
