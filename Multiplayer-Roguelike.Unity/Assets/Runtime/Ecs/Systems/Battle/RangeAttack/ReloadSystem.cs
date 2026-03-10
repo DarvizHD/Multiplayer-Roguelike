@@ -2,6 +2,7 @@ using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.ECS.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Sound;
 using Runtime.ECS.Core;
+using UnityEngine;
 
 namespace Runtime.ECS.Systems.Battle.RangeAttack
 {
@@ -30,8 +31,19 @@ namespace Runtime.ECS.Systems.Battle.RangeAttack
                     continue;
                 }
 
+                if (!ComponentManager.TryGetComponent<AmmoComponent>(current.WeaponEntityId, out var ammo))
+                {
+                    continue;
+                }
+
+                if (ammo.Reserve <= 0)
+                {
+                    continue;
+                }
+
                 ranged.IsReloading = true;
                 ranged.ReloadTimer = ranged.ReloadTime;
+
                 ComponentManager.RemoveComponent<ReloadEventComponent>(entityId);
                 ComponentManager.AddComponent(entityId, new PlaySoundEventComponent(ranged.ReloadClip));
             }
@@ -45,24 +57,28 @@ namespace Runtime.ECS.Systems.Battle.RangeAttack
                     continue;
                 }
 
-                if (!ComponentManager.TryGetComponent<AmmoComponent>(current.WeaponEntityId, out var ammo))
+                if (!ranged.IsReloading)
                 {
                     continue;
                 }
 
-                if (!ranged.IsReloading)
+                if (!ComponentManager.TryGetComponent<AmmoComponent>(current.WeaponEntityId, out var ammo))
                 {
                     continue;
                 }
 
                 ranged.ReloadTimer -= deltaTime;
 
-                if (!(ranged.ReloadTimer <= 0f))
+                if (ranged.ReloadTimer > 0f)
                 {
                     continue;
                 }
 
-                ammo.Current = ammo.Max;
+                var needed = ammo.Magazine - ammo.Current;
+                var taken = Mathf.Min(needed, ammo.Reserve);
+
+                ammo.Current += taken;
+                ammo.Reserve -= taken;
                 ranged.IsReloading = false;
             }
         }
