@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Runtime.ECS.Components.Health;
 using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Components.Tags;
 using Runtime.ECS.Core;
 using Runtime.UI.HUD;
 using UnityEngine;
@@ -10,9 +11,8 @@ namespace Runtime.ECS.Systems.UI
 {
     public class UIDrawHealthSystem : BaseSystem
     {
-        private QueryBuffer<HealthComponent, PositionComponent> _buffer = new();
-        private readonly Dictionary<int, VisualElement> _bars = new();
-        private readonly Dictionary<int, VisualElement> _fills = new();
+        private QueryBuffer<HealthComponent, PositionComponent, EnemyTagComponent> _buffer = new();
+        private readonly Dictionary<int, ProgressBar> _bars = new();
 
         private readonly UIHudView _uiHudView;
         private readonly Camera _camera;
@@ -33,28 +33,9 @@ namespace Runtime.ECS.Systems.UI
                 var healthComponent = _buffer.Components1[i];
                 var positionComponent = _buffer.Components2[i];
 
-                if (!_bars.TryGetValue(entityId, out var bar) || !_fills.TryGetValue(entityId, out var fill))
+                if (!_bars.TryGetValue(entityId, out var bar))
                 {
-                    bar = new VisualElement
-                    {
-                        name = $"health-{entityId}",
-                        style =
-                        {
-                            position = Position.Absolute
-                        }
-                    };
-
-                    fill = new VisualElement
-                    {
-                        name = "fill"
-                    };
-
-                    bar.AddToClassList("health-bar");
-                    bar.Add(fill);
-
-                    _bars[entityId] = bar;
-                    _fills[entityId] = fill;
-                    _uiHudView.Root.Add(bar);
+                    bar = CreateBar(entityId);
                 }
 
                 var screenPos = _camera.WorldToScreenPoint(positionComponent.Position);
@@ -63,26 +44,37 @@ namespace Runtime.ECS.Systems.UI
                                 screenPos.x < 0 || screenPos.x > Screen.width ||
                                 screenPos.y < 0 || screenPos.y > Screen.height;
 
-                bar.style.display = outScreen ? DisplayStyle.None : DisplayStyle.Flex;
-
-
                 if (outScreen)
                 {
                     bar.style.display = DisplayStyle.None;
                     continue;
                 }
 
-                var offsetY = 20f;
+                bar.style.display = DisplayStyle.Flex;
 
                 var x = screenPos.x - bar.resolvedStyle.width * 0.5f;
-                var y = Screen.height - screenPos.y + offsetY;
+                var y = Screen.height - screenPos.y - 70f;
 
                 bar.style.left = x;
                 bar.style.top = y;
 
-                var healthPercent = Mathf.Clamp01(healthComponent.CurrentHealth / healthComponent.MaxHealth);
-                fill.style.width = new Length(healthPercent * 100, LengthUnit.Percent);
+                bar.value = healthComponent.CurrentHealth;
+                bar.highValue = healthComponent.MaxHealth;
             }
+        }
+
+        private ProgressBar CreateBar(int entityId)
+        {
+            var root = _uiHudView.HealthAsset.CloneTree();
+            var bar = root.Q<ProgressBar>("health-bar");
+
+            bar.style.position = Position.Absolute;
+            bar.highValue = 100f;
+
+            _uiHudView.WorldHudRoot.Add(bar);
+            _bars[entityId] = bar;
+
+            return bar;
         }
     }
 }
