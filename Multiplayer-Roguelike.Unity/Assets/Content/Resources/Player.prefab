@@ -155,6 +155,7 @@ MonoBehaviour:
   <RagdollProvider>k__BackingField: {fileID: 0}
   <WeaponProvider>k__BackingField: {fileID: 2899899281721966434}
   <SfxContainer>k__BackingField: {fileID: 8466663897692600473}
+  <LoopAudioSource>k__BackingField: {fileID: 0}
 --- !u!114 &2899899281721966434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,8 +195,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8466663897692600473}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.07433, y: 2.5852, z: 0.54092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
