@@ -1,7 +1,7 @@
 using Runtime.ECS.Components.Battle.Weapon;
 using Runtime.ECS.Components.Network;
 using Runtime.ECS.Core;
-using Shared.Commands;
+using Shared.Commands.Player;
 
 namespace Runtime.ECS.Systems.Battle
 {

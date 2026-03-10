@@ -2,7 +2,7 @@ using ENet;
 using Shared.Commands.Common;
 using Shared.Protocol;
 
-namespace Shared.Commands
+namespace Shared.Commands.Player
 {
     public class SwitchWeaponCommand : BaseCommand
     {
