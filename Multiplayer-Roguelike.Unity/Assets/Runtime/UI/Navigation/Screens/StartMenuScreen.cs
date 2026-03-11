@@ -1,6 +1,7 @@
 using Runtime.UI.Menu;
 using Runtime.UI.Panels.StartMenuPanel;
 using Shared.Commands.Lobby;
+using Shared.Commands.Player;
 using UnityEngine;
 
 namespace Runtime.UI.Navigation.Screens
@@ -69,6 +70,15 @@ namespace Runtime.UI.Navigation.Screens
         {
             _audioService.PlayNavigate();
 
+            _uiCoreModel.ServerConnectionModel.PlayerDisconnect += HandleDisconnect;
+
+            var logoutCommand = new LogoutCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value);
+            logoutCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
+        }
+
+        private void HandleDisconnect()
+        {
+            _uiCoreModel.ServerConnectionModel.PlayerDisconnect -= HandleDisconnect;
             Application.Quit();
         }
     }

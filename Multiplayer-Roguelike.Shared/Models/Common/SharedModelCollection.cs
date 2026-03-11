@@ -120,6 +120,21 @@ namespace Shared.Models.Common
             }
         }
 
+        public void WriteAll(NetworkProtocol protocol)
+        {
+            protocol.Add(Id);
+            protocol.Add(false);
+
+            protocol.Add(_models.Values.Count);
+            foreach (var model in _models.Values)
+            {
+                model.WriteAll(protocol);
+            }
+
+            protocol.Add(0);
+            protocol.Add(0);
+        }
+
         protected abstract T CreateInstance(string id);
 
         public void Clear()

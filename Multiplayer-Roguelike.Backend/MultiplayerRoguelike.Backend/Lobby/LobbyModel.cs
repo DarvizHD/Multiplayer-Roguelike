@@ -9,7 +9,7 @@ namespace Backend.Lobby
         public event Action<string> OnMemberRemoved;
 
         public string Guid { get; }
-        public string OwnerNickname { get; }
+        public string OwnerNickname { get; set; }
 
         public readonly List<string> Members = new();
 

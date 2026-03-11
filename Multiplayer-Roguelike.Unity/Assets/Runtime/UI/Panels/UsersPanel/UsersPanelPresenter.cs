@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine.UIElements;
 
 namespace Runtime.UI.Panels.UsersPanel
@@ -8,6 +9,8 @@ namespace Runtime.UI.Panels.UsersPanel
         private readonly WorldViewDescription _viewDescription;
         private readonly UICoreModel _uiCoreModel;
         private readonly UIAudioService _audioService;
+
+        private readonly Dictionary<string, VisualElement> _usersContainer = new();
 
         public UsersPanelPresenter(UsersPanelView view, WorldViewDescription viewDescription, UICoreModel uiCoreModel, UIAudioService audioService)
         {
@@ -22,6 +25,7 @@ namespace Runtime.UI.Panels.UsersPanel
             _view.ParentRoot.Add(_view.Root);
 
             _uiCoreModel.PlayerSharedModel.Lobby.Members.OnAdded += OnMemberAdded;
+            _uiCoreModel.PlayerSharedModel.Lobby.Members.OnRemoved += OnMemberRemoved;
 
             foreach (var username in _uiCoreModel.PlayerSharedModel.Lobby.Members.Values)
             {
@@ -40,12 +44,23 @@ namespace Runtime.UI.Panels.UsersPanel
             var user = userAsset.CloneTree().Q<VisualElement>("user-panel");
             user.Q<Label>("username-text").text = username;
             _view.UsersContainer.Add(user);
+            _usersContainer.Add(username, user);
+        }
+
+        private void OnMemberRemoved(string username)
+        {
+            _view.UsersContainer.Remove(_usersContainer[username]);
+            _usersContainer.Remove(username);
         }
 
         public void Disable()
         {
+            _uiCoreModel.PlayerSharedModel.Lobby.Members.OnAdded -= OnMemberAdded;
+            _uiCoreModel.PlayerSharedModel.Lobby.Members.OnRemoved -= OnMemberRemoved;
+
             _view.ParentRoot.Remove(_view.Root);
             _view.UsersContainer.Clear();
+            _usersContainer.Clear();
         }
     }
 }

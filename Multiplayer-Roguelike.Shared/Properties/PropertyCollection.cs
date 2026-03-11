@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Shared.Common;
 using Shared.Protocol;
@@ -90,6 +91,21 @@ namespace Shared.Properties
             {
                 protocol.Add(value);
             }
+        }
+
+        public void WriteAll(NetworkProtocol protocol)
+        {
+            protocol.Add(Id);
+
+            protocol.Add(false);
+
+            protocol.Add(Values.Count);
+            foreach (var value in Values)
+            {
+                protocol.Add(value);
+            }
+
+            protocol.Add(0);
         }
 
         public void Clear()

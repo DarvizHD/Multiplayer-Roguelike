@@ -41,6 +41,18 @@ namespace Shared.Models.Common
             }
         }
 
+        public void WriteAll(NetworkProtocol protocol)
+        {
+            protocol.Add(Id);
+
+            protocol.Add(Children.Count);
+            foreach (var child in Children.Values)
+            {
+                child.WriteAll(protocol);
+                child.ClearDirty();
+            }
+        }
+
         public void ClearDirty()
         {
             foreach (var child in Children.Values)

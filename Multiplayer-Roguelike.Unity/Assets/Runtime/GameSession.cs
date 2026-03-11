@@ -196,7 +196,7 @@ namespace Runtime
                 EcsWorld.AddEntityComponent(entityId, new PlayerInputComponent(_playerControls));
                 EcsWorld.AddEntityComponent(entityId, new CharacterConnectionComponent(_serverConnectionModel));
                 EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
-                EcsWorld.AddEntityComponent(entityId, new RigidbodyComponent(provider.Rigidbody));
+                EcsWorld.AddEntityComponent(entityId, new RigidbodyComponent(provider.Rigidbody, position));
                 EcsWorld.AddEntityComponent(entityId, new CursorWorldPositionComponent());
             }
             else

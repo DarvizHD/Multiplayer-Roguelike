@@ -5,6 +5,8 @@ using Runtime.Sound;
 using Runtime.UI;
 using Runtime.UI.HUD;
 using Runtime.UI.Navigation;
+using Shared.Commands.Player;
+using Shared.Models;
 using Shared.Models.GameSession;
 using Shared.Models.Player;
 using Shared.Protocol;
@@ -70,7 +72,22 @@ namespace Runtime
             _serverConnectionModel.PlayerPacketReceived += OnPlayerPacketReceived;
 
             _gameSessionSharedModel.IsRun.OnChange += RunSession;
+
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+#endif
         }
+
+#if UNITY_EDITOR
+        private void OnPlayModeStateChanged(UnityEditor.PlayModeStateChange state)
+        {
+            if (state == UnityEditor.PlayModeStateChange.ExitingPlayMode)
+            {
+                var commandLogout = new LogoutCommand(_playerSharedModel.Nickname.Value);
+                commandLogout.Write(_serverConnectionModel.PlayerPeer);
+            }
+        }
+#endif
 
         private void FixedUpdate()
         {

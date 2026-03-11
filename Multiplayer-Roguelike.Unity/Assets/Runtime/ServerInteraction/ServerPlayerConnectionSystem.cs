@@ -1,5 +1,6 @@
 using System;
 using Runtime.GameSystems;
+using Shared.Commands.Player;
 using UnityEngine;
 using EventType = ENet.EventType;
 
@@ -34,6 +35,7 @@ namespace Runtime.ServerInteraction
                     Debug.Log("Server connected");
                     break;
                 case EventType.Disconnect:
+                    _serverConnectionModel.DisconnectPlayer();
                     Debug.Log("Server disconnected");
                     break;
                 case EventType.Receive:

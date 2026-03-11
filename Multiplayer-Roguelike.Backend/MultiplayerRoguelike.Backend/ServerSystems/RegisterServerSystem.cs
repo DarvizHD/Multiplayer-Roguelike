@@ -17,17 +17,17 @@ namespace Backend.ServerSystems
 
         public void Update(float deltaTime)
         {
-            foreach (var item in _items)
-            {
-                Update(item, deltaTime);
-            }
-
             foreach (var item in _itemsToRemove)
             {
                 _items.Remove(item);
             }
 
             _itemsToRemove.Clear();
+
+            foreach (var item in _items)
+            {
+                Update(item, deltaTime);
+            }
         }
 
         public void Register(T item)

@@ -1,12 +1,15 @@
 using System;
+using System.Linq;
 using System.Diagnostics;
 using System.Threading;
 using Backend.CommandExecutors.Common;
+using Backend.CommandExecutors.Player;
 using Backend.Lobby.Collection;
 using Backend.Navigation;
 using Backend.Player.Collection;
 using Backend.Session.Collection;
 using ENet;
+using Shared.Commands.Player;
 using Shared.Protocol;
 
 namespace Backend
@@ -136,20 +139,36 @@ namespace Backend
 
                 case EventType.Timeout:
                     Console.WriteLine($"{netEvent.Peer.ID} timed out");
+
+                    var player = _world.Players.Models.Values.FirstOrDefault(p => p.Peer.ID == netEvent.Peer.ID);
+                    if (player != null)
+                    {
+                        var logoutCommand = new LogoutCommand(player.PlayerSharedModel.Nickname.Value);
+                        var logoutExecutor = new LogoutCommandExecutor(logoutCommand, _world, player.Peer);
+                        logoutExecutor.Execute();
+                    }
                     break;
             }
         }
 
         private void HandlePlayers()
         {
-            foreach (var player in _world.Players.Models.Values)
+            foreach (var player in _world.Players.Models.Values.Where(p => p.IsActive))
             {
-                if (player.PlayerSharedModel.IsDirty)
+                if (player.PlayerSharedModel.IsDirty || player.IsConnectingToSession)
                 {
                     var protocol = new NetworkProtocol();
                     var packet = default(Packet);
 
-                    player.PlayerSharedModel.Write(protocol);
+                    if (player.IsConnectingToSession)
+                    {
+                        player.PlayerSharedModel.WriteAll(protocol);
+                        player.IsConnectingToSession = player.SessionId != string.Empty;
+                    }
+                    else
+                    {
+                        player.PlayerSharedModel.Write(protocol);
+                    }
 
                     packet.Create(protocol.Stream.GetBuffer());
 
@@ -163,15 +182,21 @@ namespace Backend
             foreach (var session in _world.Sessions.Models.Values)
             {
                 var worldSharedModel = session.GameSessionSharedModel;
-                if (worldSharedModel.IsDirty)
+                if (worldSharedModel.IsDirty || session.Players.Models.Values.Any(p => p.IsConnectingToSession))
                 {
                     var protocol = new NetworkProtocol();
                     worldSharedModel.Write(protocol);
 
-                    foreach (var player in session.Players.Models.Values)
+                    var fullWorldProtocol = new NetworkProtocol();
+                    worldSharedModel.WriteAll(fullWorldProtocol);
+
+                    foreach (var player in session.Players.Models.Values.Where(p => p.IsActive))
                     {
                         var packet = default(Packet);
-                        packet.Create(protocol.Stream.GetBuffer());
+                        packet.Create(player.IsConnectingToSession
+                            ? fullWorldProtocol.Stream.GetBuffer()
+                            : protocol.Stream.GetBuffer());
+                        player.IsConnectingToSession = false;
                         SendPacket(player.Peer, 1, ref packet);
                     }
                 }
