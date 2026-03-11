@@ -153,7 +153,7 @@ namespace Backend
 
         private void HandlePlayers()
         {
-            foreach (var player in _world.Players.Models.Values)
+            foreach (var player in _world.Players.Models.Values.Where(p => p.IsActive))
             {
                 if (player.PlayerSharedModel.IsDirty || player.IsConnectingToSession)
                 {
@@ -190,7 +190,7 @@ namespace Backend
                     var fullWorldProtocol = new NetworkProtocol();
                     worldSharedModel.WriteAll(fullWorldProtocol);
 
-                    foreach (var player in session.Players.Models.Values)
+                    foreach (var player in session.Players.Models.Values.Where(p => p.IsActive))
                     {
                         var packet = default(Packet);
                         packet.Create(player.IsConnectingToSession
