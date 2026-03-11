@@ -1,29 +1,34 @@
 using System.Collections.Generic;
-using Runtime.Ecs.Components;
-using Runtime.Ecs.Components.Battle;
+using Runtime.ECS.Components;
+using Runtime.ECS.Components.Battle;
 using Runtime.Ecs.Components.Battle.Weapon;
-using Runtime.Ecs.Components.Camera;
-using Runtime.Ecs.Components.Health;
-using Runtime.Ecs.Components.Movement;
-using Runtime.Ecs.Components.Movement.Freeze;
-using Runtime.Ecs.Components.Network;
-using Runtime.Ecs.Components.Player;
-using Runtime.Ecs.Components.Spawn;
-using Runtime.Ecs.Components.Tags;
-using Runtime.Ecs.Components.UI;
-using Runtime.Ecs.Core;
-using Runtime.Ecs.Systems.AI;
-using Runtime.Ecs.Systems.Battle;
-using Runtime.Ecs.Systems.Battle.MeleeAttack;
-using Runtime.Ecs.Systems.Battle.RangeAttack;
-using Runtime.Ecs.Systems.CameraFocus;
-using Runtime.Ecs.Systems.Movement;
-using Runtime.Ecs.Systems.Movement.Freeze;
-using Runtime.Ecs.Systems.Network;
-using Runtime.Ecs.Systems.Player;
-using Runtime.Ecs.Systems.Rotation;
+using Runtime.ECS.Components.Battle.Weapon;
+using Runtime.ECS.Components.Camera;
+using Runtime.ECS.Components.Health;
+using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Components.Movement.Freeze;
+using Runtime.ECS.Components.Network;
+using Runtime.ECS.Components.Player;
+using Runtime.Ecs.Components.Sound;
+using Runtime.ECS.Components.Spawn;
+using Runtime.ECS.Components.Tags;
+using Runtime.ECS.Components.UI;
+using Runtime.ECS.Core;
+using Runtime.Ecs.Systems;
+using Runtime.ECS.Systems.AI;
+using Runtime.ECS.Systems.Battle;
+using Runtime.ECS.Systems.Battle.MeleeAttack;
+using Runtime.ECS.Systems.Battle.RangeAttack;
+using Runtime.ECS.Systems.CameraFocus;
+using Runtime.ECS.Systems.Movement;
+using Runtime.ECS.Systems.Network;
+using Runtime.ECS.Systems.Player;
+using Runtime.ECS.Systems.Rotation;
+using Runtime.Ecs.Systems.Sound;
 using Runtime.Ecs.Systems.UI;
+using Runtime.ECS.Systems.UI;
 using Runtime.ServerInteraction;
+using Runtime.Sound;
 using Runtime.Tools;
 using Runtime.UI.HUD;
 using Shared.Commands;
@@ -42,6 +47,7 @@ namespace Runtime
         private readonly GameSessionSharedModel _gameSessionSharedModel;
         private readonly PlayerSharedModel _playerSharedModel;
         private readonly Dictionary<string, int> _characterEntities = new();
+        private AudioClip[] _zombieVoiceClips;
 
         private PlayerControls _playerControls;
         private readonly UIHudView _hudView;
@@ -70,6 +76,8 @@ namespace Runtime
             _gameSessionSharedModel.Characters.Added += OnCharacterAdded;
 
             _gameSessionSharedModel.Enemies.Added += OnNpcAdded;
+
+            _zombieVoiceClips = Resources.LoadAll<AudioClip>("Audio/SFX/Enemies/ZombieVoices");
         }
 
         public void Disable()
@@ -134,7 +142,8 @@ namespace Runtime
         private ushort CreateMeleeWeapon()
         {
             var entityId = EcsWorld.CreateEntity();
-            EcsWorld.AddEntityComponent(entityId, new MeleeAttackComponent(2f, 5f));
+            var clip = Resources.Load<AudioClip>(AudioResourcesConstants.Weapon.BaseballBatHit);
+            EcsWorld.AddEntityComponent(entityId, new MeleeAttackComponent(25f, 2f, clip));
             EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(2f));
             return entityId;
         }
@@ -142,9 +151,11 @@ namespace Runtime
         private ushort CreateRangedWeapon()
         {
             var entityId = EcsWorld.CreateEntity();
-            EcsWorld.AddEntityComponent(entityId, new RangedWeaponComponent(10f, 2f, 3f));
-            EcsWorld.AddEntityComponent(entityId, new AmmoComponent(10));
-            EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(0.5f));
+            var shootClip = Resources.Load<AudioClip>(AudioResourcesConstants.Weapon.PistolShot);
+            var reloadClip = Resources.Load<AudioClip>(AudioResourcesConstants.Weapon.WeaponReload);
+            EcsWorld.AddEntityComponent(entityId, new RangedWeaponComponent(50f, 2f, 2f, shootClip, reloadClip));
+            EcsWorld.AddEntityComponent(entityId, new AmmoComponent(7, 30));
+            EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(0.75f));
             return entityId;
         }
 
@@ -153,6 +164,8 @@ namespace Runtime
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Player");
             var provider = Object.Instantiate(prefab);
+
+            var playerHitClip = Resources.Load<AudioClip>(AudioResourcesConstants.Player.PlayerTakeDamage);
 
             EcsWorld.AddEntityComponent(entityId, new NameComponent(characterSharedModel.Id));
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(position));
@@ -168,12 +181,15 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(5f, 3f));
             EcsWorld.AddEntityComponent(entityId, new CharacterNetworkSyncComponent(characterSharedModel));
             EcsWorld.AddEntityComponent(entityId, new WeaponProviderComponent(provider.WeaponProvider));
+            EcsWorld.AddEntityComponent(entityId, new SfxContainerComponent(provider.SfxContainer));
 
             var meleeId = CreateMeleeWeapon();
             var rangedId = CreateRangedWeapon();
 
             EcsWorld.AddEntityComponent(entityId, new WeaponSlotsComponent(new[] { meleeId, rangedId }));
             EcsWorld.AddEntityComponent(entityId, new CurrentWeaponComponent(meleeId));
+
+            EcsWorld.AddEntityComponent(entityId, new HitSoundComponent(playerHitClip));
 
             if (controllable)
             {
@@ -187,14 +203,16 @@ namespace Runtime
             {
                 EcsWorld.AddEntityComponent(entityId, new NetworkControllableTag());
                 EcsWorld.AddEntityComponent(entityId, new PositionInterpolationComponent(Vector3.zero, Vector3.zero));
+                EcsWorld.AddEntityComponent(entityId, new CharacterNetworkEventComponent(string.Empty));
             }
         }
 
         private void CreateEnemy(ushort entityId, Vector3 spawnPosition, EnemySharedModel enemySharedModel)
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Enemy");
-
             var enemyProvider = Object.Instantiate(prefab);
+
+            var enemyHitClip = Resources.Load<AudioClip>(AudioResourcesConstants.Enemies.ZombieTakeDamage);
 
             var speed = 1f;
 
@@ -206,17 +224,23 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(360f));
             EcsWorld.AddEntityComponent(entityId, new EnemyTagComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionRotationTagComponent());
+            EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(2f));
             EcsWorld.AddEntityComponent(entityId, new AnimatorComponent(enemyProvider.Animator));
-            EcsWorld.AddEntityComponent(entityId, new HealthComponent(10f));
+            EcsWorld.AddEntityComponent(entityId, new HealthComponent(100f));
             EcsWorld.AddEntityComponent(entityId, new RegenerationComponent(2f, 5f));
             EcsWorld.AddEntityComponent(entityId, new FreezeMovementByDamageComponent(1.5f));
             EcsWorld.AddEntityComponent(entityId, new AliveTagComponent());
             EcsWorld.AddEntityComponent(entityId, new EnemyNetworkSyncComponent(enemySharedModel));
             EcsWorld.AddEntityComponent(entityId, new PositionInterpolationComponent(Vector3.zero, Vector3.zero));
             EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, spawnPosition, speed));
+            EcsWorld.AddEntityComponent(entityId, new SfxContainerComponent(enemyProvider.SfxContainer));
 
             EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
             EcsWorld.AddEntityComponent(entityId, new RagdollComponent(enemyProvider.RagdollProvider));
+
+            var voiceClip = _zombieVoiceClips[Random.Range(0, _zombieVoiceClips.Length)];
+            var voiceDelay = Random.Range(0f, 3f);
+            EcsWorld.AddEntityComponent(entityId, new ZombieVoiceComponent(enemyProvider.LoopAudioSource, voiceClip, voiceDelay));
         }
 
         private void RegisterComponents()
@@ -276,6 +300,14 @@ namespace Runtime
             EcsWorld.RegisterComponent<CursorWorldPositionComponent>();
 
             EcsWorld.RegisterComponent<WeaponProviderComponent>();
+
+            EcsWorld.RegisterComponent<DamageAnimationEventComponent>();
+            EcsWorld.RegisterComponent<AttackAnimationEventComponent>();
+            EcsWorld.RegisterComponent<CharacterNetworkEventComponent>();
+            EcsWorld.RegisterComponent<SfxContainerComponent>();
+            EcsWorld.RegisterComponent<PlaySoundEventComponent>();
+            EcsWorld.RegisterComponent<HitSoundComponent>();
+            EcsWorld.RegisterComponent<ZombieVoiceComponent>();
         }
 
         private void AddSystems()
@@ -304,10 +336,15 @@ namespace Runtime
             EcsWorld.AddSystem<AISyncSystem>();
 
             EcsWorld.AddSystem<CursorWorldPositionSystem>();
-            EcsWorld.AddSystem<WeaponInputSystem>();
+
+            EcsWorld.AddSystem<WeaponSwitchInputSystem>();
+            EcsWorld.AddSystem<WeaponSwitchSyncSystem>();
+
+            EcsWorld.AddSystem<WeaponSwitchNetworkSystem>();
+
             EcsWorld.AddSystem<DrawWeaponSwitcherSystem>();
             EcsWorld.AddSystem<WeaponAnimationSwitcherSystem>();
-            EcsWorld.AddSystem<WeaponSwitchSystem>();
+            EcsWorld.AddSystem<WeaponSwitchHandlerSystem>();
 
             EcsWorld.AddSystem<AttackCooldownSystem>();
 
@@ -316,18 +353,26 @@ namespace Runtime
             EcsWorld.AddSystem<RangedAttackSystem>();
             EcsWorld.AddSystem<ReloadSystem>();
 
-            EcsWorld.AddSystem<AttackSystem>();
-            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
-            EcsWorld.AddSystem<FreezeMovementSystem>();
+            EcsWorld.AddSystem<CharacterAttackSystem>();
 
-            EcsWorld.AddSystem<DamageAnimationSystem>();
-            EcsWorld.AddSystem<DamageSystem>();
+            EcsWorld.AddSystem<AIHealthSync>();
             EcsWorld.AddSystem<AIDeathSystem>();
+            EcsWorld.AddSystem<DamageAnimationSystem>();
+
+            EcsWorld.AddSystem<CharacterAnimationSyncSystem>();
+
+            EcsWorld.AddSystem(new PlaySoundSystem());
+            EcsWorld.AddSystem<ZombieVoiceSystem>();
 
             EcsWorld.AddSystem(new UIDrawNameSystem(_hudView));
             EcsWorld.AddSystem(new UIDrawHealthSystem(_hudView));
+            EcsWorld.AddSystem(new UIDrawSwitchWeapon(_hudView));
+            EcsWorld.AddSystem(new UIDrawAmmo(_hudView));
+            EcsWorld.AddSystem(new UIDrawTeammates(_hudView));
 
             /*
+            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
+            EcsWorld.AddSystem<FreezeMovementSystem>();
             EcsWorld.AddSystem<RegenerationSystem>();
             EcsWorld.AddSystem<InvulnerabilitySystem>();
             EcsWorld.AddSystem<DeathAnimationSystem>();*/

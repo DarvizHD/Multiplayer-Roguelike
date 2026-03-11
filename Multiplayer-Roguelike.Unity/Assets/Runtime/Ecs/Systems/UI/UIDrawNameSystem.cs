@@ -1,19 +1,18 @@
 using System.Collections.Generic;
-using Runtime.Ecs.Components.Movement;
-using Runtime.Ecs.Components.UI;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Components.UI;
+using Runtime.ECS.Core;
 using Runtime.UI.HUD;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Runtime.Ecs.Systems.UI
+namespace Runtime.ECS.Systems.UI
 {
     public class UIDrawNameSystem : BaseSystem
     {
         private QueryBuffer<NameComponent, PositionComponent> _buffer = new();
 
-        private readonly Dictionary<int, TextElement> _labels = new();
-
+        private readonly Dictionary<int, Label> _labels = new();
         private readonly UIHudView _uiHudView;
         private readonly Camera _camera;
 
@@ -35,24 +34,10 @@ namespace Runtime.Ecs.Systems.UI
 
                 if (!_labels.TryGetValue(entityId, out var label))
                 {
-                    label = new Label
-                    {
-                        name = $"entity-{entityId}",
-                        style =
-                        {
-                            position = Position.Absolute,
-                            unityTextAlign = TextAnchor.MiddleCenter
-                        },
-                        text = nameComponent.Name
-                    };
-
-                    label.AddToClassList("nickname");
-                    _labels[entityId] = label;
-                    _uiHudView.Root.Add(label);
+                    label = CreateLabel(entityId, nameComponent.Name);
                 }
 
-                var worldPosition = positionComponent.Position;
-                var screenPosition = _camera.WorldToScreenPoint(worldPosition);
+                var screenPosition = _camera.WorldToScreenPoint(positionComponent.Position);
 
                 var outScreen = screenPosition.z <= 0 ||
                                 screenPosition.x < 0 || screenPosition.x > Screen.width ||
@@ -66,14 +51,26 @@ namespace Runtime.Ecs.Systems.UI
 
                 label.style.display = DisplayStyle.Flex;
 
-                var offsetY = 30f;
-
                 var x = screenPosition.x - label.resolvedStyle.width * 0.5f;
-                var y = Screen.height - screenPosition.y + offsetY;
+                var y = Screen.height - screenPosition.y - 100f;
 
                 label.style.left = x;
                 label.style.top = y;
             }
+        }
+
+        private Label CreateLabel(int entityId, string name)
+        {
+            var root = _uiHudView.NameAsset.CloneTree();
+            var label = root.Q<Label>("nickname");
+
+            label.text = name;
+            label.style.position = Position.Absolute;
+
+            _uiHudView.WorldHudRoot.Add(label);
+            _labels[entityId] = label;
+
+            return label;
         }
     }
 }

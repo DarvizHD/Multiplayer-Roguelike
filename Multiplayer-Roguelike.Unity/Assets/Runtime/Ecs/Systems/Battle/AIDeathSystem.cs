@@ -1,8 +1,8 @@
-using Runtime.Ecs.Components;
-using Runtime.Ecs.Components.Health;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components;
+using Runtime.ECS.Components.Health;
+using Runtime.ECS.Core;
 
-namespace Runtime.Ecs.Systems.Battle
+namespace Runtime.ECS.Systems.Battle
 {
     public class AIDeathSystem : BaseSystem
     {
@@ -19,7 +19,9 @@ namespace Runtime.Ecs.Systems.Battle
                 var ragdollComponent = _buffer.Components3[i];
                 var navMeshAgentComponent = _buffer.Components4[i];
 
+                ComponentManager.RemoveComponent<AliveTagComponent>(entityId);
                 ComponentManager.RemoveComponent<DeathEventComponent>(entityId);
+                ComponentManager.AddComponent(entityId, new DeathTagComponent());
 
                 ragdollComponent.RagdollProvider.Enable = true;
                 animatorComponent.Animator.enabled = false;

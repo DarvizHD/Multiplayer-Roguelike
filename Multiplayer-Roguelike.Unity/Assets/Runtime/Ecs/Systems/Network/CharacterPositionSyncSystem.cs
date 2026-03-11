@@ -1,9 +1,9 @@
-using Runtime.Ecs.Components.Movement;
-using Runtime.Ecs.Components.Network;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Components.Network;
+using Runtime.ECS.Core;
 using Runtime.Tools;
 
-namespace Runtime.Ecs.Systems.Network
+namespace Runtime.ECS.Systems.Network
 {
     public class CharacterPositionSyncSystem : BaseSystem
     {

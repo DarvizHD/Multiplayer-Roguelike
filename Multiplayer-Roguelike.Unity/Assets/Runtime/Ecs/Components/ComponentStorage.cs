@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Runtime.Ecs.Components
+namespace Runtime.ECS.Components
 {
     public class ComponentStorage<T> : IComponentStorage<T> where T : IComponent
     {

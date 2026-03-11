@@ -1,8 +1,9 @@
-using Runtime.Ecs.Components.Battle;
-using Runtime.Ecs.Components.Health;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components.Battle;
+using Runtime.ECS.Components.Health;
+using Runtime.Ecs.Components.Sound;
+using Runtime.ECS.Core;
 
-namespace Runtime.Ecs.Systems.Battle
+namespace Runtime.ECS.Systems.Battle
 {
     public class DamageSystem : BaseSystem
     {
@@ -25,11 +26,16 @@ namespace Runtime.Ecs.Systems.Battle
 
                 healthComponent.CurrentHealth -= pendingDamageEventComponent.TotalDamage;
 
+                if (ComponentManager.TryGetComponent<HitSoundComponent>(entityId, out var hitSound) && healthComponent.CurrentHealth >= 0)
+                {
+                    ComponentManager.AddComponent(entityId, new PlaySoundEventComponent(hitSound.Clip));
+                }
+
                 if (healthComponent.CurrentHealth <= 0)
                 {
-                    ComponentManager.RemoveComponent<AliveTagComponent>(entityId);
                     ComponentManager.AddComponent(entityId, new DeathEventComponent());
                     ComponentManager.AddComponent(entityId, new DeathTagComponent());
+                    ComponentManager.RemoveComponent<AliveTagComponent>(entityId);
                 }
 
                 if (ComponentManager.TryGetComponent<RegenerationComponent>(entityId, out var regenerationComponent))

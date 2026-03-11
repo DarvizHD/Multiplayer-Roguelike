@@ -1,4 +1,4 @@
-namespace Runtime.Ecs.Components.Player
+namespace Runtime.ECS.Components.Player
 {
     public class PlayerLookRotationTagComponent : IComponent
     {

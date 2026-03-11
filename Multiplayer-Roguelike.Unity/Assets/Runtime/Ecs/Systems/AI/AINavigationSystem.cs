@@ -1,11 +1,11 @@
-using Runtime.Ecs.Components;
-using Runtime.Ecs.Components.Health;
-using Runtime.Ecs.Components.Movement;
-using Runtime.Ecs.Components.Tags;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components;
+using Runtime.ECS.Components.Health;
+using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Components.Tags;
+using Runtime.ECS.Core;
 using UnityEngine;
 
-namespace Runtime.Ecs.Systems.AI
+namespace Runtime.ECS.Systems.AI
 {
     public class AINavigationSystem : BaseSystem
     {

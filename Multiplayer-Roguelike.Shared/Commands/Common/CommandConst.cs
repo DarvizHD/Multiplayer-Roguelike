@@ -11,5 +11,7 @@ namespace Shared.Commands.Common
         public const string RotatePlayer = "rotate_player";
         public const string StartSession = "start_session";
         public const string SpawnNpc = "spawn_npc";
+        public const string PlayerAttack = "player_attack";
+        public const string SwitchWeaponId = "switch_weapon_id";
     }
 }

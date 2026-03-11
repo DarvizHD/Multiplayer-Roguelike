@@ -1,8 +1,8 @@
-using Runtime.Ecs.Components;
-using Runtime.Ecs.Components.Movement;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components;
+using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Core;
 
-namespace Runtime.Ecs.Systems.AI
+namespace Runtime.ECS.Systems.AI
 {
     public class AIPositionSyncSystem : BaseSystem
     {

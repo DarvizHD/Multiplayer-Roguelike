@@ -1,4 +1,4 @@
-namespace Runtime.Ecs.Components.Movement.Freeze
+namespace Runtime.ECS.Components.Movement.Freeze
 {
     public class FreezeMovementByDamageComponent : IComponent
     {

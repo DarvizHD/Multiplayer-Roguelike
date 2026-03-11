@@ -38,6 +38,8 @@ namespace Backend.CommandExecutors.Common
                 CommandConst.StartSession => new StartSessionCommandExecutor(new StartSessionCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.RotatePlayer => new RotateCommandExecutor(new RotateCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.SpawnNpc => new SpawnNpcCommandExecutor(new SpawnNpcCommand(eNetProtocol), _world, netEvent.Peer),
+                CommandConst.SwitchWeaponId => new SwitchWeaponCommandExecutor(new SwitchWeaponCommand(eNetProtocol), _world, netEvent.Peer),
+                CommandConst.PlayerAttack => new PlayerAttackCommandExecutor(new PlayerAttackCommand(eNetProtocol), _world, netEvent.Peer),
                 _ => null
             };
         }

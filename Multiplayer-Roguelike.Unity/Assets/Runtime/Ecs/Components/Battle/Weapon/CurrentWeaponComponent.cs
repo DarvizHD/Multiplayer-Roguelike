@@ -1,4 +1,4 @@
-namespace Runtime.Ecs.Components.Battle.Weapon
+namespace Runtime.ECS.Components.Battle.Weapon
 {
     public class CurrentWeaponComponent : IComponent
     {

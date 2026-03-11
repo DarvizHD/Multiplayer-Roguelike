@@ -1,8 +1,9 @@
-using Runtime.Ecs.Components;
-using Runtime.Ecs.Components.Battle;
+using Runtime.ECS.Components;
+using Runtime.ECS.Components.Battle;
 using Runtime.Ecs.Components.Battle.Weapon;
-using Runtime.Ecs.Components.Movement;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components.Battle.Weapon;
+using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Core;
 using UnityEditor;
 using UnityEngine;
 
@@ -124,7 +125,7 @@ namespace Runtime.Tools
                 }
                 else
                 {
-                    label = ammo != null ? $"{ammo.Current}/{ammo.Max}" : "READY";
+                    label = ammo != null ? $"{ammo.Current}/{ammo.Reserve}" : "READY";
                 }
 
                 Handles.Label(position + Vector3.up * 2f, label);

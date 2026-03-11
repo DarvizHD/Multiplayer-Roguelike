@@ -1,14 +1,16 @@
-namespace Runtime.Ecs.Components.Battle.Weapon
+namespace Runtime.ECS.Components.Battle.Weapon
 {
     public class AmmoComponent : IComponent
     {
         public int Current { get; set; }
-        public int Max { get; }
+        public int Magazine { get; }
+        public int Reserve { get; set; }
 
-        public AmmoComponent(int max)
+        public AmmoComponent(int magazine, int reserve)
         {
-            Max = max;
-            Current = max;
+            Magazine = magazine;
+            Current = magazine;
+            Reserve = reserve;
         }
     }
 }

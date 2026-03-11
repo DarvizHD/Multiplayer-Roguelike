@@ -1,6 +1,6 @@
 using Runtime.Tools;
 
-namespace Runtime.Ecs.Components.Health
+namespace Runtime.ECS.Components.Health
 {
     public class RagdollComponent : IComponent
     {

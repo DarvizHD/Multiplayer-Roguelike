@@ -1,10 +1,10 @@
-using Runtime.Ecs.Components.Camera;
-using Runtime.Ecs.Components.Movement;
-using Runtime.Ecs.Components.Tags;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components.Camera;
+using Runtime.ECS.Components.Movement;
+using Runtime.ECS.Components.Tags;
+using Runtime.ECS.Core;
 using UnityEngine;
 
-namespace Runtime.Ecs.Systems.CameraFocus
+namespace Runtime.ECS.Systems.CameraFocus
 {
     public class CameraFocusSystem : BaseSystem
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Runtime.Ecs.Components.Camera
+namespace Runtime.ECS.Components.Camera
 {
     public class CameraTargetComponent : IComponent
     {

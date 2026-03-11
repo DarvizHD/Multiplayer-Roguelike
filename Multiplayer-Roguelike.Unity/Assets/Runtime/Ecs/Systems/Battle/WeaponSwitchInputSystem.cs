@@ -1,12 +1,14 @@
-using Runtime.Ecs.Components.Battle.Weapon;
-using Runtime.Ecs.Components.Player;
-using Runtime.Ecs.Core;
+using Runtime.ECS.Components.Battle.Weapon;
+using Runtime.ECS.Components.Network;
+using Runtime.ECS.Components.Player;
+using Runtime.ECS.Core;
 
-namespace Runtime.Ecs.Systems.Battle
+namespace Runtime.ECS.Systems.Battle
 {
-    public class WeaponInputSystem : BaseSystem
+    public class WeaponSwitchInputSystem : BaseSystem
     {
-        private QueryBuffer<PlayerInputComponent, WeaponSlotsComponent, CurrentWeaponComponent> _buffer = new();
+        private QueryBuffer<PlayerInputComponent, WeaponSlotsComponent,
+            CurrentWeaponComponent, LocalControllableTag> _buffer = new();
 
         public override void Update(float deltaTime)
         {
@@ -16,6 +18,8 @@ namespace Runtime.Ecs.Systems.Battle
             {
                 var entityId = _buffer.EntityIds[i];
                 var input = _buffer.Components1[i];
+                var weaponSlots = _buffer.Components2[i];
+                var currentWeaponComponent = _buffer.Components3[i];
 
                 var targetSlot = -1;
 
@@ -35,6 +39,11 @@ namespace Runtime.Ecs.Systems.Battle
                 }
 
                 if (targetSlot == -1)
+                {
+                    continue;
+                }
+
+                if (weaponSlots.SlotEntityIds[targetSlot] == currentWeaponComponent.WeaponEntityId)
                 {
                     continue;
                 }

@@ -12,15 +12,17 @@ namespace Runtime.UI.Navigation.Screens
         private readonly UsersPanelPresenter _usersPresenter;
         private readonly HostLobbyPanelModel _model;
         private readonly UICoreModel _uiCoreModel;
+        private readonly UIAudioService _audioService;
 
         public HostLobbyScreen(Router router, HostLobbyPanelPresenter hostPresenter,
-            UsersPanelPresenter usersPresenter, HostLobbyPanelModel model, UICoreModel uiCoreModel)
+            UsersPanelPresenter usersPresenter, HostLobbyPanelModel model, UICoreModel uiCoreModel, UIAudioService audioService)
         {
             _router = router;
             _hostPresenter = hostPresenter;
             _usersPresenter = usersPresenter;
             _model = model;
             _uiCoreModel = uiCoreModel;
+            _audioService = audioService;
         }
 
         public void Enable()
@@ -50,6 +52,8 @@ namespace Runtime.UI.Navigation.Screens
 
         private void HandleStartGame()
         {
+            _audioService.PlayNavigate();
+
             var startGameCommand = new StartSessionCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value,
                 _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value);
             startGameCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);

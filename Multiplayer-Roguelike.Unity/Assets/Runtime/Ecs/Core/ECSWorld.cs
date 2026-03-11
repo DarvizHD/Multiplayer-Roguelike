@@ -1,7 +1,7 @@
-using Runtime.Ecs.Components;
-using Runtime.Ecs.Systems;
+using Runtime.ECS.Components;
+using Runtime.ECS.Systems;
 
-namespace Runtime.Ecs.Core
+namespace Runtime.ECS.Core
 {
     public class EcsWorld
     {

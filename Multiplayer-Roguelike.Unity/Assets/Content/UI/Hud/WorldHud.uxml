@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Content/UI/Styles/Progress-bar-style.uss?fileID=7433441132597879392&amp;guid=b049ac705b4041849b6ab37e732d9f2d&amp;type=3#Progress-bar-style"/>
+    <Style src="project://database/Assets/Content/UI/Styles/Buttons-style.uss?fileID=7433441132597879392&amp;guid=c27d3fe66dcee4046ad483deca7232d1&amp;type=3#Buttons-style"/>
+    <Style src="project://database/Assets/Content/UI/Styles/Input-field-style.uss?fileID=7433441132597879392&amp;guid=f2b6487d66123cd438838f57d7848f59&amp;type=3#Input-field-style"/>
+    <Style src="project://database/Assets/Content/UI/Styles/Weapon-panel-style.uss?fileID=7433441132597879392&amp;guid=1204bc64c9879544e95e300e26cad547&amp;type=3#Weapon-panel-style"/>
+    <Style src="project://database/Assets/Content/UI/Styles/World-style.uss?fileID=7433441132597879392&amp;guid=6808ac2c4c137cf49a443c6380d15806&amp;type=3#World-style"/>
+    <ui:VisualElement name="content" style="flex-grow: 1; padding-top: 40px; padding-right: 40px; padding-bottom: 40px; padding-left: 40px; align-items: center; justify-content: center; bottom: auto;"/>
+</ui:UXML>
