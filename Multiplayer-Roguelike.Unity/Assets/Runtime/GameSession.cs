@@ -330,7 +330,6 @@ namespace Runtime
             EcsWorld.AddSystem<DrawTransformSystem>();
             EcsWorld.AddSystem<DrawCameraTransformSystem>();
 
-            EcsWorld.AddSystem<AINavigationSystem>();
             EcsWorld.AddSystem<AIPositionSyncSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
             EcsWorld.AddSystem<AISyncSystem>();
