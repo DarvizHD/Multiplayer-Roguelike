@@ -29,7 +29,7 @@ namespace Backend.CommandExecutors
                 var randomPosition = new Vector3(random.Next(-10, 10), 0f, random.Next(-10, 10));
                 var startHealth = 100f;
 
-                var enemy = new EnemyModel(i);
+                var enemy = new EnemyModel(i, new EnemyConfig());
                 enemy.Shared.TargetPlayerId.Value = Command.TargetId;
                 enemy.Shared.Position.Value = randomPosition;
                 enemy.Shared.Health.Value = startHealth;
