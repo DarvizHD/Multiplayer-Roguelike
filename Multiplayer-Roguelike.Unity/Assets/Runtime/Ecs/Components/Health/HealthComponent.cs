@@ -1,4 +1,4 @@
-namespace Runtime.ECS.Components.Health
+namespace Runtime.Ecs.Components.Health
 {
     public class HealthComponent : IComponent
     {

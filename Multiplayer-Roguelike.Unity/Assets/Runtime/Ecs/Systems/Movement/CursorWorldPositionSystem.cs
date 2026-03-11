@@ -1,9 +1,10 @@
-using Runtime.ECS.Components;
-using Runtime.ECS.Components.Player;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components;
+using Runtime.Ecs.Components.Player;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Movement
+namespace Runtime.Ecs.Systems.Movement
 {
     public class CursorWorldPositionSystem : BaseSystem
     {

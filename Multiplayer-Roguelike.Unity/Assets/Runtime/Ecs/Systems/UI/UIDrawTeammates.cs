@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Runtime.ECS.Components.Health;
-using Runtime.ECS.Components.Network;
-using Runtime.ECS.Components.Tags;
-using Runtime.ECS.Components.UI;
-using Runtime.ECS.Core;
-using Runtime.ECS.Systems;
+using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Components.Tags;
+using Runtime.Ecs.Components.UI;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 using Runtime.UI.HUD;
 using UnityEngine.UIElements;
 

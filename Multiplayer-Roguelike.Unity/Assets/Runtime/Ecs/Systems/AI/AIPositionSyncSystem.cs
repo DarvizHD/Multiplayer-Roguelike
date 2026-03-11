@@ -1,8 +1,9 @@
-using Runtime.ECS.Components;
-using Runtime.ECS.Components.Movement;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components;
+using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 
-namespace Runtime.ECS.Systems.AI
+namespace Runtime.Ecs.Systems.AI
 {
     public class AIPositionSyncSystem : BaseSystem
     {
@@ -14,8 +15,6 @@ namespace Runtime.ECS.Systems.AI
 
             for (var i = 0; i < _buffer.Count; i++)
             {
-                var entityId = _buffer.EntityIds[i];
-
                 var navMeshAgentComponent = _buffer.Components1[i];
                 var positionComponent = _buffer.Components2[i];
 

@@ -1,10 +1,11 @@
-using Runtime.ECS.Components;
-using Runtime.ECS.Components.Health;
-using Runtime.ECS.Components.Movement;
-using Runtime.ECS.Components.Network;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components;
+using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 
-namespace Runtime.ECS.Systems.Movement
+namespace Runtime.Ecs.Systems.Movement
 {
     public class PlayerMovementSystem : BaseSystem
     {

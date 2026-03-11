@@ -1,14 +1,15 @@
-using Runtime.ECS.Components;
-using Runtime.ECS.Components.Health;
-using Runtime.ECS.Components.Network;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components;
+using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 using Runtime.Tools;
 using Shared.Models.Player;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Network
+namespace Runtime.Ecs.Systems.AI
 {
-    public class AISyncSystem : BaseSystem
+    public class AINavigationSyncSystem : BaseSystem
     {
         private const float _softThreshold = 0.25f;
         private const float _hardThreshold = 4f;
@@ -32,9 +33,7 @@ namespace Runtime.ECS.Systems.Network
 
                 if (delta is > _softThreshold and < _hardThreshold)
                 {
-                    navMeshAgentComponent.Agent.Warp(
-                        Vector3.Lerp(navMeshAgentComponent.Agent.transform.position, serverPosition, 0.1f)
-                    );
+                    navMeshAgentComponent.Agent.Warp(Vector3.Lerp(navMeshAgentComponent.Agent.transform.position, serverPosition, 0.1f));
                 }
                 else if (delta >= _hardThreshold)
                 {

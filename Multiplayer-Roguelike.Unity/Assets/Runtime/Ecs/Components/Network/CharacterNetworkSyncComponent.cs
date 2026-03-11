@@ -1,7 +1,7 @@
 
 using Shared.Models.Player;
 
-namespace Runtime.ECS.Components.Network
+namespace Runtime.Ecs.Components.Network
 {
     public class CharacterNetworkSyncComponent : IComponent
     {

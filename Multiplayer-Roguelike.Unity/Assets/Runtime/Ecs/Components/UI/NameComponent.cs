@@ -1,4 +1,4 @@
-namespace Runtime.ECS.Components.UI
+namespace Runtime.Ecs.Components.UI
 {
     public class NameComponent : IComponent
     {

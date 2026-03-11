@@ -1,4 +1,3 @@
-using Runtime.ECS.Components;
 using UnityEngine;
 
 namespace Runtime.Ecs.Components.Battle.Weapon

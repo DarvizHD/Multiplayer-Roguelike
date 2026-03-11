@@ -1,4 +1,4 @@
-namespace Runtime.ECS.Components.Movement
+namespace Runtime.Ecs.Components.Movement
 {
     public class MoveSpeedComponent : IComponent
     {

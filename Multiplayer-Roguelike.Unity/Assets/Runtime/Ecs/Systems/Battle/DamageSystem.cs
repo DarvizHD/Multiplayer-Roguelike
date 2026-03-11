@@ -1,9 +1,10 @@
-using Runtime.ECS.Components.Battle;
-using Runtime.ECS.Components.Health;
+using Runtime.Ecs.Components.Battle;
+using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Sound;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 
-namespace Runtime.ECS.Systems.Battle
+namespace Runtime.Ecs.Systems.Battle
 {
     public class DamageSystem : BaseSystem
     {

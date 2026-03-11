@@ -1,16 +1,16 @@
-using Runtime.ECS.Components;
-using Runtime.ECS.Components.Battle;
+using Runtime.Ecs.Components;
+using Runtime.Ecs.Components.Battle;
 using Runtime.Ecs.Components.Battle.Weapon;
-using Runtime.ECS.Components.Battle.Weapon;
-using Runtime.ECS.Components.Health;
-using Runtime.ECS.Components.Movement;
-using Runtime.ECS.Components.Network;
+using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Components.Sound;
-using Runtime.ECS.Components.Tags;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components.Tags;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Battle.MeleeAttack
+namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackSystem : BaseSystem
     {

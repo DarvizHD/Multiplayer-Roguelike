@@ -1,9 +1,10 @@
-using Runtime.ECS.Components.Movement;
-using Runtime.ECS.Components.Player;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Components.Player;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Rotation
+namespace Runtime.Ecs.Systems.Player.Rotation
 {
     public class PlayerLookRotationSystem : BaseSystem
     {

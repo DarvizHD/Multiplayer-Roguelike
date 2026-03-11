@@ -1,6 +1,6 @@
-using Runtime.ECS.Core;
+using Runtime.Ecs.Core;
 
-namespace Runtime.ECS.Systems
+namespace Runtime.Ecs.Systems.Core
 {
     public abstract class BaseSystem
     {

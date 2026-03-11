@@ -1,8 +1,7 @@
 using Runtime.Ecs.Components.Battle.Weapon;
-using Runtime.ECS.Components.Battle.Weapon;
-using Runtime.ECS.Components.Network;
-using Runtime.ECS.Core;
-using Runtime.ECS.Systems;
+using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 using Runtime.UI.HUD;
 using UnityEngine.UIElements;
 

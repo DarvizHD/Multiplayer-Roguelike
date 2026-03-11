@@ -1,7 +1,7 @@
-using Runtime.ECS.Components;
+using Runtime.Ecs.Components;
 using Runtime.Tools;
 
-namespace Runtime.Ecs.Systems
+namespace Runtime.Ecs.Systems.Weapons
 {
     public class WeaponProviderComponent : IComponent
     {
