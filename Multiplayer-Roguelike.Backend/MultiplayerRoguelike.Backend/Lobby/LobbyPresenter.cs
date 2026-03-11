@@ -51,6 +51,10 @@ namespace Backend.Lobby
 
             if (_model.Members.Count == 0)
             {
+                if (_world.Sessions.TryGet(_model.Guid, out var session))
+                {
+                    _world.Sessions.Remove(_model.Guid);
+                }
                 _world.Lobbies.Remove(_model.Guid);
                 return;
             }
@@ -60,9 +64,8 @@ namespace Backend.Lobby
                 _model.OwnerNickname = _model.Members.First();
             }
 
-            foreach (var memberNickname in _model.Members)
+            foreach (var member in _model.Members.Select(memberNickname => _world.Players.Get(memberNickname)))
             {
-                var member = _world.Players.Get(memberNickname);
                 member.PlayerSharedModel.Lobby.Members.Remove(removedPlayerNickname);
                 member.PlayerSharedModel.Lobby.OwnerId.Value = _model.OwnerNickname;
             }

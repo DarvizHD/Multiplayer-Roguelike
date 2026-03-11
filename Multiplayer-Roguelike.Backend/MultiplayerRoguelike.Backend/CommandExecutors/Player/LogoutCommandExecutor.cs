@@ -30,7 +30,8 @@ namespace Backend.CommandExecutors.Player
                 World.Players.Remove(existedPlayer.PlayerSharedModel.Id);
             }
 
-            if (existedPlayer.Peer.State != PeerState.Disconnected)
+            if (existedPlayer.Peer.State != PeerState.Disconnected &&
+                existedPlayer.Peer.State != PeerState.Disconnecting)
             {
                 existedPlayer.Peer.Disconnect(0);
             }
