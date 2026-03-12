@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Backend.ServerSystems;
 using Backend.Session;
 using Shared.Models.Player;
@@ -35,7 +35,7 @@ namespace Backend.Enemies.Combat
                 return;
             }
 
-            if (enemy.Shared.TargetPlayerId != null)
+            if (enemy.Shared.TargetPlayerId.Value != null)
             {
                 if (SessionModel.GameSessionSharedModel.Characters.TryGet(enemy.Shared.TargetPlayerId.Value, out var targetPlayer) && targetPlayer.Health.Value > 0)
                 {
@@ -53,6 +53,11 @@ namespace Backend.Enemies.Combat
             var attack = enemy.EnemyAttack;
 
             player.Health.Value -= attack.Damage;
+
+            var time = DateTime.UtcNow.ToString("HH:mm:ss");
+            player.EventId.Value = $"damage_{time}";
+
+            enemy.Shared.AnimationState.Value = $"attack_{time}";
 
             attack.CooldownTimer = enemy.EnemyAttack.Cooldown;
         }

@@ -79,7 +79,7 @@ namespace Runtime
             _serverConnectionModel.WorldPacketReceived += OnWorldPacketReceived;
             _serverConnectionModel.PlayerPacketReceived += OnPlayerPacketReceived;
 
-            _gameSessionSharedModel.IsRun.OnChange += RunSession;
+            _gameSessionSharedModel.IsRun.OnChanged += RunSession;
 
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
@@ -124,7 +124,7 @@ namespace Runtime
             _playerSharedModel.Read(protocol);
         }
 
-        private void RunSession()
+        private void RunSession(bool value)
         {
             _parallaxPresenter.Disable();
             _navigationPresenter.Disable();

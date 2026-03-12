@@ -1,4 +1,4 @@
-﻿using Backend.ModelCollections;
+using Backend.ModelCollections;
 
 namespace Backend.Enemies
 {

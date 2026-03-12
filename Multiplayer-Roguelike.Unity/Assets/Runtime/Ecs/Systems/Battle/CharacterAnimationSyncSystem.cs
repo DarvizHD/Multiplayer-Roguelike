@@ -24,7 +24,15 @@ namespace Runtime.Ecs.Systems.Battle
                 if (hasDifferent)
                 {
                     characterNetworkEventComponent.EventId = characterNetworkSyncComponent.CharacterSharedModel.EventId.Value;
-                    ComponentManager.AddComponent(entityId, new AttackAnimationEventComponent());
+
+                    if (characterNetworkSyncComponent.CharacterSharedModel.EventId.Value.Contains("damage"))
+                    {
+                        ComponentManager.AddComponent(entityId, new DamageAnimationEventComponent());
+                    }
+                    else
+                    {
+                        ComponentManager.AddComponent(entityId, new AttackAnimationEventComponent());
+                    }
                 }
             }
         }

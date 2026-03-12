@@ -1,4 +1,4 @@
-﻿using DotRecast.Detour.Crowd;
+using DotRecast.Detour.Crowd;
 
 namespace Backend.Navigation
 {

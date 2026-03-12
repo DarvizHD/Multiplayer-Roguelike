@@ -1,6 +1,7 @@
 using Backend.Enemies;
 using Backend.Navigation;
 using Backend.Player.Collection;
+using Backend.Session.SpawnDirector;
 using DotRecast.Detour;
 using Shared.Models.GameSession;
 
@@ -18,10 +19,15 @@ namespace Backend.Session
 
         public NavigationModel Navigation { get; set; }
 
+        public SpawnDirectorModel SpawnDirector { get; set; }
+        public GameSessionWaveModel GameSessionWaveModel { get; set; }
+
         public SessionModel(string id)
         {
             Id = id;
             GameSessionSharedModel = new GameSessionSharedModel(id);
+            SpawnDirector = new SpawnDirectorModel(new SpawnDirectorConfig());
+            GameSessionWaveModel = new GameSessionWaveModel();
         }
 
         public void SetupNavigation(DtNavMesh navMesh)

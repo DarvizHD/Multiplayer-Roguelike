@@ -48,15 +48,20 @@ namespace Runtime.UI.Navigation
             _document.rootVisualElement.style.display = DisplayStyle.Flex;
             _router.NavigateSilent(ScreenIds.Login);
 
-            _uiCoreModel.GameSessionSharedModel.IsRun.OnChange += Disable;
+            _uiCoreModel.GameSessionSharedModel.IsRun.OnChanged += HandleIsRunChanged;
         }
 
         public void Disable()
         {
-            _uiCoreModel.GameSessionSharedModel.IsRun.OnChange -= Disable;
+            _uiCoreModel.GameSessionSharedModel.IsRun.OnChanged -= HandleIsRunChanged;
 
             _document.rootVisualElement.style.display = DisplayStyle.None;
             _router.Clear();
+        }
+
+        private void HandleIsRunChanged(bool value)
+        {
+            Disable();
         }
     }
 }
