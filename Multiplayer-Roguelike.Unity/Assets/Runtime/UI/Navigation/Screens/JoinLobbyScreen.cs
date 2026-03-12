@@ -23,7 +23,7 @@ namespace Runtime.UI.Navigation.Screens
         {
             _model.OnBackButtonClicked += HandleBack;
             _model.OnJoinButtonClicked += HandleTryJoin;
-            _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChange += HandleJoin;
+            _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChanged += HandleJoin;
 
             _presenter.Enable();
         }
@@ -32,7 +32,7 @@ namespace Runtime.UI.Navigation.Screens
         {
             _model.OnBackButtonClicked -= HandleBack;
             _model.OnJoinButtonClicked -= HandleTryJoin;
-            _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChange -= HandleJoin;
+            _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChanged -= HandleJoin;
 
             _presenter.Disable();
         }
@@ -48,9 +48,9 @@ namespace Runtime.UI.Navigation.Screens
             joinCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
         }
 
-        private void HandleJoin()
+        private void HandleJoin(string value)
         {
-            if (_uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value == string.Empty)
+            if (value == string.Empty)
             {
                 return;
             }

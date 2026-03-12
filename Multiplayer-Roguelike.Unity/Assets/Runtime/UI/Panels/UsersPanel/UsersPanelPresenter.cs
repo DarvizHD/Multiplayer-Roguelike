@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Runtime.UI.Panels.UsersPanel
@@ -27,14 +26,14 @@ namespace Runtime.UI.Panels.UsersPanel
 
             _uiCoreModel.PlayerSharedModel.Lobby.Members.OnAdded += OnMemberAdded;
             _uiCoreModel.PlayerSharedModel.Lobby.Members.OnRemoved += OnMemberRemoved;
-            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChange += OnHostChanged;
+            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChanged += OnHostChanged;
         }
 
         public void Disable()
         {
             _uiCoreModel.PlayerSharedModel.Lobby.Members.OnAdded -= OnMemberAdded;
             _uiCoreModel.PlayerSharedModel.Lobby.Members.OnRemoved -= OnMemberRemoved;
-            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChange -= OnHostChanged;
+            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChanged -= OnHostChanged;
             _view.Root.RemoveFromHierarchy();
             _view.UsersContainer.Clear();
             _usersContainer.Clear();
@@ -55,14 +54,14 @@ namespace Runtime.UI.Panels.UsersPanel
             _view.UsersContainer.Add(user);
             _usersContainer.Add(username, user);
 
-            OnHostChanged();
+            OnHostChanged(_uiCoreModel.PlayerSharedModel.Lobby.OwnerId.Value);
         }
 
-        private void OnHostChanged()
+        private void OnHostChanged(string value)
         {
             foreach (var pair in _usersContainer)
             {
-                if (pair.Key == _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.Value)
+                if (pair.Key == value)
                 {
                     var hostIcon = pair.Value.Q<VisualElement>("user-icon");
                     hostIcon.AddToClassList("host-icon-style");
@@ -77,7 +76,7 @@ namespace Runtime.UI.Panels.UsersPanel
 
         private void OnMemberRemoved(string username)
         {
-            OnHostChanged();
+            OnHostChanged(_uiCoreModel.PlayerSharedModel.Lobby.OwnerId.Value);
 
             _view.UsersContainer.Remove(_usersContainer[username]);
             _usersContainer.Remove(username);

@@ -19,16 +19,16 @@ namespace Runtime.UI.Panels.LobbyPanel
         {
             _view.ParentRoot.Add(_view.Root);
             _view.BackButton.clicked += _model.OnBackButtonClickedInvoke;
-            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChange += HandleChangeOwner;
-            _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChange += HandleChangeLobbyCode;
+            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChanged += HandleChangeOwner;
+            _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChanged += HandleChangeLobbyCode;
 
-            HandleChangeLobbyCode();
-            HandleChangeOwner();
+            HandleChangeLobbyCode(_uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value);
+            HandleChangeOwner(_uiCoreModel.PlayerSharedModel.Lobby.OwnerId.Value);
         }
 
-        private void HandleChangeOwner()
+        private void HandleChangeOwner(string value)
         {
-            if (_uiCoreModel.PlayerSharedModel.Lobby.OwnerId.Value == _uiCoreModel.PlayerSharedModel.Nickname.Value)
+            if (value == _uiCoreModel.PlayerSharedModel.Nickname.Value)
             {
                 _view.StartGameButton.style.display = DisplayStyle.Flex;
                 _view.StartGameButton.clicked += _model.OnStartGameButtonClickedInvoke;
@@ -39,16 +39,16 @@ namespace Runtime.UI.Panels.LobbyPanel
             }
         }
 
-        private void HandleChangeLobbyCode()
+        private void HandleChangeLobbyCode(string value)
         {
-            _view.LobbyCodeTextField.value = _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value;
+            _view.LobbyCodeTextField.value = value;
         }
 
         public void Disable()
         {
             _view.BackButton.clicked -= _model.OnBackButtonClickedInvoke;
             _view.StartGameButton.clicked -= _model.OnStartGameButtonClickedInvoke;
-            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChange -= HandleChangeOwner;
+            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChanged -= HandleChangeOwner;
             _view.Root.RemoveFromHierarchy();
         }
     }
