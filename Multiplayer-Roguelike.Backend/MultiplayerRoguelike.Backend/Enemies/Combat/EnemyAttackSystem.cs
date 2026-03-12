@@ -1,4 +1,5 @@
-﻿using Backend.ServerSystems;
+﻿using System;
+using Backend.ServerSystems;
 using Backend.Session;
 using Shared.Models.Player;
 
@@ -36,10 +37,9 @@ namespace Backend.Enemies.Combat
 
             if (enemy.Shared.TargetPlayerId != null)
             {
-                if (SessionModel.GameSessionSharedModel.Characters.TryGet(enemy.Shared.TargetPlayerId.Value, out var targetPlayer))
+                if (SessionModel.GameSessionSharedModel.Characters.TryGet(enemy.Shared.TargetPlayerId.Value, out var targetPlayer) && targetPlayer.Health.Value > 0)
                 {
                     var distance = (enemy.Shared.Position.Value - targetPlayer.Position.Value).LengthSquared();
-
                     if (!(distance > attack.Range * attack.Range))
                     {
                         PerformAttack(enemy, targetPlayer);
@@ -54,7 +54,7 @@ namespace Backend.Enemies.Combat
 
             player.Health.Value -= attack.Damage;
 
-            attack.CooldownTimer = 0;
+            attack.CooldownTimer = enemy.EnemyAttack.Cooldown;
         }
     }
 }
