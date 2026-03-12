@@ -30,30 +30,23 @@ namespace Shared.Primitives
 
         public static Vector3 operator -(Vector3 v1, Vector3 v2)
         {
-            return new Vector3(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
+            return new Vector3((short)(v1.X - v2.X), (short)(v1.Y - v2.Y), (short)(v1.Z - v2.Z));
         }
 
         public static Vector3 operator +(Vector3 v1, Vector3 v2)
         {
-            return new Vector3(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
+            return new Vector3((short)(v1.X + v2.X), (short)(v1.Y + v2.Y), (short)(v1.Z + v2.Z));
         }
 
         public static Vector3 operator *(float s, Vector3 v)
         {
-            return new Vector3(
-                v.X * s,
-                v.Y * s,
-                v.Z * s
+            return new Vector3((short)(v.X * s), (short)(v.Y * s), (short)(v.Z * s)
             );
         }
 
         public static Vector3 operator /(Vector3 v, float s)
         {
-            return new Vector3(
-                v.X / s,
-                v.Y / s,
-                v.Z / s
-            );
+            return new Vector3((short)(v.X / s), (short)(v.Y / s), (short)(v.Z / s));
         }
 
         public float Length()
