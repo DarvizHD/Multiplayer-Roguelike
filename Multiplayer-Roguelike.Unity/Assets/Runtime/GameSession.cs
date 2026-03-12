@@ -316,6 +316,7 @@ namespace Runtime
             EcsWorld.AddSystem<AINavigationSyncSystem>();
             EcsWorld.AddSystem<AIPositionSyncSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
+            EcsWorld.AddSystem<EnemyAttackAnimationSystem>();
 
             EcsWorld.AddSystem<CursorWorldPositionSystem>();
 
@@ -343,6 +344,7 @@ namespace Runtime
             EcsWorld.AddSystem<DamageAnimationSystem>();
 
             EcsWorld.AddSystem<CharacterAnimationSyncSystem>();
+            EcsWorld.AddSystem<EnemyAnimationSyncSystem>();
 
             EcsWorld.AddSystem(new PlaySoundSystem());
             EcsWorld.AddSystem<ZombieVoiceSystem>();
