@@ -1,24 +1,24 @@
 using Runtime.UI.Menu;
-using Runtime.UI.Panels.HostLobbyPanel;
+using Runtime.UI.Panels.LobbyPanel;
 using Runtime.UI.Panels.UsersPanel;
 using Shared.Commands.Lobby;
 
 namespace Runtime.UI.Navigation.Screens
 {
-    public class HostLobbyScreen : IPresenter
+    public class LobbyScreen : IPresenter
     {
         private readonly Router _router;
-        private readonly HostLobbyPanelPresenter _hostPresenter;
+        private readonly LobbyPanelPresenter _presenter;
         private readonly UsersPanelPresenter _usersPresenter;
-        private readonly HostLobbyPanelModel _model;
+        private readonly LobbyPanelModel _model;
         private readonly UICoreModel _uiCoreModel;
         private readonly UIAudioService _audioService;
 
-        public HostLobbyScreen(Router router, HostLobbyPanelPresenter hostPresenter,
-            UsersPanelPresenter usersPresenter, HostLobbyPanelModel model, UICoreModel uiCoreModel, UIAudioService audioService)
+        public LobbyScreen(Router router, LobbyPanelPresenter presenter,
+            UsersPanelPresenter usersPresenter, LobbyPanelModel model, UICoreModel uiCoreModel, UIAudioService audioService)
         {
             _router = router;
-            _hostPresenter = hostPresenter;
+            _presenter = presenter;
             _usersPresenter = usersPresenter;
             _model = model;
             _uiCoreModel = uiCoreModel;
@@ -29,7 +29,7 @@ namespace Runtime.UI.Navigation.Screens
         {
             _model.OnBackButtonClicked += HandleBack;
             _model.OnStartGameButtonClicked += HandleStartGame;
-            _hostPresenter.Enable();
+            _presenter.Enable();
             _usersPresenter.Enable();
         }
 
@@ -37,25 +37,23 @@ namespace Runtime.UI.Navigation.Screens
         {
             _model.OnBackButtonClicked -= HandleBack;
             _model.OnStartGameButtonClicked -= HandleStartGame;
-            _hostPresenter.Disable();
+            _presenter.Disable();
             _usersPresenter.Disable();
         }
 
         private void HandleBack()
         {
-            var leaveCommand = new LeaveLobbyCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value,
-                _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value);
+            var leaveCommand = new LeaveLobbyCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value, _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value);
             leaveCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
 
-            _router.GoBack();
+            _router.ToMainMenu();
         }
 
         private void HandleStartGame()
         {
             _audioService.PlayNavigate();
 
-            var startGameCommand = new StartSessionCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value,
-                _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value);
+            var startGameCommand = new StartSessionCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value, _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value);
             startGameCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
         }
     }
