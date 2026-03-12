@@ -1,0 +1,8 @@
+.user-icon-style {
+    -unity-background-image-tint-color: rgb(232, 224, 208);
+    transition-duration: 0.1s;
+}
+
+.host-icon-style {
+    -unity-background-image-tint-color: rgb(54, 142, 71);
+}
