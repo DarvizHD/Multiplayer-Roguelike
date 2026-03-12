@@ -19,7 +19,6 @@
         <ProjectReference Include="..\..\Multiplayer-Roguelike.Shared\Multiplayer-Roguelike.Shared.csproj"/>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="CommandExecutors\Battle\" />
         <Folder Include="Resources\"/>
     </ItemGroup>
     <ItemGroup>
