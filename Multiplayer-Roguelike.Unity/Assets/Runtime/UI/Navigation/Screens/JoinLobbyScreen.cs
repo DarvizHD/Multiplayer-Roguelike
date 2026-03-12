@@ -22,14 +22,18 @@ namespace Runtime.UI.Navigation.Screens
         public void Enable()
         {
             _model.OnBackButtonClicked += HandleBack;
-            _model.OnJoinButtonClicked += HandleJoin;
+            _model.OnJoinButtonClicked += HandleTryJoin;
+            _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChange += HandleJoin;
+
             _presenter.Enable();
         }
 
         public void Disable()
         {
             _model.OnBackButtonClicked -= HandleBack;
-            _model.OnJoinButtonClicked -= HandleJoin;
+            _model.OnJoinButtonClicked -= HandleTryJoin;
+            _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChange -= HandleJoin;
+
             _presenter.Disable();
         }
 
@@ -38,12 +42,20 @@ namespace Runtime.UI.Navigation.Screens
             _router.GoBack();
         }
 
-        private void HandleJoin()
+        private void HandleTryJoin()
         {
             var joinCommand = new JoinLobbyCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value, _model.LobbyCode);
             joinCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
+        }
 
-            _router.NavigateTo(ScreenIds.HostLobby);
+        private void HandleJoin()
+        {
+            if (_uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value == string.Empty)
+            {
+                return;
+            }
+
+            _router.NavigateTo(ScreenIds.Lobby);
         }
     }
 }
