@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Runtime.UI.Panels.UsersPanel
@@ -26,11 +27,17 @@ namespace Runtime.UI.Panels.UsersPanel
 
             _uiCoreModel.PlayerSharedModel.Lobby.Members.OnAdded += OnMemberAdded;
             _uiCoreModel.PlayerSharedModel.Lobby.Members.OnRemoved += OnMemberRemoved;
+            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChange += OnHostChanged;
+        }
 
-            foreach (var username in _uiCoreModel.PlayerSharedModel.Lobby.Members.Values)
-            {
-                OnMemberAdded(username);
-            }
+        public void Disable()
+        {
+            _uiCoreModel.PlayerSharedModel.Lobby.Members.OnAdded -= OnMemberAdded;
+            _uiCoreModel.PlayerSharedModel.Lobby.Members.OnRemoved -= OnMemberRemoved;
+            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChange -= OnHostChanged;
+            _view.Root.RemoveFromHierarchy();
+            _view.UsersContainer.Clear();
+            _usersContainer.Clear();
         }
 
         private void OnMemberAdded(string username)
@@ -42,25 +49,38 @@ namespace Runtime.UI.Panels.UsersPanel
 
             var userAsset = _viewDescription.UI.UserAsset;
             var user = userAsset.CloneTree().Q<VisualElement>("user-panel");
+
             user.Q<Label>("username-text").text = username;
+
             _view.UsersContainer.Add(user);
             _usersContainer.Add(username, user);
+
+            OnHostChanged();
+        }
+
+        private void OnHostChanged()
+        {
+            foreach (var pair in _usersContainer)
+            {
+                if (pair.Key == _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.Value)
+                {
+                    var hostIcon = pair.Value.Q<VisualElement>("user-icon");
+                    hostIcon.AddToClassList("host-icon-style");
+                }
+                else
+                {
+                    var hostIcon = pair.Value.Q<VisualElement>("user-icon");
+                    hostIcon.RemoveFromClassList("host-icon-style");
+                }
+            }
         }
 
         private void OnMemberRemoved(string username)
         {
+            OnHostChanged();
+
             _view.UsersContainer.Remove(_usersContainer[username]);
             _usersContainer.Remove(username);
-        }
-
-        public void Disable()
-        {
-            _uiCoreModel.PlayerSharedModel.Lobby.Members.OnAdded -= OnMemberAdded;
-            _uiCoreModel.PlayerSharedModel.Lobby.Members.OnRemoved -= OnMemberRemoved;
-
-            _view.ParentRoot.Remove(_view.Root);
-            _view.UsersContainer.Clear();
-            _usersContainer.Clear();
         }
     }
 }
