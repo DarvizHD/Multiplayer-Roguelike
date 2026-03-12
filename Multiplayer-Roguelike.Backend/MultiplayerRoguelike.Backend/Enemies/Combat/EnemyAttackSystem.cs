@@ -54,6 +54,11 @@ namespace Backend.Enemies.Combat
 
             player.Health.Value -= attack.Damage;
 
+            var time = DateTime.UtcNow.ToString("HH:mm:ss");
+            player.EventId.Value = $"damage_{time}";
+
+            enemy.Shared.AnimationState.Value = $"attack_{time}";
+
             attack.CooldownTimer = enemy.EnemyAttack.Cooldown;
         }
     }
