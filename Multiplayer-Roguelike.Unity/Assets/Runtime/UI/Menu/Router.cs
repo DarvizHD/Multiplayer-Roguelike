@@ -6,7 +6,7 @@ namespace Runtime.UI.Menu
     {
         private readonly Dictionary<string, IPresenter> _screens = new();
         private readonly Stack<string> _history = new();
-        private UIAudioService _audioService;
+        private readonly UIAudioService _audioService;
 
         public Router(UIAudioService audioService)
         {
@@ -41,6 +41,17 @@ namespace Runtime.UI.Menu
             _screens[_history.Peek()].Enable();
 
             _audioService.PlayNavigate();
+        }
+
+        public void ToMainMenu()
+        {
+            foreach (var id in _history)
+            {
+                _screens[id].Disable();
+            }
+            _history.Clear();
+
+            NavigateTo(ScreenIds.StartMenu);
         }
 
         public void Clear()

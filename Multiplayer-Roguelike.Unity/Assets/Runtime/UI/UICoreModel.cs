@@ -1,6 +1,6 @@
 using Runtime.ServerInteraction;
-using Runtime.UI.Panels.HostLobbyPanel;
 using Runtime.UI.Panels.JoinLobbyPanel;
+using Runtime.UI.Panels.LobbyPanel;
 using Runtime.UI.Panels.LoginPanel;
 using Runtime.UI.Panels.StartMenuPanel;
 using Runtime.UI.Panels.UsersPanel;
@@ -13,7 +13,7 @@ namespace Runtime.UI
     {
         public LoginPanelModel LoginPanelModel { get; } = new();
         public StartMenuPanelModel StartMenuPanelModel { get; } = new();
-        public HostLobbyPanelModel HostLobbyPanelModel { get; } = new();
+        public LobbyPanelModel LobbyPanelModel { get; } = new();
         public JoinLobbyPanelModel JoinLobbyPanelModel { get; } = new();
         public UsersPanelModel UsersPanelModel { get; } = new();
         public PlayerSharedModel PlayerSharedModel { get; private set; }

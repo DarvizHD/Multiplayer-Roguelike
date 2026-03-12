@@ -1,8 +1,8 @@
 using UnityEngine.UIElements;
 
-namespace Runtime.UI.Panels.HostLobbyPanel
+namespace Runtime.UI.Panels.LobbyPanel
 {
-    public class HostLobbyPanelView
+    public class LobbyPanelView
     {
         public VisualElement Root { get; }
         public VisualElement ParentRoot { get; }
@@ -10,7 +10,7 @@ namespace Runtime.UI.Panels.HostLobbyPanel
         public Button StartGameButton { get; set; }
         public Button BackButton { get; set; }
 
-        public HostLobbyPanelView(VisualTreeAsset asset, VisualElement parentRoot)
+        public LobbyPanelView(VisualTreeAsset asset, VisualElement parentRoot)
         {
             Root = asset.CloneTree().Q<VisualElement>("host-lobby-panel");
             ParentRoot = parentRoot;

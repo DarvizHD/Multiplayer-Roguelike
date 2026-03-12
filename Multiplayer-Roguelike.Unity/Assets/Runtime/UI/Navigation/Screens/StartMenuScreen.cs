@@ -58,7 +58,7 @@ namespace Runtime.UI.Navigation.Screens
             var createLobbyCommand = new CreateLobbyCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value);
             createLobbyCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
 
-            _router.NavigateTo(ScreenIds.HostLobby);
+            _router.NavigateTo(ScreenIds.Lobby);
         }
 
         private void HandleJoinLobby()
