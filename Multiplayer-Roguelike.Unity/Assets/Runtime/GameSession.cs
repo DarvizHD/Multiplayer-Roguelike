@@ -181,6 +181,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new CharacterNetworkSyncComponent(characterSharedModel));
             EcsWorld.AddEntityComponent(entityId, new WeaponProviderComponent(provider.WeaponProvider));
             EcsWorld.AddEntityComponent(entityId, new SfxContainerComponent(provider.SfxContainer));
+            EcsWorld.AddEntityComponent(entityId, new AliveTagComponent());
 
             var meleeId = CreateMeleeWeapon();
             var rangedId = CreateRangedWeapon();
@@ -354,6 +355,7 @@ namespace Runtime
             EcsWorld.AddSystem<CharacterAttackSystem>();
 
             EcsWorld.AddSystem<AIHealthSync>();
+            EcsWorld.AddSystem<CharacterHealthSyncSystem>();
             EcsWorld.AddSystem<AIDeathSystem>();
             EcsWorld.AddSystem<DamageAnimationSystem>();
 
