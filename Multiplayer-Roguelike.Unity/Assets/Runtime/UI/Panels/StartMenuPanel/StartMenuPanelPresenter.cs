@@ -28,7 +28,7 @@ namespace Runtime.UI.Panels.StartMenuPanel
             _view.JoinLobbyButton.clicked -= _model.OnJoinLobbyButtonClickedInvoke;
             _view.ExitButton.clicked -= _model.OnExitButtonClickedInvoke;
 
-            _view.ParentRoot.Remove(_view.Root);
+            _view.Root.RemoveFromHierarchy();
         }
     }
 }

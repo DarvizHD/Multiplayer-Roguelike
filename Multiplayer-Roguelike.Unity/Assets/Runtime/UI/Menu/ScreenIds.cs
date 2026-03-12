@@ -4,7 +4,7 @@ namespace Runtime.UI.Menu
     {
         public const string Login = "Login";
         public const string StartMenu = "StartMenu";
-        public const string HostLobby = "HostLobby";
+        public const string Lobby = "Lobby";
         public const string JoinLobby = "JoinLobby";
     }
 }

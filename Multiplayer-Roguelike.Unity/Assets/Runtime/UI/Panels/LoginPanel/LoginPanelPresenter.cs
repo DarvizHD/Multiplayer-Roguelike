@@ -32,7 +32,7 @@ namespace Runtime.UI.Panels.LoginPanel
         public void Disable()
         {
             _view.ConfirmButton.clicked -= OnConfirmButtonClicked;
-            _view.ParentRoot.Remove(_view.Root);
+            _view.Root.RemoveFromHierarchy();
         }
 
         private void OnConfirmButtonClicked()
