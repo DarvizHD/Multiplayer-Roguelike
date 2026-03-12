@@ -42,6 +42,11 @@ namespace Runtime.Ecs.Systems.AI
 
                 var targetId = enemySharedModel.EnemySharedModel.TargetPlayerId.Value;
 
+                if (targetId == null)
+                {
+                    continue;
+                }
+
                 CharacterSharedModel founded = null;
 
                 for (var k = 0; k < _buffer.Count; k++)

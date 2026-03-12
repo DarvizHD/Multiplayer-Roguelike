@@ -1,4 +1,4 @@
-﻿using DotRecast.Core.Numerics;
+using DotRecast.Core.Numerics;
 using DotRecast.Detour;
 using DotRecast.Detour.Crowd;
 using Shared.Primitives;

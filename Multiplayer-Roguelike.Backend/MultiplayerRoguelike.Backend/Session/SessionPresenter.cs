@@ -3,6 +3,7 @@ using Backend.Enemies;
 using Backend.Enemies.Combat;
 using Backend.Player;
 using Backend.ServerSystems;
+using Backend.Session.SpawnDirector;
 using Shared.Models.Player;
 
 namespace Backend.Session
@@ -16,6 +17,8 @@ namespace Backend.Session
         private readonly EnemyModelCollectionPresenter _enemyModelCollectionPresenter;
         private readonly EnemyTargetSystem _targetSystem;
         private readonly EnemyAttackSystem _attackSystem;
+        private readonly SpawnDirectorSystem _spawnDirectorSystem;
+        private readonly GameSessionWavePresenter _gameSessionWavePresenter;
 
         public SessionPresenter(SessionModel model, WorldModel worldModel)
         {
@@ -24,8 +27,10 @@ namespace Backend.Session
             _serverSystems = worldModel.ServerSystems;
 
             _enemyModelCollectionPresenter = new EnemyModelCollectionPresenter(model.Enemies, model);
+            _gameSessionWavePresenter = new GameSessionWavePresenter(model.GameSessionWaveModel);
             _targetSystem = new EnemyTargetSystem($"{_model.Id}: enemy-target-system", _model);
             _attackSystem = new EnemyAttackSystem($"{_model.Id}: enemy-attack-system", _model);
+            _spawnDirectorSystem = new SpawnDirectorSystem($"{_model.Id}: spawn-director-system", model.SpawnDirector, _model);
         }
 
         public void Enable()
@@ -34,9 +39,11 @@ namespace Backend.Session
             _model.Players.OnRemoved += OnPlayerRemoved;
 
             _enemyModelCollectionPresenter.Enable();
+            _gameSessionWavePresenter.Enable();
 
             _serverSystems.Add(_targetSystem);
             _serverSystems.Add(_attackSystem);
+            _serverSystems.Add(_spawnDirectorSystem);
         }
 
         public void Disable()
@@ -45,9 +52,11 @@ namespace Backend.Session
             _model.Players.OnRemoved -= OnPlayerRemoved;
 
             _enemyModelCollectionPresenter.Disable();
+            _gameSessionWavePresenter.Disable();
 
             _serverSystems.Remove(_targetSystem);
             _serverSystems.Remove(_attackSystem);
+            _serverSystems.Remove(_spawnDirectorSystem);
 
             foreach (var player in _model.Players.Models.Values.Where(p => !p.IsActive))
             {

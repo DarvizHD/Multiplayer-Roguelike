@@ -19,14 +19,14 @@ namespace Runtime.UI.Panels.HostLobbyPanel
             _view.BackButton.clicked += _model.OnBackButtonClickedInvoke;
             _view.StartGameButton.clicked += _model.OnStartGameButtonClickedInvoke;
 
-            _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChange += HandleChangeLobbyCode;
+            _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChanged += HandleChangeLobbyCode;
 
-            HandleChangeLobbyCode();
+            HandleChangeLobbyCode(_uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value);
         }
 
-        private void HandleChangeLobbyCode()
+        private void HandleChangeLobbyCode(string value)
         {
-            _view.LobbyCodeTextField.value = _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value;
+            _view.LobbyCodeTextField.value = value;
         }
 
         public void Disable()

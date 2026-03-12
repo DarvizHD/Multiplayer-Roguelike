@@ -1,4 +1,4 @@
-﻿using Backend.Navigation;
+using Backend.Navigation;
 using Backend.ServerSystems;
 using Backend.Session;
 using DotRecast.Core.Numerics;

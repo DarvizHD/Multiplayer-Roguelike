@@ -90,8 +90,6 @@ namespace Runtime
             AddSystems();
 
             CreateCamera(6);
-
-            SpawnNpc();
         }
 
         private void OnCharacterAdded(CharacterSharedModel characterSharedModel)
@@ -115,20 +113,6 @@ namespace Runtime
         public void Update(float deltaTime)
         {
             EcsWorld?.Update(deltaTime);
-        }
-
-        private void SpawnNpc()
-        {
-            if (!IsHost)
-            {
-                Debug.Log("I'm not host");
-
-                return;
-            }
-
-            var spawnNpcCommand = new SpawnNpcCommand(_playerSharedModel.Lobby.LobbyId.Value, _playerSharedModel.Nickname.Value, 10);
-
-            spawnNpcCommand.Write(_serverConnectionModel.PlayerPeer);
         }
 
         private void CreateCamera(ushort entityId)

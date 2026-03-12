@@ -7,7 +7,7 @@ namespace Shared.Properties
 {
     public class Property<T> : ISharedData
     {
-        public event Action OnChange;
+        public event Action<T> OnChanged;
 
         public string Id { get; }
 
@@ -22,7 +22,7 @@ namespace Shared.Properties
                 {
                     _value = value;
                     IsDirty = true;
-                    OnChange?.Invoke();
+                    OnChanged?.Invoke(value);
                 }
             }
         }

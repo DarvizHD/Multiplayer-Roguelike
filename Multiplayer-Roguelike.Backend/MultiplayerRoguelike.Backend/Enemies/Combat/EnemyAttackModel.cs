@@ -1,4 +1,4 @@
-﻿namespace Backend.Enemies.Combat
+namespace Backend.Enemies.Combat
 {
     public class EnemyAttackModel
     {
