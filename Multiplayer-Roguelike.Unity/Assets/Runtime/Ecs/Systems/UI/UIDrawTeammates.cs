@@ -16,18 +16,21 @@ namespace Runtime.Ecs.Systems.UI
 
         private readonly VisualTreeAsset _teammatePanelAsset;
         private readonly VisualElement _container;
+        private readonly VisualElement _root;
         private readonly Dictionary<ushort, ProgressBar> _panels = new();
 
         public UIDrawTeammates(UIHudView hudView)
         {
-            var panel = hudView.HudRoot.Q<VisualElement>("teammates-panel");
-            _container = panel.Q<VisualElement>("container");
+            _root = hudView.HudRoot.Q<VisualElement>("teammates-panel");
+            _container = _root.Q<VisualElement>("container");
             _teammatePanelAsset = hudView.TeammateAsset;
         }
 
         public override void Update(float deltaTime)
         {
             ComponentManager.Filter.Query(ref _buffer);
+
+            _root.style.display = _buffer.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
 
             for (var i = 0; i < _buffer.Count; i++)
             {
