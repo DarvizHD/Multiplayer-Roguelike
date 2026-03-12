@@ -1,10 +1,11 @@
-using Runtime.ECS.Components.Movement;
-using Runtime.ECS.Components.Network;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 using Runtime.Tools;
 using Shared.Commands.Player;
 
-namespace Runtime.ECS.Systems.Network
+namespace Runtime.Ecs.Systems.Player.Network
 {
     public class CharacterPositionSendSystem : BaseSystem
     {

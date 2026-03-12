@@ -1,7 +1,7 @@
 using System;
-using Runtime.ECS.Components;
+using Runtime.Ecs.Components;
 
-namespace Runtime.ECS.Core
+namespace Runtime.Ecs.Core
 {
     public class ComponentFilter
     {

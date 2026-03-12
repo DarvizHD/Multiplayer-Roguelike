@@ -1,7 +1,7 @@
-using Runtime.ECS.Components.Health;
+using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Sound;
-using Runtime.ECS.Core;
-using Runtime.ECS.Systems;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 using UnityEngine;
 
 namespace Runtime.Ecs.Systems.Sound

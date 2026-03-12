@@ -1,4 +1,4 @@
-namespace Runtime.ECS.Components.Tags
+namespace Runtime.Ecs.Components.Tags
 {
     public class SpawnedUnitTagComponent : IComponent
     {

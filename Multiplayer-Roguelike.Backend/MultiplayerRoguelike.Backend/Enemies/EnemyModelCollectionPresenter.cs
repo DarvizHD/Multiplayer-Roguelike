@@ -1,5 +1,4 @@
-﻿using Backend.ServerSystems;
-using Backend.Session;
+﻿using Backend.Session;
 using DotRecast.Core.Numerics;
 
 namespace Backend.Enemies
@@ -8,31 +7,23 @@ namespace Backend.Enemies
     {
         private readonly EnemyModelCollection _modelCollection;
         private readonly SessionModel _sessionModel;
-        private readonly ServerSystemCollection _serverSystems;
-        private readonly EnemyTargetSystem _targetSystem;
 
-        public EnemyModelCollectionPresenter(EnemyModelCollection modelCollection, SessionModel sessionModel, ServerSystemCollection serverSystems)
+        public EnemyModelCollectionPresenter(EnemyModelCollection modelCollection, SessionModel sessionModel)
         {
             _modelCollection = modelCollection;
             _sessionModel = sessionModel;
-            _serverSystems = serverSystems;
-            _targetSystem = new EnemyTargetSystem(sessionModel.Id, sessionModel);
         }
 
         public void Enable()
         {
             _modelCollection.OnAdded += HandleEnemyAdded;
             _modelCollection.OnRemoved += HandleEnemyRemoved;
-
-            _serverSystems.Add(_targetSystem);
         }
 
         public void Disable()
         {
             _modelCollection.OnAdded -= HandleEnemyAdded;
             _modelCollection.OnRemoved -= HandleEnemyRemoved;
-
-            _serverSystems.Remove(_targetSystem);
         }
 
         private void HandleEnemyAdded(EnemyModel enemy)

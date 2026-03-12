@@ -17,7 +17,7 @@ namespace Backend.Navigation
         public NavigationPresenter(WorldModel worldModel)
         {
             _worldModel = worldModel;
-            _navigationSystem = new NavigationSystem("navigation");
+            _navigationSystem = new NavigationSystem("navigation-system");
         }
 
         public void Enable()

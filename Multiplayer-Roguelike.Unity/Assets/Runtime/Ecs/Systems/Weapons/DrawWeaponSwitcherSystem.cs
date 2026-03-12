@@ -1,8 +1,8 @@
-using Runtime.ECS.Components.Battle.Weapon;
-using Runtime.ECS.Core;
-using Runtime.ECS.Systems;
+using Runtime.Ecs.Components.Battle.Weapon;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 
-namespace Runtime.Ecs.Systems
+namespace Runtime.Ecs.Systems.Weapons
 {
     public class DrawWeaponSwitcherSystem : BaseSystem
     {

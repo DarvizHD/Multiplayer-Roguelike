@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Runtime.ECS.Components.Spawn
+namespace Runtime.Ecs.Components.Spawn
 {
     public class SpawnerComponent : IComponent
     {

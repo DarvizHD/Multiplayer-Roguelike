@@ -1,8 +1,9 @@
-using Runtime.ECS.Components.Movement;
-using Runtime.ECS.Components.Movement.Freeze;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Components.Movement.Freeze;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 
-namespace Runtime.ECS.Systems.Movement.Freeze
+namespace Runtime.Ecs.Systems.Movement.Freeze
 {
     public class FreezeMovementSystem : BaseSystem
     {

@@ -1,4 +1,4 @@
-namespace Runtime.ECS.Components.Battle
+namespace Runtime.Ecs.Components.Battle
 {
     public class AttackCooldownComponent : IComponent
     {

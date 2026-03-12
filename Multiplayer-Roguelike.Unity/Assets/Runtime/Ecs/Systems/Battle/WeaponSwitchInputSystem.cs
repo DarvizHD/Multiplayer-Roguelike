@@ -1,9 +1,10 @@
-using Runtime.ECS.Components.Battle.Weapon;
-using Runtime.ECS.Components.Network;
-using Runtime.ECS.Components.Player;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components.Battle.Weapon;
+using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Components.Player;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 
-namespace Runtime.ECS.Systems.Battle
+namespace Runtime.Ecs.Systems.Battle
 {
     public class WeaponSwitchInputSystem : BaseSystem
     {

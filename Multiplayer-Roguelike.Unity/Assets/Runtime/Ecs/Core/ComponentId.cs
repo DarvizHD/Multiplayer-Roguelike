@@ -1,6 +1,6 @@
-using Runtime.ECS.Components;
+using Runtime.Ecs.Components;
 
-namespace Runtime.ECS.Core
+namespace Runtime.Ecs.Core
 {
     public static class ComponentId<T> where T : IComponent
     {

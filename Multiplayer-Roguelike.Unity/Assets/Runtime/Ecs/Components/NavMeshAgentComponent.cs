@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Runtime.ECS.Components
+namespace Runtime.Ecs.Components
 {
     public class NavMeshAgentComponent : IComponent
     {

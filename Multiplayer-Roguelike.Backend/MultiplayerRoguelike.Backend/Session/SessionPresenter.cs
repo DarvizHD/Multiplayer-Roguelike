@@ -1,6 +1,8 @@
 using System.Linq;
 using Backend.Enemies;
+using Backend.Enemies.Combat;
 using Backend.Player;
+using Backend.ServerSystems;
 using Shared.Models.Player;
 
 namespace Backend.Session
@@ -9,15 +11,21 @@ namespace Backend.Session
     {
         private readonly SessionModel _model;
         private readonly WorldModel _world;
+        private readonly ServerSystemCollection _serverSystems;
 
         private readonly EnemyModelCollectionPresenter _enemyModelCollectionPresenter;
+        private readonly EnemyTargetSystem _targetSystem;
+        private readonly EnemyAttackSystem _attackSystem;
 
         public SessionPresenter(SessionModel model, WorldModel worldModel)
         {
             _model = model;
             _world = worldModel;
+            _serverSystems = worldModel.ServerSystems;
 
-            _enemyModelCollectionPresenter = new EnemyModelCollectionPresenter(model.Enemies, model, worldModel.ServerSystems);
+            _enemyModelCollectionPresenter = new EnemyModelCollectionPresenter(model.Enemies, model);
+            _targetSystem = new EnemyTargetSystem($"{_model.Id}: enemy-target-system", _model);
+            _attackSystem = new EnemyAttackSystem($"{_model.Id}: enemy-attack-system", _model);
         }
 
         public void Enable()
@@ -26,6 +34,9 @@ namespace Backend.Session
             _model.Players.OnRemoved += OnPlayerRemoved;
 
             _enemyModelCollectionPresenter.Enable();
+
+            _serverSystems.Add(_targetSystem);
+            _serverSystems.Add(_attackSystem);
         }
 
         public void Disable()
@@ -34,6 +45,9 @@ namespace Backend.Session
             _model.Players.OnRemoved -= OnPlayerRemoved;
 
             _enemyModelCollectionPresenter.Disable();
+
+            _serverSystems.Remove(_targetSystem);
+            _serverSystems.Remove(_attackSystem);
 
             foreach (var player in _model.Players.Models.Values.Where(p => !p.IsActive))
             {

@@ -1,9 +1,10 @@
-using Runtime.ECS.Components;
-using Runtime.ECS.Components.Network;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components;
+using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 using Shared.Commands.Player;
 
-namespace Runtime.ECS.Systems.Battle
+namespace Runtime.Ecs.Systems.Battle
 {
     public class CharacterAttackSystem : BaseSystem
     {

@@ -1,11 +1,12 @@
-using Runtime.ECS.Components;
-using Runtime.ECS.Components.Health;
-using Runtime.ECS.Components.Network;
-using Runtime.ECS.Components.Tags;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Components;
+using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Components.Tags;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Battle
+namespace Runtime.Ecs.Systems.Battle
 {
     public class AIHealthSync : BaseSystem
     {

@@ -1,10 +1,10 @@
 using Runtime.Ecs.Components.Battle.Weapon;
-using Runtime.ECS.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Sound;
-using Runtime.ECS.Core;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
 using UnityEngine;
 
-namespace Runtime.ECS.Systems.Battle.RangeAttack
+namespace Runtime.Ecs.Systems.Battle.RangeAttack
 {
     public class ReloadSystem : BaseSystem
     {

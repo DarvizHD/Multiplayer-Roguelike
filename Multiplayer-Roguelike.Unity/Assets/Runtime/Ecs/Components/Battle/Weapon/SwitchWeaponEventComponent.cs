@@ -1,4 +1,4 @@
-namespace Runtime.ECS.Components.Battle.Weapon
+namespace Runtime.Ecs.Components.Battle.Weapon
 {
     public class SwitchWeaponEventComponent : IComponent
     {

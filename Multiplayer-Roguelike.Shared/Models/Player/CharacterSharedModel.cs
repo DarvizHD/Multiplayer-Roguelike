@@ -6,7 +6,7 @@ namespace Shared.Models.Player
 {
     public class CharacterSharedModel : SharedModel
     {
-        public readonly Property<float> Health = new Property<float>("health", 0f);
+        public readonly Property<float> Health = new Property<float>("health", 100f);
         public readonly Property<Vector3> Position = new Property<Vector3>("position", new Vector3(0f, 0f, 0f));
         public readonly Property<Vector3> Direction = new Property<Vector3>("direction", new Vector3(0f, 0f, 0f));
         public readonly Property<float> Rotation = new Property<float>("rotation", 0f);

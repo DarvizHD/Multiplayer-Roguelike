@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Runtime.ECS.Components
+namespace Runtime.Ecs.Components
 {
     public class RigidbodyComponent : IComponent
     {

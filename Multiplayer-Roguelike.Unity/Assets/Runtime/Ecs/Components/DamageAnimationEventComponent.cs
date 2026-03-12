@@ -1,4 +1,4 @@
-namespace Runtime.ECS.Components
+namespace Runtime.Ecs.Components
 {
     public class DamageAnimationEventComponent : IComponent
     {
