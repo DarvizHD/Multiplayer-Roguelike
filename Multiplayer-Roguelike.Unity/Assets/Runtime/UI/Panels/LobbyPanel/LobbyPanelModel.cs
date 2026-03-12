@@ -1,10 +1,10 @@
 using System;
 
-namespace Runtime.UI.Panels.HostLobbyPanel
+namespace Runtime.UI.Panels.LobbyPanel
 {
-    public class HostLobbyPanelModel : IPanelModel
+    public class LobbyPanelModel : IPanelModel
     {
-        public string ViewId => "HostLobbyPanel";
+        public string ViewId => "LobbyPanel";
 
         public string LobbyId;
 
