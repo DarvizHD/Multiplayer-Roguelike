@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Backend.Session;
 using DotRecast.Detour;
 using DotRecast.Detour.Io;

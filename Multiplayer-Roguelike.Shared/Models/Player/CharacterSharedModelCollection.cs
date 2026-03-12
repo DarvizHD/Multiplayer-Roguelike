@@ -1,4 +1,4 @@
-﻿using Shared.Models.Common;
+using Shared.Models.Common;
 
 namespace Shared.Models.Player
 {

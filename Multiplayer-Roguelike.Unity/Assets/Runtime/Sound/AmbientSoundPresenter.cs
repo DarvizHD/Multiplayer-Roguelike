@@ -16,20 +16,20 @@ namespace Runtime.Sound
 
         public void Enable()
         {
-            Change();
+            HandelIsRunChanged(_gameSessionSharedModel.IsRun.Value);
 
-            _gameSessionSharedModel.IsRun.OnChange += Change;
+            _gameSessionSharedModel.IsRun.OnChanged += HandelIsRunChanged;
         }
 
         public void Disable()
         {
             _source.Stop();
-            _gameSessionSharedModel.IsRun.OnChange -= Change;
+            _gameSessionSharedModel.IsRun.OnChanged -= HandelIsRunChanged;
         }
 
-        private void Change()
+        private void HandelIsRunChanged(bool value)
         {
-            _source.clip = Resources.Load<AudioClip>(_gameSessionSharedModel.IsRun.Value
+            _source.clip = Resources.Load<AudioClip>(value
                 ? AudioResourcesConstants.Ambient.GameplayAmbientPath
                 : AudioResourcesConstants.Ambient.MenuAmbientPath);
 
