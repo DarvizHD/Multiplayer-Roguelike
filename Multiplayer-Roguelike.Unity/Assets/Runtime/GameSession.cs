@@ -7,6 +7,7 @@ using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Movement.Freeze;
 using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Components.Particles;
 using Runtime.Ecs.Components.Player;
 using Runtime.Ecs.Components.Sound;
 using Runtime.Ecs.Components.Spawn;
@@ -19,6 +20,7 @@ using Runtime.Ecs.Systems.Battle.MeleeAttack;
 using Runtime.Ecs.Systems.Battle.RangeAttack;
 using Runtime.Ecs.Systems.CameraFocus;
 using Runtime.Ecs.Systems.Movement;
+using Runtime.ECS.Systems.Particles;
 using Runtime.Ecs.Systems.Player;
 using Runtime.Ecs.Systems.Player.Network;
 using Runtime.Ecs.Systems.Player.Rotation;
@@ -28,6 +30,7 @@ using Runtime.Ecs.Systems.Weapons;
 using Runtime.ServerInteraction;
 using Runtime.Sound;
 using Runtime.Tools;
+using Runtime.UI;
 using Runtime.UI.HUD;
 using Shared.Commands;
 using Shared.Models.Enemy;
@@ -48,17 +51,19 @@ namespace Runtime
         private AudioClip[] _zombieVoiceClips;
 
         private PlayerControls _playerControls;
+        private WorldViewDescription _worldViewDescription;
         private readonly UIHudView _hudView;
 
         private bool IsHost => _playerSharedModel.Lobby.OwnerId.Value == _playerSharedModel.Nickname.Value;
 
         public GameSession(GameSessionSharedModel gameSessionSharedModel, PlayerSharedModel playerSharedModel,
-            ServerConnectionModel serverConnectionModel, UIHudView hudView)
+            ServerConnectionModel serverConnectionModel, UIHudView hudView, WorldViewDescription worldViewDescription)
         {
             _gameSessionSharedModel = gameSessionSharedModel;
             _playerSharedModel = playerSharedModel;
             _serverConnectionModel = serverConnectionModel;
             _hudView = hudView;
+            _worldViewDescription = worldViewDescription;
         }
 
         public void Enable()
@@ -172,6 +177,7 @@ namespace Runtime
             EcsWorld.AddEntityComponent(entityId, new WeaponSlotsComponent(new[] { meleeId, rangedId }));
             EcsWorld.AddEntityComponent(entityId, new CurrentWeaponComponent(meleeId));
 
+            EcsWorld.AddEntityComponent(entityId, new ShootParticlePointComponent(provider.ShootPoint));
             EcsWorld.AddEntityComponent(entityId, new HitSoundComponent(playerHitClip));
 
             if (controllable)
@@ -291,6 +297,11 @@ namespace Runtime
             EcsWorld.RegisterComponent<PlaySoundEventComponent>();
             EcsWorld.RegisterComponent<HitSoundComponent>();
             EcsWorld.RegisterComponent<ZombieVoiceComponent>();
+
+            EcsWorld.RegisterComponent<ShootParticlePointComponent>();
+            EcsWorld.RegisterComponent<DamageParticleEventComponent>();
+            EcsWorld.RegisterComponent<DeathParticleEventComponent>();
+            EcsWorld.RegisterComponent<ShootParticleEventComponent>();
         }
 
         private void AddSystems()
@@ -341,6 +352,9 @@ namespace Runtime
             EcsWorld.AddSystem<AIHealthSync>();
             EcsWorld.AddSystem<CharacterHealthSyncSystem>();
             EcsWorld.AddSystem<AIDeathSystem>();
+            EcsWorld.AddSystem<ShootParticleSystem>(new ShootParticleSystem(new PinnedParticlePool(_worldViewDescription.ShootParticle)));
+            EcsWorld.AddSystem<DamageParticleSystem>(new DamageParticleSystem(new PositionalParticlePool(_worldViewDescription.DamageParticle)));
+            EcsWorld.AddSystem<DeathParticleSystem>(new DeathParticleSystem(new PositionalParticlePool(_worldViewDescription.DeathParticle)));
             EcsWorld.AddSystem<DamageAnimationSystem>();
 
             EcsWorld.AddSystem<CharacterAnimationSyncSystem>();

@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: WorldViewDescription
   m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.UI.WorldViewDescription
   UI: {fileID: 11400000, guid: 7d9b1413de043a24d8263fd4d94aa293, type: 2}
+  DeathParticle: {fileID: -8372144124649282982, guid: 421c8dac3ab6c3b40b7548da110185e8, type: 3}
+  ShootParticle: {fileID: 1771266317456120760, guid: c5946a66b3eec2d479e20b7315b06bf8, type: 3}
+  DamageParticle: {fileID: 6257281512815012598, guid: b85ef8139fbcfa746b2954a470627418, type: 3}
