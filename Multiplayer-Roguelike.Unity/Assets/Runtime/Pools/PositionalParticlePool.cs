@@ -1,25 +1,28 @@
 using UnityEngine;
 
-public class PositionalParticlePool : Pool<Particle>
+namespace Runtime.Pools
 {
-    private readonly Transform _parent;
-
-    public PositionalParticlePool(Particle prefab) : base(prefab)
+    public class PositionalParticlePool : Pool<Particle>
     {
-        _parent = new GameObject($"{prefab.name}_Pool").transform;
-    }
+        private readonly Transform _parent;
 
-    public Particle Get(Vector3 position)
-    {
-        var particle = Get();
+        public PositionalParticlePool(Particle prefab) : base(prefab)
+        {
+            _parent = new GameObject($"{prefab.name}_Pool").transform;
+        }
 
-        particle.transform.position = position;
+        public Particle Get(Vector3 position)
+        {
+            var particle = Get();
 
-        return particle;
-    }
+            particle.transform.position = position;
 
-    protected override Particle CreateItem()
-    {
-        return GameObject.Instantiate(Prefab, _parent);
+            return particle;
+        }
+
+        protected override Particle CreateItem()
+        {
+            return Object.Instantiate(Prefab, _parent);
+        }
     }
 }

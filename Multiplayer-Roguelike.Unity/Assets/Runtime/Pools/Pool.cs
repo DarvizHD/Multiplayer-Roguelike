@@ -1,52 +1,55 @@
 using System.Collections.Generic;
 
-public abstract class Pool<T> where T : IPoolItem
+namespace Runtime.Pools
 {
-    protected T Prefab { get; }
-
-    private readonly List<T> _pool = new List<T>();
-
-    private readonly List<T> _inProgress = new List<T>();
-
-    public Pool(T prefab)
+    public abstract class Pool<T> where T : IPoolItem
     {
-        Prefab = prefab;
-    }
+        protected T Prefab { get; }
 
-    public T Get()
-    {
-        T item;
+        private readonly List<T> _pool = new List<T>();
 
-        if (_pool.Count > 0)
+        private readonly List<T> _inProgress = new List<T>();
+
+        public Pool(T prefab)
         {
-            item = _pool[0];
-            _pool.RemoveAt(0);
-        }
-        else
-        {
-            item = CreateItem();
+            Prefab = prefab;
         }
 
-        _inProgress.Add(item);
+        public T Get()
+        {
+            T item;
 
-        item.OnComplete += ReturnToPool;
-        item.Enable();
+            if (_pool.Count > 0)
+            {
+                item = _pool[0];
+                _pool.RemoveAt(0);
+            }
+            else
+            {
+                item = CreateItem();
+            }
 
-        return item;
-    }
+            _inProgress.Add(item);
 
-    protected abstract T CreateItem();
+            item.OnComplete += ReturnToPool;
+            item.Enable();
 
-    private void ReturnToPool(IPoolItem item)
-    {
-        var typedItem = (T) item;
+            return item;
+        }
 
-        typedItem.Disable();
+        protected abstract T CreateItem();
 
-        _inProgress.Remove(typedItem);
+        private void ReturnToPool(IPoolItem item)
+        {
+            var typedItem = (T) item;
 
-        _pool.Add(typedItem);
+            typedItem.Disable();
 
-        typedItem.OnComplete -= ReturnToPool;
+            _inProgress.Remove(typedItem);
+
+            _pool.Add(typedItem);
+
+            typedItem.OnComplete -= ReturnToPool;
+        }
     }
 }

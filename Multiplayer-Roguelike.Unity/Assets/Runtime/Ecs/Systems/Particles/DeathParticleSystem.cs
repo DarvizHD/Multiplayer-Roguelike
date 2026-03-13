@@ -2,8 +2,9 @@ using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Particles;
 using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems.Core;
+using Runtime.Pools;
 
-namespace Runtime.ECS.Systems.Particles
+namespace Runtime.Ecs.Systems.Particles
 {
     public class DeathParticleSystem : BaseSystem
     {

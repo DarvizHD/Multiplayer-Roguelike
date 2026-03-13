@@ -1,9 +1,9 @@
 using Runtime.ServerInteraction;
-using Runtime.UI.Panels.JoinLobbyPanel;
-using Runtime.UI.Panels.LobbyPanel;
-using Runtime.UI.Panels.LoginPanel;
-using Runtime.UI.Panels.StartMenuPanel;
-using Runtime.UI.Panels.UsersPanel;
+using Runtime.UI.Menu.Panels.JoinLobbyPanel;
+using Runtime.UI.Menu.Panels.LobbyPanel;
+using Runtime.UI.Menu.Panels.LoginPanel;
+using Runtime.UI.Menu.Panels.StartMenuPanel;
+using Runtime.UI.Menu.Panels.UsersPanel;
 using Shared.Models.GameSession;
 using Shared.Models.Player;
 

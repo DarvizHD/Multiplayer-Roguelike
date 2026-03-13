@@ -1,10 +1,13 @@
 using System;
 
-public interface IPoolItem
+namespace Runtime.Pools
 {
-    event Action<IPoolItem> OnComplete;
+    public interface IPoolItem
+    {
+        event Action<IPoolItem> OnComplete;
 
-    void Enable();
+        void Enable();
 
-    void Disable();
+        void Disable();
+    }
 }

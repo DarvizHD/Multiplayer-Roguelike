@@ -1,24 +1,27 @@
 using UnityEngine;
 
-public class PinnedParticlePool : Pool<Particle>
+namespace Runtime.Pools
 {
-    public PinnedParticlePool(Particle prefab) : base(prefab)
+    public class PinnedParticlePool : Pool<Particle>
     {
-    }
+        public PinnedParticlePool(Particle prefab) : base(prefab)
+        {
+        }
 
-    public Particle Get(Transform parent)
-    {
-        var particle = Get();
+        public Particle Get(Transform parent)
+        {
+            var particle = Get();
 
-        particle.transform.parent = parent;
-        particle.transform.localPosition = Vector3.zero;
-        particle.transform.localRotation = Quaternion.identity;
+            particle.transform.parent = parent;
+            particle.transform.localPosition = Vector3.zero;
+            particle.transform.localRotation = Quaternion.identity;
 
-        return particle;
-    }
+            return particle;
+        }
 
-    protected override Particle CreateItem()
-    {
-        return GameObject.Instantiate(Prefab);
+        protected override Particle CreateItem()
+        {
+            return GameObject.Instantiate(Prefab);
+        }
     }
 }
