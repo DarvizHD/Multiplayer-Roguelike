@@ -1,5 +1,6 @@
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Components.Particles;
 using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems.Core;
 
@@ -22,6 +23,7 @@ namespace Runtime.Ecs.Systems.Battle
 
                 ComponentManager.RemoveComponent<AliveTagComponent>(entityId);
                 ComponentManager.RemoveComponent<DeathEventComponent>(entityId);
+                ComponentManager.AddComponent<DeathParticleEventComponent>(entityId, new DeathParticleEventComponent());
                 ComponentManager.AddComponent(entityId, new DeathTagComponent());
 
                 ragdollComponent.RagdollProvider.Enable = true;

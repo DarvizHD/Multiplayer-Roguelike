@@ -1,4 +1,4 @@
-namespace Backend.Constants
+namespace Shared.Constants
 {
     public static class WeaponConstants
     {
