@@ -1,6 +1,7 @@
 using System;
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Battle.Weapon;
+using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems.Core;
 using Runtime.UI.HUD;
@@ -12,7 +13,7 @@ namespace Runtime.Ecs.Systems.UI
 {
     public class UIDrawCrosshairSystem : BaseSystem
     {
-        private QueryBuffer<CursorWorldPositionComponent, WeaponSlotsComponent, CurrentWeaponComponent> _buffer = new();
+        private QueryBuffer<CursorWorldPositionComponent, WeaponSlotsComponent, CurrentWeaponComponent, LocalControllableTag> _buffer = new();
 
         private readonly UIHudView _hudView;
         private VisualElement _crosshair;
