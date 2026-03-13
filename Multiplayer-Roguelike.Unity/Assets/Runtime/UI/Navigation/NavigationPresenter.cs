@@ -1,7 +1,7 @@
 using Runtime.UI.Menu;
 using Runtime.UI.Navigation.Screens;
-using Runtime.UI.Panels.HostLobbyPanel;
 using Runtime.UI.Panels.JoinLobbyPanel;
+using Runtime.UI.Panels.LobbyPanel;
 using Runtime.UI.Panels.LoginPanel;
 using Runtime.UI.Panels.StartMenuPanel;
 using Runtime.UI.Panels.UsersPanel;
@@ -24,8 +24,7 @@ namespace Runtime.UI.Navigation
 
             _router = new Router(audioService);
 
-            var loginView = new LoginPanelView(worldViewDescription.UI.Get(uiCoreModel.LoginPanelModel.ViewId).Asset,
-                parentRoot);
+            var loginView = new LoginPanelView(worldViewDescription.UI.Get(uiCoreModel.LoginPanelModel.ViewId).Asset, parentRoot);
             var loginPresenter = new LoginPanelPresenter(uiCoreModel.LoginPanelModel, loginView, uiCoreModel);
             _router.Register(ScreenIds.Login, new LoginScreenPresenter(_router, loginPresenter, uiCoreModel.LoginPanelModel));
 
@@ -33,11 +32,11 @@ namespace Runtime.UI.Navigation
             var startMenuPresenter = new StartMenuPanelPresenter(uiCoreModel.StartMenuPanelModel, startMenuView);
             _router.Register(ScreenIds.StartMenu, new StartMenuScreen(_router, startMenuPresenter, uiCoreModel.StartMenuPanelModel, uiCoreModel, audioService));
 
-            var hostLobbyView = new HostLobbyPanelView(worldViewDescription.UI.Get(uiCoreModel.HostLobbyPanelModel.ViewId).Asset, parentRoot);
-            var hostLobbyPresenter = new HostLobbyPanelPresenter(uiCoreModel.HostLobbyPanelModel, hostLobbyView, uiCoreModel);
+            var lobbyView = new LobbyPanelView(worldViewDescription.UI.Get(uiCoreModel.LobbyPanelModel.ViewId).Asset, parentRoot);
+            var lobbyPresenter = new LobbyPanelPresenter(uiCoreModel.LobbyPanelModel, lobbyView, uiCoreModel);
             var usersView = new UsersPanelView(worldViewDescription.UI.Get(uiCoreModel.UsersPanelModel.ViewId).Asset, parentRoot);
             var usersPresenter = new UsersPanelPresenter(usersView, worldViewDescription, uiCoreModel, audioService);
-            _router.Register(ScreenIds.HostLobby, new HostLobbyScreen(_router, hostLobbyPresenter, usersPresenter, uiCoreModel.HostLobbyPanelModel, uiCoreModel, audioService));
+            _router.Register(ScreenIds.Lobby, new LobbyScreen(_router, lobbyPresenter, usersPresenter, uiCoreModel.LobbyPanelModel, uiCoreModel, audioService));
 
             var joinLobbyView = new JoinLobbyPanelView(worldViewDescription.UI.Get(uiCoreModel.JoinLobbyPanelModel.ViewId).Asset, parentRoot);
             var joinLobbyPresenter = new JoinLobbyPanelPresenter(uiCoreModel.JoinLobbyPanelModel, joinLobbyView, uiCoreModel);
@@ -49,15 +48,20 @@ namespace Runtime.UI.Navigation
             _document.rootVisualElement.style.display = DisplayStyle.Flex;
             _router.NavigateSilent(ScreenIds.Login);
 
-            _uiCoreModel.GameSessionSharedModel.IsRun.OnChange += Disable;
+            _uiCoreModel.GameSessionSharedModel.IsRun.OnChanged += HandleIsRunChanged;
         }
 
         public void Disable()
         {
-            _uiCoreModel.GameSessionSharedModel.IsRun.OnChange -= Disable;
+            _uiCoreModel.GameSessionSharedModel.IsRun.OnChanged -= HandleIsRunChanged;
 
             _document.rootVisualElement.style.display = DisplayStyle.None;
             _router.Clear();
+        }
+
+        private void HandleIsRunChanged(bool value)
+        {
+            Disable();
         }
     }
 }

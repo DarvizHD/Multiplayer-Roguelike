@@ -1,9 +1,8 @@
 using System;
 using Backend.CommandExecutors.Common;
-using Backend.Constants;
 using ENet;
-using Shared.Commands;
 using Shared.Commands.Player;
+using Shared.Constants;
 
 namespace Backend.CommandExecutors.Player
 {

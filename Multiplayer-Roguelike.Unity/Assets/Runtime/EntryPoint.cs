@@ -5,8 +5,8 @@ using Runtime.Sound;
 using Runtime.UI;
 using Runtime.UI.HUD;
 using Runtime.UI.Navigation;
+using Runtime.UI.Parallax;
 using Shared.Commands.Player;
-using Shared.Models;
 using Shared.Models.GameSession;
 using Shared.Models.Player;
 using Shared.Protocol;
@@ -34,6 +34,10 @@ namespace Runtime
         private ServerConnectionModel _serverConnectionModel;
         private ServerConnectionPresenter _serverConnectionPresenter;
 
+        private ParallaxPresenter _parallaxPresenter;
+        private NavigationPresenter _navigationPresenter;
+        private AmbientSoundPresenter _ambientSoundPresenter;
+
         private async void Start()
         {
             Application.runInBackground = true;
@@ -59,19 +63,23 @@ namespace Runtime
 
             var uiAudioService = new UIAudioService(audioSource, buttonClickClip, joinToLobbyClip);
 
-            var navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, _menuDocument, uiAudioService);
-            navigationPresenter.Enable();
+            _navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, _menuDocument, uiAudioService);
+            _navigationPresenter.Enable();
 
-            var ambientSoundPresenter = new AmbientSoundPresenter(_ambientSoundSource, _gameSessionSharedModel);
-            ambientSoundPresenter.Enable();
+            var parallaxView = new ParallaxView(_menuDocument.rootVisualElement);
+            _parallaxPresenter = new ParallaxPresenter(parallaxView);
+            _parallaxPresenter.Enable();
 
-            _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel, _uiHudView);
+            _ambientSoundPresenter = new AmbientSoundPresenter(_ambientSoundSource, _gameSessionSharedModel);
+            _ambientSoundPresenter.Enable();
+
+            _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel, _uiHudView, _worldViewDescription);
             _gameSession.Enable();
 
             _serverConnectionModel.WorldPacketReceived += OnWorldPacketReceived;
             _serverConnectionModel.PlayerPacketReceived += OnPlayerPacketReceived;
 
-            _gameSessionSharedModel.IsRun.OnChange += RunSession;
+            _gameSessionSharedModel.IsRun.OnChanged += RunSession;
 
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
@@ -116,8 +124,11 @@ namespace Runtime
             _playerSharedModel.Read(protocol);
         }
 
-        private void RunSession()
+        private void RunSession(bool value)
         {
+            _parallaxPresenter.Disable();
+            _navigationPresenter.Disable();
+
             _gameSession.Run();
         }
     }

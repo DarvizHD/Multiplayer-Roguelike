@@ -12,6 +12,7 @@ public class PinnedParticlePool : Pool<Particle>
 
         particle.transform.parent = parent;
         particle.transform.localPosition = Vector3.zero;
+        particle.transform.localRotation = Quaternion.identity;
 
         return particle;
     }

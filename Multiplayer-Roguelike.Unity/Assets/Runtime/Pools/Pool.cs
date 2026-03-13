@@ -8,12 +8,12 @@ public abstract class Pool<T> where T : IPoolItem
 
     private readonly List<T> _inProgress = new List<T>();
 
-    protected Pool(T prefab)
+    public Pool(T prefab)
     {
         Prefab = prefab;
     }
 
-    protected T Get()
+    public T Get()
     {
         T item;
 
@@ -39,7 +39,7 @@ public abstract class Pool<T> where T : IPoolItem
 
     private void ReturnToPool(IPoolItem item)
     {
-        var typedItem = (T)item;
+        var typedItem = (T) item;
 
         typedItem.Disable();
 

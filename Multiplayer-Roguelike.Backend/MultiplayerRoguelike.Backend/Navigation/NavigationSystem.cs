@@ -1,4 +1,4 @@
-﻿using Backend.ServerSystems;
+using Backend.ServerSystems;
 using Backend.Session;
 using Shared.Primitives;
 

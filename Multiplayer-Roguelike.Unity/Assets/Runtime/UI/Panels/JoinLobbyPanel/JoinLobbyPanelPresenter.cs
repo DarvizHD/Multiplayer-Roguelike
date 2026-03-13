@@ -30,7 +30,7 @@ namespace Runtime.UI.Panels.JoinLobbyPanel
         {
             _view.BackButton.clicked -= _model.OnBackButtonClickedInvoke;
             _view.JoinButton.clicked -= HandleJoinButtonClick;
-            _view.ParentRoot.Remove(_view.Root);
+            _view.Root.RemoveFromHierarchy();
         }
     }
 }

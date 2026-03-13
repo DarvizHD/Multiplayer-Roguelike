@@ -20,19 +20,19 @@ namespace Runtime.UI.Panels.LoginPanel
             _view.ParentRoot.Add(_view.Root);
             _view.ConfirmButton.clicked += OnConfirmButtonClicked;
 
-            _uiCoreModel.PlayerSharedModel.Nickname.OnChange += OnNicknameChanged;
+            _uiCoreModel.PlayerSharedModel.Nickname.OnChanged += OnNicknameChanged;
         }
 
-        private void OnNicknameChanged()
+        private void OnNicknameChanged(string value)
         {
-            _model.SetUsername(_uiCoreModel.PlayerSharedModel.Nickname.Value);
+            _model.SetUsername(value);
             _model.Confirm();
         }
 
         public void Disable()
         {
             _view.ConfirmButton.clicked -= OnConfirmButtonClicked;
-            _view.ParentRoot.Remove(_view.Root);
+            _view.Root.RemoveFromHierarchy();
         }
 
         private void OnConfirmButtonClicked()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Runtime.UI
 {
@@ -6,5 +7,9 @@ namespace Runtime.UI
     public class WorldViewDescription : ScriptableObject
     {
         public UIViewDescription UI;
+
+        public Particle DeathParticle;
+        public Particle ShootParticle;
+        public Particle DamageParticle;
     }
 }

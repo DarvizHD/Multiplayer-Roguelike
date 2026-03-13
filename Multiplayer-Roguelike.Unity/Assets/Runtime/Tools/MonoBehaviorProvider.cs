@@ -13,5 +13,6 @@ namespace Runtime.Tools
         [field: SerializeField] public WeaponProvider WeaponProvider { get; private set; }
         [field: SerializeField] public GameObject SfxContainer { get; private set; }
         [field: SerializeField] public AudioSource LoopAudioSource { get; private set; }
+        [field: SerializeField] public Transform ShootPoint { get; private set; }
     }
 }

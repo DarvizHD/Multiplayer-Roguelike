@@ -4,6 +4,7 @@ using Runtime.Ecs.Components.Battle.Weapon;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Components.Particles;
 using Runtime.Ecs.Components.Sound;
 using Runtime.Ecs.Components.Tags;
 using Runtime.Ecs.Core;
@@ -66,6 +67,7 @@ namespace Runtime.Ecs.Systems.Battle.RangeAttack
                     continue;
                 }
 
+                ComponentManager.AddComponent(entityId, new ShootParticleEventComponent());
                 ComponentManager.AddComponent(entityId, new AttackEventComponent(entityId, target.Value));
                 ammo.Current--;
                 cooldown.CurrentCooldown = cooldown.Cooldown;

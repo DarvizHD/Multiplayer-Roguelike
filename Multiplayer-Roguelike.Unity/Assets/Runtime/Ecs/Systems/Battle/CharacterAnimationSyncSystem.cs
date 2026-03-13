@@ -1,7 +1,9 @@
 using Runtime.Ecs.Components;
 using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Components.Particles;
 using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems.Core;
+using Shared.Constants;
 
 namespace Runtime.Ecs.Systems.Battle
 {
@@ -23,8 +25,26 @@ namespace Runtime.Ecs.Systems.Battle
 
                 if (hasDifferent)
                 {
+                    var evt = characterNetworkSyncComponent.CharacterSharedModel.EventId.Value;
+
+                    var isPistolEvent =
+                        evt.Contains(WeaponConstants.Events[characterNetworkSyncComponent.CharacterSharedModel.EquippedWeaponSlotId.Value]);
+
+                    if (isPistolEvent)
+                    {
+                        ComponentManager.AddComponent(entityId, new ShootParticleEventComponent());
+                    }
+
                     characterNetworkEventComponent.EventId = characterNetworkSyncComponent.CharacterSharedModel.EventId.Value;
-                    ComponentManager.AddComponent(entityId, new AttackAnimationEventComponent());
+
+                    if (characterNetworkSyncComponent.CharacterSharedModel.EventId.Value.Contains("damage"))
+                    {
+                        ComponentManager.AddComponent(entityId, new DamageAnimationEventComponent());
+                    }
+                    else
+                    {
+                        ComponentManager.AddComponent(entityId, new AttackAnimationEventComponent());
+                    }
                 }
             }
         }
