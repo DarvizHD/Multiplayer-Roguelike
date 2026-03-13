@@ -4,8 +4,9 @@ using Runtime.ServerInteraction;
 using Runtime.Sound;
 using Runtime.UI;
 using Runtime.UI.HUD;
-using Runtime.UI.Navigation;
-using Runtime.UI.Parallax;
+using Runtime.UI.Menu.Navigation;
+using Runtime.UI.Menu.Parallax;
+using Runtime.ViewDescriptions;
 using Shared.Commands.Player;
 using Shared.Models.GameSession;
 using Shared.Models.Player;
@@ -13,7 +14,7 @@ using Shared.Protocol;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Runtime
+namespace Runtime.Core
 {
     public class EntryPoint : MonoBehaviour
     {
@@ -21,6 +22,7 @@ namespace Runtime
         [SerializeField] private UIDocument _menuDocument;
         [SerializeField] private UIHudView _uiHudView;
         [SerializeField] private AudioSource _ambientSoundSource;
+        [SerializeField] private Camera _dustRenderCamera;
 
         private readonly GameSystemCollection _gameFixedSystemCollection = new();
 
@@ -34,9 +36,12 @@ namespace Runtime
         private ServerConnectionModel _serverConnectionModel;
         private ServerConnectionPresenter _serverConnectionPresenter;
 
-        private ParallaxPresenter _parallaxPresenter;
-        private NavigationPresenter _navigationPresenter;
+        private Router _router;
+        private StartMenuPresenter _startMenuPresenter;
+
         private AmbientSoundPresenter _ambientSoundPresenter;
+        private ParallaxPresenter _parallaxPresenter;
+        private DustParticlePresenter _dustParticlePresenter;
 
         private async void Start()
         {
@@ -63,12 +68,17 @@ namespace Runtime
 
             var uiAudioService = new UIAudioService(audioSource, buttonClickClip, joinToLobbyClip);
 
-            _navigationPresenter = new NavigationPresenter(_uiCoreModel, _worldViewDescription, _menuDocument, uiAudioService);
-            _navigationPresenter.Enable();
+            _router = new Router(uiAudioService);
+            _startMenuPresenter = new StartMenuPresenter(_router, _uiCoreModel, _worldViewDescription, _menuDocument, uiAudioService);
+            _startMenuPresenter.Enable();
+            _router.NavigateTo(ScreenIds.Login);
 
-            var parallaxView = new ParallaxView(_menuDocument.rootVisualElement);
+            var parallaxView = new ParallaxView(_menuDocument);
             _parallaxPresenter = new ParallaxPresenter(parallaxView);
             _parallaxPresenter.Enable();
+
+            _dustParticlePresenter = new DustParticlePresenter(_dustRenderCamera);
+            _dustParticlePresenter.Enable();
 
             _ambientSoundPresenter = new AmbientSoundPresenter(_ambientSoundSource, _gameSessionSharedModel);
             _ambientSoundPresenter.Enable();
@@ -127,7 +137,8 @@ namespace Runtime
         private void RunSession(bool value)
         {
             _parallaxPresenter.Disable();
-            _navigationPresenter.Disable();
+            _startMenuPresenter.Disable();
+            _dustParticlePresenter.Disable();
 
             _gameSession.Run();
         }

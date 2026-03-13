@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Runtime.UI
+namespace Runtime.ViewDescriptions
 {
     [CreateAssetMenu(fileName = "UIViewDescription", menuName = "ViewDescriptions/UIViewDescription")]
     public class UIViewDescription : ScriptableObject

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Runtime.UI
+namespace Runtime.ViewDescriptions
 {
     [CreateAssetMenu(fileName = "PanelViewDescription", menuName = "ViewDescriptions/PanelViewDescription")]
     public class PanelViewDescription : ScriptableObject

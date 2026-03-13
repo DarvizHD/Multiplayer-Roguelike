@@ -20,25 +20,25 @@ using Runtime.Ecs.Systems.Battle.MeleeAttack;
 using Runtime.Ecs.Systems.Battle.RangeAttack;
 using Runtime.Ecs.Systems.CameraFocus;
 using Runtime.Ecs.Systems.Movement;
-using Runtime.ECS.Systems.Particles;
+using Runtime.Ecs.Systems.Particles;
 using Runtime.Ecs.Systems.Player;
 using Runtime.Ecs.Systems.Player.Network;
 using Runtime.Ecs.Systems.Player.Rotation;
 using Runtime.Ecs.Systems.Sound;
 using Runtime.Ecs.Systems.UI;
 using Runtime.Ecs.Systems.Weapons;
+using Runtime.Pools;
 using Runtime.ServerInteraction;
 using Runtime.Sound;
 using Runtime.Tools;
-using Runtime.UI;
 using Runtime.UI.HUD;
-using Shared.Commands;
+using Runtime.ViewDescriptions;
 using Shared.Models.Enemy;
 using Shared.Models.GameSession;
 using Shared.Models.Player;
 using UnityEngine;
 
-namespace Runtime
+namespace Runtime.Core
 {
     public class GameSession
     {

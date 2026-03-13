@@ -1,7 +1,7 @@
+using Runtime.Pools;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Runtime.UI
+namespace Runtime.ViewDescriptions
 {
     [CreateAssetMenu(fileName = "WorldViewDescription", menuName = "ViewDescriptions/WorldViewDescription")]
     public class WorldViewDescription : ScriptableObject

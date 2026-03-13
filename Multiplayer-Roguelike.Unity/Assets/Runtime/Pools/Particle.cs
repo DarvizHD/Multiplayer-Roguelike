@@ -2,35 +2,38 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Particle : MonoBehaviour, IPoolItem
+namespace Runtime.Pools
 {
-    public event Action<IPoolItem> OnComplete;
-
-    [SerializeField] private List<ParticleSystem> _particleSystems;
-
-    [SerializeField] private GameObject _gameObject;
-
-    public void Enable()
+    public class Particle : MonoBehaviour, IPoolItem
     {
-        _gameObject.SetActive(true);
+        public event Action<IPoolItem> OnComplete;
 
-        foreach (var ps in _particleSystems)
+        [SerializeField] private List<ParticleSystem> _particleSystems;
+
+        [SerializeField] private GameObject _gameObject;
+
+        public void Enable()
         {
-            var main = ps.main;
-            main.stopAction = ParticleSystemStopAction.Callback;
-            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            ps.Play();
+            _gameObject.SetActive(true);
+
+            foreach (var ps in _particleSystems)
+            {
+                var main = ps.main;
+                main.stopAction = ParticleSystemStopAction.Callback;
+                ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                ps.Play();
+            }
         }
-    }
 
-    public void Disable()
-    {
-        _gameObject.SetActive(false);
-    }
+        public void Disable()
+        {
+            _gameObject.SetActive(false);
+        }
 
-    private void OnParticleSystemStopped()
-    {
-        _gameObject.SetActive(false);
-        OnComplete?.Invoke(this);
+        private void OnParticleSystemStopped()
+        {
+            _gameObject.SetActive(false);
+            OnComplete?.Invoke(this);
+        }
     }
 }
