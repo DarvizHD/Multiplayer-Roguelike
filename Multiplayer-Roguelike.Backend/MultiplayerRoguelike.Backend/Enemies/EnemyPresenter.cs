@@ -27,6 +27,7 @@ namespace Backend.Enemies
             if (health <= 0)
             {
                 _sessionModel.GameSessionWaveModel.IncrementEnemiesKilled();
+                _sessionModel.Enemies.Remove(_enemyModel.Id);
             }
         }
     }
