@@ -369,6 +369,7 @@ namespace Runtime
             EcsWorld.AddSystem(new UIDrawAmmo(_hudView));
             EcsWorld.AddSystem(new UIDrawTeammates(_hudView));
             EcsWorld.AddSystem(new UIDrawCurrentPlayerHealth(_hudView));
+            EcsWorld.AddSystem<UIDrawCrosshairSystem>(new UIDrawCrosshairSystem(_hudView));
 
             /*
             EcsWorld.AddSystem<FreezeMovementByDamageSystem>();

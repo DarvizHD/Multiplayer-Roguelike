@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace Runtime.UI.HUD
@@ -11,6 +12,8 @@ namespace Runtime.UI.HUD
         [field: SerializeField] public VisualTreeAsset TeammateAsset { get; private set; }
         [field: SerializeField] public VisualTreeAsset NameAsset { get; private set; }
         [field: SerializeField] public VisualTreeAsset HealthAsset { get; private set; }
+
+        [field: SerializeField] public VisualTreeAsset CrosshairAsset { get; private set; }
 
         [SerializeField] private UIDocument _hudDocument;
         [SerializeField] private UIDocument _worldHudDocument;
