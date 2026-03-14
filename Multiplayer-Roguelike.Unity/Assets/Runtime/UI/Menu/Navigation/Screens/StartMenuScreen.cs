@@ -2,6 +2,7 @@ using Runtime.Core;
 using Runtime.UI.Menu.Panels.StartMenuPanel;
 using Shared.Commands.Lobby;
 using Shared.Commands.Player;
+using Shared.Commands.Session;
 using UnityEngine;
 
 namespace Runtime.UI.Menu.Navigation.Screens

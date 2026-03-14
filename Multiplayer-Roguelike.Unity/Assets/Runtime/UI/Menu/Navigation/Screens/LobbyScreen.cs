@@ -2,6 +2,7 @@ using Runtime.Core;
 using Runtime.UI.Menu.Panels.LobbyPanel;
 using Runtime.UI.Menu.Panels.UsersPanel;
 using Shared.Commands.Lobby;
+using Shared.Commands.Session;
 
 namespace Runtime.UI.Menu.Navigation.Screens
 {

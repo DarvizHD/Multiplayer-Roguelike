@@ -1,10 +1,11 @@
 using System;
+using System.Linq;
 using Backend.CommandExecutors.Common;
 using Backend.Session;
 using ENet;
-using Shared.Commands.Lobby;
+using Shared.Commands.Session;
 
-namespace Backend.CommandExecutors.Lobby
+namespace Backend.CommandExecutors.Session
 {
     public class StartSessionCommandExecutor : BaseCommandExecutor<StartSessionCommand>
     {
@@ -23,7 +24,7 @@ namespace Backend.CommandExecutors.Lobby
 
             if (!World.Lobbies.TryGet(player.PlayerSharedModel.Lobby.LobbyId.Value, out var lobby))
             {
-                Console.WriteLine($"Player {Command.LobbyId} not found");
+                Console.WriteLine($"Lobby {Command.LobbyId} not found");
                 return;
             }
 
@@ -31,6 +32,15 @@ namespace Backend.CommandExecutors.Lobby
             {
                 Console.WriteLine($"Player {Command.PlayerNickname} are not owner of lobby {Command.LobbyId}");
                 return;
+            }
+
+            if (World.Sessions.TryGet(Command.LobbyId, out var existedSession))
+            {
+                var activePlayers = existedSession.Players.Models.Values.Where(p => p.IsActive);
+                foreach (var activePlayer in activePlayers)
+                {
+                    existedSession.Players.Remove(activePlayer.PlayerSharedModel.Id);
+                }
             }
 
             if (player.SessionId != string.Empty)

@@ -29,6 +29,11 @@ namespace Runtime.UI.Menu.Panels.UsersPanel
             _uiCoreModel.PlayerSharedModel.Lobby.Members.OnAdded += OnMemberAdded;
             _uiCoreModel.PlayerSharedModel.Lobby.Members.OnRemoved += OnMemberRemoved;
             _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChanged += OnHostChanged;
+
+            foreach (var member in _uiCoreModel.PlayerSharedModel.Lobby.Members.Values)
+            {
+                OnMemberAdded(member);
+            }
         }
 
         public void Disable()

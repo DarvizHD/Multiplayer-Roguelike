@@ -64,6 +64,14 @@ namespace Runtime.Ecs.Systems.UI
             }
         }
 
+        public void Destroy()
+        {
+            foreach (var bar in _bars.Values)
+            {
+                _uiHudView.WorldHudRoot.Remove(bar);
+            }
+        }
+
         private ProgressBar CreateBar(int entityId)
         {
             var root = _uiHudView.HealthAsset.CloneTree();

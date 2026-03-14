@@ -54,6 +54,17 @@ namespace Runtime.Core
         private WorldViewDescription _worldViewDescription;
         private readonly UIHudView _hudView;
 
+        private readonly List<GameObject> _gameObjects = new();
+
+        private readonly PinnedParticlePool _pinnedParticlePool;
+        private readonly PositionalParticlePool _damageParticlePool;
+        private readonly PositionalParticlePool _deathParticlePool;
+
+        private readonly UIDrawHealthSystem _drawHealthSystem;
+        private readonly UIDrawNameSystem _drawNameSystem;
+        private readonly UIDrawTeammates _drawTeammates;
+        private readonly UIDrawCrosshairSystem _drawCrosshair;
+
         private bool IsHost => _playerSharedModel.Lobby.OwnerId.Value == _playerSharedModel.Nickname.Value;
 
         public GameSession(GameSessionSharedModel gameSessionSharedModel, PlayerSharedModel playerSharedModel,
@@ -64,6 +75,17 @@ namespace Runtime.Core
             _serverConnectionModel = serverConnectionModel;
             _hudView = hudView;
             _worldViewDescription = worldViewDescription;
+
+            _pinnedParticlePool = new PinnedParticlePool(_worldViewDescription.ShootParticle);
+            _damageParticlePool = new PositionalParticlePool(_worldViewDescription.DamageParticle);
+            _deathParticlePool = new PositionalParticlePool(_worldViewDescription.DeathParticle);
+
+            _drawHealthSystem = new UIDrawHealthSystem(_hudView);
+            _drawNameSystem = new UIDrawNameSystem(_hudView);
+            _drawTeammates = new UIDrawTeammates(_hudView);
+            _drawCrosshair = new UIDrawCrosshairSystem(_hudView);
+
+            _playerControls = new PlayerControls();
         }
 
         public void Enable()
@@ -72,8 +94,6 @@ namespace Runtime.Core
 
             RegisterComponents();
 
-            _playerControls = new PlayerControls();
-
             _playerControls.Enable();
 
             _gameSessionSharedModel.Characters.Added += OnCharacterAdded;
@@ -81,6 +101,16 @@ namespace Runtime.Core
             _gameSessionSharedModel.Enemies.Added += OnNpcAdded;
 
             _zombieVoiceClips = Resources.LoadAll<AudioClip>("Audio/SFX/Enemies/ZombieVoices");
+
+            foreach (var character in _gameSessionSharedModel.Characters.Models)
+            {
+                OnCharacterAdded(character);
+            }
+
+            foreach (var enemy in _gameSessionSharedModel.Enemies.Models)
+            {
+                OnNpcAdded(enemy);
+            }
         }
 
         public void Disable()
@@ -88,6 +118,21 @@ namespace Runtime.Core
             _gameSessionSharedModel.Characters.Added -= OnCharacterAdded;
 
             _gameSessionSharedModel.Enemies.Added -= OnNpcAdded;
+
+            _playerControls.Disable();
+            EcsWorld.ClearComponents();
+            foreach (var gameObject in _gameObjects)
+            {
+                Object.Destroy(gameObject);
+            }
+
+            _damageParticlePool.Destroy();
+            _deathParticlePool.Destroy();
+
+            _drawHealthSystem.Destroy();
+            _drawNameSystem.Destroy();
+            _drawTeammates.Destroy();
+            _drawCrosshair.Destroy();
         }
 
         public void Run()
@@ -95,6 +140,11 @@ namespace Runtime.Core
             AddSystems();
 
             CreateCamera(6);
+        }
+
+        public void Stop()
+        {
+            EcsWorld.ClearSystems();
         }
 
         private void OnCharacterAdded(CharacterSharedModel characterSharedModel)
@@ -161,6 +211,7 @@ namespace Runtime.Core
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Player");
             var provider = Object.Instantiate(prefab);
+            _gameObjects.Add(provider.gameObject);
 
             var playerHitClip = Resources.Load<AudioClip>(AudioResourcesConstants.Player.PlayerTakeDamage);
 
@@ -210,6 +261,7 @@ namespace Runtime.Core
         {
             var prefab = Resources.Load<MonoBehaviorProvider>("Enemy");
             var enemyProvider = Object.Instantiate(prefab);
+            _gameObjects.Add(enemyProvider.gameObject);
 
             var enemyHitClip = Resources.Load<AudioClip>(AudioResourcesConstants.Enemies.ZombieTakeDamage);
 
@@ -362,9 +414,9 @@ namespace Runtime.Core
             EcsWorld.AddSystem<AIHealthSync>();
             EcsWorld.AddSystem<CharacterHealthSyncSystem>();
             EcsWorld.AddSystem<AIDeathSystem>();
-            EcsWorld.AddSystem<ShootParticleSystem>(new ShootParticleSystem(new PinnedParticlePool(_worldViewDescription.ShootParticle)));
-            EcsWorld.AddSystem<DamageParticleSystem>(new DamageParticleSystem(new PositionalParticlePool(_worldViewDescription.DamageParticle)));
-            EcsWorld.AddSystem<DeathParticleSystem>(new DeathParticleSystem(new PositionalParticlePool(_worldViewDescription.DeathParticle)));
+            EcsWorld.AddSystem<ShootParticleSystem>(new ShootParticleSystem(_pinnedParticlePool));
+            EcsWorld.AddSystem<DamageParticleSystem>(new DamageParticleSystem(_damageParticlePool));
+            EcsWorld.AddSystem<DeathParticleSystem>(new DeathParticleSystem(_deathParticlePool));
             EcsWorld.AddSystem<DamageAnimationSystem>();
 
             EcsWorld.AddSystem<CharacterAnimationSyncSystem>();
@@ -373,13 +425,13 @@ namespace Runtime.Core
             EcsWorld.AddSystem(new PlaySoundSystem());
             EcsWorld.AddSystem<ZombieVoiceSystem>();
 
-            EcsWorld.AddSystem(new UIDrawNameSystem(_hudView), UpdateMode.LateUpdate);
-            EcsWorld.AddSystem(new UIDrawHealthSystem(_hudView), UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(_drawNameSystem, UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(_drawHealthSystem,  UpdateMode.LateUpdate);
             EcsWorld.AddSystem(new UIDrawSwitchWeapon(_hudView), UpdateMode.LateUpdate);
             EcsWorld.AddSystem(new UIDrawAmmo(_hudView), UpdateMode.LateUpdate);
-            EcsWorld.AddSystem(new UIDrawTeammates(_hudView), UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(_drawTeammates, UpdateMode.LateUpdate);
             EcsWorld.AddSystem(new UIDrawCurrentPlayerHealth(_hudView), UpdateMode.LateUpdate);
-            EcsWorld.AddSystem<UIDrawCrosshairSystem>(new UIDrawCrosshairSystem(_hudView), UpdateMode.LateUpdate);
+            EcsWorld.AddSystem<UIDrawCrosshairSystem>(_drawCrosshair, UpdateMode.LateUpdate);
 
             /*
             EcsWorld.AddSystem<FreezeMovementByDamageSystem>();

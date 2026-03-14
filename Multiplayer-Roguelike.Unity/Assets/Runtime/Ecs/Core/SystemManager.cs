@@ -52,6 +52,11 @@ namespace Runtime.Ecs.Core
             }
         }
 
+        public void ClearSystems()
+        {
+            _systems.Clear();
+        }
+
         public void UpdateAll(float deltaTime)
         {
             foreach (var system in _systems[UpdateMode.Update])

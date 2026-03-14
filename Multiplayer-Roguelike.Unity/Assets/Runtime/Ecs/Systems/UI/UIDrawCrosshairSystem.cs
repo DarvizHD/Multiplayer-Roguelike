@@ -59,5 +59,10 @@ namespace Runtime.Ecs.Systems.UI
                 _crosshair.style.top = y - _crosshair.resolvedStyle.height / 2;
             }
         }
+
+        public void Destroy()
+        {
+            _hudView.HudRoot.Remove(_crosshair);
+        }
     }
 }
