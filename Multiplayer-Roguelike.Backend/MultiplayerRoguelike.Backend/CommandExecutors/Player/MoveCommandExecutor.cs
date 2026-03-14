@@ -25,9 +25,11 @@ namespace Backend.CommandExecutors.Player
                 return;
             }
 
-            session.GameSessionSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character);
-            character.Position.Value = Command.Position;
-            character.Direction.Value = Command.Direction;
+            if (session.GameSessionSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character))
+            {
+                character.Position.Value = Command.Position;
+                character.Direction.Value = Command.Direction;
+            }
         }
     }
 }

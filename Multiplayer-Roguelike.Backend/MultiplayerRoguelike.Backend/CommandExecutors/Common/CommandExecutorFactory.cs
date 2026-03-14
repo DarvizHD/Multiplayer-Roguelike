@@ -1,10 +1,11 @@
 using Backend.CommandExecutors.Lobby;
 using Backend.CommandExecutors.Player;
+using Backend.CommandExecutors.Session;
 using ENet;
-using Shared.Commands;
 using Shared.Commands.Common;
 using Shared.Commands.Lobby;
 using Shared.Commands.Player;
+using Shared.Commands.Session;
 using Shared.Protocol;
 
 namespace Backend.CommandExecutors.Common
@@ -36,6 +37,7 @@ namespace Backend.CommandExecutors.Common
                 CommandConst.LeaveLobby => new LeaveLobbyCommandExecutor(new LeaveLobbyCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.MovePlayer => new MoveCommandExecutor(new MoveCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.StartSession => new StartSessionCommandExecutor(new StartSessionCommand(eNetProtocol), _world, netEvent.Peer),
+                CommandConst.LeaveSession => new LeaveSessionCommandExecutor(new LeaveSessionCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.RotatePlayer => new RotateCommandExecutor(new RotateCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.SwitchWeaponId => new SwitchWeaponCommandExecutor(new SwitchWeaponCommand(eNetProtocol), _world, netEvent.Peer),
                 CommandConst.PlayerAttack => new PlayerAttackCommandExecutor(new PlayerAttackCommand(eNetProtocol), _world, netEvent.Peer),
