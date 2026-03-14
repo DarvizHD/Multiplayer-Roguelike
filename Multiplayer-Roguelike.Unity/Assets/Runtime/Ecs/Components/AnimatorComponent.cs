@@ -9,6 +9,7 @@ namespace Runtime.Ecs.Components
         public int IsRun => Animator.StringToHash("IsRun");
         public int MeleeAttack => Animator.StringToHash("MeleeAttack");
         public int Damage => Animator.StringToHash("Damage");
+        public int Death => Animator.StringToHash("Death");
 
         public int WeaponId => Animator.StringToHash("WeaponId");
 

@@ -414,6 +414,7 @@ namespace Runtime.Core
             EcsWorld.AddSystem<AIHealthSync>();
             EcsWorld.AddSystem<CharacterHealthSyncSystem>();
             EcsWorld.AddSystem<AIDeathSystem>();
+            EcsWorld.AddSystem<CharacterDeathSystem>();
             EcsWorld.AddSystem<ShootParticleSystem>(new ShootParticleSystem(_pinnedParticlePool));
             EcsWorld.AddSystem<DamageParticleSystem>(new DamageParticleSystem(_damageParticlePool));
             EcsWorld.AddSystem<DeathParticleSystem>(new DeathParticleSystem(_deathParticlePool));
