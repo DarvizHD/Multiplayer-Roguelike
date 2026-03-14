@@ -170,6 +170,16 @@ namespace Runtime.Core
             EcsWorld?.Update(deltaTime);
         }
 
+        public void FixedUpdate(float fixedDeltaTime)
+        {
+            EcsWorld?.FixedUpdate(fixedDeltaTime);
+        }
+
+        public void LateUpdate(float deltaTime)
+        {
+            EcsWorld?.LateUpdate(deltaTime);
+        }
+
         private void CreateCamera(ushort entityId)
         {
             EcsWorld.AddEntityComponent(entityId, new CameraTargetComponent());
@@ -415,13 +425,13 @@ namespace Runtime.Core
             EcsWorld.AddSystem(new PlaySoundSystem());
             EcsWorld.AddSystem<ZombieVoiceSystem>();
 
-            EcsWorld.AddSystem<UIDrawNameSystem>(_drawNameSystem);
-            EcsWorld.AddSystem<UIDrawHealthSystem>(_drawHealthSystem);
-            EcsWorld.AddSystem(new UIDrawSwitchWeapon(_hudView));
-            EcsWorld.AddSystem(new UIDrawAmmo(_hudView));
-            EcsWorld.AddSystem<UIDrawTeammates>(_drawTeammates);
-            EcsWorld.AddSystem(new UIDrawCurrentPlayerHealth(_hudView));
-            EcsWorld.AddSystem<UIDrawCrosshairSystem>(_drawCrosshair);
+            EcsWorld.AddSystem(_drawNameSystem, UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(_drawHealthSystem,  UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(new UIDrawSwitchWeapon(_hudView), UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(new UIDrawAmmo(_hudView), UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(_drawTeammates, UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(new UIDrawCurrentPlayerHealth(_hudView), UpdateMode.LateUpdate);
+            EcsWorld.AddSystem<UIDrawCrosshairSystem>(_drawCrosshair, UpdateMode.LateUpdate);
 
             /*
             EcsWorld.AddSystem<FreezeMovementByDamageSystem>();

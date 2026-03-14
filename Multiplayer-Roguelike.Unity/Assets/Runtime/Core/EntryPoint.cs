@@ -1,3 +1,4 @@
+using System;
 using ENet;
 using Runtime.GameSystems;
 using Runtime.ServerInteraction;
@@ -107,8 +108,18 @@ namespace Runtime.Core
 
         private void FixedUpdate()
         {
-            _gameSession?.Update(Time.fixedDeltaTime);
+            _gameSession?.FixedUpdate(Time.fixedDeltaTime);
             _gameFixedSystemCollection.Update(Time.fixedDeltaTime);
+        }
+
+        private void Update()
+        {
+            _gameSession?.Update(Time.deltaTime);
+        }
+
+        private void LateUpdate()
+        {
+            _gameSession?.LateUpdate(Time.deltaTime);
         }
 
         private void OnWorldPacketReceived(Packet packet)

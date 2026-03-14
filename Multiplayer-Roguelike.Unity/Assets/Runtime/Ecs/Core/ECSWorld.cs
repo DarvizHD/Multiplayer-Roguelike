@@ -25,6 +25,16 @@ namespace Runtime.Ecs.Core
         public void Update(float deltaTime)
         {
             SystemManager.UpdateAll(deltaTime);
+        }
+
+        public void FixedUpdate(float fixedDeltaTime)
+        {
+            SystemManager.FixedUpdateAll(fixedDeltaTime);
+        }
+
+        public void LateUpdate(float deltaTime)
+        {
+            SystemManager.LateUpdateAll(deltaTime);
             ComponentManager.RemoveComponents();
         }
 
@@ -43,12 +53,12 @@ namespace Runtime.Ecs.Core
             ComponentManager.AddComponent(entityId, component);
         }
 
-        public void AddSystem<T>() where T : BaseSystem, new()
+        public void AddSystem<T>(UpdateMode updateMode = UpdateMode.Update) where T : BaseSystem, new()
         {
-            SystemManager.RegisterSystem<T>();
+            SystemManager.RegisterSystem<T>(updateMode);
         }
 
-        public void AddSystem<T>(T system) where T : BaseSystem
+        public void AddSystem<T>(T system, UpdateMode updateMode = UpdateMode.Update) where T : BaseSystem
         {
             SystemManager.RegisterSystem(system);
         }
