@@ -4941,6 +4941,7 @@ MonoBehaviour:
   <TeammateAsset>k__BackingField: {fileID: 9197481963319205126, guid: df2bf4257ea70f1468693c7971d1e6b0, type: 3}
   <NameAsset>k__BackingField: {fileID: 9197481963319205126, guid: a826c092469be794ea08789fe160431d, type: 3}
   <HealthAsset>k__BackingField: {fileID: 9197481963319205126, guid: 6cd408dc0bd99b24f989f135ee55db10, type: 3}
+  <CrosshairAsset>k__BackingField: {fileID: 9197481963319205126, guid: b2ae832419d45c8438b49930c9acc368, type: 3}
   _hudDocument: {fileID: 1172141499}
   _worldHudDocument: {fileID: 1665815417}
 --- !u!1 &1215277623
