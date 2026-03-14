@@ -63,6 +63,7 @@ namespace Runtime.Core
         private readonly UIDrawHealthSystem _drawHealthSystem;
         private readonly UIDrawNameSystem _drawNameSystem;
         private readonly UIDrawTeammates _drawTeammates;
+        private readonly UIDrawCrosshairSystem _drawCrosshair;
 
         private bool IsHost => _playerSharedModel.Lobby.OwnerId.Value == _playerSharedModel.Nickname.Value;
 
@@ -82,6 +83,7 @@ namespace Runtime.Core
             _drawHealthSystem = new UIDrawHealthSystem(_hudView);
             _drawNameSystem = new UIDrawNameSystem(_hudView);
             _drawTeammates = new UIDrawTeammates(_hudView);
+            _drawCrosshair = new UIDrawCrosshairSystem(_hudView);
 
             _playerControls = new PlayerControls();
         }
@@ -130,6 +132,7 @@ namespace Runtime.Core
             _drawHealthSystem.Destroy();
             _drawNameSystem.Destroy();
             _drawTeammates.Destroy();
+            _drawCrosshair.Destroy();
         }
 
         public void Run()
@@ -418,7 +421,7 @@ namespace Runtime.Core
             EcsWorld.AddSystem(new UIDrawAmmo(_hudView));
             EcsWorld.AddSystem<UIDrawTeammates>(_drawTeammates);
             EcsWorld.AddSystem(new UIDrawCurrentPlayerHealth(_hudView));
-            EcsWorld.AddSystem<UIDrawCrosshairSystem>(new UIDrawCrosshairSystem(_hudView));
+            EcsWorld.AddSystem<UIDrawCrosshairSystem>(_drawCrosshair);
 
             /*
             EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
