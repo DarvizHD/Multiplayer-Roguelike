@@ -2,7 +2,7 @@ using ENet;
 using Shared.Commands.Common;
 using Shared.Protocol;
 
-namespace Shared.Commands.Lobby
+namespace Shared.Commands.Session
 {
     public class StartSessionCommand : BaseCommand
     {
