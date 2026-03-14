@@ -4,6 +4,7 @@ using Runtime.ServerInteraction;
 using Runtime.Sound;
 using Runtime.UI;
 using Runtime.UI.HUD;
+using Runtime.UI.Menu;
 using Runtime.UI.Menu.Navigation;
 using Runtime.UI.Menu.Parallax;
 using Runtime.ViewDescriptions;
@@ -37,7 +38,7 @@ namespace Runtime.Core
         private ServerConnectionPresenter _serverConnectionPresenter;
 
         private Router _router;
-        private StartMenuPresenter _startMenuPresenter;
+        private UIPresenter _uiPresenter;
 
         private AmbientSoundPresenter _ambientSoundPresenter;
         private ParallaxPresenter _parallaxPresenter;
@@ -69,9 +70,9 @@ namespace Runtime.Core
             var uiAudioService = new UIAudioService(audioSource, buttonClickClip, joinToLobbyClip);
 
             _router = new Router(uiAudioService);
-            _startMenuPresenter = new StartMenuPresenter(_router, _uiCoreModel, _worldViewDescription, _menuDocument, uiAudioService);
-            _startMenuPresenter.Enable();
-            _router.NavigateTo(ScreenIds.Login);
+            _uiPresenter = new UIPresenter(_router, _uiCoreModel, _worldViewDescription, _menuDocument, uiAudioService,
+                _uiHudView);
+            _uiPresenter.Enable();
 
             var parallaxView = new ParallaxView(_menuDocument);
             _parallaxPresenter = new ParallaxPresenter(parallaxView);
@@ -82,9 +83,6 @@ namespace Runtime.Core
 
             _ambientSoundPresenter = new AmbientSoundPresenter(_ambientSoundSource, _gameSessionSharedModel);
             _ambientSoundPresenter.Enable();
-
-            _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel, _uiHudView, _worldViewDescription);
-            _gameSession.Enable();
 
             _serverConnectionModel.WorldPacketReceived += OnWorldPacketReceived;
             _serverConnectionModel.PlayerPacketReceived += OnPlayerPacketReceived;
@@ -136,11 +134,25 @@ namespace Runtime.Core
 
         private void RunSession(bool value)
         {
-            _parallaxPresenter.Disable();
-            _startMenuPresenter.Disable();
-            _dustParticlePresenter.Disable();
+            if (value)
+            {
+                _parallaxPresenter.Disable();
+                _dustParticlePresenter.Disable();
 
-            _gameSession.Run();
+                _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel,
+                    _uiHudView, _worldViewDescription);
+                _gameSession.Enable();
+                _gameSession.Run();
+            }
+            else
+            {
+                _parallaxPresenter.Enable();
+                _dustParticlePresenter.Enable();
+
+                _gameSession.Stop();
+                _gameSession.Disable();
+                _gameSession = null;
+            }
         }
     }
 }

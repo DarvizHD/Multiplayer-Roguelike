@@ -33,6 +33,11 @@ namespace Runtime.Ecs.Core
             ComponentManager.RegisterComponent<T>();
         }
 
+        public void ClearComponents()
+        {
+            ComponentManager.ClearComponents();
+        }
+
         public void AddEntityComponent<T>(ushort entityId, T component) where T : class, IComponent
         {
             ComponentManager.AddComponent(entityId, component);
@@ -46,6 +51,11 @@ namespace Runtime.Ecs.Core
         public void AddSystem<T>(T system) where T : BaseSystem
         {
             SystemManager.RegisterSystem(system);
+        }
+
+        public void ClearSystems()
+        {
+            SystemManager.ClearSystems();
         }
     }
 }

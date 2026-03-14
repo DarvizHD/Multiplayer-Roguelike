@@ -20,6 +20,11 @@ namespace Runtime.Pools
             return particle;
         }
 
+        public void Destroy()
+        {
+            Object.Destroy(_parent.gameObject);
+        }
+
         protected override Particle CreateItem()
         {
             return Object.Instantiate(Prefab, _parent);

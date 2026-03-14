@@ -36,6 +36,11 @@ namespace Runtime.Ecs.Core
             _systems.Remove(typeof(T));
         }
 
+        public void ClearSystems()
+        {
+            _systems.Clear();
+        }
+
         public void UpdateAll(float deltaTime)
         {
             foreach (var system in _systems.Values)

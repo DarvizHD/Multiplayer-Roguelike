@@ -48,6 +48,14 @@ namespace Runtime.Ecs.Systems.UI
             }
         }
 
+        public void Destroy()
+        {
+            foreach (var panel in _panels.Values)
+            {
+                _container.Remove(panel);
+            }
+        }
+
         private ProgressBar CreatePanel(ushort entityId, string name)
         {
             var bar = _teammatePanelAsset.CloneTree().Q<ProgressBar>("teammate-health-bar");

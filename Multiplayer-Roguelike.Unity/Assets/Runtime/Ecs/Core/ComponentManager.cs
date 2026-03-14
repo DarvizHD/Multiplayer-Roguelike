@@ -25,6 +25,11 @@ namespace Runtime.Ecs.Core
             _storages[id] = new ComponentStorage<T>();
         }
 
+        public void ClearComponents()
+        {
+            Array.Clear(_storages, 0, _storages.Length);
+        }
+
         public void AddComponent<T>(ushort entityId, T component) where T : class, IComponent
         {
             var storage = (ComponentStorage<T>)_storages[ComponentId<T>.Id];

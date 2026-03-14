@@ -60,6 +60,14 @@ namespace Runtime.Ecs.Systems.UI
             }
         }
 
+        public void Destroy()
+        {
+            foreach (var label in _labels.Values)
+            {
+                _uiHudView.WorldHudRoot.Remove(label);
+            }
+        }
+
         private Label CreateLabel(int entityId, string name)
         {
             var root = _uiHudView.NameAsset.CloneTree();
