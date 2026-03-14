@@ -13,11 +13,14 @@ namespace Shared.Models.GameSession
 
         public readonly Property<bool> IsRun = new Property<bool>("is_run", false);
 
+        public readonly Property<bool> IsComplete = new Property<bool>("is_complete", false);
+
         public GameSessionSharedModel(string id) : base(id)
         {
             Children.Add(Characters.Id, Characters);
             Children.Add(Enemies.Id, Enemies);
             Children.Add(IsRun.Id, IsRun);
+            Children.Add(IsComplete.Id, IsComplete);
         }
     }
 }

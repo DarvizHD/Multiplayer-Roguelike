@@ -30,6 +30,7 @@ namespace Runtime.UI.HUD.SessionStatusPanel
             {
                 _view.RestartButton.style.display = DisplayStyle.None;
             }
+            _view.StatusLabel.text = _uiCoreModel.GameSessionSharedModel.IsComplete.Value ? "ЗАДАНИЕ ВЫПОЛНЕНО" : "ЗАДАНИЕ ПРОВАЛЕНО";
 
             _view.LobbyButton.clicked += OnLobbyButtonClicked;
         }
