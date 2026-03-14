@@ -1,3 +1,4 @@
+using System.Linq;
 using Backend.Navigation;
 using Backend.ServerSystems;
 using Backend.Session;
@@ -79,7 +80,7 @@ namespace Backend.Enemies
             CharacterSharedModel closestCharacter = null;
             var closestDistance = float.MaxValue;
 
-            foreach (var character in session.GameSessionSharedModel.Characters.Models)
+            foreach (var character in session.GameSessionSharedModel.Characters.Models.Where(c => c.Health.Value > 0))
             {
                 var distance = (enemy.Shared.Position.Value - character.Position.Value).LengthSquared();
 

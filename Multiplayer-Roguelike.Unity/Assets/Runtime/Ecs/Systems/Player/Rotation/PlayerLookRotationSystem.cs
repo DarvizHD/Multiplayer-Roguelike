@@ -1,3 +1,4 @@
+using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Player;
 using Runtime.Ecs.Core;
@@ -8,7 +9,7 @@ namespace Runtime.Ecs.Systems.Player.Rotation
 {
     public class PlayerLookRotationSystem : BaseSystem
     {
-        private QueryBuffer<PlayerInputComponent, PositionComponent, RotationComponent, RotationSpeedComponent> _buffer = new();
+        private QueryBuffer<PlayerInputComponent, PositionComponent, RotationComponent, RotationSpeedComponent, AliveTagComponent> _buffer = new();
 
         public override void Update(float deltaTime)
         {
