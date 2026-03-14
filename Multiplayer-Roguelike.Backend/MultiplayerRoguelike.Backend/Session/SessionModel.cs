@@ -22,6 +22,8 @@ namespace Backend.Session
         public SpawnDirectorModel SpawnDirector { get; set; }
         public GameSessionWaveModel GameSessionWaveModel { get; set; }
 
+        public bool NeedStop = false;
+
         public SessionModel(string id)
         {
             Id = id;
