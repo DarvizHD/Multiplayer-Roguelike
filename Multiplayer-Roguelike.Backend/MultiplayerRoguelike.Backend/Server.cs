@@ -26,6 +26,8 @@ namespace Backend
         private CommandExecutorFactory _commandExecutorFactory;
         private bool _isRunning;
 
+        private int _hadleCount = 0;
+
         public Server(ushort port)
         {
             _port = port;
@@ -78,37 +80,30 @@ namespace Backend
 
         private void Update()
         {
-            var stopwatch = Stopwatch.StartNew();
-            var lastTime = stopwatch.Elapsed.TotalSeconds;
-            double accumulator = 0;
-
-            while (_isRunning)
+            while (true)
             {
-                while (_host.CheckEvents(out var netEvent) > 0)
-                {
-                    HandleEvent(netEvent);
-                }
-
-                while (_host.Service(15, out var netEvent) > 0)
-                {
-                    HandleEvent(netEvent);
-                }
-
-                var now = stopwatch.Elapsed.TotalSeconds;
-                var frameTime = now - lastTime;
-                lastTime = now;
-                accumulator += frameTime;
-
-                while (accumulator >= _tickInterval)
-                {
-                    _world.ServerSystems.Update(_tickInterval);
-                    accumulator -= _tickInterval;
-                }
+                _world.ServerSystems.Update(_tickInterval);
 
                 HandlePlayers();
                 HandleSessions();
 
-                Thread.Sleep(1);
+                var polled = false;
+                while (!polled)
+                {
+                    if (_host.CheckEvents(out var netEvent) <= 0)
+                    {
+                        if (_host.Service(15, out netEvent) <= 0)
+                        {
+                            break;
+                        }
+
+                        polled = true;
+                    }
+
+                    HandleEvent(netEvent);
+
+                    _host.Flush();
+                }
             }
         }
 
@@ -120,6 +115,8 @@ namespace Backend
             }
         }
 
+        private int recieveCount = 0;
+
         private void HandleEvent(Event netEvent)
         {
             switch (netEvent.Type)
@@ -129,6 +126,9 @@ namespace Backend
                     break;
 
                 case EventType.Receive:
+                    recieveCount++;
+                    Console.WriteLine($"{netEvent.Peer.ID} received {recieveCount}");
+
                     _commandExecutorFactory.CreateCommandExecutor(ref netEvent).Execute();
                     netEvent.Packet.Dispose();
                     break;
@@ -147,6 +147,7 @@ namespace Backend
                         var logoutExecutor = new LogoutCommandExecutor(logoutCommand, _world, player.Peer);
                         logoutExecutor.Execute();
                     }
+
                     break;
             }
         }

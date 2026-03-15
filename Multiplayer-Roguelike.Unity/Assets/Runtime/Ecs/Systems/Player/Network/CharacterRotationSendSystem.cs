@@ -1,3 +1,4 @@
+using System;
 using Runtime.Ecs.Components.Movement;
 using Runtime.Ecs.Components.Network;
 using Runtime.Ecs.Core;
@@ -20,6 +21,11 @@ namespace Runtime.Ecs.Systems.Player.Network
                 var characterConnectionComponent = _buffer.Components1[i];
                 var characterNetworkSyncComponent = _buffer.Components2[i];
                 var rotationComponent = _buffer.Components3[i];
+
+                if (Math.Abs(rotationComponent.Angle - characterNetworkSyncComponent.CharacterSharedModel.Rotation.Value) < 1f)
+                {
+                    continue;
+                }
 
                 var rotateCommand = new RotateCommand
                 (

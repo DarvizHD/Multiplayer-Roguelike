@@ -31,6 +31,7 @@ namespace Runtime.Ecs.Systems.Battle
                 var attackCommand = new PlayerAttackCommand(characterNetworkSyncComponent.CharacterSharedModel.Id, targetId);
 
                 attackCommand.Write(characterConnectionComponent.ServerConnectionModel.PlayerPeer);
+                TestCounter.Increase();
 
                 ComponentManager.RemoveComponent<AttackEventComponent>(entityId);
             }

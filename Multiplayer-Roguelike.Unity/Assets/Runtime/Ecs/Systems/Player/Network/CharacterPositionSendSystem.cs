@@ -23,6 +23,13 @@ namespace Runtime.Ecs.Systems.Player.Network
                 var positionComponent = _buffer.Components3[i];
                 var directionComponent = _buffer.Components4[i];
 
+                if ((positionComponent.Position -
+                     characterNetworkSyncComponent.CharacterSharedModel.Position.Value.ToUnityVector3()).sqrMagnitude <
+                    0.01f)
+                {
+                    continue;
+                }
+
                 var moveCommand = new MoveCommand
                 (
                     characterNetworkSyncComponent.CharacterSharedModel.Id,
