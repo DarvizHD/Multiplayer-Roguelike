@@ -42,7 +42,7 @@ namespace Runtime.Ecs.Systems.AI
 
                 var targetId = enemySharedModel.EnemySharedModel.TargetPlayerId.Value;
 
-                if (targetId == null)
+                if (targetId == string.Empty)
                 {
                     continue;
                 }

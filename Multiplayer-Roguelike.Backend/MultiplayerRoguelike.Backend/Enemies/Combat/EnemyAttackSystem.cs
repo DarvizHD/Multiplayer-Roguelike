@@ -35,7 +35,7 @@ namespace Backend.Enemies.Combat
                 return;
             }
 
-            if (enemy.Shared.TargetPlayerId.Value != null)
+            if (enemy.Shared.TargetPlayerId.Value != string.Empty)
             {
                 if (SessionModel.GameSessionSharedModel.Characters.TryGet(enemy.Shared.TargetPlayerId.Value, out var targetPlayer) && targetPlayer.Health.Value > 0)
                 {
