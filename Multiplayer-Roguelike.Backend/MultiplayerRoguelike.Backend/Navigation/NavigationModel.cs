@@ -1,7 +1,5 @@
-using DotRecast.Core.Numerics;
 using DotRecast.Detour;
 using DotRecast.Detour.Crowd;
-using Shared.Primitives;
 
 namespace Backend.Navigation
 {
@@ -25,22 +23,6 @@ namespace Backend.Navigation
             for (var i = 0; i < 4; i++)
             {
                 Crowd.SetObstacleAvoidanceParams(i, Config.ObstacleParams);
-            }
-        }
-
-        public void SetAgentTarget(DtCrowdAgent agent, Vector3 target)
-        {
-            var targetPos = new RcVec3f(target.Xf, target.Yf, target.Zf);
-
-            var halfExtents = new RcVec3f(2, 4, 2);
-
-            var filter = new DtQueryDefaultFilter();
-
-            var result = Query.FindNearestPoly(targetPos, halfExtents, filter, out var polyRef, out var polyPos, out _);
-
-            if (result.Succeeded())
-            {
-                agent.SetTarget(polyRef, polyPos);
             }
         }
     }
