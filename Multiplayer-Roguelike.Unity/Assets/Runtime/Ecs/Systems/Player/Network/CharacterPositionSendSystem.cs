@@ -4,11 +4,15 @@ using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems.Core;
 using Runtime.Tools;
 using Shared.Commands.Player;
+using UnityEngine;
 
 namespace Runtime.Ecs.Systems.Player.Network
 {
     public class CharacterPositionSendSystem : BaseSystem
     {
+        private const float _positionThreshold = 0.1f;
+        private const float _positionThresholdSqr = _positionThreshold * _positionThreshold;
+
         private QueryBuffer<CharacterConnectionComponent, CharacterNetworkSyncComponent,
             PositionComponent, DirectionComponent, LocalControllableTag> _buffer = new();
 
@@ -23,9 +27,9 @@ namespace Runtime.Ecs.Systems.Player.Network
                 var positionComponent = _buffer.Components3[i];
                 var directionComponent = _buffer.Components4[i];
 
-                if ((positionComponent.Position -
-                     characterNetworkSyncComponent.CharacterSharedModel.Position.Value.ToUnityVector3()).sqrMagnitude <
-                    0.01f)
+                var deltaPosition = positionComponent.Position - characterNetworkSyncComponent.CharacterSharedModel.Position.Value.ToUnityVector3();
+
+                if (deltaPosition.sqrMagnitude < _positionThresholdSqr)
                 {
                     continue;
                 }
