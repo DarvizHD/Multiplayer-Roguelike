@@ -1,5 +1,4 @@
 using Runtime.Core;
-using Shared.Commands.Player;
 
 namespace Runtime.UI.Menu.Panels.LoginPanel
 {
@@ -28,7 +27,6 @@ namespace Runtime.UI.Menu.Panels.LoginPanel
             _uiCoreModel.PlayerSharedModel.Nickname.OnChanged -= OnNicknameChanged;
 
             _model.SetUsername(value);
-            _model.Confirm();
         }
 
         public void Disable()
@@ -38,15 +36,21 @@ namespace Runtime.UI.Menu.Panels.LoginPanel
             _view.Root.RemoveFromHierarchy();
         }
 
-        private void OnConfirmButtonClicked()
+        private async void OnConfirmButtonClicked()
         {
             if (string.IsNullOrEmpty(_view.UsernameTextField.value))
             {
                 return;
             }
 
-            var loginCommand = new LoginCommand(_view.UsernameTextField.value);
-            loginCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
+            if (string.IsNullOrEmpty(_view.AddressTextField.value))
+            {
+                return;
+            }
+
+            _uiCoreModel.ServerConnectionModel.ConnectPlayer(_view.AddressTextField.value, _view.UsernameTextField.value);
+            await _uiCoreModel.ServerConnectionModel.CompletePlayerConnectAwaiter;
+            _model.Confirm();
         }
     }
 }

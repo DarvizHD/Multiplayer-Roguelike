@@ -7,6 +7,7 @@ namespace Runtime.UI.Menu.Panels.LoginPanel
         public VisualElement Root { get; }
         public VisualElement ParentRoot { get; }
         public TextField UsernameTextField { get; }
+        public TextField AddressTextField { get; }
         public Button ConfirmButton { get; set; }
 
         public LoginPanelView(VisualTreeAsset asset, VisualElement parentRoot)
@@ -15,6 +16,7 @@ namespace Runtime.UI.Menu.Panels.LoginPanel
             ParentRoot = parentRoot;
 
             UsernameTextField = Root.Q<TextField>("username-text-field");
+            AddressTextField = Root.Q<TextField>("address-text-field");
             ConfirmButton = Root.Q<Button>("confirm-button");
         }
     }

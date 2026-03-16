@@ -15,6 +15,11 @@ namespace Runtime.GameSystems
             return _systems[id];
         }
 
+        public bool Has(string id)
+        {
+            return _systems.ContainsKey(id);
+        }
+
         public void Add(IGameSystem system)
         {
             if (_isUpdating)

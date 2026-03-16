@@ -6,7 +6,8 @@ namespace Runtime.ServerInteraction
 {
     public class ServerConnectionModel : IServerConnectionModel
     {
-        public event Action PlayerConnect;
+        private IServerConnectionModel _serverConnectionModelImplementation;
+        public event Action<string, string> PlayerConnect;
         public event Action PlayerDisconnect;
 
         public event Action<Packet> PlayerPacketReceived;
@@ -17,9 +18,9 @@ namespace Runtime.ServerInteraction
         public Peer PlayerPeer { get; set; }
         public Host PlayerHost { get; set; }
 
-        public void ConnectPlayer()
+        public void ConnectPlayer(string address,  string nickname)
         {
-            PlayerConnect?.Invoke();
+            PlayerConnect?.Invoke(address, nickname);
         }
 
         public void DisconnectPlayer()
