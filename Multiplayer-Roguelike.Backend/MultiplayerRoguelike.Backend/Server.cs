@@ -124,7 +124,6 @@ namespace Backend
                     break;
 
                 case EventType.Receive:
-                    Console.WriteLine($"packet received channel: {netEvent.ChannelID}, size: {netEvent.Packet.Length}");
                     _commandExecutorFactory.CreateCommandExecutor(ref netEvent).Execute();
                     netEvent.Packet.Dispose();
                     break;
@@ -169,8 +168,6 @@ namespace Backend
 
                     var buffer = protocol.Stream.ToArray();
                     packet.Create(buffer, buffer.Length, PacketFlags.Reliable);
-                    Console.WriteLine($"Player packet bytes: {BitConverter.ToString(protocol.Stream.ToArray())}");
-
 
                     SendPacket(player.Peer, 0, ref packet);
                 }
@@ -189,8 +186,6 @@ namespace Backend
 
                     var fullWorldProtocol = new NetworkProtocol();
                     worldSharedModel.WriteAll(fullWorldProtocol);
-
-                    Console.WriteLine($"World packet bytes: {BitConverter.ToString(fullWorldProtocol.Stream.ToArray())}");
 
                     foreach (var player in session.Players.Models.Values.Where(p => p.IsActive))
                     {
