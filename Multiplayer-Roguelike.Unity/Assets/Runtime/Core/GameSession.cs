@@ -219,7 +219,7 @@ namespace Runtime.Core
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(position));
             EcsWorld.AddEntityComponent(entityId, new PlayerTagComponent());
             EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(8f));
-            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(360f));
+            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(180f));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.zero));
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(provider.Transform));
@@ -377,8 +377,8 @@ namespace Runtime.Core
             EcsWorld.AddSystem<PlayerMovementSystem>();
             EcsWorld.AddSystem<PositionInterpolationSystem>();
 
-            EcsWorld.AddSystem<CharacterPositionSendSystem>();
-            EcsWorld.AddSystem<CharacterRotationSendSystem>();
+            EcsWorld.AddSystem<CharacterPositionSendSystem>(UpdateMode.FixedUpdate);
+            EcsWorld.AddSystem<CharacterRotationSendSystem>(UpdateMode.FixedUpdate);
 
             EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
             EcsWorld.AddSystem<CameraFocusSystem>();
