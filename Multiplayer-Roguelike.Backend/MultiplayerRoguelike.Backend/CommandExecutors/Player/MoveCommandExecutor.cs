@@ -25,7 +25,7 @@ namespace Backend.CommandExecutors.Player
                 return;
             }
 
-            if (session.GameSessionSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character))
+            if (session.SharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character))
             {
                 character.Position.Value = Command.Position;
                 character.Direction.Value = Command.Direction;

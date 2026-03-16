@@ -12,13 +12,13 @@ namespace Backend.Enemies.Combat
 
         public string Id { get; }
 
-        private SessionModel SessionModel { get; }
+        private GameSessionModel GameSessionModel { get; }
         private float _timer;
 
-        public EnemyAttackSystem(string id, SessionModel sessionModel)
+        public EnemyAttackSystem(string id, GameSessionModel gameSessionModel)
         {
             Id = id;
-            SessionModel = sessionModel;
+            GameSessionModel = gameSessionModel;
         }
 
         public void Update(float deltaTime)
@@ -29,7 +29,7 @@ namespace Backend.Enemies.Combat
             {
                 _timer = 0f;
 
-                foreach (var enemy in SessionModel.Enemies.Models.Values)
+                foreach (var enemy in GameSessionModel.Enemies.Models.Values)
                 {
                     UpdateEnemy(enemy, deltaTime);
                 }
@@ -48,7 +48,7 @@ namespace Backend.Enemies.Combat
 
             if (enemy.Shared.TargetPlayerId.Value != string.Empty)
             {
-                if (SessionModel.GameSessionSharedModel.Characters.TryGet(enemy.Shared.TargetPlayerId.Value, out var targetPlayer) && targetPlayer.Health.Value > 0)
+                if (GameSessionModel.SharedModel.Characters.TryGet(enemy.Shared.TargetPlayerId.Value, out var targetPlayer) && targetPlayer.Health.Value > 0)
                 {
                     var distance = (enemy.Shared.Position.Value - targetPlayer.Position.Value).LengthSquared();
                     if (!(distance > attack.Range * attack.Range))

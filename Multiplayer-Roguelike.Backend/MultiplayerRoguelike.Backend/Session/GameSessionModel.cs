@@ -1,3 +1,4 @@
+using System;
 using Backend.Enemies;
 using Backend.Navigation;
 using Backend.Player.Collection;
@@ -7,13 +8,13 @@ using Shared.Models.GameSession;
 
 namespace Backend.Session
 {
-    public class SessionModel
+    public class GameSessionModel
     {
         public string Id { get; }
 
         public PlayerModelCollection Players { get; } = new();
 
-        public GameSessionSharedModel GameSessionSharedModel { get; }
+        public GameSessionSharedModel SharedModel { get; }
 
         public EnemyModelCollection Enemies { get; } = new();
 
@@ -24,10 +25,12 @@ namespace Backend.Session
 
         public bool NeedStop = false;
 
-        public SessionModel(string id)
+        public TimeSpan SessionTime { get; set; }
+
+        public GameSessionModel(string id)
         {
             Id = id;
-            GameSessionSharedModel = new GameSessionSharedModel(id);
+            SharedModel = new GameSessionSharedModel(id);
             SpawnDirector = new SpawnDirectorModel(new SpawnDirectorConfig());
             GameSessionWaveModel = new GameSessionWaveModel();
         }

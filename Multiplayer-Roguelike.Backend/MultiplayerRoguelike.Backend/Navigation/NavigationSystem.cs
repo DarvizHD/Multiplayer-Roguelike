@@ -4,7 +4,7 @@ using Shared.Primitives;
 
 namespace Backend.Navigation
 {
-    public class NavigationSystem : RegisterServerSystem<SessionModel>
+    public class NavigationSystem : RegisterServerSystem<GameSessionModel>
     {
         private const int _tickRate = 32;
         private const float _tickInterval = 1f / _tickRate;
@@ -18,16 +18,16 @@ namespace Backend.Navigation
         {
         }
 
-        protected override void Update(SessionModel session, float deltaTime)
+        protected override void Update(GameSessionModel gameSession, float deltaTime)
         {
             _timer += deltaTime;
 
             if (_timer > _tickInterval)
             {
                 _timer = 0f;
-                session.Navigation.Crowd.Update(deltaTime, null);
+                gameSession.Navigation.Crowd.Update(deltaTime, null);
 
-                foreach (var enemy in session.Enemies.Models.Values)
+                foreach (var enemy in gameSession.Enemies.Models.Values)
                 {
                     var agent = enemy.CrowdAgent;
                     var newPosition = new Vector3(-agent.npos.X, agent.npos.Y, agent.npos.Z);

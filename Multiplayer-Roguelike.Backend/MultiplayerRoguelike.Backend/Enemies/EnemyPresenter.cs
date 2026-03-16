@@ -5,12 +5,12 @@ namespace Backend.Enemies
     public class EnemyPresenter : IPresenter
     {
         private readonly EnemyModel _enemyModel;
-        private readonly SessionModel _sessionModel;
+        private readonly GameSessionModel _gameSessionModel;
 
-        public EnemyPresenter(EnemyModel enemyModel, SessionModel sessionModel)
+        public EnemyPresenter(EnemyModel enemyModel, GameSessionModel gameSessionModel)
         {
             _enemyModel = enemyModel;
-            _sessionModel = sessionModel;
+            _gameSessionModel = gameSessionModel;
         }
         public void Enable()
         {
@@ -26,8 +26,8 @@ namespace Backend.Enemies
         {
             if (health <= 0)
             {
-                _sessionModel.GameSessionWaveModel.IncrementEnemiesKilled();
-                _sessionModel.Enemies.Remove(_enemyModel.Id);
+                _gameSessionModel.GameSessionWaveModel.IncrementEnemiesKilled();
+                _gameSessionModel.Enemies.Remove(_enemyModel.Id);
             }
         }
     }

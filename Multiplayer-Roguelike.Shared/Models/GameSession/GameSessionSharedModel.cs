@@ -15,12 +15,18 @@ namespace Shared.Models.GameSession
 
         public readonly Property<bool> IsComplete = new Property<bool>("is_complete", false);
 
+        public readonly Property<int> WaveNumber = new Property<int>("wave_number", 1);
+
+        public readonly Property<string> SessionTime = new Property<string>("session_time", "00:00");
+
         public GameSessionSharedModel(string id) : base(id)
         {
             Children.Add(Characters.Id, Characters);
             Children.Add(Enemies.Id, Enemies);
             Children.Add(IsRun.Id, IsRun);
             Children.Add(IsComplete.Id, IsComplete);
+            Children.Add(WaveNumber.Id, WaveNumber);
+            Children.Add(SessionTime.Id, SessionTime);
         }
     }
 }

@@ -120,21 +120,17 @@ namespace Backend
             switch (netEvent.Type)
             {
                 case EventType.Connect:
-                    Console.WriteLine($"{netEvent.Peer.ID} connected");
                     break;
 
                 case EventType.Receive:
-                    Console.WriteLine($"packet received channel: {netEvent.ChannelID}, size: {netEvent.Packet.Length}");
                     _commandExecutorFactory.CreateCommandExecutor(ref netEvent).Execute();
                     netEvent.Packet.Dispose();
                     break;
 
                 case EventType.Disconnect:
-                    Console.WriteLine($"{netEvent.Peer.ID} disconnected");
                     break;
 
                 case EventType.Timeout:
-                    Console.WriteLine($"{netEvent.Peer.ID} timed out");
 
                     var player = _world.Players.Models.Values.FirstOrDefault(p => p.Peer.ID == netEvent.Peer.ID);
                     if (player != null)
@@ -169,8 +165,6 @@ namespace Backend
 
                     var buffer = protocol.Stream.ToArray();
                     packet.Create(buffer, buffer.Length, PacketFlags.Reliable);
-                    Console.WriteLine($"Player packet bytes: {BitConverter.ToString(protocol.Stream.ToArray())}");
-
 
                     SendPacket(player.Peer, 0, ref packet);
                 }
@@ -181,7 +175,7 @@ namespace Backend
         {
             foreach (var session in _world.Sessions.Models.Values)
             {
-                var worldSharedModel = session.GameSessionSharedModel;
+                var worldSharedModel = session.SharedModel;
                 if (worldSharedModel.IsDirty || session.Players.Models.Values.Any(p => p.IsConnectingToSession))
                 {
                     var protocol = new NetworkProtocol();
@@ -189,8 +183,6 @@ namespace Backend
 
                     var fullWorldProtocol = new NetworkProtocol();
                     worldSharedModel.WriteAll(fullWorldProtocol);
-
-                    Console.WriteLine($"World packet bytes: {BitConverter.ToString(fullWorldProtocol.Stream.ToArray())}");
 
                     foreach (var player in session.Players.Models.Values.Where(p => p.IsActive))
                     {

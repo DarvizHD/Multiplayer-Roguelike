@@ -51,16 +51,16 @@ namespace Backend.Navigation
             _navMesh = reader.Read(br, 6);
         }
 
-        private void HandleSessionAdded(SessionModel session)
+        private void HandleSessionAdded(GameSessionModel gameSession)
         {
-            session.SetupNavigation(_navMesh);
-            _navigationSystem.Register(session);
+            gameSession.SetupNavigation(_navMesh);
+            _navigationSystem.Register(gameSession);
         }
 
-        private void HandleSessionRemoved(SessionModel session)
+        private void HandleSessionRemoved(GameSessionModel gameSession)
         {
-            _navigationSystem.Unregister(session);
-            session.Navigation = null;
+            _navigationSystem.Unregister(gameSession);
+            gameSession.Navigation = null;
         }
     }
 }
