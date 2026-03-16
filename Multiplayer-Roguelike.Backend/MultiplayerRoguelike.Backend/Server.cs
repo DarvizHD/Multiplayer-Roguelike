@@ -120,7 +120,6 @@ namespace Backend
             switch (netEvent.Type)
             {
                 case EventType.Connect:
-                    Console.WriteLine($"{netEvent.Peer.ID} connected");
                     break;
 
                 case EventType.Receive:
@@ -129,11 +128,9 @@ namespace Backend
                     break;
 
                 case EventType.Disconnect:
-                    Console.WriteLine($"{netEvent.Peer.ID} disconnected");
                     break;
 
                 case EventType.Timeout:
-                    Console.WriteLine($"{netEvent.Peer.ID} timed out");
 
                     var player = _world.Players.Models.Values.FirstOrDefault(p => p.Peer.ID == netEvent.Peer.ID);
                     if (player != null)
@@ -178,7 +175,7 @@ namespace Backend
         {
             foreach (var session in _world.Sessions.Models.Values)
             {
-                var worldSharedModel = session.GameSessionSharedModel;
+                var worldSharedModel = session.SharedModel;
                 if (worldSharedModel.IsDirty || session.Players.Models.Values.Any(p => p.IsConnectingToSession))
                 {
                     var protocol = new NetworkProtocol();

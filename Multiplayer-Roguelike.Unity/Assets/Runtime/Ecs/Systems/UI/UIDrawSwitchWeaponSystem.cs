@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Runtime.Ecs.Systems.UI
 {
-    public class UIDrawSwitchWeapon : BaseSystem
+    public class UIDrawSwitchWeaponSystem : BaseSystem
     {
         private QueryBuffer<SwitchWeaponEventComponent, WeaponSlotsComponent, LocalControllableTag> _buffer = new();
         private const string _selectedClass = "weapon-panel-selected";
@@ -15,7 +15,7 @@ namespace Runtime.Ecs.Systems.UI
         private readonly VisualElement _meleeWeapon;
         private readonly VisualElement _rangeWeapon;
 
-        public UIDrawSwitchWeapon(UIHudView hudView)
+        public UIDrawSwitchWeaponSystem(UIHudView hudView)
         {
             _meleeWeapon = hudView.HudRoot.Q<VisualElement>("melee-weapon-panel");
             _rangeWeapon = hudView.HudRoot.Q<VisualElement>("range-weapon-panel");

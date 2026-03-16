@@ -2,7 +2,7 @@ using Backend.ModelCollections;
 
 namespace Backend.Session.Collection
 {
-    public class SessionModelCollection : ModelCollectionBase<string, SessionModel>
+    public class SessionModelCollection : ModelCollectionBase<string, GameSessionModel>
     {
     }
 }

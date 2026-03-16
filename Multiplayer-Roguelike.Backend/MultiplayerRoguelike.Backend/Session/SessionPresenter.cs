@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Backend.Enemies;
 using Backend.Enemies.Combat;
@@ -10,7 +11,7 @@ namespace Backend.Session
 {
     public class SessionPresenter : IPresenter
     {
-        private readonly SessionModel _model;
+        private readonly GameSessionModel _model;
         private readonly WorldModel _world;
         private readonly ServerSystemCollection _serverSystems;
 
@@ -21,14 +22,14 @@ namespace Backend.Session
         private readonly GameSessionWavePresenter _gameSessionWavePresenter;
         private readonly SessionStateSystem _sessionStateSystem;
 
-        public SessionPresenter(SessionModel model, WorldModel worldModel)
+        public SessionPresenter(GameSessionModel model, WorldModel worldModel)
         {
             _model = model;
             _world = worldModel;
             _serverSystems = worldModel.ServerSystems;
 
             _enemyModelCollectionPresenter = new EnemyModelCollectionPresenter(model.Enemies, model);
-            _gameSessionWavePresenter = new GameSessionWavePresenter(model.GameSessionWaveModel);
+            _gameSessionWavePresenter = new GameSessionWavePresenter(model.GameSessionWaveModel, model);
             _targetSystem = new EnemyTargetSystem($"{_model.Id}: enemy-target-system", _model);
             _attackSystem = new EnemyAttackSystem($"{_model.Id}: enemy-attack-system", _model);
             _spawnDirectorSystem = new SpawnDirectorSystem($"{_model.Id}: spawn-director-system", model.SpawnDirector, _model);
@@ -40,7 +41,7 @@ namespace Backend.Session
             _model.Players.OnAdded += OnPlayerAdded;
             _model.Players.OnRemoved += OnPlayerRemoved;
 
-            _model.GameSessionSharedModel.IsRun.OnChanged += OnSessionIsRunChanged;
+            _model.SharedModel.IsRun.OnChanged += OnSessionIsRunChanged;
 
             _enemyModelCollectionPresenter.Enable();
             _gameSessionWavePresenter.Enable();
@@ -56,7 +57,7 @@ namespace Backend.Session
             _model.Players.OnAdded -= OnPlayerAdded;
             _model.Players.OnRemoved -= OnPlayerRemoved;
 
-            _model.GameSessionSharedModel.IsRun.OnChanged -= OnSessionIsRunChanged;
+            _model.SharedModel.IsRun.OnChanged -= OnSessionIsRunChanged;
 
             _enemyModelCollectionPresenter.Disable();
             _gameSessionWavePresenter.Disable();
@@ -77,16 +78,16 @@ namespace Backend.Session
             player.SessionId = _model.Id;
 
             var character = new CharacterSharedModel(player.PlayerSharedModel.Id);
-            _model.GameSessionSharedModel.Characters.Add(character);
+            _model.SharedModel.Characters.Add(character);
         }
 
         private void OnPlayerRemoved(PlayerModel player)
         {
             player.SessionId = string.Empty;
 
-            if (_model.GameSessionSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character))
+            if (_model.SharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character))
             {
-                _model.GameSessionSharedModel.Characters.Remove(character);
+                _model.SharedModel.Characters.Remove(character);
             }
 
             if (!_model.Players.Models.Values.Any(p => p.IsActive))
@@ -99,8 +100,8 @@ namespace Backend.Session
         {
             if (!isRun)
             {
-                _model.GameSessionSharedModel.Enemies.Clear();
-                _model.GameSessionSharedModel.Characters.Clear();
+                _model.SharedModel.Enemies.Clear();
+                _model.SharedModel.Characters.Clear();
             }
         }
     }
