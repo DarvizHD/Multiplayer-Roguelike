@@ -8,7 +8,7 @@ namespace Runtime.ServerInteraction
 {
     public class ServerPlayerConnectionSystem : IGameSystem
     {
-        public string Id => "ServerPlayerConnectionSystem";
+        public string Id => "server_player_connection_system";
 
         private readonly ServerConnectionModel _serverConnectionModel;
 

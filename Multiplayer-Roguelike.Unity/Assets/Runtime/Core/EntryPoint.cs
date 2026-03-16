@@ -44,7 +44,7 @@ namespace Runtime.Core
         private ParallaxPresenter _parallaxPresenter;
         private DustParticlePresenter _dustParticlePresenter;
 
-        private async void Start()
+        private void Start()
         {
             Application.runInBackground = true;
 
@@ -57,9 +57,6 @@ namespace Runtime.Core
             _serverConnectionPresenter =
                 new ServerConnectionPresenter(_serverConnectionModel, _gameFixedSystemCollection);
             _serverConnectionPresenter.Enable();
-
-            _serverConnectionModel.ConnectPlayer();
-            await _serverConnectionModel.CompletePlayerConnectAwaiter;
 
             _uiCoreModel.Setup(_playerSharedModel, _serverConnectionModel, _gameSessionSharedModel);
 

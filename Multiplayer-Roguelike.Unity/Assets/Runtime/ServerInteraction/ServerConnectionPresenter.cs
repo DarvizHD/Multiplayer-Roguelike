@@ -1,6 +1,7 @@
 using ENet;
 using Runtime.Core;
 using Runtime.GameSystems;
+using Shared.Commands.Player;
 
 namespace Runtime.ServerInteraction
 {
@@ -29,10 +30,10 @@ namespace Runtime.ServerInteraction
             _model.PlayerDisconnect -= OnPlayerDisconnect;
         }
 
-        private void OnPlayerConnect()
+        private async void OnPlayerConnect(string value, string nickname)
         {
             var address = new Address();
-            address.SetHost("127.0.0.1");
+            address.SetHost(value);
             address.Port = 7777;
 
             _model.PlayerHost = new Host();
@@ -40,8 +41,16 @@ namespace Runtime.ServerInteraction
 
             _model.PlayerPeer = _model.PlayerHost.Connect(address, 2);
 
-            _serverConnectionSystem = new ServerPlayerConnectionSystem(_model);
-            _systemCollection.Add(_serverConnectionSystem);
+            if (!_systemCollection.Has("server_player_connection_system"))
+            {
+                _serverConnectionSystem = new ServerPlayerConnectionSystem(_model);
+                _systemCollection.Add(_serverConnectionSystem);
+            }
+
+            await _model.CompletePlayerConnectAwaiter;
+
+            var loginCommand = new LoginCommand(nickname);
+            loginCommand.Write(_model.PlayerPeer);
         }
 
         private void OnPlayerDisconnect()

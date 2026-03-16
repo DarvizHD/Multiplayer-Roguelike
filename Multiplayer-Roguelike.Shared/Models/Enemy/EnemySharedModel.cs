@@ -18,10 +18,5 @@ namespace Shared.Models.Enemy
             Children.Add(TargetPlayerId.Id, TargetPlayerId);
             Children.Add(AnimationState.Id, AnimationState);
         }
-
-        public static EnemySharedModel Create(string id)
-        {
-            return new EnemySharedModel(id);
-        }
     }
 }
