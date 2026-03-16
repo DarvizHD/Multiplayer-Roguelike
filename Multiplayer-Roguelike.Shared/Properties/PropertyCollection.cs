@@ -51,14 +51,11 @@ namespace Shared.Properties
 
         public void Read(NetworkProtocol protocol)
         {
-            protocol.Get(out string _); // читает Id
-            ReadData(protocol);
-        }
-
-        public void ReadData(NetworkProtocol protocol)
-        {
             protocol.Get(out bool cleared);
-            if (cleared) Values.Clear();
+            if (cleared)
+            {
+                Values.Clear();
+            }
 
             protocol.Get(out int addCount);
             for (var i = 0; i < addCount; i++)

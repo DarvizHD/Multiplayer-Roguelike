@@ -71,7 +71,8 @@ namespace Runtime.Core
             var uiAudioService = new UIAudioService(audioSource, buttonClickClip, joinToLobbyClip);
 
             _router = new Router(uiAudioService);
-            _uiPresenter = new UIPresenter(_router, _uiCoreModel, _worldViewDescription, _menuDocument, uiAudioService, _uiHudView);
+            _uiPresenter = new UIPresenter(_router, _uiCoreModel, _worldViewDescription, _menuDocument, uiAudioService,
+                _uiHudView);
             _uiPresenter.Enable();
 
             var parallaxView = new ParallaxView(_menuDocument);
@@ -125,28 +126,22 @@ namespace Runtime.Core
         {
             var buffer = new byte[packet.Length];
             packet.CopyTo(buffer);
+
             var protocol = new NetworkProtocol(buffer);
-            _gameSessionSharedModel.Read(protocol); // сама читает свой Id
+            protocol.Get(out string _);
+
+            _gameSessionSharedModel.Read(protocol);
         }
 
         private void OnPlayerPacketReceived(Packet packet)
         {
             var buffer = new byte[packet.Length];
             packet.CopyTo(buffer);
-            Debug.Log($"OnPlayerPacketReceived size: {packet.Length}");
 
-            try
-            {
-                var protocol = new NetworkProtocol(buffer);
-                _playerSharedModel.Read(protocol);
-                Debug.Log($"Read success, nickname: {_playerSharedModel.Nickname.Value}");
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Read failed: {e}");
-            }
+            var protocol = new NetworkProtocol(buffer);
+            protocol.Get(out string _);
+            _playerSharedModel.Read(protocol);
         }
-
 
         private void RunSession(bool value)
         {

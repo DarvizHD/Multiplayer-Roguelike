@@ -59,36 +59,23 @@ namespace Shared.Models.Common
 
         public void Read(NetworkProtocol protocol)
         {
-            protocol.Get(out string _); // читает Id
-            ReadData(protocol);
-        }
-
-        public void ReadData(NetworkProtocol protocol)
-        {
-            System.Console.WriteLine($"[SharedModelCollection.ReadData] Collection '{Id}': starting read at position {protocol.Stream.Position}");
-
             protocol.Get(out bool cleared);
-            System.Console.WriteLine($"[SharedModelCollection.ReadData] Cleared: {cleared}");
-            if (cleared) _models.Clear();
+            if (cleared)
+            {
+                _models.Clear();
+            }
 
             protocol.Get(out int addedCount);
-            System.Console.WriteLine($"[SharedModelCollection.ReadData] Added count: {addedCount}");
-
             for (var i = 0; i < addedCount; i++)
             {
-                var posBeforeId = protocol.Stream.Position;
                 protocol.Get(out string id);
-                System.Console.WriteLine($"[SharedModelCollection.ReadData] Reading model {i+1}/{addedCount}: ID='{id}' at position {posBeforeId}");
-
                 var model = CreateInstance(id);
-                model.ReadData(protocol); // читаем только данные, ID уже прочитан
-                System.Console.WriteLine($"[SharedModelCollection.ReadData] After model '{id}' ReadData, pos: {protocol.Stream.Position}");
+                model.Read(protocol);
                 _models[id] = model;
                 Added?.Invoke(model);
             }
 
             protocol.Get(out int removedCount);
-            System.Console.WriteLine($"[SharedModelCollection.ReadData] Removed count: {removedCount}");
             for (var i = 0; i < removedCount; i++)
             {
                 protocol.Get(out string id);
@@ -97,20 +84,11 @@ namespace Shared.Models.Common
             }
 
             protocol.Get(out int updatedCount);
-            System.Console.WriteLine($"[SharedModelCollection.ReadData] Updated count: {updatedCount}");
             for (var i = 0; i < updatedCount; i++)
             {
                 protocol.Get(out string id);
-                if (!_models.TryGetValue(id, out var model))
-                {
-                    model = CreateInstance(id);
-                    _models[id] = model;
-                    Added?.Invoke(model);
-                }
-                model.ReadData(protocol); // уже без Id
+                _models[id].Read(protocol);
             }
-
-            System.Console.WriteLine($"[SharedModelCollection.ReadData] Collection '{Id}': finished read at position {protocol.Stream.Position}");
         }
 
         public void Write(NetworkProtocol protocol)
