@@ -30,9 +30,9 @@ namespace Backend.Session.SpawnDirector
                 _gameSessionModel.SharedModel.WaveNumber.Value = _waveModel.CurrentWave;
                 _waveModel.EnemiesSpawned = 0;
                 _waveModel.EnemiesKilled = 0;
-                _waveModel.EnemiesTarget = (int)MathF.Round(_waveModel.BaseEnemiesPerWave * MathF.Pow(_waveModel.WaveMultiplier, _waveModel.CurrentWave - 1));
+                _waveModel.EnemiesTarget = (int)MathF.Round(_waveModel.BaseEnemiesPerWave * MathF.Pow(_waveModel.WaveMultiplier, _waveModel.CurrentWave - 1) * _gameSessionModel.Players.Models.Count);
                 _waveModel.WaveActive = true;
-                Console.WriteLine($"Wave {_waveModel.CurrentWave} started");
+                Console.WriteLine($"Wave {_waveModel.CurrentWave} target: {_waveModel.EnemiesTarget}");
             }
         }
     }
