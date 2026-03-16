@@ -14670,6 +14670,7 @@ MonoBehaviour:
   - {fileID: 19800010}
   - {fileID: 19800002}
   _gameObject: {fileID: 100006}
+  _duration: 0.1
 --- !u!198 &19800006
 ParticleSystem:
   m_ObjectHideFlags: 0
