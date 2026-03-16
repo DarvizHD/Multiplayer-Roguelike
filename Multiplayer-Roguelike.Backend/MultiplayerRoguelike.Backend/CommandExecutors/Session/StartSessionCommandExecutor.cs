@@ -49,14 +49,15 @@ namespace Backend.CommandExecutors.Session
                 session.Players.Remove(player.PlayerSharedModel.Id);
             }
 
-            var newSession = new SessionModel(lobby.Guid);
-            newSession.GameSessionSharedModel.IsRun.Value = true;
+            var newSession = new GameSessionModel(lobby.Guid);
+            newSession.SharedModel.IsRun.Value = true;
             World.Sessions.Add(newSession.Id, newSession);
 
             foreach (var memberId in lobby.Members)
             {
                 World.Players.TryGet(memberId, out var member);
                 newSession.Players.Add(memberId, member);
+                member.IsConnectingToSession = true;
             }
         }
     }

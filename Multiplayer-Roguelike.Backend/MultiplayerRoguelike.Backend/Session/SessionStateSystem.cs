@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Backend.ServerSystems;
 
@@ -7,9 +8,9 @@ namespace Backend.Session
     {
         public string Id { get; }
 
-        private readonly SessionModel _model;
+        private readonly GameSessionModel _model;
 
-        public SessionStateSystem(string id, SessionModel model)
+        public SessionStateSystem(string id, GameSessionModel model)
         {
             Id = id;
             _model = model;
@@ -17,12 +18,21 @@ namespace Backend.Session
 
         public void Update(float deltaTime)
         {
-            if (_model.NeedStop)
+            _model.SessionTime += TimeSpan.FromSeconds(deltaTime);
+
+            if (_model.SharedModel.SessionTime.Value != _model.SessionTime.ToString(@"mm\:ss"))
             {
-                _model.GameSessionSharedModel.IsRun.Value = false;
+                _model.SharedModel.SessionTime.Value = _model.SessionTime.ToString(@"mm\:ss");
             }
 
-            if (_model.GameSessionSharedModel.Characters.Models.All(character => character.Health.Value <= 0))
+            Console.WriteLine(_model.SharedModel.SessionTime.Value);
+
+            if (_model.NeedStop)
+            {
+                _model.SharedModel.IsRun.Value = false;
+            }
+
+            if (_model.SharedModel.Characters.Models.All(character => character.Health.Value <= 0))
             {
                 _model.NeedStop = true;
             }

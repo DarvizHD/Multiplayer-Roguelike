@@ -34,20 +34,20 @@ namespace Backend.Session.Collection
             _models.OnRemoved -= OnRemoved;
         }
 
-        private void OnAdded(SessionModel session)
+        private void OnAdded(GameSessionModel gameSession)
         {
-            var presenter = new SessionPresenter(session, _worldModel);
+            var presenter = new SessionPresenter(gameSession, _worldModel);
             presenter.Enable();
-            _presenters.Add(session.Id, presenter);
+            _presenters.Add(gameSession.Id, presenter);
         }
 
-        private void OnRemoved(SessionModel session)
+        private void OnRemoved(GameSessionModel gameSession)
         {
-            Console.WriteLine($"Session {session.Id} has been removed");
+            Console.WriteLine($"Session {gameSession.Id} has been removed");
 
-            var presenter = _presenters[session.Id];
+            var presenter = _presenters[gameSession.Id];
             presenter.Disable();
-            _presenters.Remove(session.Id);
+            _presenters.Remove(gameSession.Id);
         }
     }
 }

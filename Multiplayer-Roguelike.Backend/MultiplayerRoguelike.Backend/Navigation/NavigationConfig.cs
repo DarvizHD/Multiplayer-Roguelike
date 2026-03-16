@@ -4,7 +4,7 @@ namespace Backend.Navigation
 {
     public class NavigationConfig
     {
-        public DtCrowdAgentParams AgentParams { get; set; } = new()
+        public DtCrowdAgentParams AgentParams { get; } = new()
         {
             radius = 0.6f,
             height = 2.0f,
@@ -19,7 +19,7 @@ namespace Backend.Navigation
             userData = null
         };
 
-        public DtObstacleAvoidanceParams ObstacleParams { get; set; } = new()
+        public DtObstacleAvoidanceParams ObstacleParams { get; } = new()
         {
             velBias = 0.4f,
             weightDesVel = 2.0f,
@@ -33,7 +33,7 @@ namespace Backend.Navigation
             adaptiveDepth = 5
         };
 
-        public DtCrowdConfig CrowdConfig { get; set; } = new(0.6f)
+        public DtCrowdConfig CrowdConfig { get; } = new(0.6f)
         {
             pathQueueSize = 64,
             maxFindPathIterations = 50,

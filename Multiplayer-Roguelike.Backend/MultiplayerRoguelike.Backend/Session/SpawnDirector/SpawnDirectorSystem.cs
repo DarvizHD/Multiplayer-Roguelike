@@ -10,26 +10,26 @@ namespace Backend.Session.SpawnDirector
     {
         private float _spawnTimer;
         private readonly SpawnDirectorModel _model;
-        private readonly SessionModel _sessionModel;
+        private readonly GameSessionModel _gameSessionModel;
         private int _lastSpawnPointIndex;
         private int _lastEnemyId = 10;
         public string Id { get; }
 
-        public SpawnDirectorSystem(string id, SpawnDirectorModel model, SessionModel sessionModel)
+        public SpawnDirectorSystem(string id, SpawnDirectorModel model, GameSessionModel gameSessionModel)
         {
             Id = id;
             _model = model;
-            _sessionModel = sessionModel;
+            _gameSessionModel = gameSessionModel;
         }
 
         public void Update(float deltaTime)
         {
-            if (_sessionModel.GameSessionWaveModel.WaveActive)
+            if (_gameSessionModel.GameSessionWaveModel.WaveActive)
             {
                 _spawnTimer += deltaTime;
                 if (_spawnTimer >= _model.SpawnInterval)
                 {
-                    var maxToSpawn = _sessionModel.GameSessionWaveModel.EnemiesTarget - _sessionModel.GameSessionWaveModel.EnemiesSpawned;
+                    var maxToSpawn = _gameSessionModel.GameSessionWaveModel.EnemiesTarget - _gameSessionModel.GameSessionWaveModel.EnemiesSpawned;
                     if (maxToSpawn > 0)
                     {
                         var spawnPointCount = _model.SpawnPoints.Count;
@@ -41,7 +41,7 @@ namespace Backend.Session.SpawnDirector
                             {
                                 SpawnEnemy(spawnPoint);
                                 maxToSpawn--;
-                                _sessionModel.GameSessionWaveModel.EnemiesSpawned++;
+                                _gameSessionModel.GameSessionWaveModel.EnemiesSpawned++;
                                 _lastSpawnPointIndex = (index + 1) % spawnPointCount;
                             }
                         }
@@ -55,10 +55,9 @@ namespace Backend.Session.SpawnDirector
         {
             var enemy = new EnemyModel(_lastEnemyId + 1, new EnemyConfig());
             enemy.Shared.Position.Value = spawnPoint.Position;
-            _sessionModel.GameSessionSharedModel.Enemies.Add(enemy.Shared);
-            _sessionModel.Enemies.Add(_lastEnemyId + 1, enemy);
+            _gameSessionModel.SharedModel.Enemies.Add(enemy.Shared);
+            _gameSessionModel.Enemies.Add(_lastEnemyId + 1, enemy);
             _lastEnemyId++;
-            Console.WriteLine($"Spawned enemy {_lastEnemyId} at {spawnPoint.Position}");
         }
 
         private bool CanSpawnEnemy(SpawnPointModel spawnPoint, float deltaTime)

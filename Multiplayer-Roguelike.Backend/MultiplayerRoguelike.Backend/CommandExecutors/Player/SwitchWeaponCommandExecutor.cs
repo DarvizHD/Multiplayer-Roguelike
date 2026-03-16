@@ -1,10 +1,9 @@
 using System;
 using Backend.CommandExecutors.Common;
 using ENet;
-using Shared.Commands;
 using Shared.Commands.Player;
 
-namespace Backend.CommandExecutors
+namespace Backend.CommandExecutors.Player
 {
     public class SwitchWeaponCommandExecutor : BaseCommandExecutor<SwitchWeaponCommand>
     {
@@ -27,7 +26,7 @@ namespace Backend.CommandExecutors
                 return;
             }
 
-            session.GameSessionSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character);
+            session.SharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character);
             character.EquippedWeaponSlotId.Value = Command.WeaponId;
         }
     }

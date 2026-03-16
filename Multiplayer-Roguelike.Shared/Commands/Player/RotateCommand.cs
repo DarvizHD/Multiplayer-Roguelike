@@ -38,7 +38,8 @@ namespace Shared.Commands.Player
             protocol.Add(PlayerNickname);
             protocol.Add(Rotation);
 
-            packet.Create(protocol.Stream.GetBuffer());
+            var buffer = protocol.Stream.ToArray();
+            packet.Create(buffer, buffer.Length, PacketFlags.None);
             peer.Send(0, ref packet);
         }
     }

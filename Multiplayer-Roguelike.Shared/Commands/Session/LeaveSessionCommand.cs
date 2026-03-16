@@ -36,7 +36,8 @@ namespace Shared.Commands.Session
             protocol.Add(PlayerNickname);
             protocol.Add(SessionId);
 
-            packet.Create(protocol.Stream.GetBuffer());
+            var buffer = protocol.Stream.ToArray();
+            packet.Create(buffer, buffer.Length, PacketFlags.Reliable);
             peer.Send(0, ref packet);
         }
     }

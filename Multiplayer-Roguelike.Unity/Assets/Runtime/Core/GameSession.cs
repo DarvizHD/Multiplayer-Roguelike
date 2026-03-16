@@ -62,7 +62,7 @@ namespace Runtime.Core
 
         private readonly UIDrawHealthSystem _drawHealthSystem;
         private readonly UIDrawNameSystem _drawNameSystem;
-        private readonly UIDrawTeammates _drawTeammates;
+        private readonly UIDrawTeammatesSystem _drawTeammatesSystem;
         private readonly UIDrawCrosshairSystem _drawCrosshair;
 
         private bool IsHost => _playerSharedModel.Lobby.OwnerId.Value == _playerSharedModel.Nickname.Value;
@@ -82,7 +82,7 @@ namespace Runtime.Core
 
             _drawHealthSystem = new UIDrawHealthSystem(_hudView);
             _drawNameSystem = new UIDrawNameSystem(_hudView);
-            _drawTeammates = new UIDrawTeammates(_hudView);
+            _drawTeammatesSystem = new UIDrawTeammatesSystem(_hudView);
             _drawCrosshair = new UIDrawCrosshairSystem(_hudView);
 
             _playerControls = new PlayerControls();
@@ -131,7 +131,7 @@ namespace Runtime.Core
 
             _drawHealthSystem.Destroy();
             _drawNameSystem.Destroy();
-            _drawTeammates.Destroy();
+            _drawTeammatesSystem.Destroy();
             _drawCrosshair.Destroy();
         }
 
@@ -219,7 +219,7 @@ namespace Runtime.Core
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(position));
             EcsWorld.AddEntityComponent(entityId, new PlayerTagComponent());
             EcsWorld.AddEntityComponent(entityId, new MoveSpeedComponent(8f));
-            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(360f));
+            EcsWorld.AddEntityComponent(entityId, new RotationSpeedComponent(180f));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.zero));
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(provider.Transform));
@@ -263,7 +263,7 @@ namespace Runtime.Core
             var enemyProvider = Object.Instantiate(prefab);
             _gameObjects.Add(enemyProvider.gameObject);
 
-            var enemyHitClip = Resources.Load<AudioClip>(AudioResourcesConstants.Enemies.ZombieTakeDamage);
+            Resources.Load<AudioClip>(AudioResourcesConstants.Enemies.ZombieTakeDamage);
 
             var speed = 1f;
 
@@ -377,8 +377,8 @@ namespace Runtime.Core
             EcsWorld.AddSystem<PlayerMovementSystem>();
             EcsWorld.AddSystem<PositionInterpolationSystem>();
 
-            EcsWorld.AddSystem<CharacterPositionSendSystem>();
-            EcsWorld.AddSystem<CharacterRotationSendSystem>();
+            EcsWorld.AddSystem<CharacterPositionSendSystem>(UpdateMode.FixedUpdate);
+            EcsWorld.AddSystem<CharacterRotationSendSystem>(UpdateMode.FixedUpdate);
 
             EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
             EcsWorld.AddSystem<CameraFocusSystem>();
@@ -428,11 +428,13 @@ namespace Runtime.Core
 
             EcsWorld.AddSystem(_drawNameSystem, UpdateMode.LateUpdate);
             EcsWorld.AddSystem(_drawHealthSystem,  UpdateMode.LateUpdate);
-            EcsWorld.AddSystem(new UIDrawSwitchWeapon(_hudView), UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(new UIDrawSwitchWeaponSystem(_hudView), UpdateMode.LateUpdate);
             EcsWorld.AddSystem(new UIDrawAmmo(_hudView), UpdateMode.LateUpdate);
-            EcsWorld.AddSystem(_drawTeammates, UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(_drawTeammatesSystem, UpdateMode.LateUpdate);
             EcsWorld.AddSystem(new UIDrawCurrentPlayerHealth(_hudView), UpdateMode.LateUpdate);
             EcsWorld.AddSystem<UIDrawCrosshairSystem>(_drawCrosshair, UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(new UIDrawTimerSystem(_hudView, _gameSessionSharedModel), UpdateMode.LateUpdate);
+            EcsWorld.AddSystem(new UIDrawWaveSystem(_hudView, _gameSessionSharedModel), UpdateMode.LateUpdate);
 
             /*
             EcsWorld.AddSystem<FreezeMovementByDamageSystem>();

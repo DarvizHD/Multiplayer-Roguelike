@@ -17,7 +17,6 @@ namespace Runtime.Ecs.Systems.Player.Rotation
 
             for (var i = 0; i < _buffer.Count; i++)
             {
-                var entityId = _buffer.EntityIds[i];
                 var playerInputComponent = _buffer.Components1[i];
                 var positionComponent = _buffer.Components2[i];
                 var rotationComponent = _buffer.Components3[i];

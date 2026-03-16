@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Backend.CommandExecutors.Common;
@@ -16,8 +15,6 @@ namespace Backend
 {
     public class Server
     {
-        private const int _tickRate = 32;
-        private const float _tickInterval = 1f / _tickRate;
         private readonly ushort _port;
 
         private Host _host;
@@ -78,37 +75,35 @@ namespace Backend
 
         private void Update()
         {
-            var stopwatch = Stopwatch.StartNew();
-            var lastTime = stopwatch.Elapsed.TotalSeconds;
-            double accumulator = 0;
+            var currentTime = DateTime.Now;
 
             while (_isRunning)
             {
-                while (_host.CheckEvents(out var netEvent) > 0)
-                {
-                    HandleEvent(netEvent);
-                }
-
-                while (_host.Service(15, out var netEvent) > 0)
-                {
-                    HandleEvent(netEvent);
-                }
-
-                var now = stopwatch.Elapsed.TotalSeconds;
-                var frameTime = now - lastTime;
-                lastTime = now;
-                accumulator += frameTime;
-
-                while (accumulator >= _tickInterval)
-                {
-                    _world.ServerSystems.Update(_tickInterval);
-                    accumulator -= _tickInterval;
-                }
+                var nextTime = DateTime.Now;
+                var deltaTime = (nextTime - currentTime).TotalSeconds;
+                currentTime = nextTime;
+                _world.ServerSystems.Update((float)deltaTime);
 
                 HandlePlayers();
                 HandleSessions();
 
-                Thread.Sleep(1);
+                var polled = false;
+                while (!polled)
+                {
+                    if (_host.CheckEvents(out var netEvent) <= 0)
+                    {
+                        if (_host.Service(15, out netEvent) <= 0)
+                        {
+                            break;
+                        }
+
+                        polled = true;
+                    }
+
+                    HandleEvent(netEvent);
+
+                    _host.Flush();
+                }
             }
         }
 
@@ -125,7 +120,6 @@ namespace Backend
             switch (netEvent.Type)
             {
                 case EventType.Connect:
-                    Console.WriteLine($"{netEvent.Peer.ID} connected");
                     break;
 
                 case EventType.Receive:
@@ -134,11 +128,9 @@ namespace Backend
                     break;
 
                 case EventType.Disconnect:
-                    Console.WriteLine($"{netEvent.Peer.ID} disconnected");
                     break;
 
                 case EventType.Timeout:
-                    Console.WriteLine($"{netEvent.Peer.ID} timed out");
 
                     var player = _world.Players.Models.Values.FirstOrDefault(p => p.Peer.ID == netEvent.Peer.ID);
                     if (player != null)
@@ -147,6 +139,7 @@ namespace Backend
                         var logoutExecutor = new LogoutCommandExecutor(logoutCommand, _world, player.Peer);
                         logoutExecutor.Execute();
                     }
+
                     break;
             }
         }
@@ -170,7 +163,8 @@ namespace Backend
                         player.PlayerSharedModel.Write(protocol);
                     }
 
-                    packet.Create(protocol.Stream.GetBuffer());
+                    var buffer = protocol.Stream.ToArray();
+                    packet.Create(buffer, buffer.Length, PacketFlags.Reliable);
 
                     SendPacket(player.Peer, 0, ref packet);
                 }
@@ -181,7 +175,7 @@ namespace Backend
         {
             foreach (var session in _world.Sessions.Models.Values)
             {
-                var worldSharedModel = session.GameSessionSharedModel;
+                var worldSharedModel = session.SharedModel;
                 if (worldSharedModel.IsDirty || session.Players.Models.Values.Any(p => p.IsConnectingToSession))
                 {
                     var protocol = new NetworkProtocol();

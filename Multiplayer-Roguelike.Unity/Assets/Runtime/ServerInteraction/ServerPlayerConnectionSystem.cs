@@ -39,8 +39,6 @@ namespace Runtime.ServerInteraction
                     Debug.Log("Server disconnected");
                     break;
                 case EventType.Receive:
-                    Debug.Log("Server received");
-
                     switch (netEvent.ChannelID)
                     {
                         case 0:

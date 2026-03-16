@@ -27,16 +27,17 @@ namespace Backend.CommandExecutors.Player
                 return;
             }
 
-            if (!session.GameSessionSharedModel.Enemies.TryGet(Command.TargetId, out var target))
+            if (!session.SharedModel.Enemies.TryGet(Command.TargetId, out var target))
             {
                 Console.WriteLine($"Enemy with {Command.TargetId} not found");
                 return;
             }
 
-            session.GameSessionSharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character);
+            session.SharedModel.Characters.TryGet(player.PlayerSharedModel.Id, out var character);
 
             if (target.Health.Value <= 0f)
             {
+                Console.WriteLine($"Enemy {Command.TargetId} is dead");
                 return;
             }
 

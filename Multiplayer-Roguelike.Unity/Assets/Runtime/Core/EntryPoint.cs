@@ -1,4 +1,3 @@
-using System;
 using ENet;
 using Runtime.GameSystems;
 using Runtime.ServerInteraction;
@@ -128,18 +127,18 @@ namespace Runtime.Core
             packet.CopyTo(buffer);
 
             var protocol = new NetworkProtocol(buffer);
-            protocol.Get(out string id);
+            protocol.Get(out string _);
 
             _gameSessionSharedModel.Read(protocol);
         }
 
         private void OnPlayerPacketReceived(Packet packet)
         {
-            var buffer = new byte[1024];
+            var buffer = new byte[packet.Length];
             packet.CopyTo(buffer);
 
             var protocol = new NetworkProtocol(buffer);
-            protocol.Get(out string id);
+            protocol.Get(out string _);
             _playerSharedModel.Read(protocol);
         }
 

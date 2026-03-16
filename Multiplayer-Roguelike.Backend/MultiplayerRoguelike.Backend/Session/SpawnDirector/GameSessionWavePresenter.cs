@@ -5,10 +5,11 @@ namespace Backend.Session.SpawnDirector
     public class GameSessionWavePresenter : IPresenter
     {
         private readonly GameSessionWaveModel _waveModel;
-
-        public GameSessionWavePresenter(GameSessionWaveModel waveModel)
+        private readonly GameSessionModel _gameSessionModel;
+        public GameSessionWavePresenter(GameSessionWaveModel waveModel, GameSessionModel gameSessionModel)
         {
             _waveModel = waveModel;
+            _gameSessionModel = gameSessionModel;
         }
 
         public void Enable()
@@ -26,6 +27,7 @@ namespace Backend.Session.SpawnDirector
             if (_waveModel.EnemiesKilled >= _waveModel.EnemiesTarget)
             {
                 _waveModel.CurrentWave++;
+                _gameSessionModel.SharedModel.WaveNumber.Value = _waveModel.CurrentWave;
                 _waveModel.EnemiesSpawned = 0;
                 _waveModel.EnemiesKilled = 0;
                 _waveModel.EnemiesTarget = (int)MathF.Round(_waveModel.BaseEnemiesPerWave * MathF.Pow(_waveModel.WaveMultiplier, _waveModel.CurrentWave - 1));
