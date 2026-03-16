@@ -8,6 +8,9 @@ namespace Runtime.Ecs.Systems.Player.Network
 {
     public class PositionInterpolationSystem : BaseSystem
     {
+        private const float _softThreshold = 0.25f;
+        private const float _hardThreshold = 4f;
+
         private QueryBuffer<PositionInterpolationComponent, PositionComponent,
             DirectionComponent, MoveSpeedComponent,
             NetworkControllableTag> _buffer = new();
@@ -23,17 +26,15 @@ namespace Runtime.Ecs.Systems.Player.Network
                 var directionComponent = _buffer.Components3[i];
                 var moveSpeedComponent = _buffer.Components4[i];
 
-                interpolationComponent.TotalTime += deltaTime;
-                if (interpolationComponent.TargetTime - interpolationComponent.LastTime == 0)
-                {
-                    return;
-                }
+                var delta = (positionComponent.Position - interpolationComponent.TargetPosition).sqrMagnitude;
 
-                var t = (interpolationComponent.TotalTime - interpolationComponent.TargetTime) / (interpolationComponent.TargetTime - interpolationComponent.LastTime);
-                if (t <= 1)
+                if (delta is > _softThreshold and < _hardThreshold)
                 {
-                    positionComponent.Position = Vector3.Lerp(interpolationComponent.LastPosition,
-                        interpolationComponent.TargetPosition, t);
+                    positionComponent.Position = Vector3.Lerp(positionComponent.Position, interpolationComponent.TargetPosition,  0.1f);
+                }
+                else if (delta >= _hardThreshold)
+                {
+                    positionComponent.Position = interpolationComponent.TargetPosition;
                 }
                 else
                 {
