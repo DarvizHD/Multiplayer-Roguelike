@@ -14435,3 +14435,4 @@ MonoBehaviour:
   _particleSystems:
   - {fileID: 259258620827335558}
   _gameObject: {fileID: 259258620811904776}
+  _duration: 15

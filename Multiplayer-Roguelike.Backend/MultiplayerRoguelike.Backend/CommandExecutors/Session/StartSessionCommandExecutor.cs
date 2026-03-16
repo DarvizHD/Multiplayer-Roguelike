@@ -57,7 +57,6 @@ namespace Backend.CommandExecutors.Session
             {
                 World.Players.TryGet(memberId, out var member);
                 newSession.Players.Add(memberId, member);
-                member.IsConnectingToSession = true;
             }
         }
     }

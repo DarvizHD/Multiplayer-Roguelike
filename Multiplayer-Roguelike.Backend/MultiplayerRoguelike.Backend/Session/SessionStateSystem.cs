@@ -25,8 +25,6 @@ namespace Backend.Session
                 _model.SharedModel.SessionTime.Value = _model.SessionTime.ToString(@"mm\:ss");
             }
 
-            Console.WriteLine(_model.SharedModel.SessionTime.Value);
-
             if (_model.NeedStop)
             {
                 _model.SharedModel.IsRun.Value = false;

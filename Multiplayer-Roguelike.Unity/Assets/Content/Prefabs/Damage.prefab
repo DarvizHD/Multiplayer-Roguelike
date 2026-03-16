@@ -29372,7 +29372,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -29425,7 +29425,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeZ:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -38773,3 +38773,4 @@ MonoBehaviour:
   _particleSystems:
   - {fileID: 19882578}
   _gameObject: {fileID: 186584}
+  _duration: 10

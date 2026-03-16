@@ -10,18 +10,27 @@ namespace Runtime.Pools
 
         public Particle Get(Transform parent)
         {
-            var particle = Get();
+            if (parent == null || !parent.gameObject.activeInHierarchy)
+            {
+                return null;
+            }
+
+            var particle = GetItemFromPool();
 
             particle.transform.parent = parent;
             particle.transform.localPosition = Vector3.zero;
             particle.transform.localRotation = Quaternion.identity;
+
+            AddItemToInProgress(particle);
+            particle.OnComplete += ReturnToPool;
+            particle.Enable();
 
             return particle;
         }
 
         protected override Particle CreateItem()
         {
-            return GameObject.Instantiate(Prefab);
+            return Object.Instantiate(Prefab);
         }
     }
 }
