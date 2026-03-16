@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 namespace Runtime.Ecs.Systems.UI
 {
-    public class UIDrawTeammates : BaseSystem
+    public class UIDrawTeammatesSystem : BaseSystem
     {
         private QueryBuffer<PlayerTagComponent, NameComponent, HealthComponent, NetworkControllableTag> _buffer = new();
 
@@ -19,7 +19,7 @@ namespace Runtime.Ecs.Systems.UI
         private readonly VisualElement _root;
         private readonly Dictionary<ushort, ProgressBar> _panels = new();
 
-        public UIDrawTeammates(UIHudView hudView)
+        public UIDrawTeammatesSystem(UIHudView hudView)
         {
             _root = hudView.HudRoot.Q<VisualElement>("teammates-panel");
             _container = _root.Q<VisualElement>("container");
