@@ -17,6 +17,18 @@ namespace Runtime.Pools
 
         public T Get()
         {
+            T item = GetItemFromPool();
+
+            AddItemToInProgress(item);
+
+            item.OnComplete += ReturnToPool;
+            item.Enable();
+
+            return item;
+        }
+
+        protected T GetItemFromPool()
+        {
             T item;
 
             if (_pool.Count > 0)
@@ -29,17 +41,17 @@ namespace Runtime.Pools
                 item = CreateItem();
             }
 
-            _inProgress.Add(item);
-
-            item.OnComplete += ReturnToPool;
-            item.Enable();
-
             return item;
+        }
+
+        protected void AddItemToInProgress(T item)
+        {
+            _inProgress.Add(item);
         }
 
         protected abstract T CreateItem();
 
-        private void ReturnToPool(IPoolItem item)
+        protected void ReturnToPool(IPoolItem item)
         {
             var typedItem = (T) item;
 
