@@ -42,7 +42,7 @@ namespace Shared.Commands.Player
             protocol.Add(Direction);
 
             var buffer = protocol.Stream.ToArray();
-            packet.Create(buffer, buffer.Length, PacketFlags.Reliable);
+            packet.Create(buffer, buffer.Length, PacketFlags.None);
             peer.Send(0, ref packet);
         }
     }
