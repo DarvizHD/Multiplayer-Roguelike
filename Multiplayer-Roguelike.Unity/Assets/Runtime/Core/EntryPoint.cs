@@ -128,7 +128,7 @@ namespace Runtime.Core
             packet.CopyTo(buffer);
 
             var protocol = new NetworkProtocol(buffer);
-            protocol.Get(out string id);
+            protocol.Get(out string _);
 
             _gameSessionSharedModel.Read(protocol);
         }
@@ -139,7 +139,7 @@ namespace Runtime.Core
             packet.CopyTo(buffer);
 
             var protocol = new NetworkProtocol(buffer);
-            protocol.Get(out string id);
+            protocol.Get(out string _);
             _playerSharedModel.Read(protocol);
         }
 

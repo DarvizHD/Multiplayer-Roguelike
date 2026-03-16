@@ -263,7 +263,7 @@ namespace Runtime.Core
             var enemyProvider = Object.Instantiate(prefab);
             _gameObjects.Add(enemyProvider.gameObject);
 
-            var enemyHitClip = Resources.Load<AudioClip>(AudioResourcesConstants.Enemies.ZombieTakeDamage);
+            Resources.Load<AudioClip>(AudioResourcesConstants.Enemies.ZombieTakeDamage);
 
             var speed = 1f;
 

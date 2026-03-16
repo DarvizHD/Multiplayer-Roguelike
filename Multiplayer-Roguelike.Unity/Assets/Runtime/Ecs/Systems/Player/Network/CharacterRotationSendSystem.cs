@@ -17,7 +17,6 @@ namespace Runtime.Ecs.Systems.Player.Network
 
             for (var i = 0; i < _buffer.Count; i++)
             {
-                var entityId = _buffer.EntityIds[i];
                 var characterConnectionComponent = _buffer.Components1[i];
                 var characterNetworkSyncComponent = _buffer.Components2[i];
                 var rotationComponent = _buffer.Components3[i];

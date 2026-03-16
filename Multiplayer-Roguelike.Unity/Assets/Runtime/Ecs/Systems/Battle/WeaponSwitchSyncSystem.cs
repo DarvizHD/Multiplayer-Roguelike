@@ -18,7 +18,6 @@ namespace Runtime.Ecs.Systems.Battle
 
             for (var i = 0; i < _buffer.Count; i++)
             {
-                var entityId = _buffer.EntityIds[i];
                 var characterNetwork = _buffer.Components1[i];
                 var characterConnection = _buffer.Components2[i];
                 var switchWeaponEvent = _buffer.Components3[i];

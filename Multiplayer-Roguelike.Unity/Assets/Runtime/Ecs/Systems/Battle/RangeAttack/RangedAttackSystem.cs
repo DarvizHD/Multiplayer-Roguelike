@@ -28,7 +28,6 @@ namespace Runtime.Ecs.Systems.Battle.RangeAttack
                 var entityId = _attackerBuffer.EntityIds[i];
                 var current = _attackerBuffer.Components1[i];
                 var cursorPos = _attackerBuffer.Components2[i];
-                var weaponSlots = _attackerBuffer.Components3[i];
 
                 if (!ComponentManager.TryGetComponent<RangedWeaponComponent>(current.WeaponEntityId, out var ranged))
                 {
