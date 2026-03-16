@@ -58,7 +58,6 @@ namespace Backend.Session.SpawnDirector
             _sessionModel.GameSessionSharedModel.Enemies.Add(enemy.Shared);
             _sessionModel.Enemies.Add(_lastEnemyId + 1, enemy);
             _lastEnemyId++;
-            Console.WriteLine($"Spawned enemy {_lastEnemyId} at {spawnPoint.Position}");
         }
 
         private bool CanSpawnEnemy(SpawnPointModel spawnPoint, float deltaTime)
