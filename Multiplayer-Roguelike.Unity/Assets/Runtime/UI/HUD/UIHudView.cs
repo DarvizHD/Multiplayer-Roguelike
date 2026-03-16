@@ -7,7 +7,7 @@ namespace Runtime.UI.HUD
     public class UIHudView : MonoBehaviour
     {
         public VisualElement HudRoot => _hudDocument.rootVisualElement.Q<VisualElement>("content");
-        public VisualElement WorldHudRoot => _hudDocument.rootVisualElement.Q<VisualElement>("content");
+        public VisualElement WorldHudRoot => _worldHudDocument.rootVisualElement.Q<VisualElement>("content");
 
         [field: SerializeField] public VisualTreeAsset TeammateAsset { get; private set; }
         [field: SerializeField] public VisualTreeAsset NameAsset { get; private set; }
