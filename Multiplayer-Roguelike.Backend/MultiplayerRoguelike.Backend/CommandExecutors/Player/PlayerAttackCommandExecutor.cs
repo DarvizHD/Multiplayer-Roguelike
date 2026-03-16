@@ -15,8 +15,6 @@ namespace Backend.CommandExecutors.Player
 
         public override void Execute()
         {
-            Console.WriteLine($"Enemy {Command.PlayerId} attacks {Command.TargetId}");
-
             if (!World.Players.TryGet(Command.PlayerId, out var player))
             {
                 Console.WriteLine($"Player {Command.PlayerId} not found");
@@ -49,8 +47,6 @@ namespace Backend.CommandExecutors.Player
             var eventName = weaponId < WeaponConstants.Events.Length ? WeaponConstants.Events[character.EquippedWeaponSlotId.Value] : "default";
             character.EventId.Value = $"{eventName}_{time}";
             target.Health.Value -= damage;
-
-            Console.WriteLine($"Enemy {Command.TargetId} has been damaged");
         }
     }
 }
