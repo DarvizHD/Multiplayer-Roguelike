@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Backend.CommandExecutors.Common;
@@ -16,8 +15,6 @@ namespace Backend
 {
     public class Server
     {
-        private const int _tickRate = 32;
-        private const float _tickInterval = 1f / _tickRate;
         private readonly ushort _port;
 
         private Host _host;
@@ -25,8 +22,6 @@ namespace Backend
         private WorldModel _world;
         private CommandExecutorFactory _commandExecutorFactory;
         private bool _isRunning;
-
-        private int _hadleCount = 0;
 
         public Server(ushort port)
         {
@@ -80,9 +75,14 @@ namespace Backend
 
         private void Update()
         {
-            while (true)
+            var currentTime = DateTime.Now;
+
+            while (_isRunning)
             {
-                _world.ServerSystems.Update(_tickInterval);
+                var nextTime = DateTime.Now;
+                var deltaTime = (nextTime - currentTime).TotalSeconds;
+                currentTime = nextTime;
+                _world.ServerSystems.Update((float)deltaTime);
 
                 HandlePlayers();
                 HandleSessions();
@@ -115,8 +115,6 @@ namespace Backend
             }
         }
 
-        private int recieveCount = 0;
-
         private void HandleEvent(Event netEvent)
         {
             switch (netEvent.Type)
@@ -126,9 +124,6 @@ namespace Backend
                     break;
 
                 case EventType.Receive:
-                    recieveCount++;
-                    Console.WriteLine($"{netEvent.Peer.ID} received {recieveCount}");
-
                     _commandExecutorFactory.CreateCommandExecutor(ref netEvent).Execute();
                     netEvent.Packet.Dispose();
                     break;

@@ -7,9 +7,13 @@ namespace Backend.Enemies.Combat
 {
     public class EnemyAttackSystem : IServerSystem
     {
+        private const int _tickRate = 32;
+        private const float _tickInterval = 1f / _tickRate;
+
         public string Id { get; }
 
         private SessionModel SessionModel { get; }
+        private float _timer;
 
         public EnemyAttackSystem(string id, SessionModel sessionModel)
         {
@@ -19,9 +23,16 @@ namespace Backend.Enemies.Combat
 
         public void Update(float deltaTime)
         {
-            foreach (var enemy in SessionModel.Enemies.Models.Values)
+            _timer += deltaTime;
+
+            if (_timer > _tickInterval)
             {
-                UpdateEnemy(enemy, deltaTime);
+                _timer = 0f;
+
+                foreach (var enemy in SessionModel.Enemies.Models.Values)
+                {
+                    UpdateEnemy(enemy, deltaTime);
+                }
             }
         }
 

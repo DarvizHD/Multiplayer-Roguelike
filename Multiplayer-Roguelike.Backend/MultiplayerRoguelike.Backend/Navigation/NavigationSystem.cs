@@ -6,8 +6,13 @@ namespace Backend.Navigation
 {
     public class NavigationSystem : RegisterServerSystem<SessionModel>
     {
+        private const int _tickRate = 32;
+        private const float _tickInterval = 1f / _tickRate;
+
         private const float _positionThreshold = 0.05f;
         private const float _positionThresholdSqr = _positionThreshold * _positionThreshold;
+
+        private float _timer;
 
         public NavigationSystem(string id) : base(id)
         {
@@ -15,17 +20,23 @@ namespace Backend.Navigation
 
         protected override void Update(SessionModel session, float deltaTime)
         {
-            session.Navigation.Crowd.Update(deltaTime, null);
+            _timer += deltaTime;
 
-            foreach (var enemy in session.Enemies.Models.Values)
+            if (_timer > _tickInterval)
             {
-                var agent = enemy.CrowdAgent;
-                var newPosition = new Vector3(-agent.npos.X, agent.npos.Y, agent.npos.Z);
-                var oldPosition = enemy.Shared.Position.Value;
+                _timer = 0f;
+                session.Navigation.Crowd.Update(deltaTime, null);
 
-                if ((newPosition - oldPosition).LengthSquared() > _positionThresholdSqr)
+                foreach (var enemy in session.Enemies.Models.Values)
                 {
-                    enemy.Shared.Position.Value = newPosition;
+                    var agent = enemy.CrowdAgent;
+                    var newPosition = new Vector3(-agent.npos.X, agent.npos.Y, agent.npos.Z);
+                    var oldPosition = enemy.Shared.Position.Value;
+
+                    if ((newPosition - oldPosition).LengthSquared() > _positionThresholdSqr)
+                    {
+                        enemy.Shared.Position.Value = newPosition;
+                    }
                 }
             }
         }

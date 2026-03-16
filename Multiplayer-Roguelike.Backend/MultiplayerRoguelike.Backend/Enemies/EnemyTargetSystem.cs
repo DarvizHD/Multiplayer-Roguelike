@@ -12,10 +12,11 @@ namespace Backend.Enemies
 {
     public class EnemyTargetSystem : IServerSystem
     {
+        private const int _tickRate = 32;
+        private const float _tickInterval = 1f / _tickRate;
+
         private const float _targetMoveThreshold = 0.5f;
         private const float _targetMoveThresholdSqr = _targetMoveThreshold * _targetMoveThreshold;
-
-        private const float _targetUpdateInterval = 0.25f;
         private float _timer;
 
         public string Id { get; }
@@ -34,7 +35,7 @@ namespace Backend.Enemies
         {
             _timer += deltaTime;
 
-            if (!(_timer < _targetUpdateInterval))
+            if (_timer > _tickInterval)
             {
                 _timer = 0f;
 
