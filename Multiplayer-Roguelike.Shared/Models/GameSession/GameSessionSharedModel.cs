@@ -15,9 +15,9 @@ namespace Shared.Models.GameSession
 
         public readonly Property<bool> IsComplete = new Property<bool>("is_complete", false);
 
-        public readonly Property<int> WaveNumber = new Property<int>("wave_number", 1);
+        public readonly Property<int> WaveNumber = new Property<int>("wave_number", 0);
 
-        public readonly Property<string> SessionTime = new Property<string>("session_time", "00:00");
+        public readonly Property<string> SessionTime = new Property<string>("session_time", string.Empty);
 
         public GameSessionSharedModel(string id) : base(id)
         {
@@ -27,6 +27,9 @@ namespace Shared.Models.GameSession
             Children.Add(IsComplete.Id, IsComplete);
             Children.Add(WaveNumber.Id, WaveNumber);
             Children.Add(SessionTime.Id, SessionTime);
+
+            WaveNumber.Value = 1;
+            SessionTime.Value = "00:00";
         }
     }
 }
