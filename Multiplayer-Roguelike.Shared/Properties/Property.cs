@@ -37,6 +37,12 @@ namespace Shared.Properties
 
         public void Read(NetworkProtocol protocol)
         {
+            protocol.Get(out string _); // читает Id
+            ReadData(protocol);
+        }
+
+        public void ReadData(NetworkProtocol protocol)
+        {
             protocol.Get(out T value);
             Value = value;
         }

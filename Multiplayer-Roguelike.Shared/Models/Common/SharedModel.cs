@@ -20,11 +20,28 @@ namespace Shared.Models.Common
 
         public void Read(NetworkProtocol protocol)
         {
-            protocol.Get(out int propertyLenght);
-            for (var i = 0; i < propertyLenght; i++)
+            protocol.Get(out string _);
+            ReadData(protocol);
+        }
+
+        public void ReadData(NetworkProtocol protocol)
+        {
+            protocol.Get(out int count);
+            System.Console.WriteLine($"[SharedModel.ReadData] Model '{Id}': reading {count} properties. Stream position: {protocol.Stream.Position}");
+
+            for (var i = 0; i < count; i++)
             {
+                var positionBefore = protocol.Stream.Position;
                 protocol.Get(out string propertyId);
-                Children[propertyId].Read(protocol);
+
+                if (Children.TryGetValue(propertyId, out var child))
+                {
+                    child.ReadData(protocol);
+                }
+                else
+                {
+                    var availableProps = string.Join(", ", Children.Keys);
+                }
             }
         }
 

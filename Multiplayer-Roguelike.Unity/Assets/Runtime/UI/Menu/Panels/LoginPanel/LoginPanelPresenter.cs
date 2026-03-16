@@ -20,12 +20,13 @@ namespace Runtime.UI.Menu.Panels.LoginPanel
         {
             _view.ParentRoot.Add(_view.Root);
             _view.ConfirmButton.clicked += OnConfirmButtonClicked;
-
             _uiCoreModel.PlayerSharedModel.Nickname.OnChanged += OnNicknameChanged;
         }
 
         private void OnNicknameChanged(string value)
         {
+            _uiCoreModel.PlayerSharedModel.Nickname.OnChanged -= OnNicknameChanged;
+
             _model.SetUsername(value);
             _model.Confirm();
         }
@@ -33,6 +34,7 @@ namespace Runtime.UI.Menu.Panels.LoginPanel
         public void Disable()
         {
             _view.ConfirmButton.clicked -= OnConfirmButtonClicked;
+            _uiCoreModel.PlayerSharedModel.Nickname.OnChanged -= OnNicknameChanged;
             _view.Root.RemoveFromHierarchy();
         }
 
