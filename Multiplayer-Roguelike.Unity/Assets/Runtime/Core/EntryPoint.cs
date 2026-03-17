@@ -153,7 +153,7 @@ namespace Runtime.Core
                 _parallaxPresenter.Disable();
                 _dustParticlePresenter.Disable();
 
-                _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel, _uiHudView, _worldViewDescription);
+                _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel, _uiHudView, _worldViewDescription, _soundModel);
                 _gameSession.Enable();
                 _gameSession.Run();
             }

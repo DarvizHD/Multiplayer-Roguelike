@@ -1,7 +1,9 @@
+using Runtime.Core;
 using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.Sound;
 using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems.Core;
+using Runtime.Sound;
 using UnityEngine;
 
 namespace Runtime.Ecs.Systems.Sound
@@ -32,8 +34,13 @@ namespace Runtime.Ecs.Systems.Sound
             }
 
             voice.Source.clip = voice.Clip;
+            voice.Source.loop = true;
             voice.Source.Play();
-            voice.Delay = Random.Range(0f, 2f);
+
+            var monoBehavior = voice.Source.GetComponent<CoroutineRunner>() ?? voice.Source.gameObject.AddComponent<CoroutineRunner>();
+
+            monoBehavior.StartCoroutine(AudioSourceFade.FadeIn(voice.Source, voice.TargetVolume, voice.FadeDuration));
+            voice.Delay = Random.Range(3f, 6f);
         }
     }
 }

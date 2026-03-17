@@ -40,8 +40,8 @@ namespace Runtime.Sound
             var next = isRun ? _gameplayAmbient : _menuAmbient;
             var volume = isRun ? SoundVolumeConstants.Ambient.Gameplay : SoundVolumeConstants.Ambient.Menu;
 
-            _soundModel.FadeOut(duration: 0.5f, clipName: current.name);
-            _soundModel.FadeIn(next, duration: 0.5f, volume: volume, loop: true);
+            _soundModel.FadeOut(duration: SoundVolumeConstants.Fade.Long, clipName: current.name);
+            _soundModel.FadeIn(next, duration: SoundVolumeConstants.Fade.Long, volume: volume, loop: true);
         }
     }
 }
