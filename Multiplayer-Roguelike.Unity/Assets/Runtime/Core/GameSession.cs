@@ -437,8 +437,6 @@ namespace Runtime.Core
             EcsWorld.AddSystem(new UIDrawWaveSystem(_hudView, _gameSessionSharedModel), UpdateMode.LateUpdate);
 
             /*
-            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
-            EcsWorld.AddSystem<FreezeMovementSystem>();
             EcsWorld.AddSystem<RegenerationSystem>();
             EcsWorld.AddSystem<InvulnerabilitySystem>();
             EcsWorld.AddSystem<DeathAnimationSystem>();*/

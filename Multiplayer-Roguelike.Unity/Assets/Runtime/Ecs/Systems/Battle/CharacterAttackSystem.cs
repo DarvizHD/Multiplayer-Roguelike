@@ -8,32 +8,33 @@ namespace Runtime.Ecs.Systems.Battle
 {
     public class CharacterAttackSystem : BaseSystem
     {
-        private QueryBuffer<AttackEventComponent, CharacterNetworkSyncComponent, CharacterConnectionComponent, LocalControllableTag>  _attackEventBuffer = new();
+        protected override IQueryBuffer Buffer => _buffer;
+        private QueryBuffer<AttackEventComponent, CharacterNetworkSyncComponent, CharacterConnectionComponent, LocalControllableTag>  _buffer = new();
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
-            ComponentManager.Filter.Query(ref _attackEventBuffer);
+            ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _attackEventBuffer.Count; i++)
+        protected override void Update(int i, float deltaTime)
+        {
+            var entityId = _buffer.EntityIds[i];
+            var attackEventComponent = _buffer.Components1[i];
+            var characterNetworkSyncComponent = _buffer.Components2[i];
+            var characterConnectionComponent = _buffer.Components3[i];
+
+            if (!ComponentManager.TryGetComponent<EnemyNetworkSyncComponent>(attackEventComponent.TargetId, out var enemyNetworkSyncComponent))
             {
-                var entityId = _attackEventBuffer.EntityIds[i];
-                var attackEventComponent = _attackEventBuffer.Components1[i];
-                var characterNetworkSyncComponent = _attackEventBuffer.Components2[i];
-                var characterConnectionComponent = _attackEventBuffer.Components3[i];
-
-                if (!ComponentManager.TryGetComponent<EnemyNetworkSyncComponent>(attackEventComponent.TargetId, out var enemyNetworkSyncComponent))
-                {
-                    continue;
-                }
-
-                var targetId = enemyNetworkSyncComponent.EnemySharedModel.Id;
-
-                var attackCommand = new PlayerAttackCommand(characterNetworkSyncComponent.CharacterSharedModel.Id, targetId);
-
-                attackCommand.Write(characterConnectionComponent.ServerConnectionModel.PlayerPeer);
-
-                ComponentManager.RemoveComponent<AttackEventComponent>(entityId);
+                return;
             }
+
+            var targetId = enemyNetworkSyncComponent.EnemySharedModel.Id;
+
+            var attackCommand = new PlayerAttackCommand(characterNetworkSyncComponent.CharacterSharedModel.Id, targetId);
+
+            attackCommand.Write(characterConnectionComponent.ServerConnectionModel.PlayerPeer);
+
+            ComponentManager.RemoveComponent<AttackEventComponent>(entityId);
         }
     }
 }

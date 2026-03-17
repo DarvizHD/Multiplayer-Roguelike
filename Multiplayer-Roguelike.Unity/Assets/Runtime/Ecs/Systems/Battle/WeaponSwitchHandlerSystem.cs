@@ -6,28 +6,30 @@ namespace Runtime.Ecs.Systems.Battle
 {
     public class WeaponSwitchHandlerSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
+
         private QueryBuffer<SwitchWeaponEventComponent, WeaponSlotsComponent, CurrentWeaponComponent> _buffer = new();
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
+        protected override void Update(int i, float deltaTime)
+        {
+            var entityId = _buffer.EntityIds[i];
+            var switchEvent = _buffer.Components1[i];
+            var slots = _buffer.Components2[i];
+            var current = _buffer.Components3[i];
+
+            var targetSlot = switchEvent.TargetSlot;
+
+            if (targetSlot >= 0 && targetSlot < slots.SlotEntityIds.Length)
             {
-                var entityId = _buffer.EntityIds[i];
-                var switchEvent = _buffer.Components1[i];
-                var slots = _buffer.Components2[i];
-                var current = _buffer.Components3[i];
-
-                var targetSlot = switchEvent.TargetSlot;
-
-                if (targetSlot >= 0 && targetSlot < slots.SlotEntityIds.Length)
-                {
-                    current.WeaponEntityId = slots.SlotEntityIds[targetSlot];
-                }
-
-                ComponentManager.RemoveComponent<SwitchWeaponEventComponent>(entityId);
+                current.WeaponEntityId = slots.SlotEntityIds[targetSlot];
             }
+
+            ComponentManager.RemoveComponent<SwitchWeaponEventComponent>(entityId);
         }
     }
 }

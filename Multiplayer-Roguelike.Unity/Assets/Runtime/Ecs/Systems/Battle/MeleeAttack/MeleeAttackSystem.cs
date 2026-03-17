@@ -14,16 +14,20 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 {
     public class MeleeAttackSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _attackerBuffer;
+
         private QueryBuffer<PositionComponent, RotationComponent, CurrentWeaponComponent, LocalControllableTag> _attackerBuffer = new();
         private QueryBuffer<PositionComponent, EnemyTagComponent, AliveTagComponent> _targetsBuffer = new();
 
-        public override void Update(float deltaTime)
+
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _targetsBuffer);
             ComponentManager.Filter.Query(ref _attackerBuffer);
+        }
 
-            for (var i = 0; i < _attackerBuffer.Count; i++)
-            {
+        protected override void Update(int i, float deltaTime)
+        {
                 var entityId = _attackerBuffer.EntityIds[i];
                 var position = _attackerBuffer.Components1[i];
                 var rotation = _attackerBuffer.Components2[i];
@@ -31,18 +35,18 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 
                 if (!ComponentManager.TryGetComponent<MeleeAttackComponent>(current.WeaponEntityId, out var melee))
                 {
-                    continue;
+                    return;
                 }
 
                 if (!ComponentManager.TryGetComponent<AttackCooldownComponent>(current.WeaponEntityId,
                         out var cooldown))
                 {
-                    continue;
+                    return;
                 }
 
                 if (cooldown.CurrentCooldown > 0f)
                 {
-                    continue;
+                    return;
                 }
 
                 var attackDir = Quaternion.Euler(0f, rotation.Angle, 0f) * Vector3.forward;
@@ -75,7 +79,6 @@ namespace Runtime.Ecs.Systems.Battle.MeleeAttack
 
                     ComponentManager.AddComponent(entityId, new PlaySoundEventComponent(melee.AttackClip));
                 }
-            }
         }
     }
 }

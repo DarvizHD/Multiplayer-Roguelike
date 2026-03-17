@@ -1,10 +1,16 @@
+using System;
 using Runtime.Ecs.Components;
 
 namespace Runtime.Ecs.Core
 {
-    public class QueryBuffer<T> where T : IComponent
+    public interface IQueryBuffer
     {
-        public ushort Count;
+        ushort Count { get; }
+    }
+
+    public class QueryBuffer<T> : IQueryBuffer where T : IComponent
+    {
+        public ushort Count { get; set; }
 
         public ushort[] EntityIds;
 
@@ -18,9 +24,9 @@ namespace Runtime.Ecs.Core
         }
     }
 
-    public class QueryBuffer<T1, T2> where T1 : IComponent where T2 : IComponent
+    public class QueryBuffer<T1, T2> : IQueryBuffer where T1 : IComponent where T2 : IComponent
     {
-        public ushort Count;
+        public ushort Count { get; set; }
 
         public ushort[] EntityIds;
 
@@ -37,12 +43,11 @@ namespace Runtime.Ecs.Core
         }
     }
 
-    public class QueryBuffer<T1, T2, T3>
-        where T1 : IComponent
+    public class QueryBuffer<T1, T2, T3> : IQueryBuffer where T1 : IComponent
         where T2 : IComponent
         where T3 : IComponent
     {
-        public ushort Count = 0;
+        public ushort Count { get; set; }
 
         public ushort[] EntityIds;
 
@@ -56,16 +61,16 @@ namespace Runtime.Ecs.Core
             Components1 = new T1[initialCapacity];
             Components2 = new T2[initialCapacity];
             Components3 = new T3[initialCapacity];
+            Count = 0;
         }
     }
 
-    public class QueryBuffer<T1, T2, T3, T4>
-        where T1 : IComponent
+    public class QueryBuffer<T1, T2, T3, T4> : IQueryBuffer where T1 : IComponent
         where T2 : IComponent
         where T3 : IComponent
         where T4 : IComponent
     {
-        public ushort Count = 0;
+        public ushort Count { get; set; }
 
         public ushort[] EntityIds;
 
@@ -81,17 +86,17 @@ namespace Runtime.Ecs.Core
             Components2 = new T2[initialCapacity];
             Components3 = new T3[initialCapacity];
             Components4 = new T4[initialCapacity];
+            Count = 0;
         }
     }
 
-    public class QueryBuffer<T1, T2, T3, T4, T5>
-        where T1 : IComponent
+    public class QueryBuffer<T1, T2, T3, T4, T5> : IQueryBuffer where T1 : IComponent
         where T2 : IComponent
         where T3 : IComponent
         where T4 : IComponent
         where T5 : IComponent
     {
-        public ushort Count = 0;
+        public ushort Count { get; set; }
 
         public ushort[] EntityIds;
 
@@ -109,6 +114,7 @@ namespace Runtime.Ecs.Core
             Components3 = new T3[initialCapacity];
             Components4 = new T4[initialCapacity];
             Components5 = new T5[initialCapacity];
+            Count = 0;
         }
     }
 }

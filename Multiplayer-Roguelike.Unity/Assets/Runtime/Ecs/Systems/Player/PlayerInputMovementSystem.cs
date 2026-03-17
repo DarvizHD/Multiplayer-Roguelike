@@ -9,20 +9,21 @@ namespace Runtime.Ecs.Systems.Player
 {
     public class PlayerInputMovementSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
         private QueryBuffer<PlayerInputComponent, DirectionComponent, AliveTagComponent> _buffer = new();
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
-            {
-                var playerInputComponent = _buffer.Components1[i];
-                var directionComponent = _buffer.Components2[i];
+        protected override void Update(int i, float deltaTime)
+        {
+            var playerInputComponent = _buffer.Components1[i];
+            var directionComponent = _buffer.Components2[i];
 
-                var moveInput = playerInputComponent.PlayerControls.Gameplay.Move.ReadValue<Vector2>();
-                directionComponent.Direction = new Vector3(moveInput.x, 0, moveInput.y).normalized;
-            }
+            var moveInput = playerInputComponent.PlayerControls.Gameplay.Move.ReadValue<Vector2>();
+            directionComponent.Direction = new Vector3(moveInput.x, 0, moveInput.y).normalized;
         }
     }
 }

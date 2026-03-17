@@ -7,20 +7,21 @@ namespace Runtime.Ecs.Systems.Battle
 {
     public class EnemyAttackAnimationSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
         private QueryBuffer<EnemyTagComponent, AnimatorComponent, AttackAnimationEventComponent> _buffer = new();
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
-            {
-                var entityId = _buffer.EntityIds[i];
-                var animator = _buffer.Components2[i];
+        protected override void Update(int i, float deltaTime)
+        {
+            var entityId = _buffer.EntityIds[i];
+            var animator = _buffer.Components2[i];
 
-                animator.Animator.SetTrigger(animator.MeleeAttack);
-                ComponentManager.RemoveComponent<AttackAnimationEventComponent>(entityId);
-            }
+            animator.Animator.SetTrigger(animator.MeleeAttack);
+            ComponentManager.RemoveComponent<AttackAnimationEventComponent>(entityId);
         }
     }
 }

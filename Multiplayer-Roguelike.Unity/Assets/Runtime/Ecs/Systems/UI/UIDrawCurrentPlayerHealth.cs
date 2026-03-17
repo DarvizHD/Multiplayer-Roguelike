@@ -10,6 +10,7 @@ namespace Runtime.Ecs.Systems.UI
 {
     public class UIDrawCurrentPlayerHealth : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
         private QueryBuffer<HealthComponent, LocalControllableTag, PlayerTagComponent> _buffer = new();
         private readonly ProgressBar _health;
 
@@ -18,16 +19,16 @@ namespace Runtime.Ecs.Systems.UI
             _health = hudView.HudRoot.Q<ProgressBar>("health-bar");
         }
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
-            {
-                var health = _buffer.Components1[i];
-                _health.value = health.CurrentHealth;
-                _health.highValue = health.MaxHealth;
-            }
+        protected override void Update(int i, float deltaTime)
+        {
+            var health = _buffer.Components1[i];
+            _health.value = health.CurrentHealth;
+            _health.highValue = health.MaxHealth;
         }
     }
 }
