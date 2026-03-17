@@ -10,13 +10,26 @@ namespace Runtime.Tools
         private float _delayMs;
         private float _fps;
 
+        private bool _visible;
+
         private void Start()
         {
             _lastTime = Time.realtimeSinceStartup;
+            _visible = false;
         }
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                _visible = !_visible;
+            }
+
+            if (!_visible)
+            {
+                return;
+            }
+
             var currentTime = Time.realtimeSinceStartup;
 
             _deltaTime = currentTime - _lastTime;
@@ -32,6 +45,11 @@ namespace Runtime.Tools
 
         private void OnGUI()
         {
+            if (!_visible)
+            {
+                return;
+            }
+
             var style = new GUIStyle(GUI.skin.label);
             style.fontSize = 20;
             style.normal.textColor = Color.green;
