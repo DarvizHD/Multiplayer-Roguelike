@@ -7,12 +7,6 @@ namespace Runtime.UI.Menu.Navigation
     {
         private readonly Dictionary<string, IPresenter> _screens = new();
         private readonly Stack<string> _history = new();
-        private readonly UIAudioService _audioService;
-
-        public Router(UIAudioService audioService)
-        {
-            _audioService = audioService;
-        }
 
         public void Register(string id, IPresenter screen)
         {
@@ -21,14 +15,13 @@ namespace Runtime.UI.Menu.Navigation
 
         public void NavigateTo(string id)
         {
-            NavigateInternal(id);
+            if (_history.TryPeek(out var current))
+            {
+                _screens[current].Disable();
+            }
 
-            _audioService.PlayNavigate();
-        }
-
-        public void NavigateSilent(string id)
-        {
-            NavigateInternal(id);
+            _history.Push(id);
+            _screens[id].Enable();
         }
 
         public void GoBack()
@@ -40,8 +33,6 @@ namespace Runtime.UI.Menu.Navigation
 
             _screens[_history.Pop()].Disable();
             _screens[_history.Peek()].Enable();
-
-            _audioService.PlayNavigate();
         }
 
         public void ToMainMenu()
@@ -63,17 +54,6 @@ namespace Runtime.UI.Menu.Navigation
             }
 
             _history.Clear();
-        }
-
-        private void NavigateInternal(string id)
-        {
-            if (_history.TryPeek(out var current))
-            {
-                _screens[current].Disable();
-            }
-
-            _history.Push(id);
-            _screens[id].Enable();
         }
     }
 }

@@ -1,48 +1,68 @@
-using Runtime.Core;
 using UnityEngine.UIElements;
 
 namespace Runtime.UI.Menu.Panels.LoginPanel
 {
-    public class LoginPanelPresenter : IPresenter
+    public class LoginPanelPresenter : BasePanelPresenter
     {
+        protected override VisualElement Root => _view.Root;
+
         private readonly LoginPanelView _view;
         private readonly LoginPanelModel _model;
         private readonly UICoreModel _uiCoreModel;
         private const string _defaultAddress = "127.0.0.1";
+        private const string _selectedClass = "selected";
 
-        public LoginPanelPresenter(LoginPanelModel model, LoginPanelView view, UICoreModel uiCoreModel)
+        private bool _isOnline;
+
+        public LoginPanelPresenter(LoginPanelModel model, LoginPanelView view, UICoreModel uiCoreModel, UIAudioService audioService) : base(audioService)
         {
             _model = model;
             _view = view;
             _uiCoreModel = uiCoreModel;
         }
 
-        public void Enable()
+        public override void Enable()
         {
             _view.ParentRoot.Add(_view.Root);
+
+            base.Enable();
+
             _view.ConfirmButton.clicked += OnConfirmButtonClicked;
-            _view.OnlineToggle.RegisterValueChangedCallback(OnOnlineToggleClicked);
+            _view.OnlineButton.clicked += OnOnlineButtonClicked;
             _uiCoreModel.PlayerSharedModel.Nickname.OnChanged += OnNicknameChanged;
+            _view.AddressContainer.style.display = DisplayStyle.None;
         }
 
-        private void OnOnlineToggleClicked(ChangeEvent<bool> evt)
+        private void OnOnlineButtonClicked()
         {
-            _view.AddressContainer.style.display = evt.newValue ? DisplayStyle.Flex : DisplayStyle.None;
+            _isOnline = !_isOnline;
+
+            if (_isOnline)
+            {
+                _view.OnlineButton.AddToClassList(_selectedClass);
+            }
+            else
+            {
+                _view.OnlineButton.RemoveFromClassList(_selectedClass);
+            }
+
+            _view.AddressContainer.style.display = _isOnline ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private void OnNicknameChanged(string value)
         {
             _uiCoreModel.PlayerSharedModel.Nickname.OnChanged -= OnNicknameChanged;
-
             _model.SetUsername(value);
         }
 
-        public void Disable()
+        public override void Disable()
         {
             _view.ConfirmButton.clicked -= OnConfirmButtonClicked;
+            _view.OnlineButton.clicked -= OnOnlineButtonClicked;
             _uiCoreModel.PlayerSharedModel.Nickname.OnChanged -= OnNicknameChanged;
-            _view.OnlineToggle.UnregisterValueChangedCallback(OnOnlineToggleClicked);
             _view.Root.RemoveFromHierarchy();
+
+            base.Disable();
         }
 
         private async void OnConfirmButtonClicked()
@@ -52,7 +72,7 @@ namespace Runtime.UI.Menu.Panels.LoginPanel
                 return;
             }
 
-            if (!_view.OnlineToggle.value)
+            if (!_isOnline)
             {
                 _uiCoreModel.ServerConnectionModel.ConnectPlayer(_defaultAddress, _view.UsernameTextField.value);
                 await _uiCoreModel.ServerConnectionModel.CompletePlayerConnectAwaiter;
@@ -60,7 +80,7 @@ namespace Runtime.UI.Menu.Panels.LoginPanel
                 return;
             }
 
-            if (_view.OnlineToggle.value && string.IsNullOrEmpty(_view.AddressTextField.value))
+            if (string.IsNullOrEmpty(_view.AddressTextField.value))
             {
                 return;
             }

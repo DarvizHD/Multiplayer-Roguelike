@@ -1,30 +1,44 @@
-using Runtime.Core;
 using UnityEngine.UIElements;
 
 namespace Runtime.UI.Menu.Panels.LobbyPanel
 {
-    public class LobbyPanelPresenter : IPresenter
+    public class LobbyPanelPresenter : BasePanelPresenter
     {
+        protected override VisualElement Root => _view.Root;
+
         private readonly LobbyPanelModel _model;
         private readonly LobbyPanelView _view;
         private readonly UICoreModel _uiCoreModel;
 
-        public LobbyPanelPresenter(LobbyPanelModel model, LobbyPanelView view, UICoreModel uiCoreModel)
+        public LobbyPanelPresenter(LobbyPanelModel model, LobbyPanelView view,
+            UICoreModel uiCoreModel, UIAudioService audioService) : base(audioService)
         {
             _model = model;
             _view = view;
             _uiCoreModel = uiCoreModel;
         }
 
-        public void Enable()
+        public override void Enable()
         {
             _view.ParentRoot.Add(_view.Root);
+
+            base.Enable();
+
             _view.BackButton.clicked += _model.OnBackButtonClickedInvoke;
             _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChanged += HandleChangeOwner;
             _uiCoreModel.PlayerSharedModel.Lobby.LobbyId.OnChanged += HandleChangeLobbyCode;
 
             HandleChangeLobbyCode(_uiCoreModel.PlayerSharedModel.Lobby.LobbyId.Value);
             HandleChangeOwner(_uiCoreModel.PlayerSharedModel.Lobby.OwnerId.Value);
+        }
+
+        public override void Disable()
+        {
+            _view.BackButton.clicked -= _model.OnBackButtonClickedInvoke;
+            _view.StartGameButton.clicked -= _model.OnStartGameButtonClickedInvoke;
+            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChanged -= HandleChangeOwner;
+            _view.Root.RemoveFromHierarchy();
+            base.Disable();
         }
 
         private void HandleChangeOwner(string value)
@@ -43,14 +57,6 @@ namespace Runtime.UI.Menu.Panels.LobbyPanel
         private void HandleChangeLobbyCode(string value)
         {
             _view.LobbyCodeTextField.value = value;
-        }
-
-        public void Disable()
-        {
-            _view.BackButton.clicked -= _model.OnBackButtonClickedInvoke;
-            _view.StartGameButton.clicked -= _model.OnStartGameButtonClickedInvoke;
-            _uiCoreModel.PlayerSharedModel.Lobby.OwnerId.OnChanged -= HandleChangeOwner;
-            _view.Root.RemoveFromHierarchy();
         }
     }
 }

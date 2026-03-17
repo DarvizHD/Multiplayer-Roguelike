@@ -13,15 +13,13 @@ namespace Runtime.UI.Menu.Navigation.Screens
         private readonly StartMenuPanelPresenter _presenter;
         private readonly StartMenuPanelModel _model;
         private readonly UICoreModel _uiCoreModel;
-        private readonly UIAudioService _audioService;
 
-        public StartMenuScreen(Router router, StartMenuPanelPresenter presenter, StartMenuPanelModel model, UICoreModel uiCoreModel, UIAudioService audioService)
+        public StartMenuScreen(Router router, StartMenuPanelPresenter presenter, StartMenuPanelModel model, UICoreModel uiCoreModel)
         {
             _router = router;
             _presenter = presenter;
             _model = model;
             _uiCoreModel = uiCoreModel;
-            _audioService = audioService;
         }
 
         public void Enable()
@@ -44,8 +42,6 @@ namespace Runtime.UI.Menu.Navigation.Screens
 
         private void HandleSingleGame()
         {
-            _audioService.PlayNavigate();
-
             var createLobbyCommand = new CreateLobbyCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value);
             createLobbyCommand.Write(_uiCoreModel.ServerConnectionModel.PlayerPeer);
 
@@ -69,8 +65,6 @@ namespace Runtime.UI.Menu.Navigation.Screens
 
         private void HandleExit()
         {
-            _audioService.PlayNavigate();
-
             _uiCoreModel.ServerConnectionModel.PlayerDisconnect += HandleDisconnect;
 
             var logoutCommand = new LogoutCommand(_uiCoreModel.PlayerSharedModel.Nickname.Value);

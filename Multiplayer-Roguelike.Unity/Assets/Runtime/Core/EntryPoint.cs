@@ -69,9 +69,8 @@ namespace Runtime.Core
 
             var uiAudioService = new UIAudioService(audioSource, buttonClickClip, joinToLobbyClip);
 
-            _router = new Router(uiAudioService);
-            _uiPresenter = new UIPresenter(_router, _uiCoreModel, _worldViewDescription, _menuDocument, uiAudioService,
-                _uiHudView);
+            _router = new Router();
+            _uiPresenter = new UIPresenter(_router, _uiCoreModel, _worldViewDescription, _menuDocument, uiAudioService, _uiHudView);
             _uiPresenter.Enable();
 
             var parallaxView = new ParallaxView(_menuDocument);

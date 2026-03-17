@@ -20,21 +20,21 @@ namespace Runtime.UI.Menu.Navigation
             var menuContent = _root.Q<VisualElement>("menu-content");
 
             var loginView = new LoginPanelView(worldViewDescription.UI.Get(uiCoreModel.LoginPanelModel.ViewId).Asset, menuContent);
-            var loginPresenter = new LoginPanelPresenter(uiCoreModel.LoginPanelModel, loginView, uiCoreModel);
+            var loginPresenter = new LoginPanelPresenter(uiCoreModel.LoginPanelModel, loginView, uiCoreModel, audioService);
             router.Register(ScreenIds.Login, new LoginScreenPresenter(router, loginPresenter, uiCoreModel.LoginPanelModel));
 
             var startMenuView = new StartMenuPanelView(worldViewDescription.UI.Get(uiCoreModel.StartMenuPanelModel.ViewId).Asset, menuContent);
-            var startMenuPresenter = new StartMenuPanelPresenter(uiCoreModel.StartMenuPanelModel, startMenuView);
-            router.Register(ScreenIds.StartMenu, new StartMenuScreen(router, startMenuPresenter, uiCoreModel.StartMenuPanelModel, uiCoreModel, audioService));
+            var startMenuPresenter = new StartMenuPanelPresenter(uiCoreModel.StartMenuPanelModel, startMenuView, audioService);
+            router.Register(ScreenIds.StartMenu, new StartMenuScreen(router, startMenuPresenter, uiCoreModel.StartMenuPanelModel, uiCoreModel));
 
             var lobbyView = new LobbyPanelView(worldViewDescription.UI.Get(uiCoreModel.LobbyPanelModel.ViewId).Asset, menuContent);
-            var lobbyPresenter = new LobbyPanelPresenter(uiCoreModel.LobbyPanelModel, lobbyView, uiCoreModel);
+            var lobbyPresenter = new LobbyPanelPresenter(uiCoreModel.LobbyPanelModel, lobbyView, uiCoreModel, audioService);
             var usersView = new UsersPanelView(worldViewDescription.UI.Get(uiCoreModel.UsersPanelModel.ViewId).Asset, menuContent);
             var usersPresenter = new UsersPanelPresenter(usersView, worldViewDescription, uiCoreModel, audioService);
             router.Register(ScreenIds.Lobby, new LobbyScreen(router, lobbyPresenter, usersPresenter, uiCoreModel.LobbyPanelModel, uiCoreModel, audioService));
 
             var joinLobbyView = new JoinLobbyPanelView(worldViewDescription.UI.Get(uiCoreModel.JoinLobbyPanelModel.ViewId).Asset, menuContent);
-            var joinLobbyPresenter = new JoinLobbyPanelPresenter(uiCoreModel.JoinLobbyPanelModel, joinLobbyView, uiCoreModel);
+            var joinLobbyPresenter = new JoinLobbyPanelPresenter(uiCoreModel.JoinLobbyPanelModel, joinLobbyView, audioService);
             router.Register(ScreenIds.JoinLobby, new JoinLobbyScreen(router, joinLobbyPresenter, uiCoreModel.JoinLobbyPanelModel, uiCoreModel));
         }
 
