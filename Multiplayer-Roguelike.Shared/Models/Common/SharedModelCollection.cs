@@ -113,10 +113,7 @@ namespace Shared.Models.Common
             protocol.Add(updated.Length);
             foreach (var model in updated)
             {
-                if (!_added.Contains(model) && !_removed.Contains(model))
-                {
-                    model.Write(protocol);
-                }
+                model.Write(protocol);
             }
         }
 
