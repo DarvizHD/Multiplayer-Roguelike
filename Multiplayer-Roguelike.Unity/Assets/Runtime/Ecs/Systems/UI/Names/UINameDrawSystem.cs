@@ -5,6 +5,7 @@ using Runtime.Ecs.Components.UI;
 using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems.Core;
 using Runtime.Ecs.Systems.UI;
+using Runtime.UI.HUD;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,6 +16,12 @@ namespace Runtime.ECS.Systems.UI.Names
         protected override IQueryBuffer Buffer => _buffer;
         private QueryBuffer<UIComponent, NameComponent, PositionComponent, AliveTagComponent> _buffer = new();
         private readonly Camera _camera = Camera.main;
+        private readonly UIHudView _hudView;
+
+        public UINameDrawSystem(UIHudView hudView)
+        {
+            _hudView = hudView;
+        }
 
         protected override void Query()
         {
@@ -28,14 +35,16 @@ namespace Runtime.ECS.Systems.UI.Names
             var nameComponent = _buffer.Components2[i];
             var positionComponent = _buffer.Components3[i];
 
-            var hasLabel = uiComponent.Elements.ContainsKey(UIConstants.Nickname);
+            var hasLabel = uiComponent.Elements.Contains(UIConstants.Nickname);
 
             if (!hasLabel)
             {
                 return;
             }
 
-            var label = uiComponent.Elements[UIConstants.Nickname];
+            var id =  $"{UIConstants.Nickname}_{entityId}";
+
+            var label = _hudView.WorldHudRoot.Q<Label>(id);
 
             var screenPosition = _camera.WorldToScreenPoint(positionComponent.Position);
 

@@ -6,6 +6,6 @@ namespace Runtime.Ecs.Systems.UI
 {
     public class UIComponent : IComponent
     {
-        public readonly Dictionary<string, VisualElement> Elements = new();
+        public readonly List<string> Elements = new();
     }
 }

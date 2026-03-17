@@ -12,7 +12,7 @@
 }
 
 .unity-toggle__input:checked .unity-toggle__checkmark {
-    background-image: url("project://database/Assets/Content/Imports/UI/Icons/free-icon%D1%84%D0%B2%D1%8B132-cross-2716333.png?fileID=21300000&guid=570683b111bd50f4e80bb4195ba97be4&type=3#free-iconфвы132-cross-2716333");
+    background-image: url("project://database/Assets/Content/Imports/UI/Icons/toggle-icon.png?fileID=21300000&guid=570683b111bd50f4e80bb4195ba97be4&type=3#toggle-icon");
 }
 
 .unity-toggle__input .unity-toggle__checkmark {
