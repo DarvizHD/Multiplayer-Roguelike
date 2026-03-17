@@ -408,6 +408,7 @@ namespace Runtime.Core
             EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
             EcsWorld.AddSystem<RangedAttackSystem>();
             EcsWorld.AddSystem<ReloadSystem>();
+            EcsWorld.AddSystem<RestoreAmmoSystem>();
 
             EcsWorld.AddSystem<CharacterAttackSystem>();
 
