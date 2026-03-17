@@ -2,6 +2,7 @@ using ENet;
 using Runtime.GameSystems;
 using Runtime.ServerInteraction;
 using Runtime.Sound;
+using Runtime.Sound.Constants;
 using Runtime.UI;
 using Runtime.UI.HUD;
 using Runtime.UI.Menu;
@@ -43,6 +44,8 @@ namespace Runtime.Core
         private AmbientSoundPresenter _ambientSoundPresenter;
         private ParallaxPresenter _parallaxPresenter;
         private DustParticlePresenter _dustParticlePresenter;
+        private SoundPresenter _soundPresenter;
+        private SoundModel _soundModel;
 
         private void Start()
         {
@@ -78,7 +81,11 @@ namespace Runtime.Core
             _dustParticlePresenter = new DustParticlePresenter(_dustRenderCamera);
             _dustParticlePresenter.Enable();
 
-            _ambientSoundPresenter = new AmbientSoundPresenter(_ambientSoundSource, _gameSessionSharedModel);
+            _soundModel = new SoundModel();
+            _soundPresenter = new SoundPresenter(_soundModel, this);
+            _soundPresenter.Enable();
+
+            _ambientSoundPresenter = new AmbientSoundPresenter(_soundModel, _gameSessionSharedModel);
             _ambientSoundPresenter.Enable();
 
             _serverConnectionModel.WorldPacketReceived += OnWorldPacketReceived;
@@ -146,8 +153,7 @@ namespace Runtime.Core
                 _parallaxPresenter.Disable();
                 _dustParticlePresenter.Disable();
 
-                _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel,
-                    _uiHudView, _worldViewDescription);
+                _gameSession = new GameSession(_gameSessionSharedModel, _playerSharedModel, _serverConnectionModel, _uiHudView, _worldViewDescription);
                 _gameSession.Enable();
                 _gameSession.Run();
             }
