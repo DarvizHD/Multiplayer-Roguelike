@@ -1,4 +1,4 @@
-namespace Runtime.Sound
+namespace Runtime.Sound.Constants
 {
     public static class AudioResourcesConstants
     {

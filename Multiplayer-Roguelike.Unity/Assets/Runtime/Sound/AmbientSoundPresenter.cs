@@ -1,4 +1,5 @@
 using Runtime.Core;
+using Runtime.Sound.Constants;
 using Shared.Models.GameSession;
 using UnityEngine;
 
@@ -6,35 +7,41 @@ namespace Runtime.Sound
 {
     public class AmbientSoundPresenter : IPresenter
     {
-        private readonly AudioSource _source;
+        private readonly SoundModel _soundModel;
         private readonly GameSessionSharedModel _gameSessionSharedModel;
 
-        public AmbientSoundPresenter(AudioSource source, GameSessionSharedModel gameSessionSharedModel)
+        private readonly AudioClip _menuAmbient;
+        private readonly AudioClip _gameplayAmbient;
+
+        public AmbientSoundPresenter(SoundModel soundModel, GameSessionSharedModel gameSessionSharedModel)
         {
-            _source = source;
+            _soundModel = soundModel;
             _gameSessionSharedModel = gameSessionSharedModel;
+
+            _menuAmbient = Resources.Load<AudioClip>(AudioResourcesConstants.Ambient.MenuAmbientPath);
+            _gameplayAmbient = Resources.Load<AudioClip>(AudioResourcesConstants.Ambient.GameplayAmbientPath);
         }
 
         public void Enable()
         {
-            HandelIsRunChanged(_gameSessionSharedModel.IsRun.Value);
-
-            _gameSessionSharedModel.IsRun.OnChanged += HandelIsRunChanged;
+            _gameSessionSharedModel.IsRun.OnChanged += HandleIsRunChanged;
+            HandleIsRunChanged(_gameSessionSharedModel.IsRun.Value);
         }
 
         public void Disable()
         {
-            _source.Stop();
-            _gameSessionSharedModel.IsRun.OnChanged -= HandelIsRunChanged;
+            _gameSessionSharedModel.IsRun.OnChanged -= HandleIsRunChanged;
+            _soundModel.FadeOut(duration: 1f);
         }
 
-        private void HandelIsRunChanged(bool value)
+        private void HandleIsRunChanged(bool isRun)
         {
-            _source.clip = Resources.Load<AudioClip>(value
-                ? AudioResourcesConstants.Ambient.GameplayAmbientPath
-                : AudioResourcesConstants.Ambient.MenuAmbientPath);
+            var current = isRun ? _menuAmbient : _gameplayAmbient;
+            var next = isRun ? _gameplayAmbient : _menuAmbient;
+            var volume = isRun ? SoundVolumeConstants.Ambient.Gameplay : SoundVolumeConstants.Ambient.Menu;
 
-            _source.Play();
+            _soundModel.FadeOut(duration: 0.5f, clipName: current.name);
+            _soundModel.FadeIn(next, duration: 0.5f, volume: volume, loop: true);
         }
     }
 }
