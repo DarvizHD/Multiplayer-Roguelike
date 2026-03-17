@@ -10,6 +10,9 @@ namespace Runtime.Ecs.Core
         public SystemManager SystemManager { get; }
         private ushort _nextEntityId;
 
+        private const float _sentTickRate = 1 / 32f;
+        private float _ticks = 0f;
+
         public EcsWorld()
         {
             DebugInstance = this;
@@ -24,6 +27,13 @@ namespace Runtime.Ecs.Core
 
         public void Update(float deltaTime)
         {
+            if (_ticks >= _sentTickRate)
+            {
+                SystemManager.SendUpdate(_sentTickRate);
+                _ticks = 0f;
+            }
+            _ticks += deltaTime;
+
             SystemManager.UpdateAll(deltaTime);
         }
 

@@ -83,7 +83,7 @@ namespace Backend.Enemies
 
             foreach (var character in gameSession.SharedModel.Characters.Models.Where(c => c.Health.Value > 0))
             {
-                var distance = (enemy.Shared.Position.Value - character.Position.Value).LengthSquared();
+                var distance = (enemy.Position - character.Position.Value).LengthSquared();
 
                 if (distance < closestDistance)
                 {

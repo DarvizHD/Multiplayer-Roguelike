@@ -8,8 +8,8 @@ namespace Backend.Navigation
         {
             radius = 0.6f,
             height = 2.0f,
-            maxAcceleration = 8.0f,
-            maxSpeed = 2.0f,
+            maxAcceleration = 4.0f,
+            maxSpeed = 1.0f,
             collisionQueryRange = 1.5f,
             pathOptimizationRange = 1.0f,
             separationWeight = 1.5f,

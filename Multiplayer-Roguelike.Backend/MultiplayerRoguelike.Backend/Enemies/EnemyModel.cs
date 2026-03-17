@@ -12,6 +12,7 @@ namespace Backend.Enemies
         public DtCrowdAgent CrowdAgent { get; set; }
         public Vector3 LastTargetPosition { get; set; } = new(0, 0, 0);
         public EnemyAttackModel EnemyAttack { get; }
+        public Vector3 Position;
 
         public EnemyModel(int id, EnemyConfig enemyConfig)
         {
@@ -24,6 +25,8 @@ namespace Backend.Enemies
                 Damage = enemyConfig.AttackDamage,
                 Cooldown = enemyConfig.AttackCooldown
             };
+
+            Position = Shared.Position.Value;
         }
     }
 }

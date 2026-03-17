@@ -272,7 +272,7 @@ namespace Runtime.Core
 
             Resources.Load<AudioClip>(AudioResourcesConstants.Enemies.ZombieTakeDamage);
 
-            var speed = 2f;
+            var speed = 1f;
 
             EcsWorld.AddEntityComponent(entityId, new UIComponent());
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(spawnPosition));
@@ -290,7 +290,7 @@ namespace Runtime.Core
             EcsWorld.AddEntityComponent(entityId, new AliveTagComponent());
             EcsWorld.AddEntityComponent(entityId, new EnemyNetworkSyncComponent(enemySharedModel));
             EcsWorld.AddEntityComponent(entityId, new PositionInterpolationComponent(Vector3.zero, Vector3.zero));
-            EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, spawnPosition, speed));
+            EcsWorld.AddEntityComponent(entityId, new NavMeshAgentComponent(enemyProvider.Agent, spawnPosition, speed, 4f));
             EcsWorld.AddEntityComponent(entityId, new SfxContainerComponent(enemyProvider.SfxContainer));
 
             EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
@@ -387,8 +387,8 @@ namespace Runtime.Core
             EcsWorld.AddSystem<PlayerMovementSystem>();
             EcsWorld.AddSystem<PositionInterpolationSystem>();
 
-            EcsWorld.AddSystem<CharacterPositionSendSystem>(UpdateMode.FixedUpdate);
-            EcsWorld.AddSystem<CharacterRotationSendSystem>(UpdateMode.FixedUpdate);
+            EcsWorld.AddSystem<CharacterPositionSendSystem>(UpdateMode.SendUpdate);
+            EcsWorld.AddSystem<CharacterRotationSendSystem>(UpdateMode.SendUpdate);
 
             EcsWorld.AddSystem<PlayerMovementAnimationSystem>();
             EcsWorld.AddSystem<CameraFocusSystem>();
@@ -397,6 +397,7 @@ namespace Runtime.Core
             EcsWorld.AddSystem<DrawCameraTransformSystem>();
 
             EcsWorld.AddSystem<AINavigationSyncSystem>();
+            EcsWorld.AddSystem<AILocalNavMeshSystem>();
             EcsWorld.AddSystem<AIPositionSyncSystem>();
             EcsWorld.AddSystem<EnemyMovementAnimationSystem>();
             EcsWorld.AddSystem<EnemyAttackAnimationSystem>();

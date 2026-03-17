@@ -54,6 +54,7 @@ namespace Backend.Session.SpawnDirector
         private void SpawnEnemy(SpawnPointModel spawnPoint)
         {
             var enemy = new EnemyModel(_lastEnemyId + 1, new EnemyConfig());
+            enemy.Position = spawnPoint.Position;
             enemy.Shared.Position.Value = spawnPoint.Position;
             _gameSessionModel.SharedModel.Enemies.Add(enemy.Shared);
             _gameSessionModel.Enemies.Add(_lastEnemyId + 1, enemy);

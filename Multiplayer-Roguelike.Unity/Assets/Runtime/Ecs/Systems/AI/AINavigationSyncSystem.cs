@@ -29,17 +29,23 @@ namespace Runtime.Ecs.Systems.AI
             var enemySharedModel = _buffer.Components1[i];
             var navMeshAgentComponent = _buffer.Components2[i];
 
-            var serverPosition = enemySharedModel.EnemySharedModel.Position.Value.ToUnityVector3();
-
-            var delta = (navMeshAgentComponent.Agent.nextPosition - serverPosition).sqrMagnitude;
-
-            if (delta is > _softThreshold and < _hardThreshold)
+            if (enemySharedModel.EnemySharedModel.Position.IsDirty)
             {
-                navMeshAgentComponent.Agent.nextPosition = Vector3.Lerp(navMeshAgentComponent.Agent.transform.position, serverPosition, 0.1f);
-            }
-            else if (delta >= _hardThreshold)
-            {
-                navMeshAgentComponent.Agent.Warp(serverPosition);
+                var serverPosition = enemySharedModel.EnemySharedModel.Position.Value.ToUnityVector3();
+
+                var delta = (navMeshAgentComponent.Agent.nextPosition - serverPosition).sqrMagnitude;
+
+                if (delta is > _softThreshold and < _hardThreshold)
+                {
+                    navMeshAgentComponent.Agent.nextPosition =
+                        Vector3.Lerp(navMeshAgentComponent.Agent.transform.position, serverPosition, 0.1f);
+                }
+                else if (delta >= _hardThreshold)
+                {
+                    navMeshAgentComponent.Agent.Warp(serverPosition);
+                }
+
+                enemySharedModel.EnemySharedModel.Position.ClearDirty();
             }
 
             var targetId = enemySharedModel.EnemySharedModel.TargetPlayerId.Value;

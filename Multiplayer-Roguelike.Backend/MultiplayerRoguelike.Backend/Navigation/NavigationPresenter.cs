@@ -1,4 +1,5 @@
 using System.IO;
+using Backend.Enemies;
 using Backend.Session;
 using DotRecast.Detour;
 using DotRecast.Detour.Io;
@@ -11,6 +12,7 @@ namespace Backend.Navigation
 
         private readonly WorldModel _worldModel;
         private readonly NavigationSystem _navigationSystem;
+        private readonly EnemyPositionSyncSystem _enemyPositionSyncSystem;
 
         private DtNavMesh _navMesh;
 
@@ -18,6 +20,7 @@ namespace Backend.Navigation
         {
             _worldModel = worldModel;
             _navigationSystem = new NavigationSystem("navigation-system");
+            _enemyPositionSyncSystem = new EnemyPositionSyncSystem("enemy-position-sync-system");
         }
 
         public void Enable()
@@ -33,12 +36,14 @@ namespace Backend.Navigation
             }
 
             _worldModel.ServerSystems.Add(_navigationSystem);
+            _worldModel.ServerSystems.Add(_enemyPositionSyncSystem);
         }
 
         public void Disable()
         {
             _worldModel.Sessions.OnAdded -= HandleSessionAdded;
             _worldModel.Sessions.OnRemoved -= HandleSessionRemoved;
+            _worldModel.ServerSystems.Remove(_enemyPositionSyncSystem);
             _worldModel.ServerSystems.Remove(_navigationSystem);
         }
 
@@ -55,10 +60,12 @@ namespace Backend.Navigation
         {
             gameSession.SetupNavigation(_navMesh);
             _navigationSystem.Register(gameSession);
+            _enemyPositionSyncSystem.Register(gameSession);
         }
 
         private void HandleSessionRemoved(GameSessionModel gameSession)
         {
+            _enemyPositionSyncSystem.Unregister(gameSession);
             _navigationSystem.Unregister(gameSession);
             gameSession.Navigation = null;
         }

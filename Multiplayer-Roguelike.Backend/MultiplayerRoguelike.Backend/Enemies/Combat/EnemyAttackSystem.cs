@@ -50,7 +50,7 @@ namespace Backend.Enemies.Combat
             {
                 if (GameSessionModel.SharedModel.Characters.TryGet(enemy.Shared.TargetPlayerId.Value, out var targetPlayer) && targetPlayer.Health.Value > 0)
                 {
-                    var distance = (enemy.Shared.Position.Value - targetPlayer.Position.Value).LengthSquared();
+                    var distance = (enemy.Position - targetPlayer.Position.Value).LengthSquared();
                     if (!(distance > attack.Range * attack.Range))
                     {
                         PerformAttack(enemy, targetPlayer);

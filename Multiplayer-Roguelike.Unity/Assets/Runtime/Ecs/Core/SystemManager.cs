@@ -4,12 +4,13 @@ using Runtime.Ecs.Systems.Core;
 namespace Runtime.Ecs.Core
 {
     public class SystemManager
-{
+    {
         private readonly Dictionary<UpdateMode, List<BaseSystem>> _systems = new()
         {
-            {UpdateMode.Update, new List<BaseSystem>()},
-            {UpdateMode.FixedUpdate, new List<BaseSystem>()},
-            {UpdateMode.LateUpdate, new List<BaseSystem>()}
+            { UpdateMode.Update, new List<BaseSystem>() },
+            { UpdateMode.FixedUpdate, new List<BaseSystem>() },
+            { UpdateMode.LateUpdate, new List<BaseSystem>() },
+            { UpdateMode.SendUpdate, new List<BaseSystem>() }
         };
 
         private readonly ComponentManager _componentManager;
@@ -59,9 +60,17 @@ namespace Runtime.Ecs.Core
             }
         }
 
+        public void SendUpdate(float deltaTime)
+        {
+            foreach (var system in _systems[UpdateMode.SendUpdate])
+            {
+                system.UpdateAll(deltaTime);
+            }
+        }
+
         public void ClearSystems()
         {
             _systems.Clear();
         }
-}
+    }
 }

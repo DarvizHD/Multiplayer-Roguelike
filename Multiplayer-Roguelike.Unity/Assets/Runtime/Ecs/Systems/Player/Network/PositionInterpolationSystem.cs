@@ -39,10 +39,8 @@ namespace Runtime.Ecs.Systems.Player.Network
             {
                 positionComponent.Position = Vector3.Lerp(positionComponent.Position, interpolationComponent.TargetPosition, 0.5f);
             }
-            else
-            {
-                positionComponent.Position += directionComponent.Direction.normalized * (moveSpeedComponent.Speed * deltaTime);
-            }
+
+            positionComponent.Position += directionComponent.Direction.normalized * (moveSpeedComponent.Speed * deltaTime);
         }
     }
 }

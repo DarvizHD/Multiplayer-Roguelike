@@ -34,7 +34,7 @@ namespace Backend.Enemies
             enemyPresenter.Enable();
             _enemyPresenters.Add(enemy.Id, enemyPresenter);
 
-            var startPosition = new RcVec3f(enemy.Shared.Position.Value.Xf, enemy.Shared.Position.Value.Yf, enemy.Shared.Position.Value.Zf);
+            var startPosition = new RcVec3f(enemy.Position.Xf, enemy.Position.Yf, enemy.Position.Zf);
 
             var dtCrowdAgent = _gameSessionModel.Navigation.Crowd.AddAgent(startPosition, _gameSessionModel.Navigation.Config.AgentParams);
             enemy.CrowdAgent = dtCrowdAgent;

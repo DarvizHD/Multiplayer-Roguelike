@@ -24,18 +24,18 @@ namespace Backend.Navigation
 
             if (_timer > _tickInterval)
             {
+                gameSession.Navigation.Crowd.Update(_timer, null);
                 _timer = 0f;
-                gameSession.Navigation.Crowd.Update(deltaTime, null);
 
                 foreach (var enemy in gameSession.Enemies.Models.Values)
                 {
                     var agent = enemy.CrowdAgent;
                     var newPosition = new Vector3(-agent.npos.X, agent.npos.Y, agent.npos.Z);
-                    var oldPosition = enemy.Shared.Position.Value;
+                    var oldPosition = enemy.Position;
 
                     if ((newPosition - oldPosition).LengthSquared() > _positionThresholdSqr)
                     {
-                        enemy.Shared.Position.Value = newPosition;
+                        enemy.Position = newPosition;
                     }
                 }
             }
