@@ -26,6 +26,8 @@ using Runtime.Ecs.Systems.Player.Network;
 using Runtime.Ecs.Systems.Player.Rotation;
 using Runtime.Ecs.Systems.Sound;
 using Runtime.Ecs.Systems.UI;
+using Runtime.ECS.Systems.UI.Health;
+using Runtime.ECS.Systems.UI.Names;
 using Runtime.Ecs.Systems.Weapons;
 using Runtime.Pools;
 using Runtime.ServerInteraction;
@@ -61,8 +63,6 @@ namespace Runtime.Core
         private readonly PositionalParticlePool _damageParticlePool;
         private readonly PositionalParticlePool _deathParticlePool;
 
-        private readonly UIDrawHealthSystem _drawHealthSystem;
-        private readonly UIDrawNameSystem _drawNameSystem;
         private readonly UIDrawTeammatesSystem _drawTeammatesSystem;
         private readonly UIDrawCrosshairSystem _drawCrosshair;
         private readonly SoundModel _soundModel;
@@ -83,8 +83,6 @@ namespace Runtime.Core
             _damageParticlePool = new PositionalParticlePool(_worldViewDescription.DamageParticle);
             _deathParticlePool = new PositionalParticlePool(_worldViewDescription.DeathParticle);
 
-            _drawHealthSystem = new UIDrawHealthSystem(_hudView);
-            _drawNameSystem = new UIDrawNameSystem(_hudView);
             _drawTeammatesSystem = new UIDrawTeammatesSystem(_hudView);
             _drawCrosshair = new UIDrawCrosshairSystem(_hudView);
 
@@ -132,8 +130,6 @@ namespace Runtime.Core
             _damageParticlePool.Destroy();
             _deathParticlePool.Destroy();
 
-            _drawHealthSystem.Destroy();
-            _drawNameSystem.Destroy();
             _drawTeammatesSystem.Destroy();
             _drawCrosshair.Destroy();
         }
@@ -245,6 +241,7 @@ namespace Runtime.Core
 
             EcsWorld.AddEntityComponent(entityId, new ShootParticlePointComponent(provider.ShootPoint));
             EcsWorld.AddEntityComponent(entityId, new HitSoundComponent(playerHitClip));
+            EcsWorld.AddEntityComponent(entityId, new UIComponent());
 
             if (controllable)
             {
@@ -273,6 +270,7 @@ namespace Runtime.Core
 
             var speed = 1f;
 
+            EcsWorld.AddEntityComponent(entityId, new UIComponent());
             EcsWorld.AddEntityComponent(entityId, new NameComponent($"Zombie {entityId}"));
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(spawnPosition));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
@@ -371,6 +369,8 @@ namespace Runtime.Core
             EcsWorld.RegisterComponent<DeathParticleEventComponent>();
             EcsWorld.RegisterComponent<ShootParticleEventComponent>();
             EcsWorld.RegisterComponent<CameraFollowTagComponent>();
+
+            EcsWorld.RegisterComponent<UIComponent>();
         }
 
         private void AddSystems()
@@ -435,8 +435,14 @@ namespace Runtime.Core
             EcsWorld.AddSystem<ZombieVoiceCreatorSystem>();
             EcsWorld.AddSystem<ZombieVoiceCleanerSystem>();
 
-            EcsWorld.AddSystem(_drawNameSystem, UpdateMode.LateUpdate);
-            EcsWorld.AddSystem(_drawHealthSystem,  UpdateMode.LateUpdate);
+            EcsWorld.AddSystem<UINameCreatorSystem>(new UINameCreatorSystem(_hudView), UpdateMode.FixedUpdate);
+            EcsWorld.AddSystem<UINameDrawSystem>(UpdateMode.LateUpdate);
+            EcsWorld.AddSystem<UINameCleanerSystem>(UpdateMode.FixedUpdate);
+
+            EcsWorld.AddSystem<UIHealthCreatorSystem>(new UIHealthCreatorSystem(_hudView), UpdateMode.FixedUpdate);
+            EcsWorld.AddSystem<UIHealthDrawSystem>(UpdateMode.LateUpdate);
+            EcsWorld.AddSystem<UIHealthCleanerSystem>();
+
             EcsWorld.AddSystem(new UIDrawSwitchWeaponSystem(_hudView), UpdateMode.LateUpdate);
             EcsWorld.AddSystem(new UIDrawAmmo(_hudView), UpdateMode.LateUpdate);
             EcsWorld.AddSystem(_drawTeammatesSystem, UpdateMode.LateUpdate);
