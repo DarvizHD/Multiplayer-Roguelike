@@ -7,8 +7,9 @@ namespace Runtime.Ecs.Systems.Particles
 {
     public class ShootParticleSystem : BaseSystem
     {
-        private QueryBuffer<ShootParticleEventComponent, ShootParticlePointComponent> _buffer = new();
+        protected override IQueryBuffer Buffer => _buffer;
 
+        private QueryBuffer<ShootParticleEventComponent, ShootParticlePointComponent> _buffer = new();
         private readonly PinnedParticlePool _pool;
 
         public ShootParticleSystem(PinnedParticlePool pool)
@@ -16,19 +17,19 @@ namespace Runtime.Ecs.Systems.Particles
             _pool = pool;
         }
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
-            {
-                var entityId = _buffer.EntityIds[i];
-                var shootParticlePointComponent = _buffer.Components2[i];
+        protected override void Update(int i, float deltaTime)
+        {
+            var entityId = _buffer.EntityIds[i];
+            var shootParticlePointComponent = _buffer.Components2[i];
 
-                _pool.Get(shootParticlePointComponent.Point);
+            _pool.Get(shootParticlePointComponent.Point);
 
-                ComponentManager.RemoveComponent<ShootParticleEventComponent>(entityId);
-            }
+            ComponentManager.RemoveComponent<ShootParticleEventComponent>(entityId);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Runtime.Ecs.Systems.UI
 {
     public class UIDrawHealthSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
         private QueryBuffer<HealthComponent, PositionComponent, EnemyTagComponent> _buffer = new();
         private readonly Dictionary<int, ProgressBar> _bars = new();
 
@@ -24,44 +25,44 @@ namespace Runtime.Ecs.Systems.UI
             _camera = Camera.main;
         }
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
+        protected override void Update(int i, float deltaTime)
+        {
+            var entityId = _buffer.EntityIds[i];
+            var healthComponent = _buffer.Components1[i];
+            var positionComponent = _buffer.Components2[i];
+
+            if (!_bars.TryGetValue(entityId, out var bar))
             {
-                var entityId = _buffer.EntityIds[i];
-                var healthComponent = _buffer.Components1[i];
-                var positionComponent = _buffer.Components2[i];
-
-                if (!_bars.TryGetValue(entityId, out var bar))
-                {
-                    bar = CreateBar(entityId);
-                }
-
-                var screenPos = _camera.WorldToScreenPoint(positionComponent.Position);
-
-                var outScreen = screenPos.z <= 0 ||
-                                screenPos.x < 0 || screenPos.x > Screen.width ||
-                                screenPos.y < 0 || screenPos.y > Screen.height;
-
-                if (outScreen)
-                {
-                    bar.style.display = DisplayStyle.None;
-                    continue;
-                }
-
-                bar.style.display = DisplayStyle.Flex;
-
-                var x = screenPos.x - bar.resolvedStyle.width * 0.5f;
-                var y = Screen.height - screenPos.y - 70f;
-
-                bar.style.left = x;
-                bar.style.top = y;
-
-                bar.value = healthComponent.CurrentHealth;
-                bar.highValue = healthComponent.MaxHealth;
+                bar = CreateBar(entityId);
             }
+
+            var screenPos = _camera.WorldToScreenPoint(positionComponent.Position);
+
+            var outScreen = screenPos.z <= 0 ||
+                            screenPos.x < 0 || screenPos.x > Screen.width ||
+                            screenPos.y < 0 || screenPos.y > Screen.height;
+
+            if (outScreen)
+            {
+                bar.style.display = DisplayStyle.None;
+                return;
+            }
+
+            bar.style.display = DisplayStyle.Flex;
+
+            var x = screenPos.x - bar.resolvedStyle.width * 0.5f;
+            var y = Screen.height - screenPos.y - 70f;
+
+            bar.style.left = x;
+            bar.style.top = y;
+
+            bar.value = healthComponent.CurrentHealth;
+            bar.highValue = healthComponent.MaxHealth;
         }
 
         public void Destroy()

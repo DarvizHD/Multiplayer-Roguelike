@@ -35,11 +35,19 @@ namespace Runtime.Ecs.Core
             _systems[updateMode].Add(system);
         }
 
+        public void UpdateAll(float deltaTime)
+        {
+            foreach (var system in _systems[UpdateMode.Update])
+            {
+                system.UpdateAll(deltaTime);
+            }
+        }
+
         public void FixedUpdateAll(float fixedDeltaTime)
         {
             foreach (var system in _systems[UpdateMode.FixedUpdate])
             {
-                system.Update(fixedDeltaTime);
+                system.UpdateAll(fixedDeltaTime);
             }
         }
 
@@ -47,7 +55,7 @@ namespace Runtime.Ecs.Core
         {
             foreach (var system in _systems[UpdateMode.LateUpdate])
             {
-                system.Update(lateDeltaTime);
+                system.UpdateAll(lateDeltaTime);
             }
         }
 
@@ -55,13 +63,5 @@ namespace Runtime.Ecs.Core
         {
             _systems.Clear();
         }
-
-        public void UpdateAll(float deltaTime)
-        {
-            foreach (var system in _systems[UpdateMode.Update])
-            {
-                system.Update(deltaTime);
-            }
-        }
-    }
+}
 }

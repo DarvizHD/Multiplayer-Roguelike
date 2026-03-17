@@ -11,14 +11,17 @@ namespace Runtime.Ecs.Systems.Battle
 {
     public class CharacterAnimationSyncSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
+
         private QueryBuffer<CharacterNetworkSyncComponent, CharacterNetworkEventComponent, WeaponSlotsComponent> _buffer = new();
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
-            {
+        protected override void Update(int i, float deltaTime)
+        {
                 var entityId = _buffer.EntityIds[i];
                 var characterNetworkSyncComponent = _buffer.Components1[i];
                 var characterNetworkEventComponent = _buffer.Components2[i];
@@ -67,7 +70,6 @@ namespace Runtime.Ecs.Systems.Battle
                         ComponentManager.AddComponent(entityId, playSoundComponent);
                     }
                 }
-            }
         }
     }
 }

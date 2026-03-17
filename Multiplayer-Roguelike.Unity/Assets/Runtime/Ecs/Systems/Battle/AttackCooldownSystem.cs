@@ -6,20 +6,22 @@ namespace Runtime.Ecs.Systems.Battle
 {
     public class AttackCooldownSystem : BaseSystem
     {
-        private QueryBuffer<AttackCooldownComponent> _attackCooldownBuffer = new();
+        protected override IQueryBuffer Buffer => _buffer;
 
-        public override void Update(float deltaTime)
+        private QueryBuffer<AttackCooldownComponent> _buffer = new();
+
+        protected override void Query()
         {
-            ComponentManager.Filter.Query(ref _attackCooldownBuffer);
+            ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _attackCooldownBuffer.Count; i++)
+        protected override void Update(int i, float deltaTime)
+        {
+            var attackCooldownComponent = _buffer.Components[i];
+
+            if (attackCooldownComponent.CurrentCooldown > 0f)
             {
-                var attackCooldownComponent = _attackCooldownBuffer.Components[i];
-
-                if (attackCooldownComponent.CurrentCooldown > 0f)
-                {
-                    attackCooldownComponent.CurrentCooldown -= deltaTime;
-                }
+                attackCooldownComponent.CurrentCooldown -= deltaTime;
             }
         }
     }

@@ -8,25 +8,28 @@ namespace Runtime.Ecs.Systems.Battle
 {
     public class WeaponSwitchSyncSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
+
         private QueryBuffer<CharacterNetworkSyncComponent, CharacterConnectionComponent,
                 SwitchWeaponEventComponent, LocalControllableTag>
             _buffer = new();
 
-        public override void Update(float deltaTime)
+
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
-            {
-                var characterNetwork = _buffer.Components1[i];
-                var characterConnection = _buffer.Components2[i];
-                var switchWeaponEvent = _buffer.Components3[i];
+        protected override void Update(int i, float deltaTime)
+        {
+            var characterNetwork = _buffer.Components1[i];
+            var characterConnection = _buffer.Components2[i];
+            var switchWeaponEvent = _buffer.Components3[i];
 
-                var switchWeaponCommand = new SwitchWeaponCommand(characterNetwork.CharacterSharedModel.Id,
-                    (ushort)switchWeaponEvent.TargetSlot);
+            var switchWeaponCommand = new SwitchWeaponCommand(characterNetwork.CharacterSharedModel.Id,
+                (ushort)switchWeaponEvent.TargetSlot);
 
-                switchWeaponCommand.Write(characterConnection.ServerConnectionModel.PlayerPeer);
-            }
+            switchWeaponCommand.Write(characterConnection.ServerConnectionModel.PlayerPeer);
         }
     }
 }

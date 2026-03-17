@@ -6,19 +6,20 @@ namespace Runtime.Ecs.Systems.Weapons
 {
     public class DrawWeaponSwitcherSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
         private QueryBuffer<SwitchWeaponEventComponent, WeaponProviderComponent> _buffer = new();
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
-            {
-                var switchEventComponent = _buffer.Components1[i];
-                var weaponProviderComponent = _buffer.Components2[i];
+        protected override void Update(int i, float deltaTime)
+        {
+            var switchEventComponent = _buffer.Components1[i];
+            var weaponProviderComponent = _buffer.Components2[i];
 
-                weaponProviderComponent.WeaponProvider.Current = switchEventComponent.TargetSlot;
-            }
+            weaponProviderComponent.WeaponProvider.Current = switchEventComponent.TargetSlot;
         }
     }
 }

@@ -1,15 +1,15 @@
 using Runtime.Ecs.Components.Battle.Weapon;
-using Runtime.Ecs.Components.Sound;
 using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems.Core;
+using UnityEngine;
 
 namespace Runtime.Ecs.Systems.Battle.RangeAttack
 {
-    public class ReloadSystem : BaseSystem
+    public class RestoreAmmoSystem : BaseSystem
     {
         protected override IQueryBuffer Buffer => _buffer;
 
-        private QueryBuffer<CurrentWeaponComponent, ReloadEventComponent> _buffer = new();
+        private QueryBuffer<CurrentWeaponComponent> _buffer = new();
 
         protected override void Query()
         {
@@ -18,15 +18,14 @@ namespace Runtime.Ecs.Systems.Battle.RangeAttack
 
         protected override void Update(int i, float deltaTime)
         {
-            var entityId = _buffer.EntityIds[i];
-            var current = _buffer.Components1[i];
+            var current = (_buffer).Components[i];
 
             if (!ComponentManager.TryGetComponent<RangedWeaponComponent>(current.WeaponEntityId, out var ranged))
             {
                 return;
             }
 
-            if (ranged.IsReloading)
+            if (!ranged.IsReloading)
             {
                 return;
             }
@@ -36,16 +35,19 @@ namespace Runtime.Ecs.Systems.Battle.RangeAttack
                 return;
             }
 
-            if (ammo.Reserve <= 0)
+            ranged.ReloadTimer -= deltaTime;
+
+            if (ranged.ReloadTimer > 0f)
             {
                 return;
             }
 
-            ranged.IsReloading = true;
-            ranged.ReloadTimer = ranged.ReloadTime;
+            var needed = ammo.Magazine - ammo.Current;
+            var taken = Mathf.Min(needed, ammo.Reserve);
 
-            ComponentManager.RemoveComponent<ReloadEventComponent>(entityId);
-            ComponentManager.AddComponent(entityId, new PlaySoundEventComponent(ranged.ReloadClip));
+            ammo.Current += taken;
+            ammo.Reserve -= taken;
+            ranged.IsReloading = false;
         }
     }
 }

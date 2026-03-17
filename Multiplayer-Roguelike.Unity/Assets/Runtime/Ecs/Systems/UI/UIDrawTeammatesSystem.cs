@@ -12,6 +12,7 @@ namespace Runtime.Ecs.Systems.UI
 {
     public class UIDrawTeammatesSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
         private QueryBuffer<PlayerTagComponent, NameComponent, HealthComponent, NetworkControllableTag> _buffer = new();
 
         private readonly VisualTreeAsset _teammatePanelAsset;
@@ -26,26 +27,27 @@ namespace Runtime.Ecs.Systems.UI
             _teammatePanelAsset = hudView.TeammateAsset;
         }
 
-        public override void Update(float deltaTime)
+
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
 
             _root.style.display = _buffer.Count > 0 ? DisplayStyle.Flex : DisplayStyle.None;
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
+        protected override void Update(int i, float deltaTime)
+        {
+            var entityId = _buffer.EntityIds[i];
+            var nameComponent = _buffer.Components2[i];
+            var healthComponent = _buffer.Components3[i];
+
+            if (!_panels.TryGetValue(entityId, out var bar))
             {
-                var entityId = _buffer.EntityIds[i];
-                var nameComponent = _buffer.Components2[i];
-                var healthComponent = _buffer.Components3[i];
-
-                if (!_panels.TryGetValue(entityId, out var bar))
-                {
-                    bar = CreatePanel(entityId, nameComponent.Name);
-                }
-
-                bar.value = healthComponent.CurrentHealth;
-                bar.highValue = healthComponent.MaxHealth;
+                bar = CreatePanel(entityId, nameComponent.Name);
             }
+
+            bar.value = healthComponent.CurrentHealth;
+            bar.highValue = healthComponent.MaxHealth;
         }
 
         public void Destroy()

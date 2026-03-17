@@ -8,19 +8,21 @@ namespace Runtime.Ecs.Systems.CameraFocus
 {
     public class DrawCameraTransformSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
+
         private QueryBuffer<CameraTargetComponent, TransformComponent> _buffer = new();
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
-            {
-                var cameraTargetComponent = _buffer.Components1[i];
-                var transformComponent = _buffer.Components2[i];
+        protected override void Update(int i, float deltaTime)
+        {
+            var cameraTargetComponent = _buffer.Components1[i];
+            var transformComponent = _buffer.Components2[i];
 
-                transformComponent.Transform.position = Vector3.Lerp(transformComponent.Transform.position, cameraTargetComponent.TargetPosition, deltaTime * 5f);
-            }
+            transformComponent.Transform.position = Vector3.Lerp(transformComponent.Transform.position, cameraTargetComponent.TargetPosition, deltaTime * 5f);
         }
     }
 }

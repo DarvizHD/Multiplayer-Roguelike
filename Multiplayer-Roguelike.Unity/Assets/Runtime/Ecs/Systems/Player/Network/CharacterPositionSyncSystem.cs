@@ -8,38 +8,41 @@ namespace Runtime.Ecs.Systems.Player.Network
 {
     public class CharacterPositionSyncSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
+
         private QueryBuffer<CharacterNetworkSyncComponent, PositionComponent,
             PositionInterpolationComponent, DirectionComponent, NetworkControllableTag> _buffer = new();
 
-        public override void Update(float deltaTime)
+
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
+        protected override void Update(int i, float deltaTime)
+        {
+            var characterSharedModelComponent = _buffer.Components1[i];
+            var positionComponent = _buffer.Components2[i];
+            var interpolationComponent = _buffer.Components3[i];
+            var directionComponent = _buffer.Components4[i];
+
+            if (characterSharedModelComponent.CharacterSharedModel.Position.IsDirty)
             {
-                var characterSharedModelComponent = _buffer.Components1[i];
-                var positionComponent = _buffer.Components2[i];
-                var interpolationComponent = _buffer.Components3[i];
-                var directionComponent = _buffer.Components4[i];
+                interpolationComponent.LastTime = interpolationComponent.TargetTime;
+                interpolationComponent.TargetTime = interpolationComponent.TotalTime;
 
-                if (characterSharedModelComponent.CharacterSharedModel.Position.IsDirty)
-                {
-                    interpolationComponent.LastTime = interpolationComponent.TargetTime;
-                    interpolationComponent.TargetTime = interpolationComponent.TotalTime;
+                interpolationComponent.LastPosition = positionComponent.Position;
+                interpolationComponent.TargetPosition = characterSharedModelComponent.CharacterSharedModel.Position
+                    .Value.ToUnityVector3();
 
-                    interpolationComponent.LastPosition = positionComponent.Position;
-                    interpolationComponent.TargetPosition = characterSharedModelComponent.CharacterSharedModel.Position
-                        .Value.ToUnityVector3();
+                characterSharedModelComponent.CharacterSharedModel.Position.ClearDirty();
+            }
 
-                    characterSharedModelComponent.CharacterSharedModel.Position.ClearDirty();
-                }
+            if (characterSharedModelComponent.CharacterSharedModel.Direction.IsDirty)
+            {
+                directionComponent.Direction = characterSharedModelComponent.CharacterSharedModel.Direction.Value.ToUnityVector3();
 
-                if (characterSharedModelComponent.CharacterSharedModel.Direction.IsDirty)
-                {
-                    directionComponent.Direction = characterSharedModelComponent.CharacterSharedModel.Direction.Value.ToUnityVector3();
-
-                    characterSharedModelComponent.CharacterSharedModel.Direction.ClearDirty();
-                }
+                characterSharedModelComponent.CharacterSharedModel.Direction.ClearDirty();
             }
         }
     }

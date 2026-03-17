@@ -9,35 +9,37 @@ namespace Runtime.Ecs.Systems.CameraFocus
 {
     public class CameraFocusSystem : BaseSystem
     {
-        private QueryBuffer<PositionComponent, PlayerTagComponent> _playersBuffer = new();
+        protected override IQueryBuffer Buffer => _cameraTargetBuffer;
+        private QueryBuffer<PositionComponent, PlayerTagComponent, CameraFollowTagComponent> _playersBuffer = new();
         private QueryBuffer<CameraTargetComponent> _cameraTargetBuffer = new();
 
-        public override void Update(float deltaTime)
+
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _playersBuffer);
             ComponentManager.Filter.Query(ref _cameraTargetBuffer);
+        }
 
-            for (var i = 0; i < _cameraTargetBuffer.Count; i++)
+        protected override void Update(int i, float deltaTime)
+        {
+            var sum = Vector3.zero;
+            var count = 0;
+
+            for (var k = 0; k < _playersBuffer.Count; k++)
             {
-                var sum = Vector3.zero;
-                var count = 0;
-
-                for (var k = 0; k < _playersBuffer.Count; k++)
-                {
-                    var positionComponent = _playersBuffer.Components1[k];
-                    sum += positionComponent.Position;
-                    count++;
-                }
-
-                if (count == 0)
-                {
-                    return;
-                }
-
-                var cameraTargetComponent = _cameraTargetBuffer.Components[i];
-
-                cameraTargetComponent.TargetPosition = sum / count;
+                var positionComponent = _playersBuffer.Components1[k];
+                sum += positionComponent.Position;
+                count++;
             }
+
+            if (count == 0)
+            {
+                return;
+            }
+
+            var cameraTargetComponent = _cameraTargetBuffer.Components[i];
+
+            cameraTargetComponent.TargetPosition = sum / count;
         }
     }
 }

@@ -7,34 +7,35 @@ namespace Runtime.Ecs.Systems.Battle.Health
 {
     public class RegenerationSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
+
         private QueryBuffer<HealthComponent, RegenerationComponent> _buffer = new();
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
+        protected override void Update(int i, float deltaTime)
+        {
+            var healthComponent = _buffer.Components1[i];
+            var regenerationComponent = _buffer.Components2[i];
+            var entityId = _buffer.EntityIds[i];
 
-            for (var i = 0; i < _buffer.Count; i++)
+            if (ComponentManager.HasComponent<DeathTagComponent>(entityId))
             {
-                var healthComponent = _buffer.Components1[i];
-                var regenerationComponent = _buffer.Components2[i];
-                var entityId = _buffer.EntityIds[i];
+                return;
+            }
 
-                if (ComponentManager.HasComponent<DeathTagComponent>(entityId))
-                {
-                    return;
-                }
+            regenerationComponent.LastDamageTime += deltaTime;
 
-                regenerationComponent.LastDamageTime += deltaTime;
-
-                if (regenerationComponent.LastDamageTime >= regenerationComponent.Cooldown &&
-                    healthComponent.CurrentHealth < healthComponent.MaxHealth)
-                {
-                    healthComponent.CurrentHealth = Mathf.Min(
-                        healthComponent.CurrentHealth + regenerationComponent.RegenerationRate * deltaTime,
-                        healthComponent.MaxHealth
-                    );
-                }
+            if (regenerationComponent.LastDamageTime >= regenerationComponent.Cooldown &&
+                healthComponent.CurrentHealth < healthComponent.MaxHealth)
+            {
+                healthComponent.CurrentHealth = Mathf.Min(
+                    healthComponent.CurrentHealth + regenerationComponent.RegenerationRate * deltaTime,
+                    healthComponent.MaxHealth
+                );
             }
         }
     }

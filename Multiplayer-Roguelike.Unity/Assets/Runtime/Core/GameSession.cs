@@ -248,6 +248,7 @@ namespace Runtime.Core
                 EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
                 EcsWorld.AddEntityComponent(entityId, new RigidbodyComponent(provider.Rigidbody, position));
                 EcsWorld.AddEntityComponent(entityId, new CursorWorldPositionComponent());
+                EcsWorld.AddEntityComponent(entityId, new CameraFollowTagComponent());
             }
             else
             {
@@ -364,6 +365,7 @@ namespace Runtime.Core
             EcsWorld.RegisterComponent<DamageParticleEventComponent>();
             EcsWorld.RegisterComponent<DeathParticleEventComponent>();
             EcsWorld.RegisterComponent<ShootParticleEventComponent>();
+            EcsWorld.RegisterComponent<CameraFollowTagComponent>();
         }
 
         private void AddSystems()
@@ -408,6 +410,7 @@ namespace Runtime.Core
             EcsWorld.AddSystem<MeleeAttackAnimationSystem>();
             EcsWorld.AddSystem<RangedAttackSystem>();
             EcsWorld.AddSystem<ReloadSystem>();
+            EcsWorld.AddSystem<RestoreAmmoSystem>();
 
             EcsWorld.AddSystem<CharacterAttackSystem>();
 
@@ -424,7 +427,8 @@ namespace Runtime.Core
             EcsWorld.AddSystem<EnemyAnimationSyncSystem>();
 
             EcsWorld.AddSystem(new PlaySoundSystem());
-            EcsWorld.AddSystem<ZombieVoiceSystem>();
+            EcsWorld.AddSystem<ZombieVoiceCreatorSystem>();
+            EcsWorld.AddSystem<ZombieVoiceCleanerSystem>();
 
             EcsWorld.AddSystem(_drawNameSystem, UpdateMode.LateUpdate);
             EcsWorld.AddSystem(_drawHealthSystem,  UpdateMode.LateUpdate);
@@ -437,8 +441,6 @@ namespace Runtime.Core
             EcsWorld.AddSystem(new UIDrawWaveSystem(_hudView, _gameSessionSharedModel), UpdateMode.LateUpdate);
 
             /*
-            EcsWorld.AddSystem<FreezeMovementByDamageSystem>();
-            EcsWorld.AddSystem<FreezeMovementSystem>();
             EcsWorld.AddSystem<RegenerationSystem>();
             EcsWorld.AddSystem<InvulnerabilitySystem>();
             EcsWorld.AddSystem<DeathAnimationSystem>();*/

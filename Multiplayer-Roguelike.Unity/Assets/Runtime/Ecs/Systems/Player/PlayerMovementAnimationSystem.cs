@@ -9,26 +9,27 @@ namespace Runtime.Ecs.Systems.Player
 {
     public class PlayerMovementAnimationSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
         private QueryBuffer<DirectionComponent, AnimatorComponent, RotationComponent, PlayerTagComponent> _buffer = new();
 
-        public override void Update(float deltaTime)
+        protected override void Query()
         {
             ComponentManager.Filter.Query(ref _buffer);
+        }
 
-            for (var i = 0; i < _buffer.Count; i++)
-            {
-                var directionComponent = _buffer.Components1[i];
-                var animatorComponent = _buffer.Components2[i];
-                var rotationComponent = _buffer.Components3[i];
+        protected override void Update(int i, float deltaTime)
+        {
+            var directionComponent = _buffer.Components1[i];
+            var animatorComponent = _buffer.Components2[i];
+            var rotationComponent = _buffer.Components3[i];
 
-                var worldMove = directionComponent.Direction;
-                var rotation = Quaternion.Euler(0f, rotationComponent.Angle, 0f);
+            var worldMove = directionComponent.Direction;
+            var rotation = Quaternion.Euler(0f, rotationComponent.Angle, 0f);
 
-                var localMove = Quaternion.Inverse(rotation) * worldMove;
+            var localMove = Quaternion.Inverse(rotation) * worldMove;
 
-                animatorComponent.Animator.SetFloat(animatorComponent.X, localMove.x, 0.1f, deltaTime);
-                animatorComponent.Animator.SetFloat(animatorComponent.Z, localMove.z, 0.1f, deltaTime);
-            }
+            animatorComponent.Animator.SetFloat(animatorComponent.X, localMove.x, 0.1f, deltaTime);
+            animatorComponent.Animator.SetFloat(animatorComponent.Z, localMove.z, 0.1f, deltaTime);
         }
     }
 }

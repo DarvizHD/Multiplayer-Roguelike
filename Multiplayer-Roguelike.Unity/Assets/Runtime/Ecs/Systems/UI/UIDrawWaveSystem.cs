@@ -1,3 +1,5 @@
+using Runtime.Ecs.Components.Network;
+using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems.Core;
 using Runtime.UI.HUD;
 using Shared.Models.GameSession;
@@ -7,6 +9,9 @@ namespace Runtime.Ecs.Systems.UI
 {
     public class UIDrawWaveSystem : BaseSystem
     {
+        protected override IQueryBuffer Buffer => _buffer;
+
+        private QueryBuffer<LocalControllableTag> _buffer = new();
         private readonly Label _waveLabel;
         private readonly GameSessionSharedModel _model;
 
@@ -19,7 +24,12 @@ namespace Runtime.Ecs.Systems.UI
             _model = model;
         }
 
-        public override void Update(float deltaTime)
+        protected override void Query()
+        {
+            ComponentManager.Filter.Query(ref _buffer);
+        }
+
+        protected override void Update(int i, float deltaTime)
         {
             _waveLabel.text =  _model.WaveNumber.Value.ToString();
         }
