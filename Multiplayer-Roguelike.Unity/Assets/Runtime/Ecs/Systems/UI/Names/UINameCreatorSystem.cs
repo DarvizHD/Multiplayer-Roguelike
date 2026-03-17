@@ -34,23 +34,27 @@ namespace Runtime.ECS.Systems.UI.Names
             var nameComponent = _buffer.Components2[i];
             var aliveTagComponent = _buffer.Components3[i];
 
-            var nameExists = uiComponent.Elements.ContainsKey(UIConstants.Nickname);
+            var id = $"{UIConstants.Nickname}_{entityId}";
+
+            var nameExists = uiComponent.Elements.Contains(UIConstants.Nickname);
 
             if (nameExists)
             {
                 return;
             }
 
-            uiComponent.Elements[UIConstants.Nickname] = CreateLabel(nameComponent.Name);
+            CreateLabel(id, nameComponent.Name);
+            uiComponent.Elements.Add(UIConstants.Nickname);
         }
 
 
-        private Label CreateLabel(string name)
+        private Label CreateLabel(string name, string text)
         {
             var root = _uiHudView.NameAsset.CloneTree();
             var label = root.Q<Label>("nickname");
 
-            label.text = name;
+            label.name = name;
+            label.text = text;
             label.style.position = Position.Absolute;
 
             _uiHudView.WorldHudRoot.Add(label);

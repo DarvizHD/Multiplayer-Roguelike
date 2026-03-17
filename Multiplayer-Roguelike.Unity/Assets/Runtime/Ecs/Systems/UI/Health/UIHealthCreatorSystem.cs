@@ -32,21 +32,26 @@ namespace Runtime.ECS.Systems.UI.Health
             var uiComponent = _buffer.Components1[i];
             var healthComponent = _buffer.Components2[i];
 
-            var healthBarExists = uiComponent.Elements.ContainsKey(UIConstants.HealthBar);
+            var healthBarExists = uiComponent.Elements.Contains(UIConstants.HealthBar);
 
             if (healthBarExists)
             {
                 return;
             }
 
-            uiComponent.Elements[UIConstants.HealthBar] = CreateBar();
+            var id =  $"{UIConstants.HealthBar}_{entityId}";
+
+            uiComponent.Elements.Add(UIConstants.HealthBar);
+
+            CreateBar(id);
         }
 
-        private ProgressBar CreateBar()
+        private ProgressBar CreateBar(string name)
         {
             var root = _uiHudView.HealthAsset.CloneTree();
             var bar = root.Q<ProgressBar>("health-bar");
 
+            bar.name = name;
             bar.style.position = Position.Absolute;
             bar.highValue = 100f;
 
