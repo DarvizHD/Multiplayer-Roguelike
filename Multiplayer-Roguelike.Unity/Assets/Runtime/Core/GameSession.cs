@@ -248,6 +248,7 @@ namespace Runtime.Core
                 EcsWorld.AddEntityComponent(entityId, new LocalControllableTag());
                 EcsWorld.AddEntityComponent(entityId, new RigidbodyComponent(provider.Rigidbody, position));
                 EcsWorld.AddEntityComponent(entityId, new CursorWorldPositionComponent());
+                EcsWorld.AddEntityComponent(entityId, new CameraFollowTagComponent());
             }
             else
             {
@@ -364,6 +365,7 @@ namespace Runtime.Core
             EcsWorld.RegisterComponent<DamageParticleEventComponent>();
             EcsWorld.RegisterComponent<DeathParticleEventComponent>();
             EcsWorld.RegisterComponent<ShootParticleEventComponent>();
+            EcsWorld.RegisterComponent<CameraFollowTagComponent>();
         }
 
         private void AddSystems()
