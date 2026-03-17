@@ -65,17 +65,19 @@ namespace Runtime.Core
         private readonly UIDrawNameSystem _drawNameSystem;
         private readonly UIDrawTeammatesSystem _drawTeammatesSystem;
         private readonly UIDrawCrosshairSystem _drawCrosshair;
+        private readonly SoundModel _soundModel;
 
         private bool IsHost => _playerSharedModel.Lobby.OwnerId.Value == _playerSharedModel.Nickname.Value;
 
         public GameSession(GameSessionSharedModel gameSessionSharedModel, PlayerSharedModel playerSharedModel,
-            ServerConnectionModel serverConnectionModel, UIHudView hudView, WorldViewDescription worldViewDescription)
+            ServerConnectionModel serverConnectionModel, UIHudView hudView, WorldViewDescription worldViewDescription, SoundModel soundModel)
         {
             _gameSessionSharedModel = gameSessionSharedModel;
             _playerSharedModel = playerSharedModel;
             _serverConnectionModel = serverConnectionModel;
             _hudView = hudView;
             _worldViewDescription = worldViewDescription;
+            _soundModel = soundModel;
 
             _pinnedParticlePool = new PinnedParticlePool(_worldViewDescription.ShootParticle);
             _damageParticlePool = new PositionalParticlePool(_worldViewDescription.DamageParticle);
@@ -427,7 +429,7 @@ namespace Runtime.Core
             EcsWorld.AddSystem<CharacterAnimationSyncSystem>();
             EcsWorld.AddSystem<EnemyAnimationSyncSystem>();
 
-            EcsWorld.AddSystem(new PlaySoundSystem());
+            EcsWorld.AddSystem(new PlaySoundSystem(_soundModel));
             EcsWorld.AddSystem<ZombieVoiceCreatorSystem>();
             EcsWorld.AddSystem<ZombieVoiceCleanerSystem>();
 
