@@ -9,6 +9,9 @@ namespace Backend.Enemies
         private float _timer;
         private const float _tickInterval = 1f;
 
+        private int _currentIndex = 0;
+        private const int _batchSize = 8;
+
         public EnemyPositionSyncSystem(string id) : base(id)
         {
         }
@@ -17,14 +20,29 @@ namespace Backend.Enemies
         {
             _timer += deltaTime;
 
-            if (_timer > _tickInterval)
+            if (_timer < _tickInterval)
             {
-                _timer = 0f;
+                return;
+            }
 
-                foreach (var enemy in gameSession.Enemies.Models.Values)
+            _timer = 0f;
+
+            var enemies = gameSession.Enemies.Models.Values.ToList();
+            var processed = 0;
+
+            while (processed < _batchSize && enemies.Count > 0)
+            {
+                if (_currentIndex >= enemies.Count)
                 {
-                    enemy.Shared.Position.Value = enemy.Position;
+                    _currentIndex = 0;
                 }
+
+                var enemy = enemies[_currentIndex];
+
+                enemy.Shared.Position.Value = enemy.Position;
+
+                _currentIndex++;
+                processed++;
             }
         }
     }
