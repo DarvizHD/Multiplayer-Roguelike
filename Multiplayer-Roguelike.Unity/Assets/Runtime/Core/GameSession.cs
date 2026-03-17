@@ -425,7 +425,8 @@ namespace Runtime.Core
             EcsWorld.AddSystem<EnemyAnimationSyncSystem>();
 
             EcsWorld.AddSystem(new PlaySoundSystem());
-            EcsWorld.AddSystem<ZombieVoiceSystem>();
+            EcsWorld.AddSystem<ZombieVoiceCreatorSystem>();
+            EcsWorld.AddSystem<ZombieVoiceCleanerSystem>();
 
             EcsWorld.AddSystem(_drawNameSystem, UpdateMode.LateUpdate);
             EcsWorld.AddSystem(_drawHealthSystem,  UpdateMode.LateUpdate);

@@ -14,11 +14,6 @@ namespace Runtime.Ecs.Systems.Core
             ComponentManager = componentManager;
         }
 
-        public virtual void Update(float deltaTime)
-        {
-
-        }
-
         protected abstract void Update(int i, float deltaTime);
 
         protected abstract void Query();
@@ -31,7 +26,6 @@ namespace Runtime.Ecs.Systems.Core
             {
                 Debug.Log($"{this.GetType().Name} UpdateAll");
             }
-
 
             for (var i = 0; i < Buffer.Count; i++)
             {
