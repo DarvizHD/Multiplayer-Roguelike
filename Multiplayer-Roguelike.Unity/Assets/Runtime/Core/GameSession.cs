@@ -136,6 +136,8 @@ namespace Runtime.Core
 
         public void Run()
         {
+            _hudView.WorldHudRoot.Clear();
+
             AddSystems();
 
             CreateCamera();
@@ -143,6 +145,8 @@ namespace Runtime.Core
 
         public void Stop()
         {
+            Cursor.visible = true;
+
             EcsWorld.ClearSystems();
         }
 
