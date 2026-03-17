@@ -10,7 +10,7 @@ namespace Runtime.Ecs.Systems.CameraFocus
     public class CameraFocusSystem : BaseSystem
     {
         protected override IQueryBuffer Buffer => _cameraTargetBuffer;
-        private QueryBuffer<PositionComponent, PlayerTagComponent> _playersBuffer = new();
+        private QueryBuffer<PositionComponent, PlayerTagComponent, CameraFollowTagComponent> _playersBuffer = new();
         private QueryBuffer<CameraTargetComponent> _cameraTargetBuffer = new();
 
 
