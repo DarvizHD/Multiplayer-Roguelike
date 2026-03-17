@@ -3,10 +3,11 @@ using Runtime.Ecs.Components.Health;
 using Runtime.Ecs.Components.UI;
 using Runtime.Ecs.Core;
 using Runtime.Ecs.Systems.Core;
+using Runtime.Ecs.Systems.UI;
 using Runtime.UI.HUD;
 using UnityEngine.UIElements;
 
-namespace Runtime.Ecs.Systems.UI
+namespace Runtime.ECS.Systems.UI.Names
 {
     public class UINameCreatorSystem : BaseSystem
     {

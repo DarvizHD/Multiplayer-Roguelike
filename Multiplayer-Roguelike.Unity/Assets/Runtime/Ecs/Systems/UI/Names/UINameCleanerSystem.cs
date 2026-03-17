@@ -23,9 +23,13 @@ namespace Runtime.ECS.Systems.UI.Names
             var entityId = _buffer.EntityIds[i];
             var uiComponent = _buffer.Components1[i];
 
-            uiComponent.Elements[UIConstants.Nickname]?.RemoveFromHierarchy();
-            uiComponent.Elements.Remove(UIConstants.Nickname);
-            ComponentManager.RemoveComponent<NameComponent>(entityId);
+            var existsNickname = uiComponent.Elements.ContainsKey(UIConstants.Nickname);
+
+            if (existsNickname)
+            {
+                uiComponent.Elements[UIConstants.Nickname]?.RemoveFromHierarchy();
+                uiComponent.Elements.Remove(UIConstants.Nickname);
+            }
         }
     }
 }
