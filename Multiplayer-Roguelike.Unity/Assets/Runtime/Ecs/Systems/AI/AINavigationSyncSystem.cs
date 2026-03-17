@@ -35,7 +35,7 @@ namespace Runtime.Ecs.Systems.AI
 
             if (delta is > _softThreshold and < _hardThreshold)
             {
-                navMeshAgentComponent.Agent.Warp(Vector3.Lerp(navMeshAgentComponent.Agent.transform.position, serverPosition, 0.1f));
+                navMeshAgentComponent.Agent.nextPosition = Vector3.Lerp(navMeshAgentComponent.Agent.transform.position, serverPosition, 0.1f);
             }
             else if (delta >= _hardThreshold)
             {

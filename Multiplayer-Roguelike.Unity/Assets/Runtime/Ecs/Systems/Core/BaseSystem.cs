@@ -14,9 +14,9 @@ namespace Runtime.Ecs.Systems.Core
             ComponentManager = componentManager;
         }
 
-        protected abstract void Update(int i, float deltaTime);
-
         protected abstract void Query();
+
+        protected abstract void Update(int i, float deltaTime);
 
         public void UpdateAll(float deltaTime)
         {
