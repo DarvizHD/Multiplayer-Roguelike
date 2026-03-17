@@ -12,7 +12,7 @@ namespace Backend.Session.SpawnDirector
         private readonly SpawnDirectorModel _model;
         private readonly GameSessionModel _gameSessionModel;
         private int _lastSpawnPointIndex;
-        private int _lastEnemyId = 10;
+        private int _lastEnemyId = 50;
         public string Id { get; }
 
         public SpawnDirectorSystem(string id, SpawnDirectorModel model, GameSessionModel gameSessionModel)
