@@ -41,18 +41,22 @@ namespace Runtime.Ecs.Systems.UI
             }
 
             var visible = slot == 1;
-
             Cursor.visible = !visible;
             _crosshair.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
 
+            if (!visible)
+            {
+                return;
+            }
 
-            var mousePosition = _camera.WorldToScreenPoint(cursorWorldPositionComponent.Position);
+            var mouseScreenPos = _camera.WorldToScreenPoint(cursorWorldPositionComponent.Position);
 
-            var x =  mousePosition.x;
-            var y = Screen.height - mousePosition.y;
+            var panel = _hudView.HudRoot.panel;
+            var uiPos = RuntimePanelUtils.ScreenToPanel(panel,
+                new Vector2(mouseScreenPos.x, Screen.height - mouseScreenPos.y));
 
-            _crosshair.style.left = x - _crosshair.resolvedStyle.width / 2;
-            _crosshair.style.top = y - _crosshair.resolvedStyle.height / 2;
+            _crosshair.style.left = uiPos.x - _crosshair.resolvedStyle.width * 0.5f;
+            _crosshair.style.top = uiPos.y - _crosshair.resolvedStyle.height * 0.5f;
         }
 
         protected override void Query()

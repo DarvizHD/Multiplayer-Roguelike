@@ -17,7 +17,6 @@ namespace Runtime.ECS.Systems.UI.Health
         private QueryBuffer<UIComponent, HealthComponent, PositionComponent, EnemyTagComponent, AliveTagComponent> _buffer = new();
 
         private readonly Camera _camera = Camera.main;
-
         private readonly UIHudView _hudView;
 
         public UIHealthDrawSystem(UIHudView hudView)
@@ -37,16 +36,24 @@ namespace Runtime.ECS.Systems.UI.Health
             var healthComponent = _buffer.Components2[i];
             var positionComponent = _buffer.Components3[i];
 
-            var hasHealthBar = uiComponent.Elements.Contains(UIConstants.HealthBar);
-
-            if (!hasHealthBar)
+            if (!uiComponent.Elements.Contains(UIConstants.HealthBar))
             {
                 return;
             }
 
             var id = $"{UIConstants.HealthBar}_{entityId}";
-
             var healthBar = _hudView.WorldHudRoot.Q<ProgressBar>(id);
+
+            if (healthBar == null)
+            {
+                return;
+            }
+
+            var panel = _hudView.WorldHudRoot.panel;
+            if (panel == null)
+            {
+                return;
+            }
 
             var screenPos = _camera.WorldToScreenPoint(positionComponent.Position);
 
@@ -62,11 +69,11 @@ namespace Runtime.ECS.Systems.UI.Health
 
             healthBar.style.display = DisplayStyle.Flex;
 
-            var x = screenPos.x - healthBar.resolvedStyle.width * 0.5f;
-            var y = Screen.height - screenPos.y - 70f;
+            var uiPos = RuntimePanelUtils.ScreenToPanel(panel,
+                new Vector2(screenPos.x, Screen.height - screenPos.y));
 
-            healthBar.style.left = x;
-            healthBar.style.top = y;
+            healthBar.style.left = uiPos.x - healthBar.resolvedStyle.width * 0.5f;
+            healthBar.style.top = uiPos.y - 70f;
 
             healthBar.value = healthComponent.CurrentHealth;
             healthBar.highValue = healthComponent.MaxHealth;

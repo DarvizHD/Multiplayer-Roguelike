@@ -32,25 +32,32 @@ namespace Runtime.ECS.Systems.UI.Names
         {
             var entityId = _buffer.EntityIds[i];
             var uiComponent = _buffer.Components1[i];
-            var nameComponent = _buffer.Components2[i];
             var positionComponent = _buffer.Components3[i];
 
-            var hasLabel = uiComponent.Elements.Contains(UIConstants.Nickname);
-
-            if (!hasLabel)
+            if (!uiComponent.Elements.Contains(UIConstants.Nickname))
             {
                 return;
             }
 
-            var id =  $"{UIConstants.Nickname}_{entityId}";
-
+            var id = $"{UIConstants.Nickname}_{entityId}";
             var label = _hudView.WorldHudRoot.Q<Label>(id);
 
-            var screenPosition = _camera.WorldToScreenPoint(positionComponent.Position);
+            if (label == null)
+            {
+                return;
+            }
 
-            var outScreen = screenPosition.z <= 0 ||
-                            screenPosition.x < 0 || screenPosition.x > Screen.width ||
-                            screenPosition.y < 0 || screenPosition.y > Screen.height;
+            var panel = _hudView.WorldHudRoot.panel;
+            if (panel == null)
+            {
+                return;
+            }
+
+            var screenPos = _camera.WorldToScreenPoint(positionComponent.Position);
+
+            var outScreen = screenPos.z <= 0 ||
+                            screenPos.x < 0 || screenPos.x > Screen.width ||
+                            screenPos.y < 0 || screenPos.y > Screen.height;
 
             if (outScreen)
             {
@@ -60,11 +67,11 @@ namespace Runtime.ECS.Systems.UI.Names
 
             label.style.display = DisplayStyle.Flex;
 
-            var x = screenPosition.x - label.resolvedStyle.width * 0.5f;
-            var y = Screen.height - screenPosition.y - 100f;
+            var uiPos = RuntimePanelUtils.ScreenToPanel(panel,
+                new Vector2(screenPos.x, Screen.height - screenPos.y));
 
-            label.style.left = x;
-            label.style.top = y;
+            label.style.left = uiPos.x - label.resolvedStyle.width * 0.5f;
+            label.style.top = uiPos.y - 100f;
         }
     }
 }
