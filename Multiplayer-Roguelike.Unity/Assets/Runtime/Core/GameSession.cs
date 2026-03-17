@@ -26,6 +26,7 @@ using Runtime.Ecs.Systems.Player.Network;
 using Runtime.Ecs.Systems.Player.Rotation;
 using Runtime.Ecs.Systems.Sound;
 using Runtime.Ecs.Systems.UI;
+using Runtime.ECS.Systems.UI.Names;
 using Runtime.Ecs.Systems.Weapons;
 using Runtime.Pools;
 using Runtime.ServerInteraction;
@@ -437,7 +438,7 @@ namespace Runtime.Core
             EcsWorld.AddSystem<ZombieVoiceCleanerSystem>();
 
             EcsWorld.AddSystem<UINameCreatorSystem>(new UINameCreatorSystem(_hudView), UpdateMode.FixedUpdate);
-            EcsWorld.AddSystem<UIFollowNameSystem>(UpdateMode.LateUpdate);
+            EcsWorld.AddSystem<UINameFollowSystem>(UpdateMode.LateUpdate);
             EcsWorld.AddSystem<UINameCleanerSystem>(UpdateMode.FixedUpdate);
 
             EcsWorld.AddSystem(_drawHealthSystem, UpdateMode.LateUpdate);
