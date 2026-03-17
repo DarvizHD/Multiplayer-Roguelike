@@ -13,7 +13,7 @@ namespace Runtime.Ecs.Components.Sound
 
         public ZombieVoiceComponent(AudioSource source, AudioClip clip, float delay,
             float targetVolume = SoundVolumeConstants.Voice.Default,
-            float fadeDuration = SoundVolumeConstants.Fade.Long)
+            float fadeDuration = SoundVolumeConstants.Fade.Default)
         {
             Source = source;
             Clip = clip;
