@@ -19,6 +19,7 @@
     -unity-text-align: upper-center;
     -unity-background-image-tint-color: rgba(255, 255, 255, 0);
     transition-duration: 0.1s;
+    margin-bottom: 15px;
 }
 
 .default.base-button-style:hover {
@@ -34,6 +35,8 @@
     border-top-color: rgb(232, 160, 32);
     border-bottom-color: rgb(232, 160, 32);
     transition-duration: 0.1s;
+    margin-bottom: 15px;
+    margin-top: 0;
 }
 
 .default.base-button-style:active {
@@ -42,6 +45,23 @@
     border-radius: 0;
     color: rgb(232, 160, 32);
     transition-duration: 0.1s;
+    margin-bottom: 15px;
+}
+
+.selected.base-button-style {
+    margin: 0 0 10px;
+    padding: 10px;
+    border-radius: 0;
+    color: rgb(232, 160, 32);
+    transition-duration: 0.1s;
+    border-left-color: rgb(232, 160, 32);
+    border-right-color: rgb(232, 160, 32);
+    border-top-color: rgb(232, 160, 32);
+    border-bottom-color: rgb(232, 160, 32);
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
 }
 
 .cancle.base-button-style {
@@ -66,6 +86,7 @@
     -unity-background-image-tint-color: rgba(255, 255, 255, 0);
     transition-duration: 0.1s;
     transition-timing-function: ease;
+    margin-bottom: 0;
 }
 
 .cancle.base-button-style:hover {
@@ -81,6 +102,7 @@
     border-top-color: rgb(192, 52, 52);
     border-bottom-color: rgb(192, 52, 52);
     transition-duration: 0.1s;
+    margin-bottom: 15px;
 }
 
 .cancle.base-button-style:active {
@@ -91,5 +113,3 @@
     transition-duration: 0.1s;
     transition-timing-function: ease;
 }
-
-

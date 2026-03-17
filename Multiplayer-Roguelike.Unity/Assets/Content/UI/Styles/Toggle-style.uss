@@ -7,7 +7,7 @@
     padding-right: 0;
     padding-bottom: 0;
     padding-left: 0;
-    color: rgb(87, 87, 87);
+    color: rgb(232, 224, 208);
     font-size: 16px;
 }
 
@@ -40,3 +40,5 @@
     border-bottom-color: rgb(232, 160, 32);
     display: flex;
 }
+
+
