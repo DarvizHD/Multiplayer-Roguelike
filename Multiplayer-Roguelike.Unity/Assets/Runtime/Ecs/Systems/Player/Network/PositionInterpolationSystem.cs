@@ -33,11 +33,11 @@ namespace Runtime.Ecs.Systems.Player.Network
 
             if (delta is > _softThreshold and < _hardThreshold)
             {
-                positionComponent.Position = Vector3.Lerp(positionComponent.Position, interpolationComponent.TargetPosition,  0.1f);
+                positionComponent.Position = Vector3.Lerp(positionComponent.Position, interpolationComponent.TargetPosition,  0.1f );
             }
             else if (delta >= _hardThreshold)
             {
-                positionComponent.Position = interpolationComponent.TargetPosition;
+                positionComponent.Position = Vector3.Lerp(positionComponent.Position, interpolationComponent.TargetPosition, 0.5f);
             }
             else
             {
