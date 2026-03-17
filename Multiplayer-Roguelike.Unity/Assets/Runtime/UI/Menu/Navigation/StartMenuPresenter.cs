@@ -12,41 +12,40 @@ namespace Runtime.UI.Menu.Navigation
 {
     public class StartMenuPresenter : IPresenter
     {
-        private readonly UIDocument _document;
+        private readonly VisualElement _root;
 
         public StartMenuPresenter(Router router, UICoreModel uiCoreModel, WorldViewDescription worldViewDescription, UIDocument document, UIAudioService audioService)
         {
-            _document = document;
+            _root = document.rootVisualElement.Q<VisualElement>("menu-root");
+            var menuContent = _root.Q<VisualElement>("menu-content");
 
-            var contentRoot = document.rootVisualElement.Q<VisualElement>("menu-content");
-
-            var loginView = new LoginPanelView(worldViewDescription.UI.Get(uiCoreModel.LoginPanelModel.ViewId).Asset, contentRoot);
+            var loginView = new LoginPanelView(worldViewDescription.UI.Get(uiCoreModel.LoginPanelModel.ViewId).Asset, menuContent);
             var loginPresenter = new LoginPanelPresenter(uiCoreModel.LoginPanelModel, loginView, uiCoreModel);
             router.Register(ScreenIds.Login, new LoginScreenPresenter(router, loginPresenter, uiCoreModel.LoginPanelModel));
 
-            var startMenuView = new StartMenuPanelView(worldViewDescription.UI.Get(uiCoreModel.StartMenuPanelModel.ViewId).Asset, contentRoot);
+            var startMenuView = new StartMenuPanelView(worldViewDescription.UI.Get(uiCoreModel.StartMenuPanelModel.ViewId).Asset, menuContent);
             var startMenuPresenter = new StartMenuPanelPresenter(uiCoreModel.StartMenuPanelModel, startMenuView);
             router.Register(ScreenIds.StartMenu, new StartMenuScreen(router, startMenuPresenter, uiCoreModel.StartMenuPanelModel, uiCoreModel, audioService));
 
-            var lobbyView = new LobbyPanelView(worldViewDescription.UI.Get(uiCoreModel.LobbyPanelModel.ViewId).Asset, contentRoot);
+            var lobbyView = new LobbyPanelView(worldViewDescription.UI.Get(uiCoreModel.LobbyPanelModel.ViewId).Asset, menuContent);
             var lobbyPresenter = new LobbyPanelPresenter(uiCoreModel.LobbyPanelModel, lobbyView, uiCoreModel);
-            var usersView = new UsersPanelView(worldViewDescription.UI.Get(uiCoreModel.UsersPanelModel.ViewId).Asset, contentRoot);
+            var usersView = new UsersPanelView(worldViewDescription.UI.Get(uiCoreModel.UsersPanelModel.ViewId).Asset, menuContent);
             var usersPresenter = new UsersPanelPresenter(usersView, worldViewDescription, uiCoreModel, audioService);
             router.Register(ScreenIds.Lobby, new LobbyScreen(router, lobbyPresenter, usersPresenter, uiCoreModel.LobbyPanelModel, uiCoreModel, audioService));
 
-            var joinLobbyView = new JoinLobbyPanelView(worldViewDescription.UI.Get(uiCoreModel.JoinLobbyPanelModel.ViewId).Asset, contentRoot);
+            var joinLobbyView = new JoinLobbyPanelView(worldViewDescription.UI.Get(uiCoreModel.JoinLobbyPanelModel.ViewId).Asset, menuContent);
             var joinLobbyPresenter = new JoinLobbyPanelPresenter(uiCoreModel.JoinLobbyPanelModel, joinLobbyView, uiCoreModel);
             router.Register(ScreenIds.JoinLobby, new JoinLobbyScreen(router, joinLobbyPresenter, uiCoreModel.JoinLobbyPanelModel, uiCoreModel));
         }
 
         public void Enable()
         {
-            _document.rootVisualElement.style.display = DisplayStyle.Flex;
+            _root.style.display = DisplayStyle.Flex;
         }
 
         public void Disable()
         {
-            _document.rootVisualElement.style.display = DisplayStyle.None;
+            _root.style.display = DisplayStyle.None;
         }
     }
 }
