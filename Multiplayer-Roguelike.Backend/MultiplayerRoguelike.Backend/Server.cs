@@ -189,7 +189,7 @@ namespace Backend
                         var packet = default(Packet);
                         packet.Create(player.IsConnectingToSession
                             ? fullWorldProtocol.Stream.GetBuffer()
-                            : protocol.Stream.GetBuffer());
+                            : protocol.Stream.GetBuffer(), PacketFlags.Reliable);
                         player.IsConnectingToSession = false;
                         SendPacket(player.Peer, 1, ref packet);
                     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Shared.Common;
 using Shared.Protocol;
+using UnityEngine;
 
 namespace Shared.Models.Common
 {
@@ -113,7 +114,10 @@ namespace Shared.Models.Common
             protocol.Add(updated.Length);
             foreach (var model in updated)
             {
-                model.Write(protocol);
+                if (!_added.Contains(model) && !_removed.Contains(model))
+                {
+                    model.Write(protocol);
+                }
             }
         }
 
