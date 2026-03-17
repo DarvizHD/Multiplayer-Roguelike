@@ -8,7 +8,9 @@ namespace Runtime.UI.Menu.Panels.LoginPanel
         public VisualElement ParentRoot { get; }
         public TextField UsernameTextField { get; }
         public TextField AddressTextField { get; }
-        public Button ConfirmButton { get; set; }
+        public VisualElement AddressContainer { get; }
+        public Button ConfirmButton { get; }
+        public Toggle OnlineToggle { get; }
 
         public LoginPanelView(VisualTreeAsset asset, VisualElement parentRoot)
         {
@@ -18,6 +20,8 @@ namespace Runtime.UI.Menu.Panels.LoginPanel
             UsernameTextField = Root.Q<TextField>("username-text-field");
             AddressTextField = Root.Q<TextField>("address-text-field");
             ConfirmButton = Root.Q<Button>("confirm-button");
+            OnlineToggle = Root.Q<Toggle>("online-game-toggle");
+            AddressContainer = Root.Q<VisualElement>("address-container");
         }
     }
 }

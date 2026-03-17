@@ -268,7 +268,7 @@ namespace Runtime.Core
 
             Resources.Load<AudioClip>(AudioResourcesConstants.Enemies.ZombieTakeDamage);
 
-            var speed = 1f;
+            var speed = 2f;
 
             EcsWorld.AddEntityComponent(entityId, new UIComponent());
             EcsWorld.AddEntityComponent(entityId, new NameComponent($"Zombie {entityId}"));
