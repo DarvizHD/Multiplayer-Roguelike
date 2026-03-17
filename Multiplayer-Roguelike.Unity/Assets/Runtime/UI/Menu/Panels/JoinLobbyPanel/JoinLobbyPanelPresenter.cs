@@ -1,38 +1,43 @@
-using Runtime.Core;
+using UnityEngine.UIElements;
 
 namespace Runtime.UI.Menu.Panels.JoinLobbyPanel
 {
-    public class JoinLobbyPanelPresenter : IPresenter
+    public class JoinLobbyPanelPresenter : BasePanelPresenter
     {
+        protected override VisualElement Root => _view.Root;
+
         private readonly JoinLobbyPanelModel _model;
         private readonly JoinLobbyPanelView _view;
-        private readonly UICoreModel _uiCoreModel;
 
-        public JoinLobbyPanelPresenter(JoinLobbyPanelModel model, JoinLobbyPanelView view, UICoreModel uiCoreModel)
+        public JoinLobbyPanelPresenter(JoinLobbyPanelModel model, JoinLobbyPanelView view, UIAudioService audioService) : base(audioService)
         {
             _model = model;
             _view = view;
-            _uiCoreModel = uiCoreModel;
         }
 
-        public void Enable()
+        public override void Enable()
         {
             _view.ParentRoot.Add(_view.Root);
+
+            base.Enable();
+
             _view.BackButton.clicked += _model.OnBackButtonClickedInvoke;
             _view.JoinButton.clicked += HandleJoinButtonClick;
+        }
+
+        public override void Disable()
+        {
+            _view.BackButton.clicked -= _model.OnBackButtonClickedInvoke;
+            _view.JoinButton.clicked -= HandleJoinButtonClick;
+            _view.Root.RemoveFromHierarchy();
+
+            base.Disable();
         }
 
         private void HandleJoinButtonClick()
         {
             _model.LobbyCode = _view.LobbyCodeTextField.value;
             _model.OnJoinButtonClickedInvoke();
-        }
-
-        public void Disable()
-        {
-            _view.BackButton.clicked -= _model.OnBackButtonClickedInvoke;
-            _view.JoinButton.clicked -= HandleJoinButtonClick;
-            _view.Root.RemoveFromHierarchy();
         }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using Runtime.Ecs.Components;
 
 namespace Runtime.Ecs.Core
