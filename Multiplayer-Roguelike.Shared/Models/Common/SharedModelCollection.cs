@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Shared.Common;
 using Shared.Protocol;
+using UnityEngine;
 
 namespace Shared.Models.Common
 {
