@@ -142,7 +142,7 @@ namespace Runtime.Core
         {
             AddSystems();
 
-            CreateCamera(6);
+            CreateCamera();
         }
 
         public void Stop()
@@ -183,8 +183,10 @@ namespace Runtime.Core
             EcsWorld?.LateUpdate(deltaTime);
         }
 
-        private void CreateCamera(ushort entityId)
+        private void CreateCamera()
         {
+            var entityId = EcsWorld.CreateEntity();
+
             EcsWorld.AddEntityComponent(entityId, new CameraTargetComponent());
             EcsWorld.AddEntityComponent(entityId, new TransformComponent(Camera.main?.transform.parent.GetChild(2)));
         }
