@@ -436,12 +436,12 @@ namespace Runtime.Core
             EcsWorld.AddSystem<ZombieVoiceCleanerSystem>();
 
             EcsWorld.AddSystem<UINameCreatorSystem>(new UINameCreatorSystem(_hudView), UpdateMode.FixedUpdate);
-            EcsWorld.AddSystem<UINameDrawSystem>(UpdateMode.LateUpdate);
-            EcsWorld.AddSystem<UINameCleanerSystem>(UpdateMode.FixedUpdate);
+            EcsWorld.AddSystem<UINameDrawSystem>(new UINameDrawSystem(_hudView), UpdateMode.LateUpdate);
+            EcsWorld.AddSystem<UINameCleanerSystem>(new UINameCleanerSystem(_hudView), UpdateMode.FixedUpdate);
 
             EcsWorld.AddSystem<UIHealthCreatorSystem>(new UIHealthCreatorSystem(_hudView), UpdateMode.FixedUpdate);
-            EcsWorld.AddSystem<UIHealthDrawSystem>(UpdateMode.LateUpdate);
-            EcsWorld.AddSystem<UIHealthCleanerSystem>();
+            EcsWorld.AddSystem<UIHealthDrawSystem>(new UIHealthDrawSystem(_hudView), UpdateMode.LateUpdate);
+            EcsWorld.AddSystem<UIHealthCleanerSystem>(new UIHealthCleanerSystem(_hudView));
 
             EcsWorld.AddSystem(new UIDrawSwitchWeaponSystem(_hudView), UpdateMode.LateUpdate);
             EcsWorld.AddSystem(new UIDrawAmmo(_hudView), UpdateMode.LateUpdate);
