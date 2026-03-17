@@ -202,7 +202,7 @@ namespace Runtime.Core
             var shootClip = Resources.Load<AudioClip>(AudioResourcesConstants.Weapon.PistolShot);
             var reloadClip = Resources.Load<AudioClip>(AudioResourcesConstants.Weapon.WeaponReload);
             EcsWorld.AddEntityComponent(entityId, new RangedWeaponComponent(50f, 2f, 2f, shootClip, reloadClip));
-            EcsWorld.AddEntityComponent(entityId, new AmmoComponent(7, 30));
+            EcsWorld.AddEntityComponent(entityId, new AmmoComponent(7, 300));
             EcsWorld.AddEntityComponent(entityId, new AttackCooldownComponent(0.75f));
             return entityId;
         }
@@ -271,7 +271,6 @@ namespace Runtime.Core
             var speed = 2f;
 
             EcsWorld.AddEntityComponent(entityId, new UIComponent());
-            EcsWorld.AddEntityComponent(entityId, new NameComponent($"Zombie {entityId}"));
             EcsWorld.AddEntityComponent(entityId, new PositionComponent(spawnPosition));
             EcsWorld.AddEntityComponent(entityId, new RotationComponent());
             EcsWorld.AddEntityComponent(entityId, new DirectionComponent(Vector3.forward));
