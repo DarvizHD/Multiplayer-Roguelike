@@ -136,8 +136,6 @@ namespace Runtime.Core
 
         public void Run()
         {
-            _hudView.WorldHudRoot.Clear();
-
             AddSystems();
 
             CreateCamera();

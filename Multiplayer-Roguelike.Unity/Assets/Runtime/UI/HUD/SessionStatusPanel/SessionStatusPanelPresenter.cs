@@ -33,6 +33,8 @@ namespace Runtime.UI.HUD.SessionStatusPanel
             _view.StatusLabel.text = _uiCoreModel.GameSessionSharedModel.IsComplete.Value ? "ЗАДАНИЕ ВЫПОЛНЕНО" : "ЗАДАНИЕ ПРОВАЛЕНО";
 
             _view.LobbyButton.clicked += OnLobbyButtonClicked;
+
+            _view.HudView.WorldHudRoot.Clear();
         }
 
         public void Disable()
