@@ -1,16 +1,21 @@
 using ENet;
+using Shared.Models.Player;
 
 namespace Backend.Player
 {
     public class PlayerModel
     {
-        public string PlayerNickname { get; }
-        public Peer Peer { get; }
-        public string PartyId { get; set; } = string.Empty;
+        public PlayerSharedModel PlayerSharedModel { get; }
+        public Peer Peer { get; set; }
+        public string SessionId { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
+        public bool IsConnectingToSession { get; set; }
 
         public PlayerModel(string playerNickname, Peer peer)
         {
-            PlayerNickname = playerNickname;
+            PlayerSharedModel = new PlayerSharedModel(playerNickname);
+            PlayerSharedModel.Nickname.Value = playerNickname;
+
             Peer = peer;
         }
     }

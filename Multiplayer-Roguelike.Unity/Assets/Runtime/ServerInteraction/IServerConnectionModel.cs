@@ -7,7 +7,7 @@ namespace Runtime.ServerInteraction
         Peer PlayerPeer { get; }
         Host PlayerHost { get; }
 
-        void ConnectPlayer();
+        void ConnectPlayer(string nickname, string address);
         void DisconnectPlayer();
         void CompletePlayerConnect();
     }

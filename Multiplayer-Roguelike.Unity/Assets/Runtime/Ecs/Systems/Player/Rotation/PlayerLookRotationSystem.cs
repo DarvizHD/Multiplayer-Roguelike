@@ -1,0 +1,46 @@
+using Runtime.Ecs.Components.Health;
+using Runtime.Ecs.Components.Movement;
+using Runtime.Ecs.Components.Player;
+using Runtime.Ecs.Core;
+using Runtime.Ecs.Systems.Core;
+using UnityEngine;
+
+namespace Runtime.Ecs.Systems.Player.Rotation
+{
+    public class PlayerLookRotationSystem : BaseSystem
+    {
+        protected override IQueryBuffer Buffer => _buffer;
+        private QueryBuffer<PlayerInputComponent, PositionComponent,
+            RotationComponent, RotationSpeedComponent, AliveTagComponent> _buffer = new();
+
+        protected override void Query()
+        {
+            ComponentManager.Filter.Query(ref _buffer);
+        }
+
+        protected override void Update(int i, float deltaTime)
+        {
+            var playerInputComponent = _buffer.Components1[i];
+            var positionComponent = _buffer.Components2[i];
+            var rotationComponent = _buffer.Components3[i];
+            var rotationSpeedComponent = _buffer.Components4[i];
+
+            var mouseScreenPosition = playerInputComponent.PlayerControls.Gameplay.Look.ReadValue<Vector2>();
+            var mouseWorldPosition = Camera.main.ScreenPointToRay(mouseScreenPosition);
+
+            if (Physics.Raycast(mouseWorldPosition, out var hit))
+            {
+                var lookPoint = hit.point;
+
+                var direction = lookPoint - positionComponent.Position;
+                direction.y = 0f;
+
+                if (direction.sqrMagnitude > 0.01f)
+                {
+                    var targetAngle = Quaternion.LookRotation(direction).eulerAngles.y;
+                    rotationComponent.Angle = Mathf.LerpAngle(rotationComponent.Angle, targetAngle, rotationSpeedComponent.Speed * deltaTime);
+                }
+            }
+        }
+    }
+}

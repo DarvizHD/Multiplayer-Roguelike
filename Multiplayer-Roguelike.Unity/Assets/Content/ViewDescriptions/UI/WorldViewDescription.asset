@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 882013c2c56f4340991c71c1eca071bd, type: 3}
+  m_Name: WorldViewDescription
+  m_EditorClassIdentifier: Pivo.MultiplayerRoguelike.Runtime::Runtime.UI.WorldViewDescription
+  UI: {fileID: 11400000, guid: 7d9b1413de043a24d8263fd4d94aa293, type: 2}
+  DeathParticle: {fileID: -8372144124649282982, guid: 421c8dac3ab6c3b40b7548da110185e8, type: 3}
+  ShootParticle: {fileID: 1771266317456120760, guid: c5946a66b3eec2d479e20b7315b06bf8, type: 3}
+  DamageParticle: {fileID: 6257281512815012598, guid: b85ef8139fbcfa746b2954a470627418, type: 3}

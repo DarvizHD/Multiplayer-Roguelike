@@ -1,0 +1,63 @@
+using System;
+using System.Linq;
+using Backend.CommandExecutors.Common;
+using Backend.Session;
+using ENet;
+using Shared.Commands.Session;
+
+namespace Backend.CommandExecutors.Session
+{
+    public class StartSessionCommandExecutor : BaseCommandExecutor<StartSessionCommand>
+    {
+        public StartSessionCommandExecutor(StartSessionCommand command, WorldModel world, Peer peer) : base(command,
+            world, ref peer)
+        {
+        }
+
+        public override void Execute()
+        {
+            if (!World.Players.TryGet(Command.PlayerNickname, out var player))
+            {
+                Console.WriteLine($"Player {Command.PlayerNickname} not found");
+                return;
+            }
+
+            if (!World.Lobbies.TryGet(player.PlayerSharedModel.Lobby.LobbyId.Value, out var lobby))
+            {
+                Console.WriteLine($"Lobby {Command.LobbyId} not found");
+                return;
+            }
+
+            if (lobby.OwnerNickname != player.PlayerSharedModel.Nickname.Value)
+            {
+                Console.WriteLine($"Player {Command.PlayerNickname} are not owner of lobby {Command.LobbyId}");
+                return;
+            }
+
+            if (World.Sessions.TryGet(Command.LobbyId, out var existedSession))
+            {
+                var activePlayers = existedSession.Players.Models.Values.Where(p => p.IsActive);
+                foreach (var activePlayer in activePlayers)
+                {
+                    existedSession.Players.Remove(activePlayer.PlayerSharedModel.Id);
+                }
+            }
+
+            if (player.SessionId != string.Empty)
+            {
+                World.Sessions.TryGet(player.SessionId, out var session);
+                session.Players.Remove(player.PlayerSharedModel.Id);
+            }
+
+            var newSession = new GameSessionModel(lobby.Guid);
+            newSession.SharedModel.IsRun.Value = true;
+            World.Sessions.Add(newSession.Id, newSession);
+
+            foreach (var memberId in lobby.Members)
+            {
+                World.Players.TryGet(memberId, out var member);
+                newSession.Players.Add(memberId, member);
+            }
+        }
+    }
+}

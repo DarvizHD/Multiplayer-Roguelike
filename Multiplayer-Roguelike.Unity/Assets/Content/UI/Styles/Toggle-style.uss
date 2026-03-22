@@ -1,0 +1,44 @@
+.unity-toggle__label {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    color: rgb(232, 224, 208);
+    font-size: 16px;
+}
+
+.unity-toggle__input:checked .unity-toggle__checkmark {
+    background-image: url("project://database/Assets/Content/Imports/UI/Icons/toggle-icon.png?fileID=21300000&guid=570683b111bd50f4e80bb4195ba97be4&type=3#toggle-icon");
+}
+
+.unity-toggle__input .unity-toggle__checkmark {
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgb(87, 87, 87);
+    border-right-color: rgb(87, 87, 87);
+    border-top-color: rgb(87, 87, 87);
+    border-bottom-color: rgb(87, 87, 87);
+    background-size: 60% 60%;
+    -unity-background-image-tint-color: rgb(232, 160, 32);
+}
+
+.unity-toggle__input:hover .unity-toggle__checkmark {
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(232, 160, 32);
+    border-right-color: rgb(232, 160, 32);
+    border-top-color: rgb(232, 160, 32);
+    border-bottom-color: rgb(232, 160, 32);
+    display: flex;
+}
+
+

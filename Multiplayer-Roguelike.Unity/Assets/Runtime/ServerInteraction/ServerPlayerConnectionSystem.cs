@@ -7,7 +7,7 @@ namespace Runtime.ServerInteraction
 {
     public class ServerPlayerConnectionSystem : IGameSystem
     {
-        public string Id => "ServerPlayerConnectionSystem";
+        public string Id => "server_player_connection_system";
 
         private readonly ServerConnectionModel _serverConnectionModel;
 
@@ -20,7 +20,7 @@ namespace Runtime.ServerInteraction
         {
             var host = _serverConnectionModel.PlayerHost;
 
-            if (host.CheckEvents(out var netEvent) <= 0 || host.Service(0, out netEvent) <= 0)
+            if (host.CheckEvents(out var netEvent) <= 0 && host.Service(0, out netEvent) <= 0)
             {
                 return;
             }
@@ -34,9 +34,20 @@ namespace Runtime.ServerInteraction
                     Debug.Log("Server connected");
                     break;
                 case EventType.Disconnect:
+                    _serverConnectionModel.DisconnectPlayer();
                     Debug.Log("Server disconnected");
                     break;
                 case EventType.Receive:
+                    switch (netEvent.ChannelID)
+                    {
+                        case 0:
+                            _serverConnectionModel.SetPlayerPacket(netEvent.Packet);
+                            break;
+                        case 1:
+                            _serverConnectionModel.SetWorldPacket(netEvent.Packet);
+                            break;
+                    }
+
                     netEvent.Packet.Dispose();
                     break;
                 case EventType.Timeout:

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Shared;
+using Shared.Primitives;
 
 namespace Backend.Extensions
 {

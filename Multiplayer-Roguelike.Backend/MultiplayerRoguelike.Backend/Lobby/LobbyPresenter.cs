@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 
 namespace Backend.Lobby
 {
@@ -25,18 +25,51 @@ namespace Backend.Lobby
             _model.OnMemberRemoved -= OnMemberRemoved;
         }
 
-        private void OnMemberAdded(string playerNickname)
+        private void OnMemberAdded(string newPlayerNickname)
         {
-            var player = _world.Players.Get(playerNickname);
-            player.PartyId = _model.Guid;
+            var newPlayer = _world.Players.Get(newPlayerNickname);
+            newPlayer.PlayerSharedModel.Lobby.LobbyId.Value = _model.Guid;
+            newPlayer.PlayerSharedModel.Lobby.OwnerId.Value = _model.OwnerNickname;
+            foreach (var memberNickname in _model.Members)
+            {
+                newPlayer.PlayerSharedModel.Lobby.Members.Add(memberNickname);
 
-            Console.WriteLine($"Player {playerNickname} added to lobby {_model.Guid}");
+                if (memberNickname != newPlayerNickname)
+                {
+                    var member = _world.Players.Get(memberNickname);
+                    member.PlayerSharedModel.Lobby.Members.Add(newPlayerNickname);
+                }
+            }
         }
 
-        private void OnMemberRemoved(string playerNickname)
+        private void OnMemberRemoved(string removedPlayerNickname)
         {
-            var player = _world.Players.Get(playerNickname);
-            player.PartyId = string.Empty;
+            var removedPlayer = _world.Players.Get(removedPlayerNickname);
+            removedPlayer.PlayerSharedModel.Lobby.LobbyId.Value = string.Empty;
+            removedPlayer.PlayerSharedModel.Lobby.OwnerId.Value = string.Empty;
+            removedPlayer.PlayerSharedModel.Lobby.Members.Clear();
+
+            if (_model.Members.Count == 0)
+            {
+                if (_world.Sessions.TryGet(_model.Guid, out var session))
+                {
+                    _world.Sessions.Remove(_model.Guid);
+                }
+                _world.Lobbies.Remove(_model.Guid);
+                return;
+            }
+
+            if (removedPlayerNickname == _model.OwnerNickname)
+            {
+                _model.OwnerNickname = _model.Members.First();
+            }
+
+            foreach (var member in _model.Members.Select(memberNickname => _world.Players.Get(memberNickname)))
+            {
+                member.PlayerSharedModel.Lobby.Members.Remove(removedPlayerNickname);
+                member.PlayerSharedModel.Lobby.OwnerId.Value = _model.OwnerNickname;
+            }
+
         }
     }
 }
